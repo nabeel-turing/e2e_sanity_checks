@@ -1,0 +1,11 @@
+papermill
+ipykernel
+
+# Add the specific Google libraries your notebooks need
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib
+
+# Example for Google Cloud Storage or BigQuery access
+# google-cloud-storage
+# google-cloud-bigquery
