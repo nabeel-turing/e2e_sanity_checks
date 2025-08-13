@@ -1,5 +1,5 @@
 import io
-import os
+import re
 import sys
 import shutil
 import json
@@ -41,6 +41,7 @@ if db_dir not in sys.path:
 if scripts_dir not in sys.path:
     sys.path.append(scripts_dir)
 
+os.chdir('/content')
 print("System paths updated.")
 
 _initial_dir = None
@@ -102,6 +103,14 @@ def sanitize_workspace():
     # install_api_requirements()
     print("Workspace sanitized successfully.")
 
+def remove_ansi_codes(text):
+    """
+    Removes ANSI escape codes from a string.
+    """
+    # This regex matches the common patterns for ANSI escape codes
+    ansi_escape_pattern = re.compile(r'\x1b\[[0-9;]*[mK]')
+    return ansi_escape_pattern.sub('', text)
+
 def execute_notebook(notebook):
     client = NotebookClient(notebook, timeout=600, kernel_name='python3')
     try:
@@ -139,7 +148,7 @@ def execute_notebook(notebook):
                             "Block": current_header,
                             "Error Type": ename,
                             "Error Description": evalue,
-                            "Error Detail": str(e)[:49999]
+                            "Error Detail": remove_ansi_codes(str(e)[:49999])
                         }
     except Exception as e:
         print_time(f"Notebook execution could not be completed due to an error: {e}")
@@ -148,7 +157,7 @@ def execute_notebook(notebook):
             "Block": "",
             "Error Type": "",
             "Error Description": "",
-            "Error Detail": str(e)[:49999]
+            "Error Detail": remove_ansi_codes(str(e)[:49999])
         }
 
 def prune_steps(notebook, remove_action, remove_download=True):
@@ -315,6 +324,32 @@ def contains_golden_answer(notebook_json):
         return True
     return False
 
+def format_execution_result(result_object):
+    
+    def format_error_object(error_object):
+        if error_object.get('Block', "") == "":
+            res_str = ""
+        else:
+            line1_block = f"Block: {error_object['Block']}"
+            line2_type = f"Error Type: {error_object['Error Type']}"
+            line3_description = f"Error Description: {error_object['Error Description']}"
+            line4_detail = f"Error Detail: {error_object['Error Detail']}"
+            res_str = f"{line1_block}\n{line2_type}\n{line3_description}\n{line4_detail}"
+
+        return error_object.get("script_success", False), res_str
+
+    no_action_script_success, no_action_fmt_response = format_error_object(result_object["no_action_error"])
+    with_action_script_success, with_action_fmt_response = format_error_object(result_object["with_action_error"])
+
+    return {
+        'notebook': result_object['notebook'],
+        'no_action_script_success': no_action_script_success,
+        'no_action_response': no_action_fmt_response,
+        'with_action_script_success': with_action_script_success,
+        'with_action_response': with_action_fmt_response,
+        'golden_answer_sample': result_object['golden_answer_sample']
+    }
+    
 if __name__ == "__main__":
 
     run_id = str(sys.argv[1])
@@ -382,7 +417,8 @@ if __name__ == "__main__":
                 'golden_answer_sample': "",
             }
         finally:
-            execution_results.append(execution_result)
+            execution_result_frmt = format_execution_result(execution_result)
+            execution_results.append(execution_result_frmt)
 
     # Define output the filename
     json_output = RESULTS_DIR  / f'output_batch_{run_id}.json'

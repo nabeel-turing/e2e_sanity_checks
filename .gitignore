@@ -1,1 +1,11 @@
 .idea/
+.ipynb_checkpoints/
+.venv/
+
+
+results/
+execution_logs/
+clean_workspace/
+
+execution_configs.csv
+*.json

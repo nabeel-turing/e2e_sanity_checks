@@ -166,32 +166,7 @@ def run_orchestration(run_name: str, run_identifiers: list[str]) -> Path:
 
 
 if __name__ == "__main__":
-    # This block allows the script to be run from the command line as before.
-    # parser = argparse.ArgumentParser(
-    #     description="Orchestrate notebook execution in Docker."
-    # )
-    # parser.add_argument(
-    #     "--run-name",
-    #     type=str,
-    #     required=True,
-    #     help="A unique name for this execution run (e.g., 'june_7th_fix_test').",
-    # )
-    # parser.add_argument(
-    #     "--mode",
-    #     type=str,
-    #     default="SKIP_SETUP",
-    #     choices=["E2E", "SKIP_SETUP"],
-    #     help="Execution mode: 'E2E' runs setup cells, 'SKIP_SETUP' skips them (default).",
-    # )
-    # parser.add_argument(
-    #     "--batch-size",
-    #     type=int,
-    #     default=2,
-    #     help="Number of notebooks to run sequentially per container.",
-    # )
-    # args = parser.parse_args()
-
-
+    
     run_config_df = pd.read_csv('execution_configs.csv')
     run_identifiers = list(set(run_config_df['batch_id']))
 

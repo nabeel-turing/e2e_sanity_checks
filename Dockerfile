@@ -25,8 +25,8 @@ RUN pip install --no-cache-dir --upgrade pip && \
 RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 RUN apt-get update && apt-get install -y build-essential
 
-# COPY clean_workspace/0.1.0/APIs/requirements.txt /tmp/api_requirements.txt
-# RUN pip install --no-cache-dir -r /tmp/api_requirements.txt
+COPY clean_workspace/0.1.0/APIs/requirements.txt /tmp/api_requirements.txt
+RUN pip install --no-cache-dir -r /tmp/api_requirements.txt
 # ---- Runner Script ----
 # Copy the runner script that contains the main execution logic.
 # COPY runner.py .
