@@ -1,0 +1,90 @@
+Cash,Equity,Job,Level,Industry,Location,Stage,Valuation,Headcount
+"160,000",1,Product Mgmt.,Director,eCommerce,SF Bay Area,Pre-Rev,$1M-$10M,1-10
+"120,000",1,Finance,VP,Enterprise,Southern CA,Revenue,$10M-$50M,1-10
+"56,000",0.17,Marketing,Mid,Other,Other US,Pre-Rev,$1M-$10M,1-10
+"160,000",0.6,Product Mgmt.,Director,Other,SF Bay Area,Pre-Rev,$1M-$10M,1-10
+"130,000",1.5,Marketing,Director,Enterprise,SF Bay Area,Revenue,$1M-$10M,1-10
+"130,000",0.01,Tech. Ops.,Director,Advertising,Southern CA,Revenue,$1M-$10M,1-10
+"130,000",1.1,"Design, UX & UI",Lead,Enterprise,SF Bay Area,Profit,< $1M,1-10
+"80,000",5,Other,C-Level,Finance,Outside US,Revenue,< $1M,1-10
+"36,000",0.1,Engineering,Entry,Education,New York,Pre-Rev,$1M-$10M,1-10
+"130,000",0.75,Engineering,Lead,Social Networks,SF Bay Area,Profit,$10M-$50M,1-10
+"130,000",3,Engineering,Director,Other,SF Bay Area,Revenue,$1M-$10M,1-10
+"65,000",40,Engineering,Founder,Health,New York,Pre-Rev,< $1M,1-10
+"120,000",0.68,Customer Service,VP,Health,Boston,Pre-Rev,$1M-$10M,1-10
+"48,000",2,"Design, UX & UI",C-Level,Games,SF Bay Area,Pre-Rev,$1M-$10M,1-10
+"30,000",1,Engineering,Entry,Environmental,Boston,Pre-Rev,$1M-$10M,1-10
+"120,000",0.25,Engineering,Director,Mobile,SF Bay Area,Revenue,$10M-$50M,1-10
+"80,000",25,Product Mgmt.,Founder,Enterprise,Outside US,Pre-Rev,< $1M,1-10
+"54,000",12.5,Engineering,Founder,Music,Southern CA,Revenue,$1M-$10M,1-10
+"120,000",1,Engineering,Lead,Finance,Boston,Pre-Rev,< $1M,1-10
+"60,000",1,"Design, UX & UI",VP,Social Networks,SF Bay Area,Pre-Rev,$1M-$10M,1-10
+"50,000",2,Tech. Ops.,Mid,Advertising,Other US,Pre-Rev,$1M-$10M,1-10
+"120,000",1,Engineering,Lead,Finance,Boston,Pre-Rev,< $1M,1-10
+"120,000",0.89,Engineering,Director,Games,SF Bay Area,Pre-Rev,$1M-$10M,1-10
+"40,000",48,Product Mgmt.,Founder,IT Operations,New York,Revenue,$1M-$10M,1-10
+"12,000",4,"Design, UX & UI",C-Level,eCommerce,Outside US,Pre-Rev,< $1M,1-10
+"111,000",0.01,Engineering,Senior,Other,New York,Revenue,$1M-$10M,1-10
+"104,000",15,Other,C-Level,Other,New York,Revenue,< $1M,1-10
+"100,000",0.67,Sales & Bus. Dev.,Director,Finance,SF Bay Area,Revenue,$10M-$50M,1-10
+"108,000",0.2,Engineering,Mid,Enterprise,SF Bay Area,Revenue,$1M-$10M,1-10
+"70,000",0.6,Engineering,Mid,Social Networks,SF Bay Area,Pre-Rev,$10M-$50M,1-10
+"145,000",2,Engineering,VP,Mobile,Seattle,Pre-Rev,< $1M,1-10
+"44,000",30,Other,Founder,Mobile,SF Bay Area,Pre-Rev,$1M-$10M,1-10
+"100,000",0.4,Engineering,Senior,Mobile,SF Bay Area,Pre-Rev,$1M-$10M,1-10
+"50,000",0.01,Marketing,Mid,Education,New York,Revenue,< $1M,1-10
+"100,000",0.4,Engineering,Lead,Health,SF Bay Area,Pre-Rev,$1M-$10M,1-10
+"120,000",40,"Design, UX & UI",C-Level,Other,Other US,Pre-Rev,$1M-$10M,1-10
+"79,500",0.5,Engineering,Entry,Enterprise,Outside US,Revenue,$1M-$10M,1-10
+"48,000",5,Engineering,VP,eCommerce,SF Bay Area,Pre-Rev,$1M-$10M,1-10
+"23,000",0.00001,Engineering,Entry,Social Networks,Outside US,Pre-Rev,< $1M,1-10
+"45,000",10,Sales & Bus. Dev.,Founder,eCommerce,New York,Pre-Rev,< $1M,1-10
+"100,000",0.25,Engineering,Senior,Security,SF Bay Area,Revenue,$10M-$50M,1-10
+"100,000",0.5,Engineering,Lead,Other,SF Bay Area,Pre-Rev,$100M-$250M,1-10
+"110,000",3,Engineering,VP,eCommerce,Southern CA,Pre-Rev,$1M-$10M,1-10
+"100,000",1.07,Analytics,Director,Games,SF Bay Area,Pre-Rev,$1M-$10M,1-10
+"75,000",0.35,Engineering,Mid,Advertising,Southern CA,Profit,$1M-$10M,1-10
+"100,000",0.5,Product Mgmt.,Lead,Finance,SF Bay Area,Pre-Rev,$100M-$250M,1-10
+"65,000",0.001,Engineering,Entry,Social Networks,SF Bay Area,Pre-Rev,$10M-$50M,1-10
+"95,000",0.03,Engineering,Senior,Mobile,New York,Pre-Rev,$10M-$50M,1-10
+"100,000",4,Sales & Bus. Dev.,VP,Finance,New York,Pre-Rev,$1M-$10M,1-10
+"90,000",1,Marketing,Director,Enterprise,SF Bay Area,Revenue,$1M-$10M,1-10
+"110,000",5,Engineering,C-Level,Social Networks,New York,Profit,$10M-$50M,1-10
+"45,500",0.5,"Design, UX & UI",Entry,Enterprise,Other US,Pre-Rev,$1M-$10M,1-10
+"24,000",49,Analytics,Founder,Advertising,Outside US,Pre-Rev,$1M-$10M,1-10
+"90,000",18,Engineering,Founder,Mobile,SF Bay Area,Revenue,$1M-$10M,1-10
+"45,500",0.5,"Design, UX & UI",Entry,Enterprise,Other US,Pre-Rev,< $1M,1-10
+"90,000",4,Sales & Bus. Dev.,Director,eCommerce,Chicago,Revenue,$1M-$10M,1-10
+"100,000",0.2,Engineering,Mid,IT Operations,New York,Pre-Rev,$1M-$10M,1-10
+"144,000",15,Engineering,C-Level,Other,Other US,Pre-Rev,$1M-$10M,1-10
+"87,000",2,Engineering,Director,Enterprise,New York,Pre-Rev,< $1M,1-10
+"50,000",33,"Design, UX & UI",Founder,Social Networks,Seattle,Pre-Rev,$1M-$10M,1-10
+"45,000",5,Engineering,VP,eCommerce,SF Bay Area,Pre-Rev,$1M-$10M,1-10
+"85,000",0.008,"Design, UX & UI",Director,Local,Chicago,Pre-Rev,$1M-$10M,1-10
+"85,000",1,Product Mgmt.,Senior,Social Networks,SF Bay Area,Pre-Rev,$1M-$10M,1-10
+"85,000",1,Engineering,Senior,Social Networks,Outside US,Pre-Rev,< $1M,1-10
+"100,000",15,Engineering,Founder,Advertising,Other US,Profit,$1M-$10M,1-10
+"80,000",1.5,Engineering,Lead,Other,SF Bay Area,Pre-Rev,$1M-$10M,1-10
+"90,000",1,Engineering,Mid,Advertising,New York,Pre-Rev,$1M-$10M,1-10
+"165,000",0.5,Engineering,C-Level,Other,New York,Pre-Rev,$1M-$10M,1-10
+"140,000",1,Engineering,Mid,Enterprise,New York,Revenue,$1M-$10M,1-10
+"70,000",0.0025,Engineering,Mid,Social Networks,Outside US,Pre-Rev,$1M-$10M,1-10
+"75,000",50,Marketing,Founder,Advertising,Other US,Revenue,< $1M,1-10
+"100,000",0.6,Engineering,Mid,Enterprise,SF Bay Area,Pre-Rev,$10M-$50M,1-10
+"58,500",0.00001,Engineering,Mid,Music,Outside US,Profit,$1M-$10M,1-10
+"80,000",2,Engineering,Senior,Enterprise,Other US,Pre-Rev,$1M-$10M,1-10
+"40,000",5,Engineering,C-Level,Education,Outside US,Pre-Rev,< $1M,1-10
+"80,000",2.25,Engineering,Lead,Mobile,Boston,Profit,$10M-$50M,1-10
+"80,000",0.25,Engineering,Lead,Local,New York,Pre-Rev,$1M-$10M,1-10
+"160,000",16,Engineering,Founder,Mobile,SF Bay Area,Revenue,$10M-$50M,1-10
+"62,500",25,Engineering,Founder,Enterprise,SF Bay Area,Pre-Rev,$1M-$10M,1-10
+"80,000",1.6,Engineering,Senior,Advertising,Outside US,Revenue,< $1M,1-10
+"80,000",0.4,Product Mgmt.,Lead,Recruiting,SF Bay Area,Pre-Rev,$10M-$50M,1-10
+"85,000",0.5,Engineering,Entry,Social Networks,SF Bay Area,Pre-Rev,$1M-$10M,1-10
+"70,000",0.1,Administration,Lead,Other,Other US,Pre-Rev,$1M-$10M,1-10
+"100,000",0.1,Engineering,Mid,Social Networks,SF Bay Area,Pre-Rev,$10M-$50M,1-10
+"50,000",1,Marketing,Senior,Social Networks,SF Bay Area,Pre-Rev,$1M-$10M,1-10
+"50,000",1.42,Engineering,Senior,Video,Outside US,Pre-Rev,$1M-$10M,1-10
+"45,000",8,Engineering,Lead,eCommerce,Outside US,Revenue,$1M-$10M,1-10
+"42,000",0.1,Engineering,Lead,IT Operations,Outside US,Revenue,< $1M,1-10
+"40,000",0.00001,Sales & Bus. Dev.,Lead,Social Networks,Austin,Revenue,$1M-$10M,1-10

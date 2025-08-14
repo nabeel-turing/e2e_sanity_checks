@@ -1,0 +1,92 @@
+Date,Month,Year,Type,Concept,Description,Supplier,Target project,Check type,Point of sale,Number,Amount (without IVA),IIBB,IVA,TISSH,Accounting Total
+14-nov,November,2019,Revenue,Aporte_Socios,PUSO DANI PARA ARREGLAR CAÑO DE AGUA CIUDAD JUDICIAL,Dani,Estructura de la empresa,X,,,$600.00,$ -,126,$ -,$726.00
+14-nov,November,2019,Revenue,Aporte_Socios,"PUSO DANI PARA CLAVOS, TORNILLOS, PEGAMENTO, HOJA SIERRA",Dani,Estructura de la empresa,X,,,$750.00,$ -,157.5,$ -,$907.50
+14-nov,November,2019,Expense,Compra_Materiales_Insumos,"CLAVOS, TORNILLOS, PEGAMENTO, HOJA SIERRA",Corralón-Ferretería,Ciudad Judicial - Reemplazo de membrana,X,,,$750.00,$ -,157.5,$ -,$907.50
+14-nov,November,2019,Expense,Compra_Materiales_Insumos,"JUNTAS RAPIDAS PARA CAÑO 50MM, HOJA SIERRA, 1M DE TUBO DE 50MM",Corralón-Ferretería,Ciudad Judicial - Reemplazo de membrana,X,,,"$1,100.00",$ -,231,$ -,"$1,331.00"
+15-nov,November,2019,Revenue,Aporte_Socios,PUSO RIKI PARA REPARACIÓN CAÑO DE AGUA CIUDAD JUDICIAL Y BIDONES DE AGUA PARA ALBAÑILES,Riki,Estructura de la empresa,X,,,$630.00,$ -,132.3,$ -,$762.30
+15-nov,November,2019,Expense,Compra_Materiales_Insumos,GASTO EN CAÑO DE AGUA + BIDÓN DE AGUA PARA ALBAÑILES,Corralón-Ferretería,Ciudad Judicial - Reemplazo de membrana,X,,,$630.00,$ -,132.3,$ -,$762.30
+19-nov,November,2019,Revenue,Aporte_Socios,DANI PAGO LAS 90 TUERCAS PARA LOS ANDAMIOS,Dani,Estructura de la empresa,X,,,$720.00,$ -,151.2,$ -,$871.20
+19-nov,November,2019,Expense,Compra_Materiales_Insumos,90 TUERCAS PARA ANDAMIOS,Bulonera Vélez,Ciudad Judicial - Reemplazo de membrana,X,,,$720.00,$ -,151.2,$ -,$871.20
+19-nov,November,2019,Revenue,Aporte_Socios,"PUSE PARA PAGAR LA MANO DE OBRA JUAN IBARRA, POR OBRA CIUDAD JUDICIAL",Piki,Estructura de la empresa,X,,,"$4,000.00",$ -,840,$ -,"$4,840.00"
+19-nov,November,2019,Revenue,Aporte_Socios,"PUSO BONA PARA PAGAR LA MANO DE OBRA JUAN IBARRA, OBRA CIUDAD JUDICIAL",Bona,Estructura de la empresa,X,,,"$4,000.00",$ -,840,$ -,"$4,840.00"
+19-nov,November,2019,Expense,Mano de obra,"ADELANTO PRIMERA QUINCENA JUAN IBARRA, OBRA CIUDAD JUDICIAL",Juan Ibarra Contratista,Ciudad Judicial - Reemplazo de membrana,X,,,"$8,000.00",$ -,1680,$ -,"$9,680.00"
+22-nov,November,2019,Revenue,Aporte_Socios,PUSO DANI PARA GRASA PERCUTOR,Dani,Estructura de la empresa,X,,,$100.00,$ -,21,$ -,$121.00
+22-nov,November,2019,Expense,Compra_Materiales_Insumos,GRASA PERCUTORES,Corralón-Ferretería,Ciudad Judicial - Reemplazo de membrana,X,,,$100.00,$ -,21,$ -,$121.00
+23-nov,November,2019,Revenue,Aporte_Socios,DANI LE DEVOLVIÓ 2000 A LO QUE PUSO CHICHO,Dani,Estructura de la empresa,X,,,"$2,000.00",$ -,420,$ -,"$2,420.00"
+23-nov,November,2019,Revenue,Aporte_Socios,PUSE 10 MIL PARA PAGAR MANO DE OBRA JUAN IBARRA PRIMERA QUINCENA OBRA CIUDAD JUDICIAL,Piki,Estructura de la empresa,X,,,"$10,000.00",$ -,2100,$ -,"$12,100.00"
+23-nov,November,2019,Revenue,Aporte_Socios,CHICHO LE PRESTÓ AL GORDO PARA PAGAR MANO DE OBRA JUAN IBARRA OBRA CIUDAD JUDICIAL,Gordo,Estructura de la empresa,X,,,"$10,000.00",$ -,2100,$ -,"$12,100.00"
+23-nov,November,2019,Expense,Mano de obra,"ADELANTO PRIMERA QUINCENA JUAN IBARRA, OBRA CIUDAD JUDICIAL",Juan Ibarra Contratista,Ciudad Judicial - Reemplazo de membrana,X,,,"$22,000.00",$ -,4620,$ -,"$26,620.00"
+30-nov,November,2019,Revenue,Aporte_Socios,PUSO PARA PAGAR LA MANO DE OBRA JUAN IBARRA POR OBRA CIUDAD JUDICIAL 2DA SEMANA,Dani,Estructura de la empresa,X,,,"$1,900.00",$ -,399,$ -,"$2,299.00"
+30-nov,November,2019,Revenue,Aporte_Socios,"PUSE PARA PAGAR LA MANO DE OBRA JUAN IBARRA, POR OBRA CIUDAD JUDICIAL (2DA SEMANA)",Piki,Estructura de la empresa,X,,,"$13,100.00",$ -,2751,$ -,"$15,851.00"
+30-nov,November,2019,Revenue,Aporte_Socios,PUSO PARA PAGAR LA MANO DE OBRA JUAN IBARRA POR OBRA CIUDAD JUDICIAL 2DA SEMANA,Bona,Estructura de la empresa,X,,,"$15,000.00",$ -,3150,$ -,"$18,150.00"
+30-nov,November,2019,Expense,Mano de obra,PAGO MANO DE OBRA JUAN IBARRA POR OBRA CIUDAD JUDICIAL 2DA SEMANA,Juan Ibarra Contratista,Ciudad Judicial - Reemplazo de membrana,X,,,"$30,000.00",$ -,6300,$ -,"$36,300.00"
+1-dic,December,2019,Revenue,Aporte_Socios,PUSO DANI PARA PAGAR A LOS 2 ALBAÑILES QUE FUERON A SOLUCIONAR LA PÉRDIDA DE AGUA,Dani,Estructura de la empresa,X,,,"$2,000.00",$ -,420,$ -,"$2,420.00"
+1-dic,December,2019,Expense,Mano de obra,SE PAGO 2 OBREROS PARA ARREGLAR PÉRDIDA DE AGUA EN CIUDAD JUDICIAL,Albañiles particulares,Ciudad Judicial - Reemplazo de membrana,X,,,"$2,000.00",$ -,420,$ -,"$2,420.00"
+1-dic,December,2019,Expense,Compra_Materiales_Insumos,COMPRA MATERIALES PARA REPARAR PÉRDIDA EN CIUDAD JUDICIAL (SILICONA + ESPUMA POLIURETÁNICA),Corralón-Ferretería,Ciudad Judicial - Reemplazo de membrana,X,,,"$6,412.00",$ -,1346.52,$ -,"$7,758.52"
+1-dic,December,2019,Revenue,Aporte_Socios,PUSO BONA PARA MATERIALES PARA REPARAR PÉRDIDA DE AGUA EN CIUDAD JUDICIAL,Bona,Estructura de la empresa,X,,,"$6,412.00",$ -,1346.52,$ -,"$7,758.52"
+2-dic,December,2019,Expense,Mano de obra,PAGO MANO DE OBRA JUAN IBARRA POR OBRA CIUDAD JUDICIAL 2DA SEMANA,Juan Ibarra Contratista,Ciudad Judicial - Reemplazo de membrana,X,,,"$15,000.00",$ -,3150,$ -,"$18,150.00"
+2-dic,December,2019,Revenue,Adelanto_Obra,ADELANTO DE ANDRES POR OBRA CIUDAD JUDICIAL,CyL Construcción,Ciudad Judicial - Reemplazo de membrana,X,,,"$20,000.00",$ -,4200,$ -,"$24,200.00"
+6-dic,December,2019,Revenue,Aporte_Socios,PUSO DANI PARA COMPRAR LAS ESCOBAS,Dani,Estructura de la empresa,X,,,"$2,086.00",$ -,438.06,$ -,"$2,524.06"
+6-dic,December,2019,Expense,Inversion_Activos,DOS ESCOBAS DE 60 CM,Corralón-Ferretería,Ciudad Judicial - Reemplazo de membrana,X,,,"$2,086.00",$ -,438.06,$ -,"$2,524.06"
+6-dic,December,2019,Expense,Retiro_Socios_Dev,EL GORDO LE DIO 2100 AL DANI DE LA CAJA DE LA EMPRESA PARA DEVOLVERLE POR LA COMPRA DE ESCOBAS,Dani,Estructura de la empresa,X,,,"$2,100.00",$ -,441,$ -,"$2,541.00"
+6-dic,December,2019,Revenue,Adelanto_Obra,NOS DIO ANDRES POR ADELANTO OBRA CIUDAD JUDICIAL,CyL Construcción,Ciudad Judicial - Reemplazo de membrana,X,,,"$30,000.00",$ -,6300,$ -,"$36,300.00"
+7-dic,December,2019,Revenue,Aporte_Socios,"PUSE PARA COMPRAR 2 DISCOS DE CORTE CERÁMICO, UN PINCEL, UNA GASEOSA Y UN ENCENDEDOR",Piki,Estructura de la empresa,X,,,$610.00,$ -,128.1,$ -,$738.10
+7-dic,December,2019,Expense,Compra_Materiales_Insumos,2 DISCOS DE CORTE + PINCEL + ENCENDEDOR + GASEOSA,Corralón-Ferretería,Ciudad Judicial - Reemplazo de membrana,X,,,$610.00,$ -,128.1,$ -,$738.10
+7-dic,December,2019,Expense,Retiro_Socios_Dev,SACO EL GORDO DE LA CAJA DE LA EMPRESA PARA PAGAR SU TARJETA,Gordo,Estructura de la empresa,X,,,"$2,580.00",$ -,541.8,$ -,"$3,121.80"
+7-dic,December,2019,Expense,Mano de obra,CANCELACIÓN MANO DE OBRA SEMANA DEL 2/12 A JUAN IBARRA POR OBRA CIUDAD JUDICIAL,Juan Ibarra Contratista,Ciudad Judicial - Reemplazo de membrana,X,,,"$30,000.00",$ -,6300,$ -,"$36,300.00"
+9-dic,December,2019,Revenue,Aporte_Socios,DANI PAGO LAS 8 BOLSAS DE ARENA,Dani,Estructura de la empresa,X,,,$200.00,$ -,42,$ -,$242.00
+9-dic,December,2019,Expense,Compra_Materiales_Insumos,8 BOLSAS DE ARENA ($25 C/U),Corralón-Ferretería,Ciudad Judicial - Reemplazo de membrana,X,,,$200.00,$ -,42,$ -,$242.00
+10-dic,December,2019,Expense,Gastos_Administrativos,ESTACIONAMIENTO DEL GORDO PARA COBRAR CHEQUE QUE LE DIO ANDRES,Indistinto,Ciudad Judicial - Reemplazo de membrana,X,,,$60.00,$ -,12.6,$ -,$72.60
+10-dic,December,2019,Expense,Gastos_Administrativos,REMIS DEL GORDO PARA IR A COMPRAR EL HIDRO DE LA LUCIANA,Indistinto,Hidromasaje Patricia Bock,X,,,$80.00,$ -,16.8,$ -,$96.80
+10-dic,December,2019,Revenue,Adelanto_Obra,NOS DIO ANDRES POR ADELANTO OBRA CIUDAD JUDICIAL,CyL Construcción,Ciudad Judicial - Reemplazo de membrana,X,,,"$20,000.00",$ -,4200,$ -,"$24,200.00"
+11-dic,December,2019,Expense,Gastos_Administrativos,REMIS DEL GORDO PARA IR A PROMET A BUSCAR LAS CHAPAS PARA OBRA CIUDAD JUDICIAL,Indistinto,Ciudad Judicial - Reemplazo de membrana,X,,,$200.00,$ -,42,$ -,$242.00
+12-dic,December,2019,Expense,Inversion_Activos,"POLEA PARA ""MONTACARGAS"" DE OBRA",Corralón-Ferretería,Ciudad Judicial - Reemplazo de membrana,X,,,$630.00,$ -,132.3,$ -,$762.30
+12-dic,December,2019,Expense,Retiro_Socios_Dev,RETIRO EL GORDO (PAGO UNA COIMA A UN POLICIA CON PLATA DE LA EMPRESA EL PELOTUDO),Gordo,Estructura de la empresa,X,,,"$1,000.00",$ -,210,$ -,"$1,210.00"
+12-dic,December,2019,Expense,Inversion_Activos,"2 REGLAS CAÑO 60x20x1,2 x 6mts",Corralón-Ferretería,Ciudad Judicial - Reemplazo de membrana,X,,,"$1,655.00",$ -,347.55,$ -,"$2,002.55"
+13-dic,December,2019,Revenue,Adelanto_Obra,NOS DIO ANDRES POR ADELANTO OBRA CIUDAD JUDICIAL,CyL Construcción,Ciudad Judicial - Reemplazo de membrana,X,,,"$30,000.00",$ -,6300,$ -,"$36,300.00"
+14-dic,December,2019,Expense,Compra_Materiales_Insumos,DOS BOLSAS DE CEMENTO PARA ARMADO DE FAJAS,Corralón-Ferretería,Ciudad Judicial - Reemplazo de membrana,X,,,"$1,080.00",$ -,226.8,$ -,"$1,306.80"
+14-dic,December,2019,Expense,Mano de obra,PAGAMOS A JUAN POR MANO DE OBRA CIUDAD JUDICIAL - SEMANA DEL 9/12,Juan Ibarra Contratista,Ciudad Judicial - Reemplazo de membrana,X,,,"$45,000.00",$ -,9450,$ -,"$54,450.00"
+16-dic,December,2019,Revenue,Aporte_Socios,PUSO DANI PARA LA BOLSA DE CEMENTO,Dani,Estructura de la empresa,X,,,$39.00,$ -,8.19,$ -,$47.19
+16-dic,December,2019,Revenue,Aporte_Socios,PUSE PARA COMPRAR UNA BOLSA DE CEMENTO,Piki,Estructura de la empresa,X,,,$500.00,$ -,105,$ -,$605.00
+16-dic,December,2019,Expense,Compra_Materiales_Insumos,BOLSA DE CEMENTO PARA LICHIGADA DE CAMION HORMIGONERO,Corralón-Ferretería,Ciudad Judicial - Reemplazo de membrana,X,,,$539.00,$ -,113.19,$ -,$652.19
+18-dic,December,2019,Revenue,Aporte_Socios,PUSE PARA LA GASEOSA DE LOS MUCHACHOS,Piki,Estructura de la empresa,X,,,$65.00,$ -,13.65,$ -,$78.65
+18-dic,December,2019,Expense,Gastos_Administrativos,GASEOSA PARA LOS MUCHACHOS DIA DE HORMIGONADO,Indistinto,Ciudad Judicial - Reemplazo de membrana,X,,,$65.00,$ -,13.65,$ -,$78.65
+20-dic,December,2019,Revenue,Adelanto_Obra,NOS DIO ANDRES POR ADELANTO OBRA CIUDAD JUDICIAL,CyL Construcción,Ciudad Judicial - Reemplazo de membrana,X,,,"$45,000.00",$ -,9450,$ -,"$54,450.00"
+21-dic,December,2019,Expense,Mano de obra,SE PAGO A JUAN POR MANO DE OBRA CIUDAD JUDICIAL,Juan Ibarra Contratista,Ciudad Judicial - Reemplazo de membrana,X,,,"$45,000.00",$ -,9450,$ -,"$54,450.00"
+27-dic,December,2019,Revenue,Adelanto_Obra,ADELANTO DE ANDRES POR OBRA CIUDAD JUDICIAL,CyL Construcción,Ciudad Judicial - Reemplazo de membrana,X,,,"$45,000.00",$ -,9450,$ -,"$54,450.00"
+28-dic,December,2019,Expense,Mano de obra,SE PAGO A JUAN POR MANO DE OBRA CIUDAD JUDICIAL,Juan Ibarra Contratista,Ciudad Judicial - Reemplazo de membrana,X,,,"$22,000.00",$ -,4620,$ -,"$26,620.00"
+29-dic,December,2019,Revenue,Aporte_Socios,PUSO RIKI PARA COMPRAR RUEDA DE CARRETILLA,Riki,Estructura de la empresa,X,,,$500.00,$ -,105,$ -,$605.00
+29-dic,December,2019,Expense,Inversion_Activos,COMPRA DE RUEDA DE CARRETILLA POR DESTRUCCIÓN,Indistinto,Ciudad Judicial - Reemplazo de membrana,X,,,$500.00,$ -,105,$ -,$605.00
+29-dic,December,2019,Expense,Retiro_Socios_Dev,RETIRÓ MAMA PIKI POR DEVOLUCIÓN DE CAPITAL,Piki,Estructura de la empresa,X,,,"$12,000.00",$ -,2520,$ -,"$14,520.00"
+2-ene,January,2020,Revenue,Aporte_Socios,PUSO RIKI PARA PAGAR EL CONTRATO DE OBRA DESCARGADO DE INTERNET,Riki,Estructura de la empresa,X,,,"$1,094.00",$ -,229.74,$ -,"$1,323.74"
+2-ene,January,2020,Expense,Gastos_Administrativos,MODELO DE CONTRATO DE OBRA DESCARGADO DE INTERNET,Indistinto,Hidromasaje Patricia Bock,X,,,"$1,094.00",$ -,229.74,$ -,"$1,323.74"
+2-ene,January,2020,Expense,Retiro_Socios_Dev,RETIRÓ BONA DE LA PLATA QUE APORTÓ,Bona,Estructura de la empresa,X,,,"$8,000.00",$ -,1680,$ -,"$9,680.00"
+3-ene,January,2020,Revenue,Adelanto_Obra,NOS DIO ANDRES POR ADELANTO OBRA CIUDAD JUDICIAL,CyL Construcción,Ciudad Judicial - Reemplazo de membrana,X,,,"$25,000.00",$ -,5250,$ -,"$30,250.00"
+4-ene,January,2020,Expense,Mano de obra,SE PAGO A JUAN POR MANO DE OBRA CIUDAD JUDICIAL,Juan Ibarra Contratista,Ciudad Judicial - Reemplazo de membrana,X,,,"$10,000.00",$ -,2100,$ -,"$12,100.00"
+6-ene,January,2020,Expense,Compra_Insumos_Indirectos,SE COMPRARON GUANTES PARA TRABAJADORES CIUDAD JUDICIAL,Indistinto,Ciudad Judicial - Reemplazo de membrana,X,,,"$1,020.00",$ -,214.2,$ -,"$1,234.20"
+6-ene,January,2020,Expense,Mano de obra,ULTIMO PAGO A JUAN ANTES DE QUE SE VAYA,Juan Ibarra Contratista,Ciudad Judicial - Reemplazo de membrana,X,,,"$12,000.00",$ -,2520,$ -,"$14,520.00"
+8-ene,January,2020,Revenue,Aporte_Socios,PUSO RIKI PARA COMPRAR LA HORMIGONERA,Riki,Estructura de la empresa,X,,,"$13,670.00",$ -,2870.7,$ -,"$16,540.70"
+8-ene,January,2020,Expense,Inversion_Activos,COMPRA DE HORMIGONERA,Indistinto,Ciudad Judicial - Reemplazo de membrana,X,,,"$13,670.00",$ -,2870.7,$ -,"$16,540.70"
+10-ene,January,2020,Expense,Compra_Materiales_Insumos,RECARGA DE GARRAFA,Indistinto,Ciudad Judicial - Reemplazo de membrana,X,,,$200.00,$ -,42,$ -,$242.00
+10-ene,January,2020,Expense,Inversion_Activos,SOGA PARA ROLDANA 25 METROS,Indistinto,Ciudad Judicial - Reemplazo de membrana,X,,,"$1,125.30",$ -,236.313,$ -,"$1,361.61"
+10-ene,January,2020,Expense,Mano de obra,PRIMER ADELANTO A LA GENTE NUEVA POR MANO DE OBRA CIUDAD JUDICIAL,Claudio Albañil Oficial,Ciudad Judicial - Reemplazo de membrana,X,,,"$10,000.00",$ -,2100,$ -,"$12,100.00"
+10-ene,January,2020,Revenue,Adelanto_Obra,NOS DIO ANDRES POR ADELANTO OBRA CIUDAD JUDICIAL,CyL Construcción,Ciudad Judicial - Reemplazo de membrana,X,,,"$25,000.00",$ -,5250,$ -,"$30,250.00"
+14-ene,January,2020,Revenue,Adelanto_Obra,PATO LE PAGÓ A RIKI LA MANO DE OBRA DE CARPETA EN OBRA HIDROMASAJE,Patricia De Bock,Hidromasaje Patricia Bock,X,,,"$5,000.00",$ -,1050,$ -,"$6,050.00"
+14-ene,January,2020,Expense,Mano de obra,SE PAGO LA MANO DE OBRA A RIKI CEDOLINI POR CARPETA HIDROMASAJE,Albañiles particulares,Hidromasaje Patricia Bock,X,,,"$5,000.00",$ -,1050,$ -,"$6,050.00"
+18-ene,January,2020,Revenue,Adelanto_Obra,PRIMER ADELANTO QUE NOS DIO LA PATO POR EJECUCIÓN HIDROMASAJE,Patricia De Bock,Hidromasaje Patricia Bock,X,,,"$20,000.00",$ -,4200,$ -,"$24,200.00"
+22-ene,January,2020,Expense,Mano de obra,SE COMPLETO EL PAGO DE LA GENTE DE LA PRIMERA SEMANA POR OBRA CIUDAD JUDICIAL,Claudio Albañil Oficial,Ciudad Judicial - Reemplazo de membrana,X,,,"$2,000.00",$ -,420,$ -,"$2,420.00"
+22-ene,January,2020,Expense,Compra_Materiales_Insumos,TUVIMOS QUE COMPRAR CON NUESTRA PLATA PARTE DEL HIERRO POR ERROR DE PRESUPUESTO,Indistinto,Hidromasaje Patricia Bock,X,,,"$11,860.00",$ -,2490.6,$ -,"$14,350.60"
+24-ene,January,2020,Expense,Inversion_Activos,MANGUERA TRICOLOR DE 50 MTS X 1/2 PULG,Tubonor,Ciudad Judicial - Reemplazo de membrana,X,,,$970.00,$ -,203.7,$ -,"$1,173.70"
+25-ene,January,2020,Expense,Mano de obra,SE LE PAGÓ A LA GENTE DE CIUDAD JUDICIAL POR MANO DE OBRA,Claudio Albañil Oficial,Ciudad Judicial - Reemplazo de membrana,X,,,"$15,000.00",$ -,3150,$ -,"$18,150.00"
+29-ene,January,2020,Revenue,Aporte_Socios,PUSE PARA COMPRAR LA CUCHARA Y EL FRATACHO EN LA TABLADA,Piki,Estructura de la empresa,X,,,$600.00,$ -,126,$ -,$726.00
+29-ene,January,2020,Expense,Inversion_Activos,"COMPRÉ UNA CUCHARA Y UN FRATACHO EN LA TABLADA, PAGUÉ CON MI PLATA",Corralón-Ferretería,Revoque pared Patricia De Bock,X,,,$600.00,$ -,126,$ -,$726.00
+30-ene,January,2020,Revenue,Aporte_Socios,PUSE PARA COMPRAR LOS MATERIALES DE LA TABLADA PARA REVOQUE PATRICIA DE BOCK,Piki,Estructura de la empresa,X,,,"$3,200.00",$ -,672,$ -,"$3,872.00"
+30-ene,January,2020,Expense,Compra_Materiales_Insumos,MATERIALES PARA REVOQUE PARED PATRICIA DE BOCK EN LA TABLADA,Corralón-Ferretería,Revoque pared Patricia De Bock,X,,,"$3,200.00",$ -,672,$ -,"$3,872.00"
+31-ene,January,2020,Expense,Compra_Materiales_Insumos,$500 DE 50 LADRILLOS + $490 DE SUPERLIGANTE SIKA Y DISCO DE CORTE,Corralón-Ferretería,Revoque pared Patricia De Bock,X,,,$990.00,$ -,207.9,$ -,"$1,197.90"
+31-ene,January,2020,Expense,Mano de obra,SE PAGO EL DIA DE LALO ($1050) Y SU AYUDANTE ($750) POR OBRA PATRICIA DE BOCK,Lalo Albañil Oficial,Revoque pared Patricia De Bock,X,,,"$1,800.00",$ -,378,$ -,"$2,178.00"
+31-ene,January,2020,Expense,Retiro_Socios_Dev,"RETIRO LO QUE PUSE AYER, $3200 MATERIALES REVOQUE Y $600 CUCHARA Y FRATACHO",Piki,Estructura de la empresa,X,,,"$3,800.00",$ -,798,$ -,"$4,598.00"
+31-ene,January,2020,Revenue,Adelanto_Obra,ME DIO PATO EN CONCEPTO DE MANO DE OBRA PARA OBRA REVOQUE,Patricia De Bock,Revoque pared Patricia De Bock,X,,,"$4,000.00",$ -,840,$ -,"$4,840.00"
+31-ene,January,2020,Revenue,Adelanto_Obra,ME DIO PATO EN CONCEPTO DE MATERIALES PARA OBRA REVOQUE,Patricia De Bock,Revoque pared Patricia De Bock,X,,,"$4,000.00",$ -,840,$ -,"$4,840.00"
+1-feb,January,2020,Expense,Gastos_Administrativos,VIATICOS PARA LOS MUCHACHOS EL DIA DE HORMIGONADO (EMPANADAS + SODA + AGUA),Claudio Albañil Oficial,Ciudad Judicial - Reemplazo de membrana,X,,,"$1,530.00",$ -,321.3,$ -,"$1,851.30"
+1-feb,January,2020,Revenue,Aporte_Socios,PUSE PARA PAGAR LA MANO DE OBRA DEL DIA DE HORMIGONADO,Piki,Estructura de la empresa,X,,,"$4,000.00",$ -,840,$ -,"$4,840.00"
+1-feb,January,2020,Revenue,Aporte_Socios,PUSO DANI PARA PAGAR LA MANO DE OBRA DEL DIA DE HORMIGONADO,Dani,Estructura de la empresa,X,,,"$4,180.00",$ -,877.8,$ -,"$5,057.80"

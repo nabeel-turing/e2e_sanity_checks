@@ -1,0 +1,58 @@
+OOC ID,Location Zip Code,Service Type,Visit Date,Duration (Hours),Cost per Visit ($),Distance Traveled (Miles),Location Tag
+OOC00,90274,Routine once a week,1/1/2022,1,130,15.3,Loc1
+OOC01,90249,Routine twice a week,1/2/2022,1.5,195,18.5,Loc2
+OOC02,90731,Routine bi-weekly,1/3/2022,2,220,5,Loc3
+OOC03,90274,Routine once a week,1/4/2022,1,130,15.3,Loc1
+OOC04,90505,Routine once a week,1/5/2022,1,130,12,Loc4
+OOC05,90706,Routine bi-weekly,1/6/2022,2,220,20,Loc5
+OOC06,90249,Routine twice a week,1/7/2022,1.5,195,18.5,Loc2
+OOC07,90274,Routine once a week,1/8/2022,1,130,15.3,Loc1
+OOC08,90745,Routine twice a week,1/9/2022,1.5,195,7,Loc6
+OOC09,90731,Routine bi-weekly,1/10/2022,2,220,5,Loc3
+OOC10,90274,Routine once a week,1/11/2022,1,130,15.3,Loc1
+OOC11,90505,Routine once a week,1/12/2022,1,130,12,Loc4
+OOC12,90249,Routine twice a week,1/13/2022,1.5,195,18.5,Loc2
+OOC13,90706,Routine bi-weekly,1/14/2022,2,220,20,Loc5
+OOC14,90274,Routine once a week,1/15/2022,1,130,15.3,Loc1
+OOC15,90745,Routine twice a week,1/16/2022,1.5,195,7,Loc6
+OOC16,90274,Routine once a week,1/17/2022,1,130,15.3,Loc1
+OOC17,90249,Routine twice a week,1/18/2022,1.5,195,18.5,Loc2
+OOC18,90731,Routine bi-weekly,1/19/2022,2,220,5,Loc3
+OOC19,90274,Routine once a week,1/20/2022,1,130,15.3,Loc1
+OOC20,90505,Routine once a week,1/21/2022,1,130,12,Loc4
+OOC21,90706,Routine bi-weekly,1/22/2022,2,220,20,Loc5
+OOC22,90249,Routine twice a week,1/23/2022,1.5,195,18.5,Loc2
+OOC23,90274,Routine once a week,1/24/2022,1,130,15.3,Loc1
+OOC24,90745,Routine twice a week,1/25/2022,1.5,195,7,Loc6
+OOC25,90731,Routine bi-weekly,1/26/2022,2,220,5,Loc3
+OOC26,90274,Routine once a week,2/2/2022,1,130,15.3,Loc1
+OOC27,90505,Routine once a week,2/9/2022,1,130,12,Loc4
+OOC28,90706,Routine bi-weekly,2/16/2022,2,220,20,Loc5
+OOC29,90249,Routine twice a week,2/23/2022,1.5,195,18.5,Loc2
+OOC30,90274,Routine once a week,3/2/2022,1,130,15.3,Loc1
+OOC31,90745,Routine twice a week,3/9/2022,1.5,195,7,Loc6
+OOC32,90731,Routine bi-weekly,3/16/2022,2,220,5,Loc3
+OOC33,90274,Routine once a week,3/23/2022,1,130,15.3,Loc1
+OOC34,90505,Routine once a week,3/30/2022,1,130,12,Loc4
+OOC35,90706,Routine bi-weekly,4/6/2022,2,220,20,Loc5
+OOC36,90249,Routine twice a week,4/13/2022,1.5,195,18.5,Loc2
+OOC37,90274,Routine once a week,4/20/2022,1,130,15.3,Loc1
+OOC38,90745,Routine twice a week,4/27/2022,1.5,195,7,Loc6
+OOC39,90731,Routine bi-weekly,5/4/2022,2,220,5,Loc3
+OOC40,90274,Routine once a week,5/11/2022,1,130,15.3,Loc1
+OOC41,90505,Routine once a week,5/18/2022,1,130,12,Loc4
+OOC42,90706,Routine bi-weekly,5/25/2022,2,220,20,Loc5
+OOC43,90249,Routine twice a week,6/1/2022,1.5,195,18.5,Loc2
+OOC44,90274,Routine once a week,6/8/2022,1,130,15.3,Loc1
+OOC45,90745,Routine twice a week,6/15/2022,1.5,195,7,Loc6
+OOC46,90731,Routine bi-weekly,6/22/2022,2,220,5,Loc3
+OOC47,90274,Routine once a week,6/29/2022,1,130,15.3,Loc1
+OOC48,90249,Routine twice a week,6/30/2022,1.5,195,18.5,Loc2
+OOC49,90274,Routine once a week,1/5/2022,1,130,15.3,Loc1
+OOC50,90249,Routine twice a week,1/12/2022,1.5,195,18.5,Loc2
+OOC51,90274,Routine once a week,1/19/2022,1,130,15.3,Loc1
+OOC52,90274,Routine once a week,1/26/2022,1,130,15.3,Loc1
+OOC53,90731,Routine bi-weekly,2/2/2022,2,220,5,Loc3
+OOC54,90240,Routine bi-weekly,2/9/2022,2.5,255,25,Loc7
+OOC55,90240,Routine bi-weekly,2/16/2022,2.5,255,25,Loc7
+...,,,,,,,

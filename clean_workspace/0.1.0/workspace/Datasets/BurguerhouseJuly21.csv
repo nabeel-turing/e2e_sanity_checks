@@ -1,0 +1,91 @@
+sale id,Date,country,status,several products package,units,product(s),variant,income by products (MXN),income by shipments (MXN),shipment expenses,Total (MXN),delivery method,with external tip
+1000003915437805,2021-07-28,Mexico,Delivered,Yes,4,"Burguer, Hot dog, Soda, Soda",No chili,$65,,,,DiDi Food,Yes
+100006476145790,2021-07-25,Mexico,Delivered,No,1,Hot dog,No mustard,$25,,,,DiDi Food,Yes
+1000006472825084,2021-07-06,Mexico,Delivered,No,2,"Burguer, Burguer",,$60,,,,,No
+1000006396112994,2021-07-21,Mexico,Delivered,No,1,Burguer,"No mayonnaise, No chili",$30,101,-60,,DiDi Food,No
+1000006286703184,2021-07-16,Mexico,Delivered,No,3,"Burguer, Burguer, Hot dog",No mayonnaise,$85,,,,DiDi Food,No
+4000004435612578,2021-07-10,Mexico,You canceled the sale,No,1,Soda,,$0,,,,,No
+4039964693404,2021-07-03,Mexico,You canceled the sale,No,1,Hot dog,"No ketchup, No chili",$0,,,,,No
+1000003896155541,2021-07-27,Mexico,Delivered,Yes,2,"BBQ wings, Hot dog",No mayonnaise,$47,,,,DiDi Food,No
+100004392722930,2021-07-29,Mexico,Delivered,No,1,BBQ wings,,$22,,,,DiDi Food,No
+1000006818842336,2021-07-09,Mexico,Delivered,No,1,Hot dog,No ketchup,$25,,,,,No
+1000004925700119,2021-07-31,Mexico,Delivered,Yes,2,"Burguer, Soda",No mustard,$35,25,-10,,DiDi Food,No
+1000004906559181,2021-07-08,Mexico,Delivered,Yes,2,"Hot dog, Soda",,$30,,,,DiDi Food,Yes
+1000006243649426,2021-07-01,Mexico,Delivered,No,4,"Hot dog, Hot dog, Soda, Soda",No mustard,$60,,,,DiDi Food,No
+1000006153843062,2021-07-19,Mexico,Delivered,No,1,Hot dog,No ketchup,$25,,,,DiDi Food,Yes
+100004367724820,2021-07-17,Mexico,Delivered,No,1,Burguer,No chili,$30,,,,,No
+1000004798731548,2021-07-27,Mexico,Delivered,No,1,Burguer,No ketchup,$30,,,,DiDi Food,Yes
+1000004732469516,2021-07-24,Mexico,Delivered,No,1,Burguer,,$30,30,-30,,DiDi Food,No
+1000004638000978,2021-07-23,Mexico,Delivered,No,1,Hot dog,"No ketchup, No mustard",$25,,,,DiDi Food,Yes
+1000004492533188,2021-07-10,Mexico,Delivered,No,2,"Hot dog, Hot dog","No ketchup, No mustard",$50,,,,DiDi Food,Yes
+1000003824978665,2021-07-19,Mexico,Delivered,Yes,3,"BBQ wings, Soda, Hot dog",,$52,,,,DiDi Food,No
+1000004188149584,2021-07-21,Mexico,Delivered,No,1,Hot dog,No mustard,$25,,,,,No
+100006832530320,2021-07-17,Mexico,Delivered,No,1,BBQ wings,,$22,,,,DiDi Food,Yes
+100004367425000,2021-07-14,Mexico,Delivered,No,1,Burguer,No mayonnaise,$30,,,,DiDi Food,Yes
+1000004896257024,2021-07-09,Mexico,Delivered,No,1,Burguer,No ketchup,$30,,,,DiDi Food,Yes
+1000004873974616,2021-07-19,Mexico,You canceled the sale,No,1,Burguer,No mayonnaise,$0,,,,,No
+1000004858580894,2021-07-06,Mexico,Delivered,No,1,Burguer,,$30,25,-25,,DiDi Food,No
+1000004857628644,2021-07-13,Mexico,Delivered,No,3,"Burguer, BBQ wings, Soda",No mayonnaise,$57,94,-55,,DiDi Food,No
+1000004455072002,2021-07-07,Mexico,You canceled the sale,No,1,Hot dog,No mustard,$0,,,,,No
+1000004446984552,2021-07-15,Mexico,Delivered,No,1,Hot dog,No mayonnaise,$25,24,-24,,DiDi Food,No
+1000003875632745,2021-07-23,Mexico,Delivered,Yes,2,"Burguer, Soda","No ketchup, No chili",$35,,,,DiDi Food,No
+1000003846429077,2021-07-05,Mexico,Delivered,Yes,2,"BBQ wings, Soda",,$27,33,-33,,DiDi Food,No
+1000003846429778,2021-07-03,Mexico,Delivered,Yes,1,BBQ wings,,$22,,,,,No
+1000003824978889,2021-07-01,Mexico,Delivered,Yes,1,Hot dog,No mustard,$25,,,,,Yes
+100000418814958,2021-07-31,Mexico,Delivered,No,1,Hot dog,No chili,$25,,,,,Yes
+1000004798731008,2021-07-19,Mexico,Delivered,No,1,Burguer,,$30,,,,DiDi Food,No
+1000004732469007,2021-07-08,Mexico,Delivered,No,3,"Burguer, Soda, Soda",No mustard,$40,105,-60,,,No
+1000005666111748,2021-07-18,Mexico,Delivered,No,1,Soda,,$5,,,,DiDi Food,Yes
+1000005627335676,2021-07-13,Mexico,Delivered,No,1,Soda,No chili,$5,,,,DiDi Food,Yes
+1000005551817162,2021-07-15,Mexico,Delivered,No,2,"BBQ wings, BBQ wings",,$5,,,,,Yes
+1000005305288242,2021-07-03,Mexico,Delivered,No,1,Hot dog,No ketchup,$25,,,,DiDi Food,Yes
+1000005280812614,2021-07-11,Mexico,Delivered,No,2,"BBQ wings, BBQ wings",,$25,20,-20,,DiDi Food,Yes
+4000004261348554,2021-07-05,Mexico,You canceled the sale,No,1,Hot dog,No mustard,$0,,,,,No
+100004819144010,2021-07-15,Mexico,Delivered,No,1,Burguer,,$30,,,,,No
+1000004806738368,2021-07-24,Mexico,Delivered,No,1,Burguer,No mayonnaise,$30,,,,DiDi Food,Yes
+1000004638000978,2021-07-28,Mexico,Delivered,No,1,Burguer,,$30,,,,DiDi Food,Yes
+1000004896266778,2021-07-02,Mexico,Delivered,No,1,Burguer,No ketchup,$30,,,,DiDi Food,Yes
+1000004858533221,2021-07-14,Mexico,Delivered,No,2,"Burguer, Burguer",,$60,19,-19,,DiDi Food,No
+1000004857655443,2021-07-19,Mexico,Delivered,No,1,Burguer,No ketchup,$30,94,-50,,,No
+1000004638000006,2021-07-06,Mexico,Delivered,No,1,Burguer,No chili,$30,,,,DiDi Food,Yes
+1000004492533005,2021-07-22,Mexico,Delivered,No,1,Burguer,No ketchup,$30,,,,DiDi Food,Yes
+1000004446984004,2021-07-26,Mexico,Delivered,No,1,BBQ wings,,$22,,,,DiDi Food,Yes
+1000003915437003,2021-07-17,Mexico,Delivered,Yes,3,"BBQ wings, Soda, Soda",,$32,,,,,No
+1000004435612002,2021-07-19,Mexico,Delivered,No,1,Hot dog,No mustard,$25,,,,DiDi Food,Yes
+1000004806738368,2021-07-15,Mexico,Delivered,No,2,"Hot dog, Hot dog",,$50,,,,DiDi Food,Yes
+1000004857628644,2021-07-23,Mexico,Delivered,No,1,Burguer,No mayonnaise,$30,94,-40,,DiDi Food,No
+4000004806131526,2021-07-17,Mexico,You canceled the sale,No,1,Hot dog,No mustard,$0,,,,,No
+1000004798731548,2021-07-30,Mexico,Delivered,No,1,BBQ wings,,$22,,,,DiDi Food,No
+1000004732469516,2021-07-13,Mexico,Delivered,No,1,Hot dog,No chili,$25,15,-15,,,No
+1000005099254392,2021-07-09,Mexico,Delivered,No,1,Hot dog,No ketchup,$25,,,,,No
+1000004806709095,2021-07-19,Mexico,Delivered,No,2,"Hot dog, Soda",No mustard,$30,,,,DiDi Food,No
+1000003896155231,2021-07-09,Mexico,Delivered,Yes,3,"BBQ wings, Soda, Soda",,$32,,,,DiDi Food,Yes
+1000004858580894,2021-07-23,Mexico,Delivered,No,1,Hot dog,No mustard,$25,,,,DiDi Food,Yes
+1000004392722432,2021-07-04,Mexico,Delivered,No,1,Burguer,No ketchup,$30,,,,DiDi Food,Yes
+1000004367724445,2021-07-20,Mexico,Delivered,No,1,Burguer,No chili,$30,,,,DiDi Food,Yes
+1000004367425556,2021-07-09,Mexico,Delivered,No,2,"Burguer, BBQ wings",No ketchup,$52,,,,,No
+4000004873974056,2021-07-05,Mexico,You canceled the sale,No,1,Hot dog,No mayonnaise,$0,,,,,No
+1000004857634571,2021-07-10,Mexico,Delivered,No,1,BBQ wings,,$22,93,-45,,DiDi Food,No
+400000487377490,2021-07-02,Mexico,You canceled the sale,No,2,"Hot dog, Hot dog",No ketchup,$0,,,,,No
+1000003915434432,2021-07-12,Mexico,Delivered,Yes,3,"BBQ wings, Hot dog, Soda",,$52,,,,,No
+1000004819165945,2021-07-04,Mexico,Delivered,No,1,Hot dog,No chili,$25,94,-39,,DiDi Food,No
+100006124933180,2021-07-21,Mexico,Delivered,No,1,BBQ wings,,$22,,,,DiDi Food,Yes
+100005922115350,2021-07-24,Mexico,Delivered,No,1,Soda,,$5,,,,DiDi Food,Yes
+1000003875632667,2021-07-20,Mexico,Delivered,Yes,4,"Hot dog, Hot dog, Soda, Soda",No ketchup,$60,,,,DiDi Food,No
+1000004970829002,2021-07-01,Mexico,Delivered,No,1,BBQ wings,,$22,,,,DiDi Food,No
+1000004970829001,2021-07-18,Mexico,Delivered,No,1,Burguer,No ketchup,$30,,,,DiDi Food,Yes
+1000004896257013,2021-07-25,Mexico,Delivered,No,1,Burguer,No ketchup,$30,,,,DiDi Food,Yes
+1000005917535688,2021-07-28,Mexico,Delivered,No,1,Hot dog,No ketchup,$25,,,,,No
+1000005885139226,2021-07-18,Mexico,Delivered,No,1,Hot dog,No ketchup,$25,89,-32,,DiDi Food,No
+4000005833801322,2021-07-03,Mexico,You canceled the sale,No,1,Hot dog,No mustard,$0,,,,,No
+1000005802052704,2021-07-01,Mexico,Delivered,No,2,"BBQ wings, Soda",,$27,,,,DiDi Food,No
+1000004497132009,2021-07-05,Mexico,Delivered,Yes,3,"BBQ wings, Burguer, Hot dog",,$77,,,,,No
+1000004467422501,2021-07-01,Mexico,Delivered,Yes,2,"Burguer, Soda",,$35,,,,,No
+1000004467422499,2021-07-20,Mexico,Delivered,Yes,2,"Hot dog, Soda",No mustard,$30,,,,DiDi Food,Yes
+1000004896257024,2021-07-23,Mexico,Delivered,No,1,Hot dog,No mustard,$25,,,,DiDi Food,No
+4000004873974616,2021-07-09,Mexico,You canceled the sale,No,1,Hot dog,,$0,,,,,No
+10000044674225431,2021-07-28,Mexico,Delivered,Yes,4,"BBQ wings, Burguer, Soda, Soda",No ketuchup,$62,,,,,No
+1000004467422095,2021-07-20,Mexico,Delivered,Yes,3,"Hot dog, Hot dog, Soda",No chili,$55,49,-49,,DiDi Food,Yes
+1000004467422658,2021-07-04,Mexico,Delivered,Yes,2,"Burguer, Soda",No chili,$35,,,,DiDi Food,No
+1000004467422473,2021-07-02,Mexico,Delivered,Yes,2,"BBQ wings, BBQ wings",,$44,,,,,Yes
+100000446742124,2021-07-16,Mexico,Delivered,Yes,1,BBQ wings,,$22,69,-49,,DiDi Food,Yes

@@ -1,0 +1,88 @@
+Product Code,Type,TypeID,Ubication,UbicationID,StockDeposit1,UnitID,StockDeposit2,UnitID,StockDeposit3,UnitID,StockDeposit4,UnitID,MinStock,MaxStock,ListPrice,Price
+CP_154,Chicken cut,00_01,FARM,GR_004,27,Unit,20,Unit,16,Unit,237,Unit,21,28,$1.640,$1.394
+CP_127,Chicken cut,00_01,FARM,GR_004,15,Unit,33,Unit,5,Unit,184,Unit,18,34,$1.100,$935
+CP_136,Chicken cut,00_01,Refrigerator 1,HL_001,47,Unit,12,Unit,13,Unit,0,Unit,24,48,$1.790,$1.522
+CP_111,Chicken cut,00_02,Refrigerator 1,HL_001,6,kg,4,kg,5,kg,0,kg,5,7,$1.790,$1.522
+CP_102,Chicken cut,00_02,Refrigerator 1,HL_001,4,kg,3,kg,5,kg,0,kg,4,6,$2.000,$1.700
+CP_120,Chicken cut,00_02,Refrigerator 1,HL_001,3,kg,8,kg,5,kg,0,kg,5,9,$2.500,$2.125
+CP_135,Chicken cut,00_02,Refrigerator 1,HL_001,5,kg,6,kg,11,kg,0,kg,7,12,$2.300,$1.955
+CP_111,Chicken cut,00_02,Refrigerator 1,HL_001,3,kg,10,kg,3,kg,0,kg,5,11,$2.400,$2.040
+CP_156,Chicken cut,00_02,Refrigerator 1,HL_001,11,kg,10,kg,5,kg,0,kg,9,12,$2.550,$2.168
+CP_125,Chicken cut,00_02,Refrigerator 1,HL_001,11,kg,4,kg,3,kg,0,kg,6,12,$2.700,$2.295
+CP_137,Chicken cut,00_02,Refrigerator 1,HL_001,9,kg,6,kg,5,kg,0,kg,7,10,$3.200,$2.720
+CP_150,Chicken cut,00_02,Refrigerator 1,HL_001,8,kg,4,kg,8,kg,0,kg,7,9,$3.500,$2.975
+CP_135,Chicken cut,00_02,Refrigerator 1,HL_001,5,kg,8,kg,10,kg,0,kg,8,11,$3.800,$3.230
+CP_126,Chicken cut,00_02,Refrigerator 1,HL_001,9,kg,4,kg,5,kg,0,kg,6,10,$1.800,$1.530
+CP_118,Chicken cut,00_02,Refrigerator 1,HL_001,11,kg,8,kg,3,kg,0,kg,7,12,$1.150,$978
+CP_126,Chicken cut,00_02,Refrigerator 1,HL_001,6,kg,3,kg,11,kg,0,kg,7,12,$900,$765
+CP_116,Chicken cut,00_02,Refrigerator 1,HL_001,10,kg,6,kg,5,kg,0,kg,7,11,$750,$638
+CP_105,Own elaboration,00_02,Refrigerator 1,HL_001,5,kg,10,kg,9,kg,0,kg,8,11,$1.500,$1.275
+EP_156,Own elaboration,00_03,COUNTER,MT_005,4,kg,7,kg,4,kg,0,kg,5,8,$2.850,$2.423
+EP_117,Own elaboration,00_03,COUNTER,MT_005,5,kg,4,kg,11,kg,0,kg,7,12,$3.500,$2.975
+EP_107,Own elaboration,00_03,COUNTER,MT_005,3,kg,4,kg,11,kg,0,kg,6,12,$3.700,$3.145
+EP_137,Own elaboration,00_03,COUNTER,MT_005,9,kg,7,kg,3,kg,0,kg,6,10,$4.200,$3.570
+EP_115,Own elaboration,00_03,Refrigerator 2,HL_002,9,kg,9,kg,6,kg,0,kg,8,10,$2.900,$2.465
+EP_150,Own elaboration,00_03,Refrigerator 2,HL_002,9,kg,8,kg,5,kg,0,kg,7,10,$2.900,$2.465
+EP_123,Own elaboration,00_03,Refrigerator 3,HL_003,4,Unit,7,Unit,5,Unit,0,Unit,5,8,$2.900,$2.465
+EP_168,Own elaboration,00_03,Refrigerator 3,HL_003,3,Unit,11,Unit,11,Unit,0,Unit,8,12,$3.200,$2.720
+EP_104,Own elaboration,00_03,Refrigerator 3,HL_003,7,Unit,8,Unit,10,Unit,0,Unit,8,11,$3.200,$2.720
+EP_152,Own elaboration,00_03,Refrigerator 2,HL_002,4,kg,3,kg,3,kg,0,kg,3,5,$8.000,$6.800
+EP_155,Own elaboration,00_03,Refrigerator 2,HL_002,5,kg,8,kg,11,kg,0,kg,8,12,$7.500,$6.375
+RE_157,Own elaboration,00_04,Refrigerator 2,HL_002,6,kg,4,kg,3,kg,0,kg,4,7,$2.650,$2.253
+RE_148,Frozen,00_04,Refrigerator 2,HL_002,10,kg,4,kg,6,kg,0,kg,7,11,$2.650,$2.253
+RE_142,Frozen,00_05,Refrigerator 2,HL_002,4,kg,8,kg,10,kg,0,kg,7,11,$2.650,$2.253
+RE_143,Frozen,00_05,Refrigerator 2,HL_002,9,kg,9,kg,10,kg,0,kg,9,11,$2.650,$2.253
+RE_163,Own elaboration,00_05,Refrigerator 2,HL_002,9,kg,8,kg,4,kg,0,kg,7,10,$2.650,$2.253
+RE_105,Own elaboration,00_04,Refrigerator 2,HL_002,3,kg,7,kg,5,kg,0,kg,5,8,$2.850,$2.423
+RE_169,Own elaboration,00_04,Refrigerator 2,HL_002,7,kg,8,kg,8,kg,0,kg,8,9,$3.150,$2.678
+RE_140,Own elaboration,00_04,Refrigerator 2,HL_002,3,kg,8,kg,7,kg,0,kg,6,9,$3.400,$2.890
+RE_109,Own elaboration,00_04,Refrigerator 2,HL_002,9,kg,10,kg,6,kg,0,kg,8,11,$3.800,$3.230
+RE_115,Own elaboration,00_04,Refrigerator 2,HL_002,5,kg,11,kg,11,kg,0,kg,9,12,$3.100,$2.635
+RE_152,Own elaboration,00_04,Refrigerator 2,HL_002,5,kg,8,kg,7,kg,0,kg,7,9,$3.100,$2.635
+RE_139,Own elaboration,00_04,Refrigerator 2,HL_002,8,kg,9,kg,4,kg,0,kg,7,10,$3.300,$2.805
+RE_145,Own elaboration,00_04,Refrigerator 2,HL_002,9,kg,7,kg,6,kg,0,kg,7,10,$3.500,$2.975
+RE_140,Own elaboration,00_04,Refrigerator 2,HL_002,5,kg,5,kg,4,kg,0,kg,5,6,$2.700,$2.295
+RE_167,Own elaboration,00_04,Refrigerator 2,HL_002,7,kg,11,kg,4,kg,0,kg,7,12,$3.050,$2.593
+RE_112,Frozen,00_04,Refrigerator 2,HL_002,10,kg,7,kg,6,kg,0,kg,8,11,$2.650,$2.253
+RE_155,Frozen,00_05,Refrigerator 3,HL_003,4,Unit,8,Unit,7,Unit,0,Unit,6,9,$850,$723
+RE_112,Own elaboration,00_05,Refrigerator 3,HL_003,6,Unit,10,Unit,8,Unit,0,Unit,8,11,$950,$808
+RE_117,EGGS,00_04,Refrigerator 2,HL_002,7,kg,3,kg,8,kg,0,kg,6,9,$2.850,$2.423
+HV_139,EGGS,00_06,COUNTER,MT_005,9,30,8,30,9,30,240,30,9,31,$2.200,$1.870
+HV_108,EGGS,00_06,COUNTER,MT_005,8,12,10,12,6,12,0,12,8,13,$900,$765
+HV_146,EGGS,00_06,COUNTER,MT_005,5,6,9,6,10,6,0,6,8,11,$650,$553
+HV_107,EGGS,00_06,COUNTER,MT_005,11,Unit,8,Unit,8,Unit,0,Unit,9,12,$120,$102
+HV_120,EGGS,00_06,COUNTER,MT_005,4,30,8,30,11,30,362,30,8,31,$2.000,$1.700
+HV_165,EGGS,00_06,COUNTER,MT_005,7,12,4,12,3,12,0,12,5,13,$800,$680
+HV_108,EGGS,00_06,COUNTER,MT_005,9,6,11,6,11,6,0,6,10,12,$600,$510
+HV_111,Alicante condiments,00_06,COUNTER,MT_005,10,Unit,4,Unit,7,Unit,0,Unit,7,11,$120,$102
+CA_404,Alicante condiments,,COUNTER,MT_005,8,Unit,6,Unit,6,Unit,0,Unit,7,9,$450,$405
+CA_398,Alicante condiments,,COUNTER,MT_005,3,Unit,4,Unit,9,Unit,0,Unit,5,10,$430,$387
+CA_353,Alicante condiments,,COUNTER,MT_005,7,Unit,5,Unit,9,Unit,0,Unit,7,10,$430,$387
+CA_390,Alicante condiments,,COUNTER,MT_005,6,Unit,7,Unit,3,Unit,0,Unit,5,8,$430,$387
+CA_370,Alicante condiments,,COUNTER,MT_005,10,Unit,9,Unit,8,Unit,0,Unit,9,11,$430,$387
+CA_359,Alicante condiments,,COUNTER,MT_005,10,Unit,6,Unit,9,Unit,0,Unit,8,11,$430,$387
+CA_399,Alicante condiments,,COUNTER,MT_005,8,Unit,10,Unit,5,Unit,0,Unit,8,11,$430,$387
+CA_361,Alicante condiments,,COUNTER,MT_005,8,Unit,10,Unit,5,Unit,0,Unit,8,11,$570,$513
+CA_375,Alicante condiments,,COUNTER,MT_005,5,Unit,9,Unit,11,Unit,0,Unit,8,12,$530,$477
+CA_399,Alicante condiments,,COUNTER,MT_005,4,Unit,3,Unit,7,Unit,0,Unit,5,8,$430,$387
+CA_401,Alicante condiments,,COUNTER,MT_005,5,Unit,5,Unit,11,Unit,0,Unit,7,12,$430,$387
+CA_379,Alicante condiments,,COUNTER,MT_005,7,Unit,9,Unit,9,Unit,0,Unit,8,10,$430,$387
+CA_364,Alicante condiments,,COUNTER,MT_005,9,Unit,11,Unit,3,Unit,0,Unit,8,12,$430,$387
+CA_410,Alicante condiments,,COUNTER,MT_005,4,Unit,4,Unit,9,Unit,0,Unit,6,10,$430,$387
+CA_406,Alicante condiments,,COUNTER,MT_005,10,Unit,10,Unit,9,Unit,0,Unit,10,11,$430,$387
+CA_392,Alicante condiments,,COUNTER,MT_005,8,Unit,10,Unit,7,Unit,0,Unit,8,11,$430,$387
+CA_367,Alicante condiments,,COUNTER,MT_005,8,Unit,6,Unit,9,Unit,0,Unit,8,10,$430,$387
+CA_389,Alicante condiments,,COUNTER,MT_005,10,Unit,9,Unit,3,Unit,0,Unit,7,11,$430,$387
+CA_377,Alicante condiments,,COUNTER,MT_005,10,Unit,3,Unit,4,Unit,0,Unit,6,11,$430,$387
+CA_368,Alicante condiments,,COUNTER,MT_005,4,Unit,11,Unit,11,Unit,0,Unit,9,12,$430,$387
+CA_362,Alicante condiments,,COUNTER,MT_005,10,Unit,3,Unit,10,Unit,0,Unit,8,11,$430,$387
+CA_362,Alicante condiments,,COUNTER,MT_005,6,Unit,5,Unit,7,Unit,0,Unit,6,8,$430,$387
+CA_382,Alicante condiments,,COUNTER,MT_005,3,Unit,8,Unit,7,Unit,0,Unit,6,9,$600,$540
+CA_363,Alicante condiments,,COUNTER,MT_005,9,Unit,9,Unit,11,Unit,0,Unit,10,12,$500,$450
+CA_409,Alicante condiments,,COUNTER,MT_005,10,Unit,9,Unit,8,Unit,0,Unit,9,11,$540,$486
+CA_407,Alicante condiments,,COUNTER,MT_005,8,Unit,8,Unit,4,Unit,0,Unit,7,9,$430,$387
+CA_390,Alicante condiments,,COUNTER,MT_005,9,Unit,7,Unit,3,Unit,0,Unit,6,10,$350,$315
+CA_401,Alicante condiments,,COUNTER,MT_005,6,Unit,8,Unit,11,Unit,0,Unit,8,12,$430,$387
+CA_391,Alicante condiments,,COUNTER,MT_005,9,Unit,6,Unit,8,Unit,0,Unit,8,10,$150,$135
+CA_354,Alicante condiments,,COUNTER,MT_005,8,Unit,9,Unit,6,Unit,0,Unit,8,10,$400,$360
+CA_378,,,COUNTER,MT_005,8,Unit,3,Unit,10,Unit,0,Unit,7,11,$450,$405

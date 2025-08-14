@@ -1,0 +1,230 @@
+ID,Categoría,Nombre,Ingredientes,Cantidad consumida,Unidad de medida,Costo unitario,Costo de reposición,Comentarios,Costo total por ingrediente,Margen de beneficio estimado,Costo total del plato
+191.0,Platos Principales,P2/PECHUGA GRILLADA,Pollo  ,3.0,,234.0,280.8,,702.0,140.4,702.0
+,,,Mix de quesos,0.0,,765.0,918,,0.0,0.0,
+,,,Aceite,4.0,,23.0,27.6,,92.0,18.400000000000002,
+,,,Tomate,5.0,,456.0,547.2,,2280.0,456.0,
+,,,Ciboulette,6.0,,234.0,280.8,,1404.0,280.8,
+,,,Pure instantaneo,4.0,,653.0,783.6,,2612.0,522.4,
+192.0,Platos Principales,P3/ MILA DE CARNE/SOJA CON PURE,Milanesa de carne,6.0,,245.0,294,,1470.0,294.0,1470.0
+,,,Aceite,3.0,,212.0,254.4,,636.0,127.2,
+,,,Pure instantaneo,6.0,,234.0,280.8,,1404.0,280.8,
+193.0,Platos Principales,P4/ WOK DE POLLO,Vegetales,4.0,,5.0,6,,20.0,4.0,20.0
+,,,Aceite,4.0,,434.0,520.8,,1736.0,347.20000000000005,
+,,,Pollo,2.0,,35.0,42,,70.0,14.0,
+214.0,Platos Principales,PAPAS,PAPAS,4.0,,345.0,414,,1380.0,276.0,1380.0
+239.0,Platos Principales,pastelito,pastelito,12.0,,46.0,55.2,,552.0,110.4,552.0
+76.0,Platos Principales,PIADINA BRESAOLA,,4.0,,578.0,693.6,,2312.0,462.40000000000003,2312.0
+75.0,Platos Principales,PIADINA HONGOS,,5.0,,78.0,93.6,,390.0,78.0,390.0
+66.0,Platos Principales,PLAN V,,4.0,,945.0,1134,,3780.0,756.0,3780.0
+194.0,Platos Principales,QUESADILLA,Tapa quesadilla,3.0,,64.0,76.8,,192.0,38.400000000000006,192.0
+,,,Queso,2.0,,23.0,27.6,,46.0,9.200000000000001,
+,,,Pollo,1.0,,4235.0,5082,,4235.0,847.0,
+,,,Vegetales salteados,0.0,,45.0,54,,0.0,0.0,
+68.0,Platos Principales,sand 1/ pan arabe,Milanesa de carne,6.0,,6547.0,7856.4,"Ver si esta ok la apertura, hay otro producto parecido",39282.0,7856.400000000001,39282.0
+,,,Cebolla caramelizada,7.0,,35.0,42,,245.0,49.0,
+,,,Pure de berenjenas,5.0,,35.0,42,,175.0,35.0,
+,,,Cherrys,3.0,,46.0,55.2,,138.0,27.6,
+,,,Aceite,5.0,,756.0,907.2,,3780.0,756.0,
+225.0,Platos Principales,SAND 3/ CIABATA POLLO,Pan ciabata,7.0,,23.0,27.6,,161.0,32.2,161.0
+,,,Vegetales grillados,9.0,,534.0,640.8,,4806.0,961.2,
+,,,Pollo,21.0,,6457.0,7748.4,,135597.0,27119.4,
+,,,Queso,8.0,,567.0,680.4,,4536.0,907.2,
+71.0,Platos Principales,SAND 3/ SCON DE HIERBAS,,16.0,,23.0,27.6,,368.0,73.60000000000001,368.0
+72.0,Platos Principales,SAND 4/ MASA MADRE/INTEGRAL,Pan masa madre,23.0,,45345.0,54414,,1042935.0,208587.0,1042935.0
+,,,Jamon crudo,4.0,,346.0,415.2,,1384.0,276.8,
+,,,queso brie,5.0,,3.0,3.6,,15.0,3.0,
+,,,rucula ,6.0,,534.0,640.8,,3204.0,640.8000000000001,
+,,,Aceite de oliva,9.0,,645.0,774,,5805.0,1161.0,
+73.0,Platos Principales,SAND 5/ VEGETALES GRILLADS,Zuchini,3.0,,645.0,774,,1935.0,387.0,1935.0
+,,,Pan ,0.0,,45.0,54,,0.0,0.0,
+,,,Berenjena,7.0,,754.0,904.8,,5278.0,1055.6000000000001,
+,,,Calabaza grillada,12.0,,745.0,894,,8940.0,1788.0,
+,,,Cherrys,2.0,,754.0,904.8,,1508.0,301.6,
+,,,Aceite de oliva,12.0,,54.0,64.8,,648.0,129.6,
+,,,Queso,5.0,,645.0,774,,3225.0,645.0,
+,,,Espinaca,7.0,,654.0,784.8,,4578.0,915.6,
+,,,Salsa alioli,56.0,,37.0,44.4,,2072.0,414.40000000000003,
+74.0,Platos Principales,SAND 6/PORTOBELLOS,Tomates secos,7.0,,856.0,1027.2,,5992.0,1198.4,5992.0
+,,,Cebolla,5.0,,57.0,68.4,,285.0,57.0,
+,,,rucula ,3.0,,23.0,27.6,,69.0,13.8,
+,,,Pan,12.0,,235.0,282,,2820.0,564.0,
+,,,pesto de cilantro,23.0,,57.0,68.4,,1311.0,262.2,
+69.0,Platos Principales,sand/ arabe/ milanesa,,4.0,,8234.0,9880.8,"Parecido al art 68, consultar diferencia entre los platos",32936.0,6587.200000000001,32936.0
+195.0,Platos Principales,SANDWICH HIERBAS Y QUESO,,5.0,,346.0,415.2,,1730.0,346.0,1730.0
+186.0,Platos Principales,SANDWICH MASA MADRE,,2.0,,7.0,8.4,,14.0,2.8000000000000003,14.0
+158.0,Platos Principales,SCON CRUDO Y QUESO BRIE,Scon,3.0,,324.0,388.8,,972.0,194.4,972.0
+,,,Jamon crudo,4.0,,35.0,42,,140.0,28.0,
+,,,queso brie,5.0,,7.0,8.4,,35.0,7.0,
+157.0,Platos Principales,SCON JAMON Y QUESO,Scon,2.0,,43.0,51.6,,86.0,17.2,86.0
+,,,Jamon cocido,8.0,,54354.0,65224.8,,434832.0,86966.40000000001,
+,,,Queso,3.0,,7.0,8.4,,21.0,4.2,
+110.0,Platos Principales,SELVANEGRA,SELVANEGRA,1.0,,3.0,3.6,,3.0,0.6000000000000001,3.0
+77.0,Platos Principales,TARTA 1/ INTEGRAL BICO,TARTA 1/ INTEGRAL BICO,3.0,,45.0,54,,135.0,27.0,135.0
+184.0,Platos Principales,TARTA 2/ POLLO Y VERDEO,TARTA 2/ POLLO Y VERDEO,5.0,,6457.0,7748.4,,32285.0,6457.0,32285.0
+78.0,Platos Principales,TARTA CREMOSA,TARTA CREMOSA,3.0,,23.0,27.6,,69.0,13.8,69.0
+153.0,Platos Principales,TARTA DE HONGOS PUERROS Y PANCETA,TARTA DE HONGOS PUERROS Y PANCETA,2.0,,34.0,40.8,,68.0,13.600000000000001,68.0
+111.0,Platos Principales,TIRAMISU,TIRAMISU,4.0,,6645.0,7974,,26580.0,5316.0,26580.0
+105.0,Platos Principales,TORTA MATILDA,TORTA MATILDA,5.0,,623.0,747.6,,3115.0,623.0,3115.0
+107.0,Platos Principales,TORTA OREO,TORTA OREO,6.0,,74.0,88.8,,444.0,88.80000000000001,444.0
+203.0,Platos Principales,tostado chipa,Chipa,3.0,,7.0,8.4,,21.0,4.2,21.0
+,,,Jamon cocido,2.0,,43.0,51.6,,86.0,17.2,
+,,,Queso,5.0,,23.0,27.6,,115.0,23.0,
+96.0,Platos Principales,tostado miga,tostado miga,3.0,,54.0,64.8,Consultar si se revende o se arma,162.0,32.4,162.0
+154.0,Platos Principales,Tostado pan arabe,Pan arabe,2.0,,7558.0,9069.6,,15116.0,3023.2000000000003,15116.0
+,,,Jamon cocido,3.0,,7654.0,9184.8,,22962.0,4592.400000000001,
+,,,Queso,6.0,,34.0,40.8,,204.0,40.800000000000004,
+97.0,Platos Principales,TOSTADO PAN DE CAMPO,Pan de campo,2.0,,5.0,6,,10.0,2.0,10.0
+,,,Jamon cocido,5.0,,457.0,548.4,,2285.0,457.0,
+,,,Queso,4.0,,45.0,54,,180.0,36.0,
+98.0,Platos Principales,TOSTADO SIN TACC,Pan molde SIN TACC,3.0,,23.0,27.6,,69.0,13.8,69.0
+,,,Jamon cocido,2.0,,645.0,774,,1290.0,258.0,
+,,,Queso,1.0,,35.0,42,,35.0,7.0,
+155.0,Platos Principales,tostado vegano,,4.0,,37.0,44.4,,148.0,29.6,148.0
+156.0,Platos Principales,TOST CHIPA JAMON Y QUESO,,5.0,,3.0,3.6,Consultar diferencia con ART 203,15.0,3.0,15.0
+51.0,Platos Principales,toston 1/ integra con mix de cereales,Pan integral mix cereales,7.0,,634.0,760.8,,4438.0,887.6,4438.0
+,,,Jamon cocido,5.0,,64.0,76.8,,320.0,64.0,
+,,,Cherrys,4.0,,54.0,64.8,,216.0,43.2,
+,,,Huevo,0.0,,34.0,40.8,,0.0,0.0,
+,,,Aceite,4.0,,54.0,64.8,,216.0,43.2,
+52.0,Platos Principales,toston 2/pan de campo/palta/aove,Pan de campo,4.0,,634.0,760.8,,2536.0,507.20000000000005,2536.0
+,,,Palta,6.0,,346.0,415.2,,2076.0,415.20000000000005,
+,,,Tomate,7.0,,634.0,760.8,,4438.0,887.6,
+,,,Aove,6.0,,34.0,40.8,,204.0,40.800000000000004,
+53.0,Platos Principales,toston 3/pan de masa madre/ guacamole,Pan masa madre,7.0,,346.0,415.2,,2422.0,484.40000000000003,2422.0
+,,,Queso crema ,6.0,,346.0,415.2,,2076.0,415.20000000000005,
+,,,Guacamole,5.0,,63.0,75.6,,315.0,63.0,
+54.0,Platos Principales,toston 4/pan de campo/,Pan de campo,4.0,,8.0,9.6,,32.0,6.4,32.0
+,,,Queso crema ,3.0,,578.0,693.6,,1734.0,346.8,
+,,,rucula ,5.0,,452.0,542.4,,2260.0,452.0,
+,,,Salmon ,1.0,,325.0,390,,325.0,65.0,
+,,,Ciboulette,2.0,,457.0,548.4,,914.0,182.8,
+55.0,Platos Principales,toston 5 /bruschetta de jamon,Bruschetta,3.0,,34.0,40.8,,102.0,20.400000000000002,102.0
+,,,Jamon crudo,5.0,,645.0,774,,3225.0,645.0,
+,,,Aceite de oliva,8.0,,7.0,8.4,,56.0,11.200000000000001,
+,,,Pesto de albahaca,8.0,,43.0,51.6,,344.0,68.8,
+,,,Queso dambo,9.0,,654.0,784.8,,5886.0,1177.2,
+56.0,Platos Principales,toston 6/ proteico de pan integral,Pan masa madre integral,9.0,,634.0,760.8,,5706.0,1141.2,5706.0
+,,,Mantequilla de mani,0.0,,6754.0,8104.8,,0.0,0.0,
+,,,Banana,9.0,,8.0,9.6,,72.0,14.4,
+,,,Miel,9.0,,879.0,1054.8,,7911.0,1582.2,
+227.0,Platos Principales,toston 7/ caprese,Pan de campo,8.0,,856.0,1027.2,,6848.0,1369.6000000000001,6848.0
+,,,Cherrys,7.0,,856.0,1027.2,,5992.0,1198.4,
+,,,Albahaca,1.0,,342.0,410.4,,342.0,68.4,
+,,,Pesto,2.0,,54.0,64.8,,108.0,21.6,
+,,,Queso Tybo,0.0,,7.0,8.4,,0.0,0.0,
+,,,Oregano,6.0,,437.0,524.4,,2622.0,524.4,
+62.0,Platos Principales,universo dulce,,4.0,,4534.0,5440.8,,18136.0,3627.2000000000003,18136.0
+49.0,Platos Principales,waffle 6/ helado de choco/oreo,Mezcla waffle,7.0,,7734.0,9280.8,,54138.0,10827.6,54138.0
+,,,Helado chocolate,4.0,,34.0,40.8,,136.0,27.200000000000003,
+,,,Oreo,4.0,,0.0,#VALUE!,,0.0,0.0,
+,,,Salsa chocolate,6.0,,3.0,3.6,,18.0,3.6,
+187.0,Platos Principales,WRAPS 1,Tapa burrito,4.0,,56.0,67.2,,224.0,44.800000000000004,224.0
+,,,Bacon,3.0,,6576.0,7891.2,,19728.0,3945.6000000000004,
+,,,Mayonesa,6.0,,76.0,91.2,,456.0,91.2,
+,,,Lechuga,8.0,,57.0,68.4,,456.0,91.2,
+,,,Tomate,4.0,,576.0,691.2,,2304.0,460.8,
+,,,Cebolla morada,3.0,,57.0,68.4,,171.0,34.2,
+,,,Pollo,5.0,,988.0,1185.6,,4940.0,988.0,
+188.0,Platos Principales,WRAPS 2,Tapa burrito,7.0,,9.0,10.8,,63.0,12.600000000000001,63.0
+,,,Pollo,3.0,,909.0,1090.8,,2727.0,545.4,
+,,,Croutons,5.0,,6765.0,8118,,33825.0,6765.0,
+,,,Adereso Cesar,7.0,,675.0,810,,4725.0,945.0,
+,,,Lechuga,5.0,,398.0,477.6,,1990.0,398.0,
+189.0,Platos Principales,WRAPS 3,Queso crema ,3.0,,243.0,291.6,,729.0,145.8,729.0
+,,,Lechuga,2.0,,765.0,918,,1530.0,306.0,
+,,,Tomate,5.0,,6589.0,7906.8,,32945.0,6589.0,
+,,,Zanahoria,7.0,,5.0,6,,35.0,7.0,
+,,,Palta,8.0,,654.0,784.8,,5232.0,1046.4,
+,,,Mix de semillas,6.0,,235.0,282,,1410.0,282.0,
+200.0,Postres,ALFAJOR ALMENDRAS Y DDL,ALFAJOR ALMENDRAS Y DDL,2.0,,876.0,1051.2,,1752.0,350.40000000000003,1752.0
+201.0,Postres,ALFAJOR DE ALMENDRAS Y GANACHE,ALFAJOR DE ALMENDRAS Y GANACHE,2.0,,23.0,27.6,,46.0,9.200000000000001,46.0
+142.0,Postres,"alfajor de ddl, almendras","alfajor de ddl, almendras",4.0,,543.0,651.6,,2172.0,434.40000000000003,2172.0
+202.0,Postres,ALFAJOR DE DULCE DE LECHE,ALFAJOR DE DULCE DE LECHE,6.0,,5675.0,6810,,34050.0,6810.0,34050.0
+122.0,Postres,alfajor sin tacc,alfajor sin tacc,8.0,,4.0,4.8,,32.0,6.4,32.0
+132.0,Postres,ALFA VEGAN,ALFA VEGAN,8.0,,23.0,27.6,,184.0,36.800000000000004,184.0
+90.0,Postres,ALF/ COCO Y DDL,ALF/ COCO Y DDL,4.0,,5423.0,6507.6,,21692.0,4338.400000000001,21692.0
+91.0,Postres,ALF DE NUEZ CON MOUSSE,ALF DE NUEZ CON MOUSSE,3.0,,546.0,655.2,,1638.0,327.6,1638.0
+89.0,Postres,ALF/MAICENA,ALF/MAICENA,5.0,,234.0,280.8,,1170.0,234.0,1170.0
+113.0,Postres,brownie con ddl,Mezcla brownie,7.0,,765.0,918,,5355.0,1071.0,5355.0
+,,,Dulce de leche,8.0,,234.0,280.8,,1872.0,374.40000000000003,
+86.0,Postres,BUDIN DE CHOCOLATE,Mezcla budin,5.0,,56.0,67.2,,280.0,56.0,280.0
+,,,Chocolate,3.0,,234.0,280.8,,702.0,140.4,
+88.0,Postres,BUDIN DE FRUTOS,Mezcla budin,2.0,,56.0,67.2,,112.0,22.400000000000002,112.0
+,,,Frutos rojos,4.0,,34.0,40.8,,136.0,27.200000000000003,
+123.0,Postres,budin de limon,Mezcla budin,7.0,,23.0,27.6,,161.0,32.2,161.0
+,,,Limon,8.0,,78945.0,94734,,631560.0,126312.0,
+135.0,Postres,BUDIN DE LIMON VEGAN,,5.0,,2.0,2.4,,10.0,2.0,10.0
+87.0,Postres,BUDIN DE NARANJA,Mezcla budin,4.0,,4565.0,5478,,18260.0,3652.0,18260.0
+,,,Naranja,5.0,,23.0,27.6,,115.0,23.0,
+134.0,Postres,BUDIN DE NARANJA VEGAN,,6.0,,45.0,54,,270.0,54.0,270.0
+85.0,Postres,BUDIN DE ZANAHORIA,Mezcla budin,7.0,,56.0,67.2,,392.0,78.4,392.0
+,,,Zanahoria,4.0,,23.0,27.6,,92.0,18.400000000000002,
+129.0,Postres,CARROT CAKE,CARROT CAKE,3.0,,4.0,4.8,,12.0,2.4000000000000004,12.0
+133.0,Postres,CARROT CAKE VEGAN,CARROT CAKE VEGAN,6.0,,56.0,67.2,,336.0,67.2,336.0
+102.0,Postres,cheescake,cheescake,7.0,,7.0,8.4,,49.0,9.8,49.0
+104.0,Postres,chocotorta,chocotorta,7.0,,3.0,3.6,,21.0,4.2,21.0
+137.0,Postres,COOKIES VEGAN,COOKIES VEGAN,4.0,,54.0,64.8,,216.0,43.2,216.0
+130.0,Postres,CROISSANT,CROISSANT,2.0,,85.0,102,,170.0,34.0,170.0
+103.0,Postres,croissant ddl,CROISSANT,2.0,,346.0,415.2,,692.0,138.4,692.0
+,,,Dulce de leche,4.0,,457.0,548.4,,1828.0,365.6,
+198.0,Postres,Croissant relleno,,5.0,,856.0,1027.2,,4280.0,856.0,4280.0
+93.0,Postres,CRUMBLE DE MANZANA,CRUMBLE DE MANZANA,6.0,,45.0,54,,270.0,54.0,270.0
+127.0,Postres,cuadradito de limon,cuadradito de limon,8.0,,568.0,681.6,,4544.0,908.8000000000001,4544.0
+7.0,Postres,Ensalada de Frutas,,9.0,,568.0,681.6,,5112.0,1022.4000000000001,5112.0
+92.0,Postres,FROLITA DE DULCE DE LECHE,FROLITA DE DULCE DE LECHE,7.0,,568.0,681.6,,3976.0,795.2,3976.0
+199.0,Postres,Frolita de frutos,Frolita de frutos,4.0,,58.0,69.6,,232.0,46.400000000000006,232.0
+99.0,Postres,lemon pie,lemon pie,3.0,,678.0,813.6,,2034.0,406.8,2034.0
+144.0,Postres,macarron frances,macarron frances,5.0,,856.0,1027.2,,4280.0,856.0,4280.0
+243.0,Postres,macarron frances 2,macarron frances 2,7.0,,6523.0,7827.6,,45661.0,9132.2,45661.0
+136.0,Postres,MAGDALENA DE CAFE,MAGDALENA DE CAFE,8.0,,5987.0,7184.4,,47896.0,9579.2,47896.0
+101.0,Postres,matilda,matilda,6.0,,634.0,760.8,,3804.0,760.8000000000001,3804.0
+147.0,Postres,MEDIALUNA DE JYQ XL,Medialuna XL,4.0,,7.0,8.4,,28.0,5.6000000000000005,28.0
+,,,Jamon cocido,3.0,,324.0,388.8,,972.0,194.4,
+,,,Queso,6.0,,75.0,90,,450.0,90.0,
+100.0,Postres,muffin,muffin,8.0,,34.0,40.8,,272.0,54.400000000000006,272.0
+124.0,Postres,pan de chocolate,pan de chocolate,5.0,,8.0,9.6,,40.0,8.0,40.0
+119.0,Postres,red velvet,red velvet,3.0,,43.0,51.6,,129.0,25.8,129.0
+246.0,Postres,rogel,rogel,32.0,,6568.0,7881.6,,210176.0,42035.200000000004,210176.0
+121.0,Postres,roll de canela,roll de canela,34.0,,43.0,51.6,,1462.0,292.40000000000003,1462.0
+146.0,Postres,SCON,SCON,7.0,,6588.0,7905.6,,46116.0,9223.2,46116.0
+182.0,Postres,"tarta, coco y ddl","tarta, coco y ddl",5.0,,54.0,64.8,,270.0,54.0,270.0
+173.0,Postres,tarta de cafe,tarta de cafe,5.0,,723.0,867.6,,3615.0,723.0,3615.0
+120.0,Postres,torta de frutilla,torta de frutilla,7.0,,9.0,10.8,,63.0,12.600000000000001,63.0
+125.0,Postres,torta mousse de chocolate,torta mousse de chocolate,8.0,,234.0,280.8,,1872.0,374.40000000000003,1872.0
+213.0,Postres,TORTA SV,TORTA SV,5.0,,34.0,40.8,,170.0,34.0,170.0
+117.0,Postres,torta tofi,torta tofi,5.0,,3.0,3.6,,15.0,3.0,15.0
+139.0,Postres,TOSTADAS,Pan de molde,7.0,,4.0,4.8,,28.0,5.6000000000000005,28.0
+140.0,Postres,trifle,Yogurt natural,6.0,,34.0,40.8,,204.0,40.800000000000004,204.0
+,,,Granola,5.0,,45.0,54,,225.0,45.0,
+,,,Banana,4.0,,4.0,4.8,,16.0,3.2,
+,,,Manzana,5.0,,567.0,680.4,,2835.0,567.0,
+,,,Kiwi,4.0,,678.0,813.6,,2712.0,542.4,
+45.0,Postres,waffle 1/ frutilla crema salsa a eleccion,Mezcla waffle,2.0,,87.0,104.4,,174.0,34.800000000000004,174.0
+,,,Frutilla,1.0,,879.0,1054.8,,879.0,175.8,
+,,,Crema,3.0,,87.0,104.4,,261.0,52.2,
+,,,Salsa,4.0,,654.0,784.8,,2616.0,523.2,
+46.0,Postres,waffle 2/ de banana/ miel/nueces,Mezcla waffle,5.0,,23.0,27.6,,115.0,23.0,115.0
+,,,Banana,6.0,,34.0,40.8,,204.0,40.800000000000004,
+,,,Miel,4.0,,45.0,54,,180.0,36.0,
+,,,Nueces,2.0,,45.0,54,,90.0,18.0,
+47.0,Postres,waffle 3 libre,Mezcla waffle,5.0,,45.0,54,,225.0,45.0,225.0
+,,,Helado,6.0,,56.0,67.2,,336.0,67.2,
+,,,Salsa dulce de leche,3.0,,67.0,80.4,,201.0,40.2,
+,,,Nutella,2.0,,78.0,93.6,,156.0,31.200000000000003,
+,,,Crema,4.0,,90.0,108,,360.0,72.0,
+,,,Frutilla,6.0,,7.0,8.4,,42.0,8.4,
+48.0,Postres,waffle 4/oreo,Mezcla waffle,7.0,,455.0,546,,3185.0,637.0,3185.0
+,,,Helado,8.0,,67.0,80.4,,536.0,107.2,
+,,,Oreo,4.0,,8.0,9.6,,32.0,6.4,
+,,,Salsa de chocolate,3.0,,90.0,108,,270.0,54.0,
+50.0,Postres,waffle 5/ kit kat,Mezcla waffle,1.0,,0.0,0,,0.0,0.0,0.0
+,,,Helado,1.0,,9.0,10.8,,9.0,1.8,
+,,,Kit kat,3.0,,6.0,7.2,,18.0,3.6,
+,,,Salsa de chocolate,4.0,,57.0,68.4,,228.0,45.6,
+204.0,Postres,waffle 5/ nutella/crema/ frutilla,Mezcla waffle,4.0,,8.0,9.6,,32.0,6.4,32.0
+,,,Helado,5.0,,9.0,10.8,,45.0,9.0,
+,,,Nutella,5.0,,9.0,10.8,,45.0,9.0,
+,,,Crema,5.0,,89.0,106.8,,445.0,89.0,
+,,,Frutilla,5.0,,65.0,78,,325.0,65.0,
+152.0,Postres,waffle helado choco oreo,,5.0,,43.0,51.6,Consultar diferencia con waffle 4,215.0,43.0,215.0
+141.0,Postres,WAFFLE SOLO,Mezcla waffle,5.0,,4.0,4.8,,20.0,4.0,20.0

@@ -1,0 +1,182 @@
+Cost Code,Concept,Group,Stage,Quantity,Unit,Unit Cost,Total,Markup %,Price w Markup
+01110,LP - Concrete paving and sidewalk,1,15,Lot,1,$0.00,$0.00,15,$0.00
+01120,LP - Head wall,1,2,Lot,1,$0.00,$0.00,15,$0.00
+01150,LP - Culvert Installation ,1,2,Lot,1,"$2,500.00","$2,500.00",15,"$2,875.00"
+01200,LP - Lot clearing - Cut trees,1,1,Lot,1,$0.00,$0.00,15,$0.00
+01210,LP - Lot clearing - Debris Haul off,1,1,Lot,1,$0.00,$0.00,15,$0.00
+01220,LP - Lot clearing - Slab demolition,1,1,Lot,1,$0.00,$0.00,15,$0.00
+01230,LP - Fill dirt,1,2,Lot,1,$0.00,$0.00,15,$0.00
+02000,Survey - Lot survey ,2,4,Lot,1,$0.00,$0.00,0,$0.00
+02100,Survey - Lot staking-pins,2,4,Lot,1,$150.00,$150.00,0,$150.00
+02110,Survey - Form staking-pins (Envelope),2,4,Lot,1,$300.00,$300.00,0,$300.00
+02120,Survey - Form Survey,2,4,Lot,1,$350.00,$350.00,0,$350.00
+03000,P - Site work - Sewer Tap,3,3,Lot,1,$0.00,$0.00,15,$0.00
+03010,P - Site work - Water Tap,3,3,Lot,1,$0.00,$0.00,15,$0.00
+03020,P - Site work - Storm Water,3,3,Lot,1,$0.00,$0.00,15,$0.00
+03100,P - Plumbing - Underground,3,3,Lot,1,"$3,400.00","$3,400.00",15,"$3,910.00"
+03110,P - Plumbing - Rough,3,9,Lot,1,"$3,400.00","$3,400.00",15,"$3,910.00"
+03120,P - Plumbing - Trim,3,12,Lot,1,"$1,700.00","$1,700.00",15,"$1,955.00"
+03200,P - Fixtures - Bathroom Sink Faucet ,3,15,Lot,1,$790.80,$790.80,15,$909.42
+03210,P - Fixtures - Shower trim,3,15,Lot,1,$106.38,$106.38,15,$122.34
+03220,P - Fixtures - Tub/shower trim,3,15,Lot,1,$150.13,$150.13,15,$172.65
+03230,P - Fixtures - standing tub faucet,3,15,Lot,1,$97.81,$97.81,15,$112.48
+03240,P - Fixtures - tub spout,3,15,Lot,1,$89.96,$89.96,15,$103.45
+03250,P - Fixtures - kitchen faucet,3,15,Lot,1,$339.90,$339.90,15,$390.89
+03260,P - Fixtures - freestanding tub,3,15,Lot,1,"$1,048.94","$1,048.94",15,"$1,206.28"
+03270,P - Fixtures - toilet,3,15,Lot,1,$0.00,$0.00,15,$0.00
+03280,P - Fixtures - shower drain,3,15,Lot,1,$67.75,$67.75,15,$77.91
+03290,P - Fixtures - tub drain ,3,15,Lot,1,$29.22,$29.22,15,$33.60
+03300,P - Fixtures - disposal,3,15,Lot,1,$105.31,$105.31,15,$121.11
+03310,P - Fixtures - Disposal pneumatic button,3,15,Lot,1,$48.49,$48.49,15,$55.76
+03320,P - Fixtures - Sink Pedestal,3,15,Lot,1,$132.72,$132.72,15,$152.63
+03330,P - Fixtures - Pedestal,3,15,Lot,1,$122.72,$122.72,15,$141.13
+03400,P - Hardware - Towel handler small,3,15,Lot,1,$145.28,$145.28,15,$167.07
+03410,P - Hardware - Towel handler large,3,15,Lot,1,$85.38,$85.38,15,$98.19
+03420,P - Hardware - Toilet paper holder,3,15,Lot,1,$117.24,$117.24,15,$134.83
+03430,P - Hardware - hook,3,15,Lot,1,$48.40,$48.40,15,$55.66
+04000,Slab - Foundation (turn key),4,5,Lot,1,"$14,952.00","$14,952.00",15,"$17,194.80"
+04100,Driveway - Exterior Driveway (ROW),4,15,Lot,1,"$1,440.00","$1,440.00",15,"$1,656.00"
+04110,Driveway - Interior Driveway,4,15,Lot,1,"$1,620.00","$1,620.00",15,"$1,863.00"
+04200,Walkway - Exterior Walkway (ROW),4,15,Lot,1,$0.00,$0.00,15,$0.00
+04210,Walkway - Interior Walkway-Flat work,4,15,Lot,1,$696.00,$696.00,15,$800.40
+04300,Stamped Concrete,4,15,Lot,1,$0.00,$0.00,15,$0.00
+04310,Head wall,4,5,Lot,1,$600.00,$600.00,15,$690.00
+04320,Street cuts,4,5,Lot,1,$250.00,$250.00,15,$287.50
+04400,Post - Tensioned wires inspection,4,6,Lot,1,$180.00,$180.00,15,$207.00
+05000,Frame 1 - Wood frame pack 1 ,5,6,Lot,1,"$3,526.22","$3,526.22",15,"$4,055.15"
+05010,Frame 1 - Trusses 1,5,6,Lot,1,"$7,524.46","$7,524.46",15,"$8,653.13"
+05020,Frame 1 - Beams 1,5,6,Lot,1,"$1,613.35","$1,613.35",15,"$1,855.35"
+05030,Frame 1 - Labor,5,6,Lot,1,"$3,888.00","$3,888.00",15,"$4,471.20"
+05100,Frame 2 - Wood frame pack 2,5,7,Lot,1,"$6,157.08","$6,157.08",15,"$7,080.64"
+05120,Frame 2 - Beams 2,5,7,Lot,1,$0.00,$0.00,15,$0.00
+05130,Frame 2 - Beams 3+4,5,7,Lot,1,$0.00,$0.00,15,$0.00
+05140,Frame 2 - Subfloor,5,7,Lot,1,"$2,581.45","$2,581.45",15,"$2,968.67"
+05150,Frame 2 - Labor ,5,7,Lot,1,"$3,888.00","$3,888.00",15,"$4,471.20"
+05300,Cornice - Sheating,5,9,Lot,1,"$1,900.07","$1,900.07",15,"$2,185.08"
+05310,Cornice - Materials,5,9,Lot,1,"$6,263.46","$6,263.46",15,"$7,202.98"
+05320,"Cornice - Fire wall-5/8"" Firecode sheetrock",5,9,Lot,1,$445.50,$445.50,15,$512.33
+05340,Cornice - Fire wall-Fire caulking,5,9,Lot,1,$207.00,$207.00,15,$238.05
+05350,Cornice - Madera Verde (4x4),5,9,Lot,1,$150.00,$150.00,15,$172.50
+05360,Cornice - Cornice Labor,5,9,Lot,1,"$7,776.00","$7,776.00",15,"$8,942.40"
+05400,Windstorm - Materials,5,8,Lot,1,$750.06,$750.06,15,$862.57
+05410,Windstorm - Labor,5,8,Lot,1,$800.00,$800.00,15,$920.00
+05420,Windstorm - HDU 4,5,8,Lot,1,$0.00,$0.00,15,$0.00
+05421,Windstorm - HDU 5,5,8,Lot,1,$0.00,$0.00,15,$0.00
+05422,Windstorm - HDU 8,5,8,Lot,1,$108.24,$108.24,15,$124.48
+05500,Decking,5,7,Lot,1,$870.41,$870.41,15,"$1,000.97"
+05600,Windows,5,9,Lot,1,"$1,668.39","$1,668.39",15,"$1,918.65"
+05700,Roofing - Shingles,5,7,Lot,1,"$4,760.51","$4,760.51",15,"$5,474.59"
+05800,Gutters,5,16,Lot,1,$0.00,$0.00,15,$0.00
+06100,HVAC - Rough,6,9,Lot,1,"$6,230.00","$6,230.00",15,"$7,164.50"
+06200,HVAC - Trim,6,12,Lot,1,"$2,670.00","$2,670.00",15,"$3,070.50"
+06300,Energy Report,6,17,Lot,1,$0.00,$0.00,15,$0.00
+07000,Electric - Temporary power pole,7,5,Lot,1,$0.00,$0.00,15,$0.00
+07100,Electric - Underground,7,3,Lot,1,"$2,875.00","$2,875.00",15,"$3,306.25"
+07110,Electric - Rough,7,9,Lot,1,"$5,226.00","$5,226.00",15,"$6,009.90"
+07120,Electric - Trim,7,12,Lot,1,"$3,484.00","$3,484.00",15,"$4,006.60"
+07200,Low Voltage - Rough,7,9,Lot,1,$672.00,$672.00,15,$772.80
+07210,Low Voltage - Trim,7,12,Lot,1,$448.00,$448.00,15,$515.20
+07331,"Light # 2. Bellevue single light 8""",7,12,Lot,1,$346.32,$346.32,15,$398.27
+07333,Lighting - Light 4 - James Allan Justice single light,7,12,Lot,1,$370.12,$370.12,15,$425.64
+07400,Lighting - light bulbs,7,12,Lot,1,$42.84,$42.84,15,$49.27
+08000,Insulation - Batts,8,10,Lot,1,"$1,411.38","$1,411.38",15,"$1,623.08"
+08010,Insulation - Blowing,8,15,Lot,1,$604.88,$604.88,15,$695.61
+08100,Drywall - Sheetrock,8,10,Lot,1,"$3,157.44","$3,157.44",15,"$3,631.06"
+08110,Drywall - Tape and Float,8,10,Lot,1,"$3,157.44","$3,157.44",15,"$3,631.06"
+08120,Drywall - Texture,8,10,Lot,1,"$1,578.72","$1,578.72",15,"$1,815.53"
+08200,Paint - Interior 1,8,12,Lot,1,"$2,106.98","$2,106.98",15,"$2,423.03"
+08210,Paint - Exterior 1,8,10,Lot,1,"$2,106.98","$2,106.98",15,"$2,423.03"
+08220,Paint - Interior 2,8,15,Lot,1,"$2,106.98","$2,106.98",15,"$2,423.03"
+08230,Paint - Touch up,8,16,Lot,1,$702.33,$702.33,15,$807.68
+08240,Paint - Fire Caulking Labor,8,9,Lot,1,$350.00,$350.00,15,$402.50
+08250,Paint - Fire Caulking Materials,8,9,Lot,1,$250.00,$250.00,15,$287.50
+09000,Brick - Material,9,10,Lot,1,"$3,500.00","$3,500.00",15,"$4,025.00"
+09010,Brick - Labor,9,10,Lot,1,"$4,500.00","$4,500.00",15,"$5,175.00"
+09100,Wrought Iron & Sheet Metal - Turn Key,9,11,Lot,1,"$2,150.62","$2,150.62",15,"$2,473.21"
+010000,Trim Materials,10,11,Lot,1,"$2,660.00","$2,660.00",15,"$3,059.00"
+010100,Trim labor,10,11,Lot,1,"$3,226.00","$3,226.00",15,"$3,709.90"
+010110,Trim labor - Cabinet handlers,10,11,Lot,1,$150.00,$150.00,15,$172.50
+010120,Trim labor - Exterior door installation (Frame),10,11,Lot,1,$450.00,$450.00,15,$517.50
+010130,Trim labor - screw reinforcement on subfloor,10,11,Lot,1,$150.00,$150.00,15,$172.50
+010140,Exterior doors - Entry Door 3/0x8,10,9,Lot,1,"$1,350.00","$1,350.00",15,"$1,552.50"
+010141,Exterior doors - Back Yard door 3/0x8,10,9,Lot,1,$908.21,$908.21,15,"$1,044.44"
+010142,Exterior doors - Balcony Door 3/0x8,10,9,Lot,1,$908.21,$908.21,15,"$1,044.44"
+010143,Exterior doors - Garage Door 2/8x6,10,9,Lot,1,$519.60,$519.60,15,$597.54
+010200,Interior doors - 2/0x6 Bathroom,10,11,Lot,1,"$1,012.10","$1,012.10",15,"$1,163.92"
+010202,Interior doors - 2/6x6,10,11,Lot,1,$630.00,$630.00,15,$724.50
+010203,Interior doors - 2/8x6 Bedroom,10,11,Lot,1,$639.75,$639.75,15,$735.71
+010204,Interior doors - 2/0x6 Toilet/pantry,10,11,Lot,1,$404.84,$404.84,15,$465.57
+010205,Interior doors - 1/6x6 Linen closet,10,11,Lot,1,$0.00,$0.00,15,$0.00
+010206,Interior doors - 2x2/6x6 (5/0x6)Utility,10,11,Lot,1,$357.22,$357.22,15,$410.80
+010207,Interior doors - 2x2/0x6 (4/0x6) Closets,10,11,Lot,1,$679.80,$679.80,15,$781.77
+010300,Door hardware - Passage,10,15,Lot,1,$124.35,$124.35,15,$143.00
+010301,Door hardware - Privacy,10,15,Lot,1,$191.12,$191.12,15,$219.79
+010302,Door hardware - Entry door knob set,10,15,Lot,1,$35.80,$35.80,15,$41.17
+010303,Door hardware - Main entry door,10,15,Lot,1,$208.14,$208.14,15,$239.36
+010304,Door hardware - Dummy,10,15,Lot,1,$82.80,$82.80,15,$95.22
+010305,Door hardware - Deadbolt,10,15,Lot,1,$90.62,$90.62,15,$104.21
+010306,Door hardware - Cabinet knob,10,15,Lot,1,$206.50,$206.50,15,$237.48
+010400,Trim Hardware - Soporte barra para techo,10,15,Lot,1,$116.76,$116.76,15,$134.27
+010401,Trim Hardware - Soporte barra muros,10,15,Lot,1,$300.00,$300.00,15,$345.00
+010402,Trim Hardware - barra para closet,10,15,Lot,1,$357.21,$357.21,15,$410.79
+010403,Trim Hardware - Soporte hand rail,10,15,Lot,1,$46.00,$46.00,15,$52.90
+010404,Trim Hardware - Tope de muro,10,15,Lot,1,$21.65,$21.65,15,$24.90
+010405,Trim Hardware - tope de puerta,10,15,Lot,1,$6.92,$6.92,15,$7.96
+010406,Trim Hardware - numero exterior,10,15,Lot,1,$85.00,$85.00,15,$97.75
+010500,Garage door - Door,10,12,Lot,1,$990.00,$990.00,15,"$1,138.50"
+010510,Garage door - Motor,10,12,Lot,1,$300.00,$300.00,15,$345.00
+010600,Cabinets - bathrooms,10,11,Lot,1,$0.00,$0.00,15,$0.00
+010610,Cabinets - Kitchen,10,11,Lot,1,$0.00,$0.00,15,$0.00
+010620,Cabinets - Turn Key,10,11,Lot,1,"$3,800.00","$3,800.00",15,"$4,370.00"
+010700,Countertops - Material,10,12,Lot,1,$0.00,$0.00,15,$0.00
+010710,Countertops - Bathroom sinks,10,12,Lot,1,$0.00,$0.00,15,$0.00
+010720,Countertops - Kitchen sink,10,12,Lot,1,$0.00,$0.00,15,$0.00
+010730,Countertops - Turn Key,10,12,Lot,1,"$4,200.00","$4,200.00",15,"$4,830.00"
+010800,Mirrors,10,14,Lot,1,$750.00,$750.00,15,$862.50
+010810,Tempered Glass,10,14,Lot,1,"$1,100.00","$1,100.00",15,"$1,265.00"
+011000,Ceramic - Shower floor,11,13,Lot,1,$154.77,$154.77,15,$177.99
+011010,Ceramic - Shower walls,11,13,Lot,1,"$1,764.00","$1,764.00",15,"$2,028.60"
+011020,Ceramic - Tub walls,11,13,Lot,1,$0.00,$0.00,15,$0.00
+011030,Ceramic - Backsplash,11,13,Lot,1,$232.32,$232.32,15,$267.17
+011040,Ceramic - Thinset,11,13,Lot,1,$84.32,$84.32,15,$96.97
+011050,Ceramic - Grout 1,11,13,Lot,1,$30.44,$30.44,15,$35.01
+011060,Ceramic - Grout 2,11,13,Lot,1,$0.00,$0.00,15,$0.00
+011070,Ceramic - Shluter ,11,13,Lot,1,$309.40,$309.40,15,$355.81
+011080,Ceramic - Shower drain,11,13,Lot,1,$0.00,$0.00,15,$0.00
+011090,Ceramic - Labor,11,13,Lot,1,"$2,800.00","$2,800.00",15,"$3,220.00"
+011100,Vinyl floors - 1st Floor ,11,13,Lot,1,"$1,817.74","$1,817.74",15,"$2,090.40"
+011110,Vinyl floors - 2nd Floor ,11,13,Lot,1,"$1,015.41","$1,015.41",15,"$1,167.72"
+011120,Vinyl floors - 3rd Floor ,11,13,Lot,1,$0.00,$0.00,15,$0.00
+011130,Vinyl floors - Steps,11,13,Lot,1,$0.00,$0.00,15,$0.00
+011140,Vinyl floors - Stair nose,11,13,Lot,1,$0.00,$0.00,15,$0.00
+011150,Vinyl floors - Labor,11,13,Lot,1,"$3,617.00","$3,617.00",15,"$4,159.55"
+011200,Carpet - Materials,11,16,Lot,1,"$1,473.90","$1,473.90",15,"$1,694.99"
+011210,Carpet - Labor,11,16,Lot,1,$0.00,$0.00,15,$0.00
+012000,Installation,12,16,Lot,1,$0.00,$0.00,15,$0.00
+012010,Refrigerator,12,16,Lot,1,"$1,466.79","$1,466.79",15,"$1,686.81"
+012020,Gas Range,12,16,Lot,1,"$1,066.26","$1,066.26",15,"$1,226.20"
+012030,Microwave,12,16,Lot,1,$263.05,$263.05,15,$302.51
+012040,Dishwasher,12,16,Lot,1,$398.36,$398.36,15,$458.11
+013100,Grading - Materials (dirt fill),13,15,Lot,1,$360.00,$360.00,15,$414.00
+013110,Grading - Labor,13,15,Lot,1,$400.00,$400.00,15,$460.00
+013200,Fence - material,13,15,Lot,1,$785.71,$785.71,15,$903.57
+013210,Fence - Labor,13,15,Lot,1,$850.00,$850.00,15,$977.50
+013220,Fence - door labor,13,15,Lot,1,$180.00,$180.00,15,$207.00
+013230,Fence- Demolition,13,15,Lot,1,$0.00,$0.00,15,$0.00
+013300,labor,13,15,Lot,1,$400.00,$400.00,15,$460.00
+013310,Grass,13,16,Lot,1,$370.00,$370.00,15,$425.50
+013320,Tree,13,16,Lot,1,$200.00,$200.00,15,$230.00
+013330,plants,13,16,Lot,1,$150.00,$150.00,15,$172.50
+013340,bulk rock,13,16,Lot,1,$180.00,$180.00,15,$207.00
+013350,Mailbox,13,17,Lot,1,$0.00,$0.00,15,$0.00
+014000,Jobsite cleaning,14,1,Lot,1,$500.00,$500.00,0,$500.00
+014010,Onsite Dumpsters,14,1,Lot,1,"$1,737.50","$1,737.50",0,"$1,737.50"
+014100,House Cleaning #1 (Deep),14,14,Lot,1,$300.00,$300.00,0,$300.00
+014110,House Cleaning #2 (Routinely),14,15,Lot,1,$300.00,$300.00,0,$300.00
+014120,House Cleaning #3 (Final),14,17,Lot,1,$200.00,$200.00,0,$200.00
+015000,Port-A-Potty,15,14,Lot,1,$170.40,$170.40,0,$170.40
+015100,Temporary Fencing,15,1,Lot,1,$900.00,$900.00,0,$900.00
+015200,Security Cameras,15,1,Lot,1,$0.00,$0.00,0,$0.00
+015300,Staging Furniture,15,18,Lot,1,$0.00,$0.00,0,$0.00
+015400,Internal Inspections,15,18,Lot,1,$0.00,$0.00,0,$0.00
+015500,Warranty expences,15,18,Lot,1,$500.00,$500.00,0,$500.00

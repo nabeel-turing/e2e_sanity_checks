@@ -1,0 +1,102 @@
+Client,Order,Payment Status,Total,Remaining Balance,Currency,Delivered,Receipt Number,Order Date,Latest Delivery Date,Payment Method,Warehouse
+AN,7097,Payment Pending,$429.20,$24.49,MXN,Yes,A3988,3/31/2020,4/1/2020,Online Transfer,Finished Product
+AL,7096,Finalized,$295.00,$0.00,MXN,Yes,A3987,3/31/2020,4/1/2020,Credit Card,Finished Product
+VA,7095,Payment Pending,$600.00,$32.12,MXN,Yes,A3986,3/31/2020,,Online Transfer,Finished Product
+RI,7094,Finalized,$911.73,$0.00,MXN,Yes,A3985,3/31/2020,4/2/2020,Credit Card,Finished Product
+ED,7093,Finalized,$428.99,$0.00,MXN,Yes,A3984,3/31/2020,4/1/2020,Credit Card,Finished Product
+ED,7092,Finalized,$359.14,$0.00,MXN,Yes,A3983,3/31/2020,4/1/2020,Credit Card,Finished Product
+LU,7091,Payment Pending,$429.20,$24.49,MXN,Yes,A3982,3/31/2020,4/1/2020,Online Transfer,Finished Product
+JO,7090,Delivery Pending,$432.00,$24.43,MXN,No,A3981,3/31/2020,4/2/2020,Online Transfer,Finished Product
+VE,7089,Finalized,$799.06,$0.00,MXN,Yes,A3980,3/31/2020,4/1/2020,Credit Card,Finished Product
+CA,7085,Delivery Pending,$432.00,$24.43,MXN,No,A3976,3/30/2020,,Online Transfer,Finished Product
+BI,7083,Finalized,"$105,878.30",$0.00,MXN,Yes,A3977,3/30/2020,3/31/2020,Online Transfer,Finished Product
+JE,7081,Delivery Pending,$768.00,$0.00,MXN,No,A3974,3/30/2020,,Online Transfer,Finished Product
+JE,7080,Finalized,"$1,171.68",$0.00,MXN,Yes,A3972,3/30/2020,,Online Transfer,Finished Product
+JO,7058,Finalized,$504.00,$0.00,MXN,Yes,A3962,3/24/2020,3/31/2020,Credit Card,Finished Product
+FA,7057,Payment Pending,"$20,310.50","$20,310.50",MXN,Yes,A3973,3/24/2020,3/31/2020,To be determined,Finished Product
+CO,7055,Payment Pending,$668.16,$668.16,MXN,Yes,A3965,3/24/2020,3/29/2020,To be determined,Finished Product
+GE,7053,Delivery Pending,$295.00,$572.81,MXN,No,A3961,3/23/2020,,Online Transfer,Finished Product
+CO,7051,Payment Pending,"$2,352.00","$2,352.00",MXN,Yes,A3970,3/23/2020,3/27/2020,To be determined,Finished Product
+CO,7050,Payment Pending,$336.00,$336.00,MXN,Yes,A3966,3/23/2020,3/27/2020,To be determined,Finished Product
+CO,7049,Payment Pending,"$2,802.24","$2,802.24",MXN,Yes,A3967,3/23/2020,3/30/2020,To be determined,Finished Product
+CO,7048,Payment Pending,"$6,245.28","$6,245.28",MXN,Yes,A3968,3/23/2020,3/27/2020,To be determined,Finished Product
+RE,7047,Delivery Pending,$429.20,$0.00,MXN,No,A3958,3/23/2020,,Credit Card,Finished Product
+TI,7045,Payment Pending,"$10,743.32","$10,743.32",MXN,Yes,A3969,3/23/2020,3/30/2020,To be determined,Finished Product
+JO,7043,Finalized,$295.00,$0.00,MXN,Yes,A3956,3/23/2020,3/26/2020,Online Transfer,Finished Product
+JO,7042,Finalized,$504.00,$0.00,MXN,Yes,A3955,3/23/2020,,Online Transfer,Finished Product
+DE,7041,Payment Pending,$429.20,$24.49,MXN,Yes,A3954,3/23/2020,3/26/2020,Online Transfer,Finished Product
+AN,7040,Finalized,$429.20,$0.00,MXN,Yes,A3953,3/23/2020,3/26/2020,Online Transfer,Finished Product
+SO,7039,Finalized,$429.20,$0.00,MXN,Yes,A3952,3/23/2020,3/26/2020,Online Transfer,Finished Product
+AL,7038,Finalized,$295.00,$0.00,MXN,Yes,A3951,3/23/2020,3/26/2020,Online Transfer,Finished Product
+RI,7037,Payment Pending,$718.27,$37.79,MXN,Yes,A3950,3/20/2020,,Online Transfer,Finished Product
+JE,7036,Finalized,$782.49,$0.00,MXN,Yes,A3949,3/20/2020,,Online Transfer,Finished Product
+CI,7035,Finalized,$432.00,$0.00,MXN,Yes,A3948,3/20/2020,,Credit Card,Finished Product
+LA,7034,Payment Pending,$429.20,$24.49,MXN,Yes,A3944,3/20/2020,,Online Transfer,Finished Product
+WA,7033,Payment Pending,"$7,581.60","$7,581.60",MXN,Yes,A3942,3/19/2020,3/24/2020,To be determined,Finished Product
+CO,7032,Payment Pending,"$3,456.00","$3,456.00",MXN,Yes,A3960,3/18/2020,3/24/2020,To be determined,Finished Product
+TR,7031,Finalized,"$54,926.09",$0.00,MXN,Yes,A3941,3/18/2020,,Online Transfer,Finished Product
+CO,7030,Payment Pending,"$30,276.00","$30,276.00",MXN,Yes,A3959,3/18/2020,3/25/2020,To be determined,Finished Product
+CA,7023,Finalized,"$1,712.16",$0.00,MXN,Yes,A3937,3/17/2020,3/20/2020,Online Transfer,Finished Product
+MA,7022,Finalized,$860.99,$0.00,MXN,Yes,A3931,3/17/2020,3/19/2020,Online Transfer,Finished Product
+RO,7021,Finalized,$429.20,$0.00,MXN,Yes,A3939,3/17/2020,3/19/2020,Online Transfer,Finished Product
+ES,7019,Payment Pending,$960.00,$960.00,MXN,Yes,A3971,3/13/2020,3/20/2020,Online Transfer,Finished Product
+JA,7018,Finalized,$295.00,$0.00,MXN,Yes,A3979,3/13/2020,,Online Transfer,Finished Product
+FA,7017,Payment Pending,"$30,048.41","$30,048.41",MXN,Yes,A3927,3/13/2020,3/18/2020,To be determined,Finished Product
+YO,7014,Finalized,$861.20,$0.00,MXN,Yes,A3904,3/12/2020,3/19/2020,Online Transfer,Finished Product
+CO,7012,Payment Pending,$180.00,$180.00,MXN,Yes,A3905,3/12/2020,3/13/2020,To be determined,Finished Product
+TI,7010,Payment Pending,"$1,000.99","$1,000.99",MXN,Yes,A3936,3/12/2020,3/19/2020,To be determined,Finished Product
+TI,7009,Payment Pending,"$1,668.31","$1,668.31",MXN,Yes,A3935,3/12/2020,3/19/2020,To be determined,Finished Product
+TI,7006,Payment Pending,"$7,340.57","$7,340.57",MXN,Yes,A3934,3/12/2020,3/19/2020,To be determined,Finished Product
+TI,7005,Payment Pending,"$1,008.00","$1,008.00",MXN,Yes,A3933,3/12/2020,3/19/2020,To be determined,Finished Product
+TI,7004,Payment Pending,"$1,334.65","$1,334.65",MXN,Yes,A3932,3/12/2020,3/19/2020,To be determined,Finished Product
+NE,7003,Finalized,"$3,493.92",$0.00,MXN,Yes,A3938,3/12/2020,3/19/2020,Online Transfer,Finished Product
+FE,6997,Finalized,$429.20,$0.00,MXN,Yes,A3940,3/12/2020,,Online Transfer,Finished Product
+WA,6996,Payment Pending,"$4,773.60","$4,773.60",MXN,Yes,A3943,3/12/2020,3/17/2020,To be determined,Finished Product
+TI,6993,Payment Pending,"$9,697.51","$9,697.51",MXN,Yes,A3928,3/11/2020,3/18/2020,To be determined,Finished Product
+MA,6991,Finalized,$720.00,$0.00,MXN,Yes,A3929,3/11/2020,3/17/2020,Online Transfer,Finished Product
+FO,6990,Finalized,"$3,696.00",$0.00,MXN,Yes,A3902,3/11/2020,3/13/2020,Online Transfer,Finished Product
+RI,6988,Finalized,$429.20,$0.00,MXN,Yes,A3901,3/10/2020,3/13/2020,Online Transfer,Finished Product
+RI,6986,Finalized,"$7,762.00",$0.00,MXN,Yes,A3946,3/10/2020,3/24/2020,Online Transfer,Finished Product
+ZI,6984,Finalized,"$78,508.80",$0.00,MXN,Yes,A3926,3/9/2020,3/10/2020,Online Transfer,Finished Product
+BI,6982,Payment Pending,"$2,724.48","$2,724.48",MXN,Yes,A3906,3/9/2020,3/13/2020,To be determined,Finished Product
+CO,6981,Payment Pending,"$11,088.00","$11,088.00",MXN,Yes,A3907,3/9/2020,3/13/2020,To be determined,Finished Product
+CO,6978,Payment Pending,"$25,040.34","$25,040.34",MXN,Yes,A3898,3/6/2020,3/11/2020,To be determined,Finished Product
+FA,6976,Finalized,"$12,388.80",$0.00,MXN,Yes,A3903,3/5/2020,,Online Transfer,Finished Product
+ZI,6975,Payment Pending,"$3,790.80","$3,790.80",MXN,Yes,A3894,3/5/2020,3/6/2020,To be determined,Finished Product
+WA,6974,Payment Pending,"$3,042.36","$3,042.36",MXN,Yes,A3888,3/3/2020,3/10/2020,To be determined,Finished Product
+TI,6973,Payment Pending,"$3,327.58","$3,327.58",MXN,Yes,A3889,3/3/2020,3/6/2020,To be determined,Finished Product
+TI,6972,Payment Pending,"$4,536.00","$4,536.00",MXN,No,A3890,3/2/2020,3/3/2020,Online Transfer,Finished Product
+IN,6968,Payment Pending,$429.20,$24.49,MXN,Yes,A3879,3/2/2020,3/6/2020,Online Transfer,Finished Product
+SO,6967,Finalized,"$1,055.60",$0.00,MXN,Yes,A3899,3/2/2020,,Online Transfer,Finished Product
+JE,6966,Payment Pending,"$1,208.16","$1,208.16",MXN,Yes,A3891,3/2/2020,3/6/2020,To be determined,Finished Product
+CO,6965,Payment Pending,"$3,360.00","$3,360.00",MXN,Yes,A3893,3/2/2020,3/6/2020,To be determined,Finished Product
+CO,6963,Finalized,"$65,145.60",$0.00,MXN,Yes,A3877,2/29/2020,,Online Transfer,Finished Product
+BI,6962,Finalized,"$39,966.55",$0.00,MXN,Yes,A3886,2/28/2020,3/3/2020,Online Transfer,Finished Product
+TR,6955,Payment Pending,"$5,335.20","$5,335.20",MXN,Yes,A3895,2/27/2020,3/3/2020,To be determined,Finished Product
+WA,6947,Payment Pending,"$5,065.20","$5,065.20",MXN,Yes,A3883,2/24/2020,3/5/2020,Online Transfer,Finished Product
+SE,6924,Payment Pending,"$20,880.00","$20,880.00",MXN,Yes,A3885,2/19/2020,3/4/2020,To be determined,Finished Product
+CO,6923,Finalized,"$59,832.96",$0.00,MXN,Yes,A3947,2/19/2020,,Online Transfer,Finished Product
+ZI,6913,Payment Pending,"$54,600.00","$54,600.00",MXN,Yes,A3896,2/17/2020,,To be determined,Finished Product
+CI,6899,Payment Pending,$432.00,$24.43,MXN,Yes,A3900,2/10/2020,,Online Transfer,Finished Product
+GA,6863,Finalized,$827.78,$0.00,MXN,Yes,A3922,2/4/2020,2/6/2020,Online Transfer,Raw Materials
+30,6862,Finalized,$827.78,$0.00,MXN,Yes,A3909,2/4/2020,2/19/2020,Online Transfer,Raw Materials
+31,6848,Finalized,$827.78,$0.00,MXN,Yes,A3920,1/30/2020,2/7/2020,Online Transfer,Raw Materials
+30,6847,Finalized,$827.78,$0.00,MXN,Yes,A3918,1/30/2020,2/7/2020,Online Transfer,Raw Materials
+30,6846,Finalized,$827.78,$0.00,MXN,Yes,A3921,1/30/2020,2/7/2020,Online Transfer,Raw Materials
+30,6845,Finalized,$827.78,$0.00,MXN,Yes,A3908,1/30/2020,2/7/2020,Online Transfer,Raw Materials
+30,6834,Delivery Pending,$776.04,$0.00,MXN,No,A3923,1/29/2020,2/20/2020,Online Transfer,Raw Materials
+PU,6833,Finalized,"$1,655.55",$0.00,MXN,Yes,A3913,1/29/2020,2/3/2020,Online Transfer,Raw Materials
+DI,6814,Finalized,$827.78,$0.00,MXN,Yes,A3911,1/22/2020,1/29/2020,Online Transfer,Raw Materials
+PU,6813,Finalized,$827.78,$0.00,MXN,Yes,A3910,1/22/2020,1/29/2020,Online Transfer,Raw Materials
+30,6812,Delivery Pending,$620.83,$0.00,MXN,No,A3925,1/22/2020,1/29/2020,Online Transfer,Raw Materials
+30,6811,Delivery Pending,$620.83,$0.00,MXN,No,A3924,1/22/2020,1/29/2020,Online Transfer,Raw Materials
+30,6810,Finalized,$827.78,$0.00,MXN,Yes,A3916,1/22/2020,1/29/2020,Online Transfer,Raw Materials
+PU,6808,Finalized,$827.78,$0.00,MXN,Yes,A3919,1/22/2020,1/29/2020,Online Transfer,Raw Materials
+30,6805,Finalized,$827.78,$0.00,MXN,Yes,A3917,1/22/2020,1/23/2020,Online Transfer,Raw Materials
+PU,6743,Finalized,"$1,826.03",$0.00,MXN,Yes,A3876,1/6/2020,,Online Transfer,Finished Product
+DI,6740,Payment Pending,$295.00,$295.00,MXN,Yes,A3880,1/3/2020,,Credit Card,Raw Materials
+PU,6739,Payment Pending,$359.04,$359.04,MXN,Yes,A3881,1/3/2020,1/7/2020,Credit Card,Raw Materials
+30,6687,Finalized,$827.78,$0.00,MXN,Yes,A3914,12/9/2019,12/13/2019,Online Transfer,Raw Materials
+30,6680,Delivery Pending,$827.78,$0.00,MXN,No,A3915,12/4/2019,12/5/2019,Online Transfer,Raw Materials
+30,6679,Delivery Pending,$827.78,$0.00,MXN,No,A3912,12/4/2019,12/7/2019,Online Transfer,Raw Materials
+PU,6675,Payment Pending,$718.08,$718.08,MXN,Yes,A3882,12/3/2019,12/3/2019,Cash,Raw Materials

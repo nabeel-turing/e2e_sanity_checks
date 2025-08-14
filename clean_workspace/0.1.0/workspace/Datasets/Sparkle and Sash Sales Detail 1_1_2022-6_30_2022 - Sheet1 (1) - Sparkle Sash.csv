@@ -1,0 +1,74 @@
+Transaction ID,Transaction Date,Shipping Zip Code,Country,Order Source,Product Style,Product Color,Sash Length,Sales Price,State Tax Collected,Payment Method,Product Returned,Star Rank
+154,2/22/2022,78130,USA,Etsy,The Sophia,White,Long,95,8.1,Visa,No,5
+155,2/22/2022,78130,USA,Etsy,The Sophia,White,Long,95,8.1,Visa,No,5
+156,2/22/2022,78130,USA,Etsy,The Sophia,White,Long,95,8.1,Visa,No,5
+157,2/22/2022,78130,USA,Etsy,The Sophia,White,Long,95,8.1,Visa,No,5
+158,2/25/2022,80026,USA,Etsy,The Atleigh,Cream,Fitted to waist,125,-,Visa,No,5
+159,2/26/2022,68023,USA,Etsy,The Ella,Pink,Long,110,-,Visa,No,5
+160,2/26/2022,68023,USA,Etsy,The Ella,Pink,Long,110,-,Visa,No,5
+161,2/26/2022,68023,USA,Etsy,The Ella,Pink,Long,110,-,Visa,No,5
+162,2/26/2022,68023,USA,Etsy,The Ella,Pink,Long,110,-,Visa,No,5
+163,2/26/2022,68023,USA,Etsy,The Ella,Pink,Long,110,-,Visa,No,5
+164,2/26/2022,68023,USA,Etsy,The Ella,Pink,Long,110,-,Visa,No,5
+165,2/26/2022,68023,USA,Etsy,The Ella,Pink,Long,110,-,Visa,No,5
+166,2/26/2022,68023,USA,Etsy,The Ella,Pink,Long,110,-,Visa,No,5
+167,3/1/2022,30022,USA,Shopify,The Atleigh,Black,Fitted to waist,125,-,MC,No,4
+168,3/2/2022,28119,USA,Etsy,The Lauren,White,Long,95,-,Visa,No,5
+169,3/2/2022,28119,USA,Etsy,The Lauren,White,Long,95,-,Visa,No,5
+170,3/4/2022,61025,USA,Etsy,The Anna,Gold,Long,95,-,Paypal,Yes,5
+171,3/5/2022,28717,USA,Etsy,The Ella,Red,Long,110,-,Visa,No,5
+172,3/5/2022,78130,USA,Etsy,The Atleigh,White,Long,125,10.7,Visa,No,5
+173,3/7/2022,29429,USA,Etsy,The Lauren,White,Long,95,-,Visa,No,5
+174,3/8/2022,28717,USA,Etsy,The Ella,Turquoise,Long,110,-,Paypall,No,5
+175,3/15/2022,78666,USA,Etsy,The Lauren,Black,Fitted to waist,95,8.1,MC,No,5
+176,3/19/2022,33858,USA,Etsy,The Ella,Pink,Long,110,-,Paypal,No,5
+177,3/23/2022,78130,USA,Etsy,The Atleigh,Navy,Long,125,10.7,Paypal,No,5
+178,3/23/2022,78130,USA,Etsy,The Atleigh,Navy,Long,125,10.7,Paypal,No,5
+179,3/26/2022,99535,USA,Etsy,The Ella,White,Long,110,-,Visa,No,5
+180,4/2/2022,58375,USA,Etsy,The Ella,Cream,Long,110,-,AMEX,No,5
+181,4/4/2022,37284,USA,Etsy,The Ella,Pink,Long,110,-,Paypal,No,5
+182,4/4/2022,37284,USA,Etsy,The Lauren,White,Long,95,-,Paypal,No,5
+183,4/11/2022,20043,USA,Etsy,The Atleigh,White,Long,125,-,Visa,No,5
+184,4/12/2022,84200,USA,Etsy,The Atleigh,White,Fitted to waist,125,-,Visa,No,5
+185,4/16/2022,32347,USA,Etsy,The Ella,Cream,Long,110,-,Visa,No,5
+186,4/16/2022,32347,USA,Etsy,The Ella,Cream,Long,110,-,Visa,No,5
+187,4/20/2022,81621,USA,Etsy,The Atleigh,White,Long,125,-,MC,No,5
+188,4/23/2022,71371,USA,Etsy,The Atleigh,Burgundy,Long,125,-,Paypal,No,5
+189,4/23/2022,71371,USA,Etsy,The Lauren,White,Long,95,-,Paypal,No,5
+190,4/26/2022,51217,USA,Etsy,The Lauren,White,Long,95,-,Visa,No,5
+191,4/27/2022,20041,USA,Etsy,The Ella,Pink,Long,110,-,Visa,No,5
+192,5/5/2022,39700,USA,Etsy,The Lauren,White,Long,95,-,Paypal,No,5
+193,5/5/2022,39700,USA,Etsy,The Lauren,White,Long,95,-,Paypal,No,5
+194,5/5/2022,39700,USA,Etsy,The Lauren,White,Long,95,-,Paypal,No,5
+195,5/5/2022,39700,USA,Etsy,The Lauren,White,Long,95,-,Paypal,No,5
+196,5/5/2022,39700,USA,Etsy,The Lauren,White,Long,95,-,Paypal,No,5
+197,5/5/2022,39700,USA,Etsy,The Lauren,White,Long,95,-,Paypal,No,5
+198,5/5/2022,39700,USA,Etsy,The Lauren,White,Long,95,-,Paypal,No,5
+199,5/12/2022,21837,USA,Etsy,The Sophia,White,Long,95,-,Visa,No,5
+200,5/14/2022,48674,USA,Shopify,The Ella,White,Long,110,-,Visa,No,5
+201,5/17/2022,68497,USA,Etsy,The Ella,Cream,Long,110,-,Paypal,No,5
+202,5/17/2022,68497,USA,Etsy,The Ella,White,Long,110,-,Paypal,No,5
+203,5/25/2022,28105,USA,Etsy,The Ella,Black,Fitted to waist,110,-,Visa,No,5
+204,5/26/2022,78131,USA,Etsy,The Atleigh,White,Long,125,10.7,MC,No,5
+205,5/26/2022,78131,USA,Etsy,The Ella,Pink,Long,110,-,Paypal,No,5
+206,5/27/2022,68105,USA,Etsy,The Atleigh,Black,Fitted to waist,125,-,Paypal,No,4
+207,6/1/2022,59640,USA,Etsy,The Atleigh,White,Long,125,-,Paypal,Yes,5
+208,6/2/2022,96771,USA,Etsy,The Sophia,White,Long,95,8.1,Paypal,No,5
+209,6/2/2022,96771,USA,Etsy,The Sophia,White,Long,95,8.1,Paypal,No,5
+210,6/7/2022,78163,USA,Etsy,The Atleigh,Red,Long,125,10.7,Paypal,No,5
+211,6/7/2022,78163,USA,Etsy,The Atleigh,White,Long,125,-,Paypal,No,5
+212,6/12/2022,85068,USA,Amazon,The Atleigh,White,Long,125,-,Paypal,No,5
+213,6/13/2022,80160,USA,Etsy,The Atleigh,Silver,Long,125,-,Paypal,No,5
+214,6/15/2022,29086,USA,Etsy,The Sophia,Blue,Long,95,8.1,Paypal,No,5
+215,6/15/2022,29086,USA,Etsy,The Sophia,Blue,Long,95,8.1,Paypal,No,5
+216,6/21/2022,20015,USA,Etsy,The Sophia,White,Long,95,8.1,Visa,Yes,5
+217,6/22/2022,14188,USA,Etsy,The Atleigh,White,Long,125,-,Visa,No,5
+218,6/23/2022,20641,USA,Etsy,The Atleigh,White,Long,125,-,Paypal,No,5
+219,6/25/2022,71219,USA,Etsy,The Sophia,Silver,Fitted to waist,95,-,Paypal,No,5
+220,6/27/2022,75455,USA,Etsy,The Atleigh,White,Long,125,-,MC,No,5
+221,6/27/2022,75455,USA,Etsy,The Atleigh,White,Long,125,-,MC,No,5
+222,6/27/2022,75455,USA,Etsy,The Atleigh,White,Long,125,-,MC,No,5
+223,6/27/2022,75455,USA,Etsy,The Atleigh,White,Long,125,-,MC,No,5
+224,6/28/2022,62703,USA,Etsy,The Sophia,White,Long,95,8.1,Visa,No,5
+,,,,,,,,,,,,
+,,,,,,,,"7,735.00",142.6,,,

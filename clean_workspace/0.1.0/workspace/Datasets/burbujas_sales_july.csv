@@ -1,0 +1,504 @@
+date,product_name,product_id,internal_cost,selling_price,salesperson,category,category_id,quantity_sold,total_revenue,profit,electronic_bill
+7/3/2023,Stainless Steel Cleaner 1L SecoCleaner,SSC001 ," $  1,816.50 "," $  2,906.40 ",oviedo95,Surface Cleaners,23,1," $  2,906.40 "," $  1,089.90 ",1
+7/4/2023,Fabric Freshener Poet 250ml,FF003 , $  695.10 ," $  1,112.16 ",lamartinez,Surface Cleaners,23,6," $  6,672.96 "," $  2,502.36 ",0
+7/4/2023,Disposable Cleaning Wipes x40 Bialcohol,DCW014 ," $  1,624.00 "," $  2,598.40 ",lamartinez,Disposable and Convenience,21,5," $  12,992.00 "," $  4,872.00 ",1
+7/4/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",fherrera,Cleaning Tools,22,6," $  8,729.28 "," $  3,273.48 ",1
+7/4/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",lamartinez,Dusting and Polishing,18,2," $  13,440.00 "," $  5,040.00 ",1
+7/4/2023,Cleaning Gloves Scotch Brite S,CG020 , $  184.10 , $  294.56 ,fherrera,Personal Protection,23,7," $  2,061.92 ", $  773.22 ,1
+7/4/2023,Cleaning Gloves Scotch Brite S,CG020 , $  184.10 , $  294.56 ,oviedo95,Personal Protection,23,10," $  2,945.60 "," $  1,104.60 ",1
+7/4/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",lamartinez,Furniture and Wood Care,17,2," $  6,220.48 "," $  2,332.68 ",0
+7/4/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",fherrera,Cleaning Tools,22,10," $  68,308.80 "," $  25,615.80 ",0
+7/4/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",lamartinez,Dusting and Polishing,18,10," $  17,360.00 "," $  6,510.00 ",0
+7/4/2023,Wood Floor Cleaner 5L SecoCleaner,WFC009 ," $  5,904.50 "," $  9,447.20 ",lamartinez,Furniture and Wood Care,17,8," $  75,577.60 "," $  28,341.60 ",1
+7/4/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",fherrera,Furniture and Wood Care,17,6," $  18,661.44 "," $  6,998.04 ",0
+7/4/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,oviedo95,Personal Protection,23,7," $  2,297.12 ", $  861.42 ,1
+7/5/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",fherrera,Dusting and Polishing,18,6," $  10,416.00 "," $  3,906.00 ",0
+7/5/2023,Cleaning Gloves Scotch Brite L,CG022, $  219.10 , $  350.56 ,lamartinez,Personal Protection,23,10," $  3,505.60 "," $  1,314.60 ",0
+7/5/2023,Oven Cleaner 5L Sutter,OC012 ," $  1,707.30 "," $  2,731.68 ",fherrera,Kitchen Cleaners,20,7," $  19,121.76 "," $  7,170.66 ",1
+7/5/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,oviedo95,Personal Protection,23,7," $  2,297.12 ", $  861.42 ,0
+7/5/2023,Fabric Freshener Poet 250ml,FF003 , $  695.10 ," $  1,112.16 ",fherrera,Surface Cleaners,23,6," $  6,672.96 "," $  2,502.36 ",0
+7/5/2023,Cleaning Gloves Scotch Brite S,CG020 , $  184.10 , $  294.56 ,fherrera,Personal Protection,23,3, $  883.68 , $  331.38 ,0
+7/5/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",fherrera,Dusting and Polishing,18,10," $  17,360.00 "," $  6,510.00 ",0
+7/5/2023,Oven Cleaner 5L Sutter,OC012 ," $  1,707.30 "," $  2,731.68 ",lamartinez,Kitchen Cleaners,20,10," $  27,316.80 "," $  10,243.80 ",0
+7/5/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,fherrera,Personal Protection,23,4," $  2,571.52 ", $  964.32 ,0
+7/5/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",fherrera,Cleaning Tools,22,7," $  10,184.16 "," $  3,819.06 ",0
+7/5/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",oviedo95,Dusting and Polishing,18,2," $  13,440.00 "," $  5,040.00 ",1
+7/5/2023,Air Freshener Glade 360ml,AF004 , $  531.30 , $  850.08 ,lamartinez,Surface Cleaners,23,6," $  5,100.48 "," $  1,912.68 ",1
+7/5/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",fherrera,Furniture and Wood Care,17,10," $  31,102.40 "," $  11,663.40 ",0
+7/6/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",oviedo95,Dusting and Polishing,18,4," $  26,880.00 "," $  10,080.00 ",1
+7/6/2023,Oven Cleaner 5L Sutter,OC012 ," $  1,707.30 "," $  2,731.68 ",lamartinez,Kitchen Cleaners,20,10," $  27,316.80 "," $  10,243.80 ",1
+7/6/2023,Mop Head Promis Max Vileda,MH017 ," $  4,309.90 "," $  6,895.84 ",fherrera,Cleaning Tools,22,10," $  68,958.40 "," $  25,859.40 ",1
+7/6/2023,Dishwasher Cleaner 1kg SUN,DCC013 , $  602.70 , $  964.32 ,fherrera,Kitchen Cleaners,20,6," $  5,785.92 "," $  2,169.72 ",1
+7/6/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",lamartinez,Cleaning Tools,22,3," $  20,492.64 "," $  7,684.74 ",1
+7/6/2023,Cleaning Gloves Scotch Brite S,CG020 , $  184.10 , $  294.56 ,oviedo95,Personal Protection,23,3, $  883.68 , $  331.38 ,1
+7/6/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",oviedo95,Bathroom Cleaners,16,10," $  92,657.60 "," $  34,746.60 ",0
+7/6/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,oviedo95,Personal Protection,23,4," $  2,571.52 ", $  964.32 ,0
+7/6/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",lamartinez,Dusting and Polishing,18,10," $  67,200.00 "," $  25,200.00 ",1
+7/6/2023,Air Freshener Glade 360ml,AF004 , $  531.30 , $  850.08 ,lamartinez,Surface Cleaners,23,5," $  4,250.40 "," $  1,593.90 ",0
+7/6/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",fherrera,Cleaning Tools,22,10," $  14,548.80 "," $  5,455.80 ",1
+7/6/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,fherrera,Personal Protection,23,5," $  3,214.40 "," $  1,205.40 ",0
+7/6/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",oviedo95,Cleaning Tools,22,6," $  40,985.28 "," $  15,369.48 ",1
+7/6/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,oviedo95,Personal Protection,23,2," $  1,285.76 ", $  482.16 ,1
+7/6/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",oviedo95,Bathroom Cleaners,16,2," $  18,531.52 "," $  6,949.32 ",0
+7/6/2023,Fabric Freshener Poet 250ml,FF003 , $  695.10 ," $  1,112.16 ",oviedo95,Surface Cleaners,23,2," $  2,224.32 ", $  834.12 ,1
+7/6/2023,Cleaning Gloves Scotch Brite L,CG022, $  219.10 , $  350.56 ,fherrera,Personal Protection,23,10," $  3,505.60 "," $  1,314.60 ",1
+7/6/2023,Toilet Bowl Cleaner HG 500ml,TBC005 ," $  1,565.90 "," $  2,505.44 ",oviedo95,Bathroom Cleaners,16,10," $  25,054.40 "," $  9,395.40 ",1
+7/6/2023,Trash Bag Asurin Green x30 (50x70cm),TB019 , $  431.20 , $  689.92 ,fherrera,Personal Protection,23,6," $  4,139.52 "," $  1,552.32 ",1
+7/6/2023,Cleaning Gloves Scotch Brite L,CG022, $  219.10 , $  350.56 ,lamartinez,Personal Protection,23,7," $  2,453.92 ", $  920.22 ,0
+7/6/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",fherrera,Cleaning Tools,22,10," $  14,548.80 "," $  5,455.80 ",0
+7/6/2023,Trash Bag Asurin Green x30 (50x70cm),TB019 , $  431.20 , $  689.92 ,oviedo95,Personal Protection,23,7," $  4,829.44 "," $  1,811.04 ",1
+7/6/2023,Fabric Freshener Poet 250ml,FF003 , $  695.10 ," $  1,112.16 ",fherrera,Surface Cleaners,23,4," $  4,448.64 "," $  1,668.24 ",1
+7/6/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",oviedo95,Dusting and Polishing,18,10," $  67,200.00 "," $  25,200.00 ",1
+7/7/2023,Sponge Virulana,S018 , $  217.00 , $  347.20 ,fherrera,Cleaning Tools,22,5," $  1,736.00 ", $  651.00 ,1
+7/7/2023,Mop Head Promis Max Vileda,MH017 ," $  4,309.90 "," $  6,895.84 ",lamartinez,Cleaning Tools,22,4," $  27,583.36 "," $  10,343.76 ",0
+7/7/2023,Mop Head Promis Max Vileda,MH017 ," $  4,309.90 "," $  6,895.84 ",lamartinez,Cleaning Tools,22,7," $  48,270.88 "," $  18,101.58 ",1
+7/7/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",fherrera,Dusting and Polishing,18,6," $  10,416.00 "," $  3,906.00 ",0
+7/7/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",fherrera,Cleaning Tools,22,2," $  13,661.76 "," $  5,123.16 ",0
+7/7/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",oviedo95,Bathroom Cleaners,16,7," $  64,860.32 "," $  24,322.62 ",1
+7/7/2023,Disposable Cleaning Wipes x40 Bialcohol,DCW014 ," $  1,624.00 "," $  2,598.40 ",oviedo95,Disposable and Convenience,21,4," $  10,393.60 "," $  3,897.60 ",0
+7/7/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",oviedo95,Cleaning Tools,22,4," $  27,323.52 "," $  10,246.32 ",1
+7/7/2023,Drain Cleaner 5L SEIQ,DC011 ," $  5,632.90 "," $  9,012.64 ",oviedo95,Kitchen Cleaners,20,3," $  27,037.92 "," $  10,139.22 ",1
+7/7/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",oviedo95,Cleaning Tools,22,3," $  20,492.64 "," $  7,684.74 ",1
+7/7/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",oviedo95,Cleaning Tools,22,4," $  27,323.52 "," $  10,246.32 ",1
+7/7/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,lamartinez,Personal Protection,23,7," $  2,297.12 ", $  861.42 ,1
+7/7/2023,Drain Cleaner 5L SEIQ,DC011 ," $  5,632.90 "," $  9,012.64 ",lamartinez,Kitchen Cleaners,20,6," $  54,075.84 "," $  20,278.44 ",1
+7/7/2023,Dishwasher Cleaner 1kg SUN,DCC013 , $  602.70 , $  964.32 ,fherrera,Kitchen Cleaners,20,4," $  3,857.28 "," $  1,446.48 ",0
+7/7/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,fherrera,Personal Protection,23,10," $  6,428.80 "," $  2,410.80 ",0
+7/8/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",lamartinez,Bathroom Cleaners,16,10," $  73,259.20 "," $  27,472.20 ",1
+7/8/2023,Drain Cleaner 5L SEIQ,DC011 ," $  5,632.90 "," $  9,012.64 ",fherrera,Kitchen Cleaners,20,7," $  63,088.48 "," $  23,658.18 ",1
+7/8/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",oviedo95,Cleaning Tools,22,10," $  14,548.80 "," $  5,455.80 ",1
+7/8/2023,Toilet Bowl Cleaner HG 500ml,TBC005 ," $  1,565.90 "," $  2,505.44 ",lamartinez,Bathroom Cleaners,16,7," $  17,538.08 "," $  6,576.78 ",0
+7/8/2023,Mop Head Promis Max Vileda,MH017 ," $  4,309.90 "," $  6,895.84 ",fherrera,Cleaning Tools,22,10," $  68,958.40 "," $  25,859.40 ",0
+7/8/2023,Carpet Stain Remover 5L SecoCleaner,CSR002 ," $  2,520.00 "," $  4,032.00 ",oviedo95,Surface Cleaners,23,6," $  24,192.00 "," $  9,072.00 ",1
+7/8/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",fherrera,Dusting and Polishing,18,10," $  17,360.00 "," $  6,510.00 ",1
+7/8/2023,Disposable Cleaning Wipes x40 Bialcohol,DCW014 ," $  1,624.00 "," $  2,598.40 ",lamartinez,Disposable and Convenience,21,5," $  12,992.00 "," $  4,872.00 ",0
+7/8/2023,Fabric Freshener Poet 250ml,FF003 , $  695.10 ," $  1,112.16 ",lamartinez,Surface Cleaners,23,4," $  4,448.64 "," $  1,668.24 ",0
+7/8/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,lamartinez,Personal Protection,23,8," $  5,143.04 "," $  1,928.64 ",0
+7/8/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",fherrera,Cleaning Tools,22,5," $  7,274.40 "," $  2,727.90 ",0
+7/8/2023,Mop Head Promis Max Vileda,MH017 ," $  4,309.90 "," $  6,895.84 ",oviedo95,Cleaning Tools,22,4," $  27,583.36 "," $  10,343.76 ",0
+7/9/2023,Carpet Stain Remover 5L SecoCleaner,CSR002 ," $  2,520.00 "," $  4,032.00 ",fherrera,Surface Cleaners,23,7," $  28,224.00 "," $  10,584.00 ",1
+7/9/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",fherrera,Cleaning Tools,22,10," $  14,548.80 "," $  5,455.80 ",1
+7/9/2023,Mop Head Promis Max Vileda,MH017 ," $  4,309.90 "," $  6,895.84 ",oviedo95,Cleaning Tools,22,2," $  13,791.68 "," $  5,171.88 ",0
+7/9/2023,Sponge Virulana,S018 , $  217.00 , $  347.20 ,fherrera,Cleaning Tools,22,8," $  2,777.60 "," $  1,041.60 ",0
+7/9/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",oviedo95,Cleaning Tools,22,6," $  40,985.28 "," $  15,369.48 ",0
+7/9/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",lamartinez,Dusting and Polishing,18,5," $  8,680.00 "," $  3,255.00 ",0
+7/9/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",fherrera,Bathroom Cleaners,16,6," $  55,594.56 "," $  20,847.96 ",1
+7/9/2023,Wood Floor Cleaner 5L SecoCleaner,WFC009 ," $  5,904.50 "," $  9,447.20 ",lamartinez,Furniture and Wood Care,17,10," $  94,472.00 "," $  35,427.00 ",0
+7/9/2023,Oven Cleaner 5L Sutter,OC012 ," $  1,707.30 "," $  2,731.68 ",lamartinez,Kitchen Cleaners,20,10," $  27,316.80 "," $  10,243.80 ",0
+7/9/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",fherrera,Dusting and Polishing,18,3," $  20,160.00 "," $  7,560.00 ",1
+7/9/2023,Sponge Virulana,S018 , $  217.00 , $  347.20 ,oviedo95,Cleaning Tools,22,10," $  3,472.00 "," $  1,302.00 ",1
+7/9/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,fherrera,Personal Protection,23,3," $  1,928.64 ", $  723.24 ,0
+7/9/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",fherrera,Dusting and Polishing,18,10," $  67,200.00 "," $  25,200.00 ",0
+7/9/2023,Sponge Virulana,S018 , $  217.00 , $  347.20 ,oviedo95,Cleaning Tools,22,2, $  694.40 , $  260.40 ,0
+7/9/2023,Disposable Cleaning Wipes x40 Bialcohol,DCW014 ," $  1,624.00 "," $  2,598.40 ",lamartinez,Disposable and Convenience,21,10," $  25,984.00 "," $  9,744.00 ",1
+7/9/2023,Toilet Bowl Cleaner HG 500ml,TBC005 ," $  1,565.90 "," $  2,505.44 ",oviedo95,Bathroom Cleaners,16,6," $  15,032.64 "," $  5,637.24 ",0
+7/9/2023,Cleaning Gloves Scotch Brite L,CG022, $  219.10 , $  350.56 ,fherrera,Personal Protection,23,4," $  1,402.24 ", $  525.84 ,1
+7/9/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",fherrera,Dusting and Polishing,18,6," $  40,320.00 "," $  15,120.00 ",0
+7/10/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",fherrera,Bathroom Cleaners,16,10," $  92,657.60 "," $  34,746.60 ",0
+7/10/2023,Fabric Freshener Poet 250ml,FF003 , $  695.10 ," $  1,112.16 ",oviedo95,Surface Cleaners,23,3," $  3,336.48 "," $  1,251.18 ",1
+7/10/2023,Carpet Stain Remover 5L SecoCleaner,CSR002 ," $  2,520.00 "," $  4,032.00 ",fherrera,Surface Cleaners,23,10," $  40,320.00 "," $  15,120.00 ",0
+7/10/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",fherrera,Cleaning Tools,22,10," $  14,548.80 "," $  5,455.80 ",0
+7/10/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,oviedo95,Personal Protection,23,10," $  3,281.60 "," $  1,230.60 ",0
+7/10/2023,Cleaning Gloves Scotch Brite S,CG020 , $  184.10 , $  294.56 ,lamartinez,Personal Protection,23,7," $  2,061.92 ", $  773.22 ,0
+7/10/2023,Dishwasher Cleaner 1kg SUN,DCC013 , $  602.70 , $  964.32 ,lamartinez,Kitchen Cleaners,20,7," $  6,750.24 "," $  2,531.34 ",0
+7/10/2023,Oven Cleaner 5L Sutter,OC012 ," $  1,707.30 "," $  2,731.68 ",fherrera,Kitchen Cleaners,20,7," $  19,121.76 "," $  7,170.66 ",1
+7/10/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",fherrera,Bathroom Cleaners,16,6," $  55,594.56 "," $  20,847.96 ",1
+7/10/2023,Toilet Bowl Cleaner HG 500ml,TBC005 ," $  1,565.90 "," $  2,505.44 ",lamartinez,Bathroom Cleaners,16,2," $  5,010.88 "," $  1,879.08 ",1
+7/10/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",fherrera,Dusting and Polishing,18,6," $  40,320.00 "," $  15,120.00 ",1
+7/10/2023,Oven Cleaner 5L Sutter,OC012 ," $  1,707.30 "," $  2,731.68 ",lamartinez,Kitchen Cleaners,20,7," $  19,121.76 "," $  7,170.66 ",0
+7/10/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",lamartinez,Cleaning Tools,22,8," $  11,639.04 "," $  4,364.64 ",0
+7/10/2023,Wood Floor Cleaner 5L SecoCleaner,WFC009 ," $  5,904.50 "," $  9,447.20 ",lamartinez,Furniture and Wood Care,17,10," $  94,472.00 "," $  35,427.00 ",1
+7/10/2023,Cleaning Gloves Scotch Brite S,CG020 , $  184.10 , $  294.56 ,lamartinez,Personal Protection,23,2, $  589.12 , $  220.92 ,1
+7/10/2023,Air Freshener Glade 360ml,AF004 , $  531.30 , $  850.08 ,fherrera,Surface Cleaners,23,8," $  6,800.64 "," $  2,550.24 ",0
+7/10/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",lamartinez,Furniture and Wood Care,17,2," $  6,220.48 "," $  2,332.68 ",1
+7/10/2023,Toilet Bowl Cleaner HG 500ml,TBC005 ," $  1,565.90 "," $  2,505.44 ",fherrera,Bathroom Cleaners,16,10," $  25,054.40 "," $  9,395.40 ",0
+7/10/2023,Cleaning Gloves Scotch Brite S,CG020 , $  184.10 , $  294.56 ,lamartinez,Personal Protection,23,4," $  1,178.24 ", $  441.84 ,0
+7/10/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",lamartinez,Bathroom Cleaners,16,10," $  73,259.20 "," $  27,472.20 ",1
+7/10/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",lamartinez,Cleaning Tools,22,6," $  8,729.28 "," $  3,273.48 ",0
+7/10/2023,Cleaning Gloves Scotch Brite S,CG020 , $  184.10 , $  294.56 ,lamartinez,Personal Protection,23,6," $  1,767.36 ", $  662.76 ,0
+7/10/2023,Cleaning Gloves Scotch Brite L,CG022, $  219.10 , $  350.56 ,lamartinez,Personal Protection,23,6," $  2,103.36 ", $  788.76 ,1
+7/10/2023,Carpet Stain Remover 5L SecoCleaner,CSR002 ," $  2,520.00 "," $  4,032.00 ",lamartinez,Surface Cleaners,23,3," $  12,096.00 "," $  4,536.00 ",0
+7/10/2023,Fabric Freshener Poet 250ml,FF003 , $  695.10 ," $  1,112.16 ",fherrera,Surface Cleaners,23,3," $  3,336.48 "," $  1,251.18 ",0
+7/10/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",lamartinez,Furniture and Wood Care,17,3," $  9,330.72 "," $  3,499.02 ",1
+7/11/2023,Mop Head Promis Max Vileda,MH017 ," $  4,309.90 "," $  6,895.84 ",lamartinez,Cleaning Tools,22,2," $  13,791.68 "," $  5,171.88 ",1
+7/11/2023,Disposable Cleaning Wipes x40 Bialcohol,DCW014 ," $  1,624.00 "," $  2,598.40 ",oviedo95,Disposable and Convenience,21,7," $  18,188.80 "," $  6,820.80 ",0
+7/11/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",oviedo95,Cleaning Tools,22,6," $  40,985.28 "," $  15,369.48 ",0
+7/11/2023,Sponge Virulana,S018 , $  217.00 , $  347.20 ,oviedo95,Cleaning Tools,22,7," $  2,430.40 ", $  911.40 ,0
+7/11/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,lamartinez,Personal Protection,23,4," $  1,312.64 ", $  492.24 ,0
+7/11/2023,Cleaning Gloves Scotch Brite S,CG020 , $  184.10 , $  294.56 ,oviedo95,Personal Protection,23,2, $  589.12 , $  220.92 ,1
+7/11/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,lamartinez,Personal Protection,23,6," $  1,968.96 ", $  738.36 ,1
+7/11/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",oviedo95,Furniture and Wood Care,17,2," $  6,220.48 "," $  2,332.68 ",1
+7/11/2023,Trash Bag Asurin Green x30 (50x70cm),TB019 , $  431.20 , $  689.92 ,fherrera,Personal Protection,23,10," $  6,899.20 "," $  2,587.20 ",0
+7/11/2023,Drain Cleaner 5L SEIQ,DC011 ," $  5,632.90 "," $  9,012.64 ",fherrera,Kitchen Cleaners,20,5," $  45,063.20 "," $  16,898.70 ",1
+7/11/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",oviedo95,Bathroom Cleaners,16,10," $  92,657.60 "," $  34,746.60 ",1
+7/11/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",lamartinez,Dusting and Polishing,18,2," $  3,472.00 "," $  1,302.00 ",0
+7/11/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",oviedo95,Cleaning Tools,22,10," $  68,308.80 "," $  25,615.80 ",1
+7/11/2023,Cleaning Gloves Scotch Brite L,CG022, $  219.10 , $  350.56 ,lamartinez,Personal Protection,23,10," $  3,505.60 "," $  1,314.60 ",0
+7/11/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",fherrera,Dusting and Polishing,18,2," $  13,440.00 "," $  5,040.00 ",0
+7/11/2023,Air Freshener Glade 360ml,AF004 , $  531.30 , $  850.08 ,fherrera,Surface Cleaners,23,7," $  5,950.56 "," $  2,231.46 ",0
+7/11/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",oviedo95,Cleaning Tools,22,10," $  14,548.80 "," $  5,455.80 ",0
+7/11/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",lamartinez,Bathroom Cleaners,16,6," $  43,955.52 "," $  16,483.32 ",1
+7/11/2023,Fabric Freshener Poet 250ml,FF003 , $  695.10 ," $  1,112.16 ",lamartinez,Surface Cleaners,23,6," $  6,672.96 "," $  2,502.36 ",1
+7/11/2023,Wood Floor Cleaner 5L SecoCleaner,WFC009 ," $  5,904.50 "," $  9,447.20 ",lamartinez,Furniture and Wood Care,17,5," $  47,236.00 "," $  17,713.50 ",0
+7/12/2023,Dishwasher Cleaner 1kg SUN,DCC013 , $  602.70 , $  964.32 ,fherrera,Kitchen Cleaners,20,10," $  9,643.20 "," $  3,616.20 ",0
+7/12/2023,Cleaning Gloves Scotch Brite S,CG020 , $  184.10 , $  294.56 ,lamartinez,Personal Protection,23,5," $  1,472.80 ", $  552.30 ,1
+7/12/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",lamartinez,Cleaning Tools,22,3," $  20,492.64 "," $  7,684.74 ",0
+7/12/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",oviedo95,Bathroom Cleaners,16,10," $  73,259.20 "," $  27,472.20 ",0
+7/12/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",lamartinez,Dusting and Polishing,18,5," $  33,600.00 "," $  12,600.00 ",0
+7/12/2023,Cleaning Gloves Scotch Brite L,CG022, $  219.10 , $  350.56 ,lamartinez,Personal Protection,23,7," $  2,453.92 ", $  920.22 ,0
+7/12/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",lamartinez,Bathroom Cleaners,16,3," $  21,977.76 "," $  8,241.66 ",1
+7/12/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",lamartinez,Dusting and Polishing,18,7," $  12,152.00 "," $  4,557.00 ",0
+7/12/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",lamartinez,Cleaning Tools,22,6," $  8,729.28 "," $  3,273.48 ",1
+7/12/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",oviedo95,Dusting and Polishing,18,3," $  20,160.00 "," $  7,560.00 ",0
+7/12/2023,Trash Bag Asurin Green x30 (50x70cm),TB019 , $  431.20 , $  689.92 ,fherrera,Personal Protection,23,7," $  4,829.44 "," $  1,811.04 ",0
+7/12/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,fherrera,Personal Protection,23,10," $  3,281.60 "," $  1,230.60 ",1
+7/12/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",fherrera,Cleaning Tools,22,8," $  11,639.04 "," $  4,364.64 ",0
+7/12/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",fherrera,Bathroom Cleaners,16,3," $  21,977.76 "," $  8,241.66 ",0
+7/12/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",fherrera,Cleaning Tools,22,10," $  14,548.80 "," $  5,455.80 ",0
+7/12/2023,Oven Cleaner 5L Sutter,OC012 ," $  1,707.30 "," $  2,731.68 ",lamartinez,Kitchen Cleaners,20,7," $  19,121.76 "," $  7,170.66 ",0
+7/13/2023,Air Freshener Glade 360ml,AF004 , $  531.30 , $  850.08 ,fherrera,Surface Cleaners,23,10," $  8,500.80 "," $  3,187.80 ",0
+7/13/2023,Wood Floor Cleaner 5L SecoCleaner,WFC009 ," $  5,904.50 "," $  9,447.20 ",fherrera,Furniture and Wood Care,17,8," $  75,577.60 "," $  28,341.60 ",1
+7/13/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,fherrera,Personal Protection,23,3," $  1,928.64 ", $  723.24 ,0
+7/13/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",oviedo95,Dusting and Polishing,18,2," $  3,472.00 "," $  1,302.00 ",1
+7/13/2023,Wood Floor Cleaner 5L SecoCleaner,WFC009 ," $  5,904.50 "," $  9,447.20 ",oviedo95,Furniture and Wood Care,17,6," $  56,683.20 "," $  21,256.20 ",1
+7/13/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",fherrera,Dusting and Polishing,18,4," $  6,944.00 "," $  2,604.00 ",1
+7/13/2023,Trash Bag Asurin Green x30 (50x70cm),TB019 , $  431.20 , $  689.92 ,oviedo95,Personal Protection,23,10," $  6,899.20 "," $  2,587.20 ",0
+7/13/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",lamartinez,Cleaning Tools,22,4," $  27,323.52 "," $  10,246.32 ",1
+7/13/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",lamartinez,Furniture and Wood Care,17,4," $  12,440.96 "," $  4,665.36 ",1
+7/13/2023,Wood Floor Cleaner 5L SecoCleaner,WFC009 ," $  5,904.50 "," $  9,447.20 ",oviedo95,Furniture and Wood Care,17,10," $  94,472.00 "," $  35,427.00 ",0
+7/13/2023,Carpet Stain Remover 5L SecoCleaner,CSR002 ," $  2,520.00 "," $  4,032.00 ",fherrera,Surface Cleaners,23,5," $  20,160.00 "," $  7,560.00 ",1
+7/13/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",oviedo95,Furniture and Wood Care,17,6," $  18,661.44 "," $  6,998.04 ",1
+7/13/2023,Dishwasher Cleaner 1kg SUN,DCC013 , $  602.70 , $  964.32 ,lamartinez,Kitchen Cleaners,20,10," $  9,643.20 "," $  3,616.20 ",1
+7/13/2023,Air Freshener Glade 360ml,AF004 , $  531.30 , $  850.08 ,fherrera,Surface Cleaners,23,5," $  4,250.40 "," $  1,593.90 ",0
+7/13/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",oviedo95,Bathroom Cleaners,16,5," $  46,328.80 "," $  17,373.30 ",0
+7/14/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",fherrera,Furniture and Wood Care,17,7," $  21,771.68 "," $  8,164.38 ",0
+7/14/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",fherrera,Dusting and Polishing,18,6," $  10,416.00 "," $  3,906.00 ",1
+7/14/2023,Cleaning Gloves Scotch Brite L,CG022, $  219.10 , $  350.56 ,lamartinez,Personal Protection,23,4," $  1,402.24 ", $  525.84 ,1
+7/14/2023,Oven Cleaner 5L Sutter,OC012 ," $  1,707.30 "," $  2,731.68 ",oviedo95,Kitchen Cleaners,20,4," $  10,926.72 "," $  4,097.52 ",0
+7/14/2023,Oven Cleaner 5L Sutter,OC012 ," $  1,707.30 "," $  2,731.68 ",oviedo95,Kitchen Cleaners,20,4," $  10,926.72 "," $  4,097.52 ",0
+7/14/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",oviedo95,Bathroom Cleaners,16,6," $  55,594.56 "," $  20,847.96 ",0
+7/14/2023,Cleaning Gloves Scotch Brite S,CG020 , $  184.10 , $  294.56 ,fherrera,Personal Protection,23,6," $  1,767.36 ", $  662.76 ,1
+7/14/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",fherrera,Cleaning Tools,22,4," $  5,819.52 "," $  2,182.32 ",1
+7/14/2023,Cleaning Gloves Scotch Brite L,CG022, $  219.10 , $  350.56 ,lamartinez,Personal Protection,23,7," $  2,453.92 ", $  920.22 ,1
+7/14/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",lamartinez,Furniture and Wood Care,17,3," $  9,330.72 "," $  3,499.02 ",1
+7/14/2023,Disposable Cleaning Wipes x40 Bialcohol,DCW014 ," $  1,624.00 "," $  2,598.40 ",lamartinez,Disposable and Convenience,21,10," $  25,984.00 "," $  9,744.00 ",0
+7/14/2023,Oven Cleaner 5L Sutter,OC012 ," $  1,707.30 "," $  2,731.68 ",oviedo95,Kitchen Cleaners,20,6," $  16,390.08 "," $  6,146.28 ",1
+7/14/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",fherrera,Cleaning Tools,22,3," $  20,492.64 "," $  7,684.74 ",1
+7/14/2023,Air Freshener Glade 360ml,AF004 , $  531.30 , $  850.08 ,lamartinez,Surface Cleaners,23,8," $  6,800.64 "," $  2,550.24 ",1
+7/14/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",oviedo95,Dusting and Polishing,18,6," $  40,320.00 "," $  15,120.00 ",1
+7/14/2023,Oven Cleaner 5L Sutter,OC012 ," $  1,707.30 "," $  2,731.68 ",lamartinez,Kitchen Cleaners,20,10," $  27,316.80 "," $  10,243.80 ",1
+7/14/2023,Sponge Virulana,S018 , $  217.00 , $  347.20 ,lamartinez,Cleaning Tools,22,8," $  2,777.60 "," $  1,041.60 ",0
+7/15/2023,Disposable Cleaning Wipes x40 Bialcohol,DCW014 ," $  1,624.00 "," $  2,598.40 ",lamartinez,Disposable and Convenience,21,7," $  18,188.80 "," $  6,820.80 ",0
+7/15/2023,Trash Bag Asurin Green x30 (50x70cm),TB019 , $  431.20 , $  689.92 ,oviedo95,Personal Protection,23,3," $  2,069.76 ", $  776.16 ,1
+7/15/2023,Oven Cleaner 5L Sutter,OC012 ," $  1,707.30 "," $  2,731.68 ",oviedo95,Kitchen Cleaners,20,6," $  16,390.08 "," $  6,146.28 ",1
+7/15/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",oviedo95,Cleaning Tools,22,3," $  20,492.64 "," $  7,684.74 ",0
+7/15/2023,Cleaning Gloves Scotch Brite S,CG020 , $  184.10 , $  294.56 ,lamartinez,Personal Protection,23,3, $  883.68 , $  331.38 ,0
+7/15/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,fherrera,Personal Protection,23,10," $  6,428.80 "," $  2,410.80 ",1
+7/15/2023,Disposable Cleaning Wipes x40 Bialcohol,DCW014 ," $  1,624.00 "," $  2,598.40 ",oviedo95,Disposable and Convenience,21,4," $  10,393.60 "," $  3,897.60 ",1
+7/15/2023,Sponge Virulana,S018 , $  217.00 , $  347.20 ,fherrera,Cleaning Tools,22,2, $  694.40 , $  260.40 ,0
+7/15/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,oviedo95,Personal Protection,23,5," $  3,214.40 "," $  1,205.40 ",0
+7/15/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",lamartinez,Furniture and Wood Care,17,8," $  24,881.92 "," $  9,330.72 ",1
+7/15/2023,Oven Cleaner 5L Sutter,OC012 ," $  1,707.30 "," $  2,731.68 ",oviedo95,Kitchen Cleaners,20,10," $  27,316.80 "," $  10,243.80 ",1
+7/15/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",fherrera,Furniture and Wood Care,17,7," $  21,771.68 "," $  8,164.38 ",1
+7/15/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",fherrera,Dusting and Polishing,18,7," $  47,040.00 "," $  17,640.00 ",1
+7/15/2023,Oven Cleaner 5L Sutter,OC012 ," $  1,707.30 "," $  2,731.68 ",fherrera,Kitchen Cleaners,20,3," $  8,195.04 "," $  3,073.14 ",0
+7/15/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",fherrera,Furniture and Wood Care,17,3," $  9,330.72 "," $  3,499.02 ",1
+7/15/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",lamartinez,Cleaning Tools,22,6," $  40,985.28 "," $  15,369.48 ",0
+7/15/2023,Cleaning Gloves Scotch Brite S,CG020 , $  184.10 , $  294.56 ,oviedo95,Personal Protection,23,4," $  1,178.24 ", $  441.84 ,0
+7/15/2023,Toilet Bowl Cleaner HG 500ml,TBC005 ," $  1,565.90 "," $  2,505.44 ",lamartinez,Bathroom Cleaners,16,4," $  10,021.76 "," $  3,758.16 ",0
+7/15/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",lamartinez,Cleaning Tools,22,8," $  54,647.04 "," $  20,492.64 ",1
+7/16/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,lamartinez,Personal Protection,23,10," $  3,281.60 "," $  1,230.60 ",0
+7/16/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",lamartinez,Furniture and Wood Care,17,10," $  31,102.40 "," $  11,663.40 ",0
+7/16/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",lamartinez,Cleaning Tools,22,10," $  14,548.80 "," $  5,455.80 ",0
+7/16/2023,Mop Head Promis Max Vileda,MH017 ," $  4,309.90 "," $  6,895.84 ",oviedo95,Cleaning Tools,22,6," $  41,375.04 "," $  15,515.64 ",1
+7/16/2023,Oven Cleaner 5L Sutter,OC012 ," $  1,707.30 "," $  2,731.68 ",lamartinez,Kitchen Cleaners,20,7," $  19,121.76 "," $  7,170.66 ",1
+7/16/2023,Mop Head Promis Max Vileda,MH017 ," $  4,309.90 "," $  6,895.84 ",oviedo95,Cleaning Tools,22,4," $  27,583.36 "," $  10,343.76 ",0
+7/16/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",fherrera,Dusting and Polishing,18,10," $  67,200.00 "," $  25,200.00 ",0
+7/16/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,lamartinez,Personal Protection,23,10," $  6,428.80 "," $  2,410.80 ",1
+7/16/2023,Trash Bag Asurin Green x30 (50x70cm),TB019 , $  431.20 , $  689.92 ,lamartinez,Personal Protection,23,10," $  6,899.20 "," $  2,587.20 ",0
+7/16/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",fherrera,Bathroom Cleaners,16,2," $  14,651.84 "," $  5,494.44 ",0
+7/16/2023,Dishwasher Cleaner 1kg SUN,DCC013 , $  602.70 , $  964.32 ,lamartinez,Kitchen Cleaners,20,6," $  5,785.92 "," $  2,169.72 ",0
+7/16/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",oviedo95,Dusting and Polishing,18,2," $  3,472.00 "," $  1,302.00 ",0
+7/16/2023,Dishwasher Cleaner 1kg SUN,DCC013 , $  602.70 , $  964.32 ,oviedo95,Kitchen Cleaners,20,7," $  6,750.24 "," $  2,531.34 ",0
+7/16/2023,Fabric Freshener Poet 250ml,FF003 , $  695.10 ," $  1,112.16 ",lamartinez,Surface Cleaners,23,7," $  7,785.12 "," $  2,919.42 ",0
+7/16/2023,Dishwasher Cleaner 1kg SUN,DCC013 , $  602.70 , $  964.32 ,oviedo95,Kitchen Cleaners,20,10," $  9,643.20 "," $  3,616.20 ",0
+7/16/2023,Air Freshener Glade 360ml,AF004 , $  531.30 , $  850.08 ,fherrera,Surface Cleaners,23,7," $  5,950.56 "," $  2,231.46 ",0
+7/16/2023,Drain Cleaner 5L SEIQ,DC011 ," $  5,632.90 "," $  9,012.64 ",oviedo95,Kitchen Cleaners,20,7," $  63,088.48 "," $  23,658.18 ",0
+7/16/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",lamartinez,Cleaning Tools,22,3," $  20,492.64 "," $  7,684.74 ",0
+7/17/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",fherrera,Furniture and Wood Care,17,4," $  12,440.96 "," $  4,665.36 ",0
+7/17/2023,Cleaning Gloves Scotch Brite S,CG020 , $  184.10 , $  294.56 ,oviedo95,Personal Protection,23,7," $  2,061.92 ", $  773.22 ,0
+7/17/2023,Disposable Cleaning Wipes x40 Bialcohol,DCW014 ," $  1,624.00 "," $  2,598.40 ",lamartinez,Disposable and Convenience,21,6," $  15,590.40 "," $  5,846.40 ",0
+7/17/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",lamartinez,Cleaning Tools,22,10," $  14,548.80 "," $  5,455.80 ",0
+7/17/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",fherrera,Cleaning Tools,22,3," $  4,364.64 "," $  1,636.74 ",0
+7/17/2023,Fabric Freshener Poet 250ml,FF003 , $  695.10 ," $  1,112.16 ",lamartinez,Surface Cleaners,23,6," $  6,672.96 "," $  2,502.36 ",1
+7/17/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",fherrera,Bathroom Cleaners,16,7," $  64,860.32 "," $  24,322.62 ",1
+7/17/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",lamartinez,Bathroom Cleaners,16,6," $  43,955.52 "," $  16,483.32 ",1
+7/17/2023,Fabric Freshener Poet 250ml,FF003 , $  695.10 ," $  1,112.16 ",lamartinez,Surface Cleaners,23,6," $  6,672.96 "," $  2,502.36 ",1
+7/17/2023,Sponge Virulana,S018 , $  217.00 , $  347.20 ,fherrera,Cleaning Tools,22,3," $  1,041.60 ", $  390.60 ,0
+7/17/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",fherrera,Bathroom Cleaners,16,7," $  51,281.44 "," $  19,230.54 ",1
+7/17/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",oviedo95,Cleaning Tools,22,4," $  27,323.52 "," $  10,246.32 ",1
+7/17/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,lamartinez,Personal Protection,23,10," $  3,281.60 "," $  1,230.60 ",1
+7/17/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",lamartinez,Cleaning Tools,22,5," $  34,154.40 "," $  12,807.90 ",1
+7/18/2023,Oven Cleaner 5L Sutter,OC012 ," $  1,707.30 "," $  2,731.68 ",oviedo95,Kitchen Cleaners,20,6," $  16,390.08 "," $  6,146.28 ",0
+7/18/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,oviedo95,Personal Protection,23,4," $  1,312.64 ", $  492.24 ,0
+7/18/2023,Carpet Stain Remover 5L SecoCleaner,CSR002 ," $  2,520.00 "," $  4,032.00 ",lamartinez,Surface Cleaners,23,4," $  16,128.00 "," $  6,048.00 ",1
+7/18/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",fherrera,Dusting and Polishing,18,3," $  5,208.00 "," $  1,953.00 ",1
+7/18/2023,Drain Cleaner 5L SEIQ,DC011 ," $  5,632.90 "," $  9,012.64 ",lamartinez,Kitchen Cleaners,20,10," $  90,126.40 "," $  33,797.40 ",1
+7/18/2023,Carpet Stain Remover 5L SecoCleaner,CSR002 ," $  2,520.00 "," $  4,032.00 ",fherrera,Surface Cleaners,23,3," $  12,096.00 "," $  4,536.00 ",0
+7/18/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",oviedo95,Dusting and Polishing,18,6," $  10,416.00 "," $  3,906.00 ",0
+7/18/2023,Mop Head Promis Max Vileda,MH017 ," $  4,309.90 "," $  6,895.84 ",lamartinez,Cleaning Tools,22,7," $  48,270.88 "," $  18,101.58 ",0
+7/18/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,fherrera,Personal Protection,23,7," $  4,500.16 "," $  1,687.56 ",0
+7/18/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",fherrera,Dusting and Polishing,18,2," $  3,472.00 "," $  1,302.00 ",0
+7/18/2023,Trash Bag Asurin Green x30 (50x70cm),TB019 , $  431.20 , $  689.92 ,lamartinez,Personal Protection,23,10," $  6,899.20 "," $  2,587.20 ",0
+7/18/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",lamartinez,Dusting and Polishing,18,10," $  17,360.00 "," $  6,510.00 ",0
+7/18/2023,Mop Head Promis Max Vileda,MH017 ," $  4,309.90 "," $  6,895.84 ",oviedo95,Cleaning Tools,22,10," $  68,958.40 "," $  25,859.40 ",1
+7/18/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",lamartinez,Cleaning Tools,22,10," $  68,308.80 "," $  25,615.80 ",0
+7/18/2023,Carpet Stain Remover 5L SecoCleaner,CSR002 ," $  2,520.00 "," $  4,032.00 ",fherrera,Surface Cleaners,23,10," $  40,320.00 "," $  15,120.00 ",1
+7/18/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",fherrera,Cleaning Tools,22,7," $  10,184.16 "," $  3,819.06 ",1
+7/19/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",fherrera,Bathroom Cleaners,16,8," $  58,607.36 "," $  21,977.76 ",0
+7/19/2023,Toilet Bowl Cleaner HG 500ml,TBC005 ," $  1,565.90 "," $  2,505.44 ",lamartinez,Bathroom Cleaners,16,3," $  7,516.32 "," $  2,818.62 ",0
+7/19/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",oviedo95,Bathroom Cleaners,16,3," $  21,977.76 "," $  8,241.66 ",1
+7/19/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",oviedo95,Cleaning Tools,22,7," $  47,816.16 "," $  17,931.06 ",0
+7/19/2023,Trash Bag Asurin Green x30 (50x70cm),TB019 , $  431.20 , $  689.92 ,oviedo95,Personal Protection,23,3," $  2,069.76 ", $  776.16 ,1
+7/19/2023,Carpet Stain Remover 5L SecoCleaner,CSR002 ," $  2,520.00 "," $  4,032.00 ",fherrera,Surface Cleaners,23,7," $  28,224.00 "," $  10,584.00 ",0
+7/19/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,lamartinez,Personal Protection,23,8," $  2,625.28 ", $  984.48 ,1
+7/19/2023,Fabric Freshener Poet 250ml,FF003 , $  695.10 ," $  1,112.16 ",fherrera,Surface Cleaners,23,3," $  3,336.48 "," $  1,251.18 ",1
+7/19/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",lamartinez,Cleaning Tools,22,10," $  68,308.80 "," $  25,615.80 ",1
+7/19/2023,Sponge Virulana,S018 , $  217.00 , $  347.20 ,oviedo95,Cleaning Tools,22,10," $  3,472.00 "," $  1,302.00 ",0
+7/19/2023,Dishwasher Cleaner 1kg SUN,DCC013 , $  602.70 , $  964.32 ,lamartinez,Kitchen Cleaners,20,10," $  9,643.20 "," $  3,616.20 ",1
+7/19/2023,Fabric Freshener Poet 250ml,FF003 , $  695.10 ," $  1,112.16 ",lamartinez,Surface Cleaners,23,10," $  11,121.60 "," $  4,170.60 ",0
+7/19/2023,Mop Head Promis Max Vileda,MH017 ," $  4,309.90 "," $  6,895.84 ",lamartinez,Cleaning Tools,22,7," $  48,270.88 "," $  18,101.58 ",0
+7/19/2023,Fabric Freshener Poet 250ml,FF003 , $  695.10 ," $  1,112.16 ",fherrera,Surface Cleaners,23,6," $  6,672.96 "," $  2,502.36 ",1
+7/19/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",fherrera,Furniture and Wood Care,17,10," $  31,102.40 "," $  11,663.40 ",0
+7/19/2023,Sponge Virulana,S018 , $  217.00 , $  347.20 ,oviedo95,Cleaning Tools,22,2, $  694.40 , $  260.40 ,1
+7/19/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",lamartinez,Bathroom Cleaners,16,3," $  27,797.28 "," $  10,423.98 ",0
+7/19/2023,Dishwasher Cleaner 1kg SUN,DCC013 , $  602.70 , $  964.32 ,oviedo95,Kitchen Cleaners,20,2," $  1,928.64 ", $  723.24 ,0
+7/19/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",lamartinez,Cleaning Tools,22,10," $  68,308.80 "," $  25,615.80 ",1
+7/20/2023,Cleaning Gloves Scotch Brite L,CG022, $  219.10 , $  350.56 ,lamartinez,Personal Protection,23,4," $  1,402.24 ", $  525.84 ,0
+7/20/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",oviedo95,Bathroom Cleaners,16,6," $  43,955.52 "," $  16,483.32 ",0
+7/20/2023,Disposable Cleaning Wipes x40 Bialcohol,DCW014 ," $  1,624.00 "," $  2,598.40 ",fherrera,Disposable and Convenience,21,7," $  18,188.80 "," $  6,820.80 ",0
+7/20/2023,Mop Head Promis Max Vileda,MH017 ," $  4,309.90 "," $  6,895.84 ",oviedo95,Cleaning Tools,22,5," $  34,479.20 "," $  12,929.70 ",1
+7/20/2023,Cleaning Gloves Scotch Brite L,CG022, $  219.10 , $  350.56 ,oviedo95,Personal Protection,23,10," $  3,505.60 "," $  1,314.60 ",1
+7/20/2023,Toilet Bowl Cleaner HG 500ml,TBC005 ," $  1,565.90 "," $  2,505.44 ",lamartinez,Bathroom Cleaners,16,7," $  17,538.08 "," $  6,576.78 ",0
+7/20/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",oviedo95,Cleaning Tools,22,5," $  7,274.40 "," $  2,727.90 ",1
+7/20/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,fherrera,Personal Protection,23,4," $  2,571.52 ", $  964.32 ,0
+7/20/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,fherrera,Personal Protection,23,10," $  6,428.80 "," $  2,410.80 ",1
+7/20/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",oviedo95,Dusting and Polishing,18,7," $  47,040.00 "," $  17,640.00 ",1
+7/20/2023,Carpet Stain Remover 5L SecoCleaner,CSR002 ," $  2,520.00 "," $  4,032.00 ",lamartinez,Surface Cleaners,23,10," $  40,320.00 "," $  15,120.00 ",1
+7/20/2023,Disposable Cleaning Wipes x40 Bialcohol,DCW014 ," $  1,624.00 "," $  2,598.40 ",lamartinez,Disposable and Convenience,21,8," $  20,787.20 "," $  7,795.20 ",1
+7/20/2023,Drain Cleaner 5L SEIQ,DC011 ," $  5,632.90 "," $  9,012.64 ",fherrera,Kitchen Cleaners,20,7," $  63,088.48 "," $  23,658.18 ",1
+7/20/2023,Trash Bag Asurin Green x30 (50x70cm),TB019 , $  431.20 , $  689.92 ,lamartinez,Personal Protection,23,3," $  2,069.76 ", $  776.16 ,1
+7/20/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,lamartinez,Personal Protection,23,10," $  3,281.60 "," $  1,230.60 ",1
+7/20/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",lamartinez,Bathroom Cleaners,16,10," $  92,657.60 "," $  34,746.60 ",0
+7/20/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",lamartinez,Dusting and Polishing,18,7," $  47,040.00 "," $  17,640.00 ",0
+7/20/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",oviedo95,Dusting and Polishing,18,7," $  12,152.00 "," $  4,557.00 ",0
+7/20/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",fherrera,Dusting and Polishing,18,2," $  3,472.00 "," $  1,302.00 ",1
+7/20/2023,Oven Cleaner 5L Sutter,OC012 ," $  1,707.30 "," $  2,731.68 ",fherrera,Kitchen Cleaners,20,3," $  8,195.04 "," $  3,073.14 ",0
+7/20/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",lamartinez,Dusting and Polishing,18,4," $  26,880.00 "," $  10,080.00 ",1
+7/20/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,lamartinez,Personal Protection,23,5," $  1,640.80 ", $  615.30 ,0
+7/21/2023,Drain Cleaner 5L SEIQ,DC011 ," $  5,632.90 "," $  9,012.64 ",fherrera,Kitchen Cleaners,20,10," $  90,126.40 "," $  33,797.40 ",1
+7/21/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",oviedo95,Furniture and Wood Care,17,2," $  6,220.48 "," $  2,332.68 ",1
+7/21/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",oviedo95,Bathroom Cleaners,16,4," $  37,063.04 "," $  13,898.64 ",1
+7/21/2023,Mop Head Promis Max Vileda,MH017 ," $  4,309.90 "," $  6,895.84 ",fherrera,Cleaning Tools,22,6," $  41,375.04 "," $  15,515.64 ",0
+7/21/2023,Toilet Bowl Cleaner HG 500ml,TBC005 ," $  1,565.90 "," $  2,505.44 ",lamartinez,Bathroom Cleaners,16,7," $  17,538.08 "," $  6,576.78 ",0
+7/21/2023,Air Freshener Glade 360ml,AF004 , $  531.30 , $  850.08 ,lamartinez,Surface Cleaners,23,5," $  4,250.40 "," $  1,593.90 ",0
+7/21/2023,Oven Cleaner 5L Sutter,OC012 ," $  1,707.30 "," $  2,731.68 ",oviedo95,Kitchen Cleaners,20,10," $  27,316.80 "," $  10,243.80 ",0
+7/21/2023,Trash Bag Asurin Green x30 (50x70cm),TB019 , $  431.20 , $  689.92 ,lamartinez,Personal Protection,23,4," $  2,759.68 "," $  1,034.88 ",1
+7/21/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",lamartinez,Furniture and Wood Care,17,10," $  31,102.40 "," $  11,663.40 ",0
+7/21/2023,Toilet Bowl Cleaner HG 500ml,TBC005 ," $  1,565.90 "," $  2,505.44 ",lamartinez,Bathroom Cleaners,16,4," $  10,021.76 "," $  3,758.16 ",0
+7/21/2023,Air Freshener Glade 360ml,AF004 , $  531.30 , $  850.08 ,lamartinez,Surface Cleaners,23,10," $  8,500.80 "," $  3,187.80 ",0
+7/21/2023,Toilet Bowl Cleaner HG 500ml,TBC005 ," $  1,565.90 "," $  2,505.44 ",lamartinez,Bathroom Cleaners,16,10," $  25,054.40 "," $  9,395.40 ",1
+7/21/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",lamartinez,Dusting and Polishing,18,4," $  26,880.00 "," $  10,080.00 ",0
+7/21/2023,Dishwasher Cleaner 1kg SUN,DCC013 , $  602.70 , $  964.32 ,lamartinez,Kitchen Cleaners,20,3," $  2,892.96 "," $  1,084.86 ",0
+7/21/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",fherrera,Dusting and Polishing,18,2," $  13,440.00 "," $  5,040.00 ",0
+7/21/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",lamartinez,Dusting and Polishing,18,3," $  20,160.00 "," $  7,560.00 ",0
+7/21/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,fherrera,Personal Protection,23,7," $  4,500.16 "," $  1,687.56 ",1
+7/21/2023,Mop Head Promis Max Vileda,MH017 ," $  4,309.90 "," $  6,895.84 ",oviedo95,Cleaning Tools,22,3," $  20,687.52 "," $  7,757.82 ",0
+7/21/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",oviedo95,Furniture and Wood Care,17,2," $  6,220.48 "," $  2,332.68 ",0
+7/21/2023,Trash Bag Asurin Green x30 (50x70cm),TB019 , $  431.20 , $  689.92 ,lamartinez,Personal Protection,23,10," $  6,899.20 "," $  2,587.20 ",0
+7/21/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",fherrera,Furniture and Wood Care,17,10," $  31,102.40 "," $  11,663.40 ",1
+7/21/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",fherrera,Bathroom Cleaners,16,10," $  92,657.60 "," $  34,746.60 ",0
+7/21/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",oviedo95,Bathroom Cleaners,16,7," $  51,281.44 "," $  19,230.54 ",0
+7/21/2023,Carpet Stain Remover 5L SecoCleaner,CSR002 ," $  2,520.00 "," $  4,032.00 ",fherrera,Surface Cleaners,23,4," $  16,128.00 "," $  6,048.00 ",0
+7/21/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",oviedo95,Cleaning Tools,22,6," $  40,985.28 "," $  15,369.48 ",0
+7/21/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",oviedo95,Cleaning Tools,22,7," $  47,816.16 "," $  17,931.06 ",0
+7/21/2023,Fabric Freshener Poet 250ml,FF003 , $  695.10 ," $  1,112.16 ",oviedo95,Surface Cleaners,23,4," $  4,448.64 "," $  1,668.24 ",1
+7/21/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",oviedo95,Bathroom Cleaners,16,10," $  92,657.60 "," $  34,746.60 ",1
+7/21/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,fherrera,Personal Protection,23,10," $  6,428.80 "," $  2,410.80 ",1
+7/22/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,fherrera,Personal Protection,23,7," $  4,500.16 "," $  1,687.56 ",0
+7/22/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,fherrera,Personal Protection,23,2," $  1,285.76 ", $  482.16 ,1
+7/22/2023,Trash Bag Asurin Green x30 (50x70cm),TB019 , $  431.20 , $  689.92 ,oviedo95,Personal Protection,23,6," $  4,139.52 "," $  1,552.32 ",1
+7/22/2023,Drain Cleaner 5L SEIQ,DC011 ," $  5,632.90 "," $  9,012.64 ",fherrera,Kitchen Cleaners,20,2," $  18,025.28 "," $  6,759.48 ",0
+7/22/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",fherrera,Cleaning Tools,22,4," $  27,323.52 "," $  10,246.32 ",1
+7/22/2023,Sponge Virulana,S018 , $  217.00 , $  347.20 ,fherrera,Cleaning Tools,22,3," $  1,041.60 ", $  390.60 ,1
+7/22/2023,Wood Floor Cleaner 5L SecoCleaner,WFC009 ," $  5,904.50 "," $  9,447.20 ",oviedo95,Furniture and Wood Care,17,10," $  94,472.00 "," $  35,427.00 ",0
+7/22/2023,Carpet Stain Remover 5L SecoCleaner,CSR002 ," $  2,520.00 "," $  4,032.00 ",lamartinez,Surface Cleaners,23,7," $  28,224.00 "," $  10,584.00 ",1
+7/22/2023,Cleaning Gloves Scotch Brite L,CG022, $  219.10 , $  350.56 ,lamartinez,Personal Protection,23,3," $  1,051.68 ", $  394.38 ,1
+7/22/2023,Toilet Bowl Cleaner HG 500ml,TBC005 ," $  1,565.90 "," $  2,505.44 ",lamartinez,Bathroom Cleaners,16,4," $  10,021.76 "," $  3,758.16 ",1
+7/22/2023,Trash Bag Asurin Green x30 (50x70cm),TB019 , $  431.20 , $  689.92 ,oviedo95,Personal Protection,23,4," $  2,759.68 "," $  1,034.88 ",1
+7/22/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",lamartinez,Dusting and Polishing,18,6," $  10,416.00 "," $  3,906.00 ",1
+7/22/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",oviedo95,Dusting and Polishing,18,6," $  40,320.00 "," $  15,120.00 ",1
+7/22/2023,Disposable Cleaning Wipes x40 Bialcohol,DCW014 ," $  1,624.00 "," $  2,598.40 ",oviedo95,Disposable and Convenience,21,10," $  25,984.00 "," $  9,744.00 ",1
+7/22/2023,Disposable Cleaning Wipes x40 Bialcohol,DCW014 ," $  1,624.00 "," $  2,598.40 ",lamartinez,Disposable and Convenience,21,5," $  12,992.00 "," $  4,872.00 ",0
+7/22/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",oviedo95,Dusting and Polishing,18,7," $  47,040.00 "," $  17,640.00 ",1
+7/23/2023,Air Freshener Glade 360ml,AF004 , $  531.30 , $  850.08 ,fherrera,Surface Cleaners,23,7," $  5,950.56 "," $  2,231.46 ",1
+7/23/2023,Dishwasher Cleaner 1kg SUN,DCC013 , $  602.70 , $  964.32 ,lamartinez,Kitchen Cleaners,20,10," $  9,643.20 "," $  3,616.20 ",1
+7/23/2023,Air Freshener Glade 360ml,AF004 , $  531.30 , $  850.08 ,oviedo95,Surface Cleaners,23,5," $  4,250.40 "," $  1,593.90 ",0
+7/23/2023,Cleaning Gloves Scotch Brite S,CG020 , $  184.10 , $  294.56 ,lamartinez,Personal Protection,23,3, $  883.68 , $  331.38 ,1
+7/23/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",lamartinez,Cleaning Tools,22,3," $  20,492.64 "," $  7,684.74 ",0
+7/23/2023,Cleaning Gloves Scotch Brite S,CG020 , $  184.10 , $  294.56 ,lamartinez,Personal Protection,23,7," $  2,061.92 ", $  773.22 ,1
+7/23/2023,Disposable Cleaning Wipes x40 Bialcohol,DCW014 ," $  1,624.00 "," $  2,598.40 ",oviedo95,Disposable and Convenience,21,10," $  25,984.00 "," $  9,744.00 ",0
+7/23/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",lamartinez,Furniture and Wood Care,17,8," $  24,881.92 "," $  9,330.72 ",0
+7/23/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",fherrera,Bathroom Cleaners,16,5," $  36,629.60 "," $  13,736.10 ",1
+7/23/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,lamartinez,Personal Protection,23,2, $  656.32 , $  246.12 ,0
+7/23/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,lamartinez,Personal Protection,23,10," $  3,281.60 "," $  1,230.60 ",0
+7/23/2023,Disposable Cleaning Wipes x40 Bialcohol,DCW014 ," $  1,624.00 "," $  2,598.40 ",lamartinez,Disposable and Convenience,21,6," $  15,590.40 "," $  5,846.40 ",0
+7/23/2023,Disposable Cleaning Wipes x40 Bialcohol,DCW014 ," $  1,624.00 "," $  2,598.40 ",lamartinez,Disposable and Convenience,21,10," $  25,984.00 "," $  9,744.00 ",0
+7/24/2023,Cleaning Gloves Scotch Brite S,CG020 , $  184.10 , $  294.56 ,fherrera,Personal Protection,23,10," $  2,945.60 "," $  1,104.60 ",1
+7/24/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",oviedo95,Furniture and Wood Care,17,10," $  31,102.40 "," $  11,663.40 ",0
+7/24/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",oviedo95,Bathroom Cleaners,16,4," $  37,063.04 "," $  13,898.64 ",1
+7/24/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",fherrera,Bathroom Cleaners,16,10," $  92,657.60 "," $  34,746.60 ",1
+7/24/2023,Trash Bag Asurin Green x30 (50x70cm),TB019 , $  431.20 , $  689.92 ,fherrera,Personal Protection,23,10," $  6,899.20 "," $  2,587.20 ",1
+7/24/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",fherrera,Cleaning Tools,22,6," $  8,729.28 "," $  3,273.48 ",1
+7/24/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",oviedo95,Furniture and Wood Care,17,4," $  12,440.96 "," $  4,665.36 ",1
+7/24/2023,Toilet Bowl Cleaner HG 500ml,TBC005 ," $  1,565.90 "," $  2,505.44 ",oviedo95,Bathroom Cleaners,16,6," $  15,032.64 "," $  5,637.24 ",0
+7/24/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",oviedo95,Dusting and Polishing,18,10," $  17,360.00 "," $  6,510.00 ",1
+7/24/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",lamartinez,Bathroom Cleaners,16,2," $  18,531.52 "," $  6,949.32 ",0
+7/24/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,oviedo95,Personal Protection,23,2, $  656.32 , $  246.12 ,1
+7/24/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",oviedo95,Dusting and Polishing,18,10," $  67,200.00 "," $  25,200.00 ",0
+7/24/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,fherrera,Personal Protection,23,5," $  1,640.80 ", $  615.30 ,0
+7/25/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",fherrera,Bathroom Cleaners,16,10," $  73,259.20 "," $  27,472.20 ",0
+7/25/2023,Sponge Virulana,S018 , $  217.00 , $  347.20 ,lamartinez,Cleaning Tools,22,10," $  3,472.00 "," $  1,302.00 ",1
+7/25/2023,Air Freshener Glade 360ml,AF004 , $  531.30 , $  850.08 ,lamartinez,Surface Cleaners,23,7," $  5,950.56 "," $  2,231.46 ",0
+7/25/2023,Wood Floor Cleaner 5L SecoCleaner,WFC009 ," $  5,904.50 "," $  9,447.20 ",lamartinez,Furniture and Wood Care,17,10," $  94,472.00 "," $  35,427.00 ",0
+7/25/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",fherrera,Cleaning Tools,22,4," $  5,819.52 "," $  2,182.32 ",1
+7/25/2023,Cleaning Gloves Scotch Brite L,CG022, $  219.10 , $  350.56 ,oviedo95,Personal Protection,23,6," $  2,103.36 ", $  788.76 ,0
+7/25/2023,Dishwasher Cleaner 1kg SUN,DCC013 , $  602.70 , $  964.32 ,oviedo95,Kitchen Cleaners,20,3," $  2,892.96 "," $  1,084.86 ",1
+7/25/2023,Toilet Bowl Cleaner HG 500ml,TBC005 ," $  1,565.90 "," $  2,505.44 ",fherrera,Bathroom Cleaners,16,7," $  17,538.08 "," $  6,576.78 ",1
+7/25/2023,Drain Cleaner 5L SEIQ,DC011 ," $  5,632.90 "," $  9,012.64 ",lamartinez,Kitchen Cleaners,20,10," $  90,126.40 "," $  33,797.40 ",0
+7/25/2023,Carpet Stain Remover 5L SecoCleaner,CSR002 ," $  2,520.00 "," $  4,032.00 ",lamartinez,Surface Cleaners,23,6," $  24,192.00 "," $  9,072.00 ",0
+7/25/2023,Cleaning Gloves Scotch Brite L,CG022, $  219.10 , $  350.56 ,lamartinez,Personal Protection,23,7," $  2,453.92 ", $  920.22 ,0
+7/25/2023,Mop Head Promis Max Vileda,MH017 ," $  4,309.90 "," $  6,895.84 ",oviedo95,Cleaning Tools,22,6," $  41,375.04 "," $  15,515.64 ",1
+7/25/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",fherrera,Dusting and Polishing,18,7," $  12,152.00 "," $  4,557.00 ",1
+7/25/2023,Trash Bag Asurin Green x30 (50x70cm),TB019 , $  431.20 , $  689.92 ,fherrera,Personal Protection,23,10," $  6,899.20 "," $  2,587.20 ",1
+7/25/2023,Drain Cleaner 5L SEIQ,DC011 ," $  5,632.90 "," $  9,012.64 ",lamartinez,Kitchen Cleaners,20,10," $  90,126.40 "," $  33,797.40 ",0
+7/26/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",oviedo95,Bathroom Cleaners,16,10," $  73,259.20 "," $  27,472.20 ",0
+7/26/2023,Drain Cleaner 5L SEIQ,DC011 ," $  5,632.90 "," $  9,012.64 ",lamartinez,Kitchen Cleaners,20,7," $  63,088.48 "," $  23,658.18 ",0
+7/26/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",oviedo95,Bathroom Cleaners,16,6," $  43,955.52 "," $  16,483.32 ",0
+7/26/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",fherrera,Cleaning Tools,22,2," $  2,909.76 "," $  1,091.16 ",0
+7/26/2023,Sponge Virulana,S018 , $  217.00 , $  347.20 ,lamartinez,Cleaning Tools,22,10," $  3,472.00 "," $  1,302.00 ",1
+7/26/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",lamartinez,Dusting and Polishing,18,3," $  5,208.00 "," $  1,953.00 ",1
+7/26/2023,Wood Floor Cleaner 5L SecoCleaner,WFC009 ," $  5,904.50 "," $  9,447.20 ",fherrera,Furniture and Wood Care,17,6," $  56,683.20 "," $  21,256.20 ",0
+7/26/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,lamartinez,Personal Protection,23,6," $  3,857.28 "," $  1,446.48 ",1
+7/26/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,fherrera,Personal Protection,23,6," $  3,857.28 "," $  1,446.48 ",1
+7/26/2023,Trash Bag Asurin Green x30 (50x70cm),TB019 , $  431.20 , $  689.92 ,lamartinez,Personal Protection,23,6," $  4,139.52 "," $  1,552.32 ",1
+7/26/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",fherrera,Cleaning Tools,22,8," $  11,639.04 "," $  4,364.64 ",0
+7/27/2023,Wood Floor Cleaner 5L SecoCleaner,WFC009 ," $  5,904.50 "," $  9,447.20 ",lamartinez,Furniture and Wood Care,17,7," $  66,130.40 "," $  24,798.90 ",1
+7/27/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",oviedo95,Dusting and Polishing,18,3," $  20,160.00 "," $  7,560.00 ",1
+7/27/2023,Wood Floor Cleaner 5L SecoCleaner,WFC009 ," $  5,904.50 "," $  9,447.20 ",oviedo95,Furniture and Wood Care,17,10," $  94,472.00 "," $  35,427.00 ",1
+7/27/2023,Mop Head Promis Max Vileda,MH017 ," $  4,309.90 "," $  6,895.84 ",fherrera,Cleaning Tools,22,2," $  13,791.68 "," $  5,171.88 ",1
+7/27/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",lamartinez,Bathroom Cleaners,16,10," $  92,657.60 "," $  34,746.60 ",1
+7/27/2023,Fabric Freshener Poet 250ml,FF003 , $  695.10 ," $  1,112.16 ",fherrera,Surface Cleaners,23,10," $  11,121.60 "," $  4,170.60 ",1
+7/27/2023,Air Freshener Glade 360ml,AF004 , $  531.30 , $  850.08 ,oviedo95,Surface Cleaners,23,10," $  8,500.80 "," $  3,187.80 ",1
+7/27/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",oviedo95,Bathroom Cleaners,16,2," $  18,531.52 "," $  6,949.32 ",0
+7/27/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,fherrera,Personal Protection,23,3," $  1,928.64 ", $  723.24 ,1
+7/27/2023,Wood Floor Cleaner 5L SecoCleaner,WFC009 ," $  5,904.50 "," $  9,447.20 ",lamartinez,Furniture and Wood Care,17,3," $  28,341.60 "," $  10,628.10 ",0
+7/27/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",fherrera,Cleaning Tools,22,6," $  40,985.28 "," $  15,369.48 ",1
+7/27/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",fherrera,Furniture and Wood Care,17,6," $  18,661.44 "," $  6,998.04 ",1
+7/27/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",fherrera,Cleaning Tools,22,6," $  8,729.28 "," $  3,273.48 ",1
+7/27/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",lamartinez,Furniture and Wood Care,17,7," $  21,771.68 "," $  8,164.38 ",1
+7/27/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",oviedo95,Bathroom Cleaners,16,7," $  51,281.44 "," $  19,230.54 ",0
+7/27/2023,Trash Bag Asurin Green x30 (50x70cm),TB019 , $  431.20 , $  689.92 ,fherrera,Personal Protection,23,3," $  2,069.76 ", $  776.16 ,1
+7/27/2023,Carpet Stain Remover 5L SecoCleaner,CSR002 ," $  2,520.00 "," $  4,032.00 ",lamartinez,Surface Cleaners,23,6," $  24,192.00 "," $  9,072.00 ",1
+7/28/2023,Sponge Virulana,S018 , $  217.00 , $  347.20 ,oviedo95,Cleaning Tools,22,10," $  3,472.00 "," $  1,302.00 ",1
+7/28/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",lamartinez,Cleaning Tools,22,7," $  47,816.16 "," $  17,931.06 ",1
+7/28/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",fherrera,Bathroom Cleaners,16,6," $  55,594.56 "," $  20,847.96 ",1
+7/28/2023,Dishwasher Cleaner 1kg SUN,DCC013 , $  602.70 , $  964.32 ,oviedo95,Kitchen Cleaners,20,6," $  5,785.92 "," $  2,169.72 ",0
+7/28/2023,Carpet Stain Remover 5L SecoCleaner,CSR002 ," $  2,520.00 "," $  4,032.00 ",fherrera,Surface Cleaners,23,10," $  40,320.00 "," $  15,120.00 ",0
+7/28/2023,Fabric Freshener Poet 250ml,FF003 , $  695.10 ," $  1,112.16 ",lamartinez,Surface Cleaners,23,10," $  11,121.60 "," $  4,170.60 ",0
+7/28/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,oviedo95,Personal Protection,23,8," $  2,625.28 ", $  984.48 ,1
+7/28/2023,Oven Cleaner 5L Sutter,OC012 ," $  1,707.30 "," $  2,731.68 ",fherrera,Kitchen Cleaners,20,3," $  8,195.04 "," $  3,073.14 ",0
+7/28/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",fherrera,Bathroom Cleaners,16,4," $  29,303.68 "," $  10,988.88 ",0
+7/28/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,oviedo95,Personal Protection,23,3," $  1,928.64 ", $  723.24 ,1
+7/28/2023,Disposable Cleaning Wipes x40 Bialcohol,DCW014 ," $  1,624.00 "," $  2,598.40 ",oviedo95,Disposable and Convenience,21,10," $  25,984.00 "," $  9,744.00 ",1
+7/28/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,lamartinez,Personal Protection,23,4," $  1,312.64 ", $  492.24 ,1
+7/28/2023,Wood Floor Cleaner 5L SecoCleaner,WFC009 ," $  5,904.50 "," $  9,447.20 ",lamartinez,Furniture and Wood Care,17,2," $  18,894.40 "," $  7,085.40 ",1
+7/28/2023,Cleaning Gloves Scotch Brite L,CG022, $  219.10 , $  350.56 ,oviedo95,Personal Protection,23,6," $  2,103.36 ", $  788.76 ,0
+7/28/2023,Wood Floor Cleaner 5L SecoCleaner,WFC009 ," $  5,904.50 "," $  9,447.20 ",oviedo95,Furniture and Wood Care,17,8," $  75,577.60 "," $  28,341.60 ",0
+7/28/2023,Cleaning Gloves Scotch Brite L,CG022, $  219.10 , $  350.56 ,fherrera,Personal Protection,23,7," $  2,453.92 ", $  920.22 ,0
+7/28/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",oviedo95,Cleaning Tools,22,3," $  20,492.64 "," $  7,684.74 ",0
+7/29/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",oviedo95,Cleaning Tools,22,3," $  20,492.64 "," $  7,684.74 ",0
+7/29/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",lamartinez,Bathroom Cleaners,16,3," $  21,977.76 "," $  8,241.66 ",1
+7/29/2023,Drain Cleaner 5L SEIQ,DC011 ," $  5,632.90 "," $  9,012.64 ",oviedo95,Kitchen Cleaners,20,6," $  54,075.84 "," $  20,278.44 ",1
+7/29/2023,Carpet Stain Remover 5L SecoCleaner,CSR002 ," $  2,520.00 "," $  4,032.00 ",lamartinez,Surface Cleaners,23,3," $  12,096.00 "," $  4,536.00 ",1
+7/29/2023,Cleaning Gloves Scotch Brite L,CG022, $  219.10 , $  350.56 ,lamartinez,Personal Protection,23,8," $  2,804.48 "," $  1,051.68 ",1
+7/29/2023,Mop Head Promis Max Vileda,MH017 ," $  4,309.90 "," $  6,895.84 ",fherrera,Cleaning Tools,22,7," $  48,270.88 "," $  18,101.58 ",0
+7/29/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",fherrera,Dusting and Polishing,18,7," $  12,152.00 "," $  4,557.00 ",0
+7/29/2023,Oven Cleaner 5L Sutter,OC012 ," $  1,707.30 "," $  2,731.68 ",oviedo95,Kitchen Cleaners,20,7," $  19,121.76 "," $  7,170.66 ",1
+7/29/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",fherrera,Cleaning Tools,22,7," $  10,184.16 "," $  3,819.06 ",1
+7/29/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",oviedo95,Dusting and Polishing,18,10," $  67,200.00 "," $  25,200.00 ",1
+7/29/2023,Sponge Virulana,S018 , $  217.00 , $  347.20 ,oviedo95,Cleaning Tools,22,3," $  1,041.60 ", $  390.60 ,1
+7/29/2023,Cleaning Gloves Scotch Brite S,CG020 , $  184.10 , $  294.56 ,oviedo95,Personal Protection,23,10," $  2,945.60 "," $  1,104.60 ",1
+7/30/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,lamartinez,Personal Protection,23,6," $  1,968.96 ", $  738.36 ,1
+7/30/2023,Trash Bag Asurin Green x30 (50x70cm),TB019 , $  431.20 , $  689.92 ,lamartinez,Personal Protection,23,10," $  6,899.20 "," $  2,587.20 ",0
+7/30/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",oviedo95,Bathroom Cleaners,16,6," $  43,955.52 "," $  16,483.32 ",1
+7/30/2023,Mop Head Promis Max Vileda,MH017 ," $  4,309.90 "," $  6,895.84 ",lamartinez,Cleaning Tools,22,7," $  48,270.88 "," $  18,101.58 ",0
+7/30/2023,Cleaning Gloves Scotch Brite L,CG022, $  219.10 , $  350.56 ,oviedo95,Personal Protection,23,10," $  3,505.60 "," $  1,314.60 ",1
+7/30/2023,Cleaning Gloves Scotch Brite S,CG020 , $  184.10 , $  294.56 ,fherrera,Personal Protection,23,10," $  2,945.60 "," $  1,104.60 ",0
+7/30/2023,Air Freshener Glade 360ml,AF004 , $  531.30 , $  850.08 ,fherrera,Surface Cleaners,23,7," $  5,950.56 "," $  2,231.46 ",0
+7/30/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",fherrera,Dusting and Polishing,18,2," $  3,472.00 "," $  1,302.00 ",1
+7/30/2023,Wood Floor Cleaner 5L SecoCleaner,WFC009 ," $  5,904.50 "," $  9,447.20 ",fherrera,Furniture and Wood Care,17,10," $  94,472.00 "," $  35,427.00 ",1
+7/31/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",lamartinez,Furniture and Wood Care,17,2," $  6,220.48 "," $  2,332.68 ",0
+7/31/2023,Wood Floor Cleaner 5L SecoCleaner,WFC009 ," $  5,904.50 "," $  9,447.20 ",fherrera,Furniture and Wood Care,17,3," $  28,341.60 "," $  10,628.10 ",0
+7/31/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,lamartinez,Personal Protection,23,2, $  656.32 , $  246.12 ,1
+7/31/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",fherrera,Bathroom Cleaners,16,10," $  92,657.60 "," $  34,746.60 ",1
+7/31/2023,Toilet Bowl Cleaner HG 500ml,TBC005 ," $  1,565.90 "," $  2,505.44 ",oviedo95,Bathroom Cleaners,16,7," $  17,538.08 "," $  6,576.78 ",0
+7/31/2023,Wood Floor Cleaner 5L SecoCleaner,WFC009 ," $  5,904.50 "," $  9,447.20 ",oviedo95,Furniture and Wood Care,17,7," $  66,130.40 "," $  24,798.90 ",1
+7/31/2023,Cleaning Gloves Scotch Brite L,CG022, $  219.10 , $  350.56 ,lamartinez,Personal Protection,23,4," $  1,402.24 ", $  525.84 ,1
+7/31/2023,Dishwasher Cleaner 1kg SUN,DCC013 , $  602.70 , $  964.32 ,fherrera,Kitchen Cleaners,20,8," $  7,714.56 "," $  2,892.96 ",1
+7/31/2023,Lint Roller Scoth Brite ,LR015 ," $  1,085.00 "," $  1,736.00 ",oviedo95,Dusting and Polishing,18,7," $  12,152.00 "," $  4,557.00 ",0
+7/31/2023,Wood Floor Cleaner 5L SecoCleaner,WFC009 ," $  5,904.50 "," $  9,447.20 ",oviedo95,Furniture and Wood Care,17,2," $  18,894.40 "," $  7,085.40 ",0
+7/31/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",oviedo95,Bathroom Cleaners,16,2," $  14,651.84 "," $  5,494.44 ",0
+7/31/2023,Dishwasher Cleaner 1kg SUN,DCC013 , $  602.70 , $  964.32 ,lamartinez,Kitchen Cleaners,20,4," $  3,857.28 "," $  1,446.48 ",0
+7/31/2023,Carpet Stain Remover 5L SecoCleaner,CSR002 ," $  2,520.00 "," $  4,032.00 ",oviedo95,Surface Cleaners,23,7," $  28,224.00 "," $  10,584.00 ",0
+7/31/2023,Oven Cleaner 5L Sutter,OC012 ," $  1,707.30 "," $  2,731.68 ",oviedo95,Kitchen Cleaners,20,2," $  5,463.36 "," $  2,048.76 ",1
+7/31/2023,Wood Floor Cleaner 5L SecoCleaner,WFC009 ," $  5,904.50 "," $  9,447.20 ",fherrera,Furniture and Wood Care,17,3," $  28,341.60 "," $  10,628.10 ",0
+8/1/2023,Air Freshener Glade 360ml,AF004 , $  531.30 , $  850.08 ,oviedo95,Surface Cleaners,23,7," $  5,950.56 "," $  2,231.46 ",1
+8/1/2023,Toilet Bowl Cleaner HG 500ml,TBC005 ," $  1,565.90 "," $  2,505.44 ",oviedo95,Bathroom Cleaners,16,6," $  15,032.64 "," $  5,637.24 ",1
+8/1/2023,Toilet Bowl Cleaner HG 500ml,TBC005 ," $  1,565.90 "," $  2,505.44 ",oviedo95,Bathroom Cleaners,16,3," $  7,516.32 "," $  2,818.62 ",0
+8/1/2023,Fabric Freshener Poet 250ml,FF003 , $  695.10 ," $  1,112.16 ",oviedo95,Surface Cleaners,23,2," $  2,224.32 ", $  834.12 ,0
+8/1/2023,Fabric Freshener Poet 250ml,FF003 , $  695.10 ," $  1,112.16 ",lamartinez,Surface Cleaners,23,10," $  11,121.60 "," $  4,170.60 ",0
+8/1/2023,Air Freshener Glade 360ml,AF004 , $  531.30 , $  850.08 ,fherrera,Surface Cleaners,23,10," $  8,500.80 "," $  3,187.80 ",1
+8/1/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,oviedo95,Personal Protection,23,6," $  3,857.28 "," $  1,446.48 ",1
+8/1/2023,Cleaning Gloves Scotch Brite L,CG022, $  219.10 , $  350.56 ,oviedo95,Personal Protection,23,7," $  2,453.92 ", $  920.22 ,0
+8/1/2023,Carpet Stain Remover 5L SecoCleaner,CSR002 ," $  2,520.00 "," $  4,032.00 ",lamartinez,Surface Cleaners,23,10," $  40,320.00 "," $  15,120.00 ",0
+8/1/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,lamartinez,Personal Protection,23,6," $  1,968.96 ", $  738.36 ,0
+8/1/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",lamartinez,Furniture and Wood Care,17,10," $  31,102.40 "," $  11,663.40 ",1
+8/1/2023,Furniture Polish SecoCleaner 120cc,FP007 ," $  1,943.90 "," $  3,110.24 ",lamartinez,Furniture and Wood Care,17,4," $  12,440.96 "," $  4,665.36 ",0
+8/1/2023,Carpet Stain Remover 5L SecoCleaner,CSR002 ," $  2,520.00 "," $  4,032.00 ",lamartinez,Surface Cleaners,23,6," $  24,192.00 "," $  9,072.00 ",1
+8/1/2023,Oven Cleaner 5L Sutter,OC012 ," $  1,707.30 "," $  2,731.68 ",lamartinez,Kitchen Cleaners,20,7," $  19,121.76 "," $  7,170.66 ",1
+8/1/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,lamartinez,Personal Protection,23,7," $  2,297.12 ", $  861.42 ,0
+8/1/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,oviedo95,Personal Protection,23,6," $  1,968.96 ", $  738.36 ,1
+8/1/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,fherrera,Personal Protection,23,6," $  3,857.28 "," $  1,446.48 ",0
+8/1/2023,Toilet Bowl Cleaner HG 500ml,TBC005 ," $  1,565.90 "," $  2,505.44 ",oviedo95,Bathroom Cleaners,16,7," $  17,538.08 "," $  6,576.78 ",0
+8/1/2023,Dishwasher Cleaner 1kg SUN,DCC013 , $  602.70 , $  964.32 ,fherrera,Kitchen Cleaners,20,4," $  3,857.28 "," $  1,446.48 ",0
+8/1/2023,Toilet Bowl Cleaner HG 500ml,TBC005 ," $  1,565.90 "," $  2,505.44 ",fherrera,Bathroom Cleaners,16,8," $  20,043.52 "," $  7,516.32 ",0
+8/1/2023,Mold and Mildew Remover 5L SecoCleaner,MMR010 ," $  5,791.10 "," $  9,265.76 ",fherrera,Bathroom Cleaners,16,6," $  55,594.56 "," $  20,847.96 ",0
+8/1/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",lamartinez,Dusting and Polishing,18,6," $  40,320.00 "," $  15,120.00 ",1
+8/2/2023,Toilet Bowl Cleaner HG 500ml,TBC005 ," $  1,565.90 "," $  2,505.44 ",fherrera,Bathroom Cleaners,16,5," $  12,527.20 "," $  4,697.70 ",0
+8/2/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,lamartinez,Personal Protection,23,10," $  3,281.60 "," $  1,230.60 ",1
+8/2/2023,Carpet Stain Remover 5L SecoCleaner,CSR002 ," $  2,520.00 "," $  4,032.00 ",lamartinez,Surface Cleaners,23,3," $  12,096.00 "," $  4,536.00 ",1
+8/2/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",oviedo95,Cleaning Tools,22,2," $  2,909.76 "," $  1,091.16 ",0
+8/2/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",fherrera,Cleaning Tools,22,6," $  40,985.28 "," $  15,369.48 ",1
+8/2/2023,Trash Bag Asurin Green x20 (45x60cm),TB018 , $  401.80 , $  642.88 ,fherrera,Personal Protection,23,7," $  4,500.16 "," $  1,687.56 ",1
+8/2/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",lamartinez,Dusting and Polishing,18,10," $  67,200.00 "," $  25,200.00 ",1
+8/2/2023,Cleaning Gloves Scotch Brite M,CG021, $  205.10 , $  328.16 ,lamartinez,Personal Protection,23,3, $  984.48 , $  369.18 ,0
+8/2/2023,Trash Bag Asurin Green x30 (50x70cm),TB019 , $  431.20 , $  689.92 ,oviedo95,Personal Protection,23,8," $  5,519.36 "," $  2,069.76 ",1
+8/2/2023,Fabric Freshener Poet 250ml,FF003 , $  695.10 ," $  1,112.16 ",oviedo95,Surface Cleaners,23,5," $  5,560.80 "," $  2,085.30 ",1
+8/2/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",lamartinez,Dusting and Polishing,18,4," $  26,880.00 "," $  10,080.00 ",0
+8/2/2023,Microfiber Cleaning Cloths x1 (35 x 40cm),MCC012 , $  909.30 ," $  1,454.88 ",fherrera,Cleaning Tools,22,3," $  4,364.64 "," $  1,636.74 ",0
+8/2/2023,Carpet Stain Remover 5L SecoCleaner,CSR002 ," $  2,520.00 "," $  4,032.00 ",oviedo95,Surface Cleaners,23,10," $  40,320.00 "," $  15,120.00 ",1
+8/2/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",lamartinez,Cleaning Tools,22,2," $  13,661.76 "," $  5,123.16 ",1
+8/2/2023,Grout Cleaner 1L SecoCleaner,GC006 ," $  4,578.70 "," $  7,325.92 ",oviedo95,Bathroom Cleaners,16,6," $  43,955.52 "," $  16,483.32 ",1
+8/2/2023,Dusting Spray RD90 130gr,DS008 ," $  4,200.00 "," $  6,720.00 ",fherrera,Dusting and Polishing,18,7," $  47,040.00 "," $  17,640.00 ",0
+8/2/2023,Microfiber Cleaning Cloths x5 (35 x 40cm),MCC016 ," $  4,269.30 "," $  6,830.88 ",oviedo95,Cleaning Tools,22,10," $  68,308.80 "," $  25,615.80 ",0

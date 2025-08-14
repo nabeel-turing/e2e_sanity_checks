@@ -1,0 +1,108 @@
+Area,Category,ID,Position,Qty,Amount,Tax,Total Amount
+Building,100 staffing fees,101,Operational Supervisor,0,$ -,0,$ -
+Building,100 staffing fees,102,Accounting assistant,0,$ -,0,$ -
+Building,100 staffing fees,106,Electrician,0,$ -,0,$ -
+Building,100 staffing fees,109,Uniforms,0,$ -,0,$ -
+Common area,100 staffing fees,101,Resident Manager,1,"$20,000.00","3,200.00","$23,200.00"
+Common area,100 staffing fees,102,Accounting assistant,1,"$10,000.00","1,600.00","$11,600.00"
+Common area,100 staffing fees,103,Administrative Assistant,0,$ -,0,$ -
+Common area,100 staffing fees,104,Kids Room,0,$ -,0,$ -
+Common area,100 staffing fees,105,Mainless Chief,1,"$12,000.00","1,920.00","$13,920.00"
+Common area,100 staffing fees,106,Electrician,,"$9,000.00","1,440.00",
+Common area,100 staffing fees,107,Plumber,,$ -,0,$ -
+Common area,100 staffing fees,108,Night officer,1,$ -,0,"$10,440.00"
+Common area,100 staffing fees,109,Uniforms,2,$333.30,53.33,$773.26
+Building,200 subcontracted services,202,Receptionists,2,"$12,500.00","$4,000.00","$29,000.00"
+Building,200 subcontracted services,205,Cleaning,2,"$8,200.00","$2,624.00","$19,024.00"
+Building,200 subcontracted services,206,Gardening,,$ -,$ -,$ -
+Building,200 subcontracted services,207,Internet Service,126,10,$201.60,"$1,461.60"
+Common area,200 subcontracted services,201,Security boss,1,"$15,000.00","$2,400.00","$17,400.00"
+Common area,200 subcontracted services,202,Receptionists,,$ -,$ -,$ -
+Common area,200 subcontracted services,203,Security,2,"$13,000.00","$2,080.00","$30,160.00"
+Common area,200 subcontracted services,204,Monitor,,$ -,$ -,$ -
+Common area,200 subcontracted services,205,Cleaning,4,"$8,200.00","$1,312.00","$38,048.00"
+Common area,200 subcontracted services,206,Gardening,3,"$7,500.00","$1,200.00","$26,100.00"
+Common area,200 subcontracted services,207,Internet Service,0,10,$ -,$ -
+Building,300 Various maintenance subcontracts,301,Garbage collection,1,"$1,000.00",160,"$1,160.00"
+Building,300 Various maintenance subcontracts,302,Fumigation and control,1,"$1,500.00",$ -,"$1,500.00"
+Building,300 Various maintenance subcontracts,303,CISTERN CLEANING,0,$875.00,$ -,$ -
+Building,300 Various maintenance subcontracts,304,Glass cleaning,0,$ -,,$ -
+Common area,300 Various maintenance subcontracts,301,Garbage collection,1,"$1,000.00",160,"$1,160.00"
+Common area,300 Various maintenance subcontracts,302,Fumigation and control,1,"$5,000.00",800,"$5,000.00"
+Common area,300 Various maintenance subcontracts,303,CISTERN CLEANING,1,$375.00,60,$ -
+Common area,300 Various maintenance subcontracts,304,Glass cleaning,1,"$7,500.00","1,200.00",$ -
+Building,500 maintenance subcontracts equipment,501,Emergency plant,1,$666.67,$ -,$666.67
+Building,500 maintenance subcontracts equipment,502,DILE load,1,$700.00,,$700.00
+Building,500 maintenance subcontracts equipment,503,Mitsubishi elevator,4,"$3,648.38","$2,334.96","$16,928.48"
+Building,500 maintenance subcontracts equipment,504,2 HP pump maintenance,0,$ -,,$ -
+Building,500 maintenance subcontracts equipment,505,5 HP pump maintenance,0,$ -,$ -,$ -
+Building,500 maintenance subcontracts equipment,506,Pumps 15 HP Maintenance,2,$583.00,$186.56,"$1,352.56"
+Building,500 maintenance subcontracts equipment,507,MAINTENANCE AND/OR RENTAL GYM,1,$ -,$ -,$ -
+Building,500 maintenance subcontracts equipment,508,Steam maintenance,1,$ -,$ -,$ -
+Building,500 maintenance subcontracts equipment,509,SAUNA MAINTENANCE,1,$ -,$ -,$ -
+Building,500 maintenance subcontracts equipment,510,Source maintenance and water mirror,,$ -,$ -,$ -
+Building,500 maintenance subcontracts equipment,511,Boilers maintenance,,$ -,$ -,$ -
+Building,500 maintenance subcontracts equipment,512,CCTV maintenance,1,$400.00,$64.00,$464.00
+Building,500 maintenance subcontracts equipment,513,ACCESS CONTROL MAINTENANCE,0,$ -,$ -,$ -
+Building,500 maintenance subcontracts equipment,514,Vertical garbage,1,"$16,100.00","$2,576.00","$1,556.33"
+Building,500 maintenance subcontracts equipment,515,Refill extinguishers,0,$202.86,$ -,$ -
+Building,500 maintenance subcontracts equipment,516,Hydrant maintenance,1,$400.00,$ -,$400.00
+Building,500 maintenance subcontracts equipment,517,Hydropneumatic maintenance,1,$800.00,,$800.00
+Building,500 maintenance subcontracts equipment,518,Boilers maintenance,0,$ -,,$ -
+Building,500 maintenance subcontracts equipment,519,VS FIRE SYSTEM MAINTENANCE,1,$700.00,$ -,$700.00
+Building,500 maintenance subcontracts equipment,520,Air Injection and Extraction Maintenance,1,,$ -,$ -
+Building,500 maintenance subcontracts equipment,522,Treatment Plant Maintenance,1,$ -,$ -,$ -
+Common area,500 maintenance subcontracts equipment,501,Emergency plant,1,$666.67,$106.67,$773.33
+Common area,500 maintenance subcontracts equipment,502,DILE load,1,$300.00,$48.00,$348.00
+Common area,500 maintenance subcontracts equipment,503,Elevator,0,$ -,$ -,$ -
+Common area,500 maintenance subcontracts equipment,504,2 HP pump maintenance,2,$333.00,$53.28,$772.56
+Common area,500 maintenance subcontracts equipment,505,5 HP pump maintenance,1,$416.00,$66.56,$482.56
+Common area,500 maintenance subcontracts equipment,506,Pumps 15 HP Maintenance,0,$ -,$ -,$ -
+Common area,500 maintenance subcontracts equipment,507,MAINTENANCE AND/OR RENTAL GYM,1,"$80,000.00","$12,800.00","$30,000.00"
+Common area,500 maintenance subcontracts equipment,508,Steam maintenance,1,$ -,$ -,$ -
+Common area,500 maintenance subcontracts equipment,509,SAUNA MAINTENANCE,1,$ -,$ -,$ -
+Common area,500 maintenance subcontracts equipment,510,Source maintenance and water mirror,1,$500.00,$80.00,$ -
+Common area,500 maintenance subcontracts equipment,511,Boilers maintenance,1,$800.00,$128.00,$ -
+Common area,500 maintenance subcontracts equipment,512,CCTV maintenance,1,"$1,600.00",$256.00,"$1,856.00"
+Common area,500 maintenance subcontracts equipment,513,ACCESS CONTROL MAINTENANCE,1,"$24,342.00","$3,894.72","$2,353.06"
+Common area,500 maintenance subcontracts equipment,514,Vertical garbage,1,$ -,$ -,$ -
+Common area,500 maintenance subcontracts equipment,515,Refill extinguishers,49,$34.00,$5.44,$960.87
+Common area,500 maintenance subcontracts equipment,516,Hydrant maintenance,1,$500.00,$80.00,$580.00
+Common area,500 maintenance subcontracts equipment,517,Hydropneumatic maintenance,2,$800.00,$128.00,"$1,856.00"
+Common area,500 maintenance subcontracts equipment,518,Boilers maintenance,0,$500.00,$80.00,$ -
+Common area,500 maintenance subcontracts equipment,519,VS FIRE SYSTEM MAINTENANCE,1,"$1,000.00",$160.00,"$1,160.00"
+Common area,500 maintenance subcontracts equipment,520,Air Injection and Extraction Maintenance,1,"$20,249.53","$3,239.92","$23,489.45"
+Common area,500 maintenance subcontracts equipment,522,Treatamineto Plant Maintenance,1,"$9,800.00","$1,568.00","$11,368.00"
+Building,600 administration and consumption expenses,601,Telephone service,1,$399.00,$ -,$399.00
+Building,600 administration and consumption expenses,602,Telephone service,0,$249.50,,$ -
+Building,600 administration and consumption expenses,603,Satellite TV,,$ -,$ -,$ -
+Building,600 administration and consumption expenses,604,Stationery,,$250.00,$ -,$250.00
+Building,600 administration and consumption expenses,605,Protocolization Act Assembly,0,$500.00,$80.00,$580.00
+Building,600 administration and consumption expenses,606,Electricity,1,"$30,000.00","$4,800.00","$34,800.00"
+Building,600 administration and consumption expenses,607,SACMEX,1,"$5,000.00",$800.00,"$5,800.00"
+Building,600 administration and consumption expenses,608,Natural Gas Area Community,1,$ -,$ -,$ -
+Building,600 administration and consumption expenses,609,Electric material,1,"$2,100.00",$336.00,"$2,436.00"
+Building,600 administration and consumption expenses,610,Painting material,1,"$1,200.00",$192.00,"$1,392.00"
+Building,600 administration and consumption expenses,611,Plumbing material,1,"$1,000.00",$160.00,"$1,160.00"
+Building,600 administration and consumption expenses,612,Carpentry material,1,$25.00,$4.00,$29.00
+Common area,600 administration and consumption expenses,601,Telephone service,1,$399.00,$ -,$399.00
+Common area,600 administration and consumption expenses,602,Telephone service,1,$249.50,,$249.50
+Common area,600 administration and consumption expenses,603,Satellite TV,1,$768.10,$122.90,$891.00
+Common area,600 administration and consumption expenses,604,Stationery,1,$500.00,$ -,$500.00
+Common area,600 administration and consumption expenses,605,Protocolization Act Assembly,0,$ -,$ -,$ -
+Common area,600 administration and consumption expenses,606,Electricity,1,"$30,000.00","$4,800.00","$34,800.00"
+Common area,600 administration and consumption expenses,607,SACMEX,1,"$8,000.00","$1,280.00","$9,280.00"
+Common area,600 administration and consumption expenses,608,Natural Gas Area Community,1,$ -,$ -,$ -
+Common area,600 administration and consumption expenses,609,Electric material,1,"$2,000.00",$320.00,"$2,320.00"
+Common area,600 administration and consumption expenses,610,Painting material,1,"$1,000.00",$160.00,"$1,160.00"
+Common area,600 administration and consumption expenses,611,Plumbing material,1,$500.00,$80.00,$580.00
+Common area,600 administration and consumption expenses,612,Carpentry material,1,$250.00,$40.00,$290.00
+Common area,600 administration and consumption expenses,613,Electromechanical material,1,$500.00,$80.00,$580.00
+Common area,600 administration and consumption expenses,614,Minor tool,1,$300.00,$48.00,$348.00
+Common area,600 administration and consumption expenses,615,Civil Protection Program,1,$ -,$ -,$ -
+Common area,600 administration and consumption expenses,616,Swimming pool chemicals,1,"$4,000.00",$640.00,"$7,000.00"
+Common area,600 administration and consumption expenses,617,Consumable bathrooms,1,"$1,000.00",$160.00,"$1,160.00"
+Building,700 insurance and bonds,701,Insurance,1,$ -,,"$30,000.00"
+Building,800 administrative expenses,801,Management and Accounting Fees,40,"$46,815.30","$7,490.45",
+Building,800 administrative expenses,804,Banking expenses and commissions,1,"$5,000.00",$800.00,"$5,800.00"
+Common area,800 administrative expenses,801,Management and Accounting Fees,40,$145.00,$23.20,"$6,728.00"

@@ -1,0 +1,53 @@
+Type,Client ID,Amount of sessions purchased,Country,Gross Amount,Transaction Fee,Net Amount,Currency,Product Name,Invoice Number,Transaction Date,Account Type
+,,,,,,,,,,,
+Credit,8954260,8,United States of America,400,-11.9,388.1,USD,In-Person Training,11,2023-06-21,Stripe
+Credit,8954260,8,United States of America,400,-11.9,388.1,USD,In-Person Training,10,2023-05-23,Stripe
+Credit,8954260,8,United States of America,400,-11.9,388.1,USD,In-Person Training,9,2023-04-20,Stripe
+Credit,8954260,8,United States of America,400,-11.9,388.1,USD,In-Person Training,8,2023-03-12,Stripe
+Credit,8954260,8,United States of America,192,-5.87,186.13,USD,In-Person Training,7,2022-12-31,Stripe
+Credit,8954260,8,United States of America,400,-11.9,388.1,USD,In-Person Training,6,2022-10-31,Stripe
+Credit,8954260,8,United States of America,400,-11.9,388.1,USD,In-Person Training,5,2022-10-10,Stripe
+Credit,8954260,8,United States of America,400,-11.9,388.1,USD,In-Person Training,4,2022-09-14,Stripe
+Credit,6992696,2,United States of America,50,-1.75,48.25,USD,Online Training Session Packs,3,2022-02-28,Stripe
+Credit,6992696,2,United States of America,50,-1.75,48.25,USD,Online Training Session Packs,2,2022-02-17,Stripe
+Credit,6799812,NA,United States of America,37.5,-1.39,36.11,USD,Dancer's Guide to Strength and Conditioning,1,2022-01-24,Stripe
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-07-01,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023/07/21,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-07-24,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-07-28,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-07-31,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-08-04,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-08-07,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-08-11,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-08-14,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-08-18,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-08-21,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-08-25,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-08-28,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-09-01,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-09-04,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-09-08,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-09-11,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-09-15,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-09-18,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-09-22,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-09-25,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-09-29,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-10-02,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-10-06,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-10-09,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-10-13,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-10-16,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-10-20,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-10-23,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-10-30,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-11-03,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-11-06,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-11-10,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-11-13,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-11-17,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-11-20,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-12-01,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-12-04,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-12-11,Venmo
+Venmo,9163702,1,United States of America,30,0,30,USD,In-Person Training,NA,2023-12-18,Venmo

@@ -1,0 +1,47 @@
+from .ContentAPI import add_custom_property_to_content, apply_labels_to_content, fetch_all_content_permissions, fetch_all_descendant_content_grouped, fetch_children_of_specific_type, fetch_content_by_id, fetch_content_property_by_key, fetch_filtered_content_list, find_content_with_cql, find_descendants_by_type, get_permissions_for_action, initialize_content_property, list_child_content_by_type, list_content_attachments, list_content_metadata_properties, list_labels_on_content, modify_attachment_properties, modify_content_property, modify_existing_content, publish_content_document, remove_content_property, remove_labels_from_content, replace_attachment_file, retrieve_content_comment_thread, retrieve_content_version_history, trash_or_purge_content, upload_new_attachment_to_content
+from .ContentBodyAPI import transform_body_representation
+from .LongTaskAPI import get_background_task_status, list_all_background_tasks
+from .Search import perform_cql_search
+from .SpaceAPI import fetch_space_by_key, filter_space_content_by_type, initiate_space_deletion, list_all_content_in_space, list_all_spaces, modify_space_details, provision_new_private_space, provision_new_space
+
+_function_map = {
+    'add_custom_property_to_content': 'confluence.mutations.m01.ContentAPI.add_custom_property_to_content',
+    'apply_labels_to_content': 'confluence.mutations.m01.ContentAPI.apply_labels_to_content',
+    'fetch_all_content_permissions': 'confluence.mutations.m01.ContentAPI.fetch_all_content_permissions',
+    'fetch_all_descendant_content_grouped': 'confluence.mutations.m01.ContentAPI.fetch_all_descendant_content_grouped',
+    'fetch_children_of_specific_type': 'confluence.mutations.m01.ContentAPI.fetch_children_of_specific_type',
+    'fetch_content_by_id': 'confluence.mutations.m01.ContentAPI.fetch_content_by_id',
+    'fetch_content_property_by_key': 'confluence.mutations.m01.ContentAPI.fetch_content_property_by_key',
+    'fetch_filtered_content_list': 'confluence.mutations.m01.ContentAPI.fetch_filtered_content_list',
+    'fetch_space_by_key': 'confluence.mutations.m01.SpaceAPI.fetch_space_by_key',
+    'filter_space_content_by_type': 'confluence.mutations.m01.SpaceAPI.filter_space_content_by_type',
+    'find_content_with_cql': 'confluence.mutations.m01.ContentAPI.find_content_with_cql',
+    'find_descendants_by_type': 'confluence.mutations.m01.ContentAPI.find_descendants_by_type',
+    'get_background_task_status': 'confluence.mutations.m01.LongTaskAPI.get_background_task_status',
+    'get_permissions_for_action': 'confluence.mutations.m01.ContentAPI.get_permissions_for_action',
+    'initialize_content_property': 'confluence.mutations.m01.ContentAPI.initialize_content_property',
+    'initiate_space_deletion': 'confluence.mutations.m01.SpaceAPI.initiate_space_deletion',
+    'list_all_background_tasks': 'confluence.mutations.m01.LongTaskAPI.list_all_background_tasks',
+    'list_all_content_in_space': 'confluence.mutations.m01.SpaceAPI.list_all_content_in_space',
+    'list_all_spaces': 'confluence.mutations.m01.SpaceAPI.list_all_spaces',
+    'list_child_content_by_type': 'confluence.mutations.m01.ContentAPI.list_child_content_by_type',
+    'list_content_attachments': 'confluence.mutations.m01.ContentAPI.list_content_attachments',
+    'list_content_metadata_properties': 'confluence.mutations.m01.ContentAPI.list_content_metadata_properties',
+    'list_labels_on_content': 'confluence.mutations.m01.ContentAPI.list_labels_on_content',
+    'modify_attachment_properties': 'confluence.mutations.m01.ContentAPI.modify_attachment_properties',
+    'modify_content_property': 'confluence.mutations.m01.ContentAPI.modify_content_property',
+    'modify_existing_content': 'confluence.mutations.m01.ContentAPI.modify_existing_content',
+    'modify_space_details': 'confluence.mutations.m01.SpaceAPI.modify_space_details',
+    'perform_cql_search': 'confluence.mutations.m01.Search.perform_cql_search',
+    'provision_new_private_space': 'confluence.mutations.m01.SpaceAPI.provision_new_private_space',
+    'provision_new_space': 'confluence.mutations.m01.SpaceAPI.provision_new_space',
+    'publish_content_document': 'confluence.mutations.m01.ContentAPI.publish_content_document',
+    'remove_content_property': 'confluence.mutations.m01.ContentAPI.remove_content_property',
+    'remove_labels_from_content': 'confluence.mutations.m01.ContentAPI.remove_labels_from_content',
+    'replace_attachment_file': 'confluence.mutations.m01.ContentAPI.replace_attachment_file',
+    'retrieve_content_comment_thread': 'confluence.mutations.m01.ContentAPI.retrieve_content_comment_thread',
+    'retrieve_content_version_history': 'confluence.mutations.m01.ContentAPI.retrieve_content_version_history',
+    'transform_body_representation': 'confluence.mutations.m01.ContentBodyAPI.transform_body_representation',
+    'trash_or_purge_content': 'confluence.mutations.m01.ContentAPI.trash_or_purge_content',
+    'upload_new_attachment_to_content': 'confluence.mutations.m01.ContentAPI.upload_new_attachment_to_content',
+}
