@@ -1,0 +1,173 @@
+[
+  {
+    "name": "get_business_profile_data",
+    "description": "Get profile data of a TikTok account, including analytics and insights.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string",
+          "description": "Access token authorized by TikTok creators."
+        },
+        "business_id": {
+          "type": "string",
+          "description": "Application specific unique identifier for the TikTok account."
+        },
+        "start_date": {
+          "type": "string",
+          "description": "Query start date in YYYY-MM-DD format. Defaults to None."
+        },
+        "end_date": {
+          "type": "string",
+          "description": "Query end date in YYYY-MM-DD format. Defaults to None."
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of requested fields to include in the response. Defaults to None.\n- username\n- display_name\n- profile\n- analytics\n- settings"
+        }
+      },
+      "required": [
+        "access_token",
+        "business_id"
+      ]
+    }
+  },
+  {
+    "name": "get_business_publish_status",
+    "description": "Get the publishing status of a TikTok video or photo post.\n\nThis endpoint allows you to check the current status of a post publishing task,\nincluding whether it has completed successfully or is still in progress.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string",
+          "description": "Access token authorized by TikTok creators."
+        },
+        "business_id": {
+          "type": "string",
+          "description": "Application specific unique identifier for the TikTok account."
+        },
+        "publish_id": {
+          "type": "string",
+          "description": "Unique identifier for a post publishing task."
+        }
+      },
+      "required": [
+        "access_token",
+        "business_id",
+        "publish_id"
+      ]
+    }
+  },
+  {
+    "name": "publish_business_video",
+    "description": "Publish a public video post to a TikTok account.\n\nThis endpoint allows you to upload and publish a video to your TikTok account with various\ncustomization options for the post's visibility and interaction settings.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string",
+          "description": "Access token authorized by TikTok creators."
+        },
+        "content_type": {
+          "type": "string",
+          "description": "Must be \"application/json\"."
+        },
+        "business_id": {
+          "type": "string",
+          "description": "Application specific unique identifier for the TikTok account."
+        },
+        "video_url": {
+          "type": "string",
+          "description": "URL of the video to be published."
+        },
+        "post_info": {
+          "type": "object",
+          "description": "Additional information about the post.",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Title of the video."
+            },
+            "description": {
+              "type": "string",
+              "description": "Description of the video."
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of tags for the video."
+            },
+            "thumbnail_url": {
+              "type": "string",
+              "description": "URL of the thumbnail for the video."
+            },
+            "thumbnail_offset": {
+              "type": "integer",
+              "description": "Time offset in seconds for video thumbnail."
+            },
+            "is_ai_generated": {
+              "type": "boolean",
+              "description": "Whether the content is AI-generated."
+            }
+          },
+          "required": [
+            "description",
+            "is_ai_generated",
+            "tags",
+            "thumbnail_offset",
+            "thumbnail_url",
+            "title"
+          ]
+        },
+        "caption": {
+          "type": "string",
+          "description": "Caption text for the video. Defaults to None."
+        },
+        "is_brand_organic": {
+          "type": "boolean",
+          "description": "Whether the post is organic branded content. Defaults to False."
+        },
+        "is_branded_content": {
+          "type": "boolean",
+          "description": "Whether the post is branded content. Defaults to False."
+        },
+        "disable_comment": {
+          "type": "boolean",
+          "description": "Whether to disable comments. Defaults to False."
+        },
+        "disable_duet": {
+          "type": "boolean",
+          "description": "Whether to disable duet feature. Defaults to False."
+        },
+        "disable_stitch": {
+          "type": "boolean",
+          "description": "Whether to disable stitch feature. Defaults to False."
+        },
+        "thumbnail_offset": {
+          "type": "integer",
+          "description": "Time offset in seconds for video thumbnail. Defaults to 0."
+        },
+        "is_ai_generated": {
+          "type": "boolean",
+          "description": "Whether the content is AI-generated. Defaults to False."
+        },
+        "upload_to_draft": {
+          "type": "boolean",
+          "description": "Whether to save as draft instead of publishing. Defaults to False."
+        }
+      },
+      "required": [
+        "access_token",
+        "business_id",
+        "content_type",
+        "post_info",
+        "video_url"
+      ]
+    }
+  }
+]

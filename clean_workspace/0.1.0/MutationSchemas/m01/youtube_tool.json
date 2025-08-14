@@ -1,0 +1,22 @@
+[
+  {
+    "name": "find_videos",
+    "description": "Search for videos, channels, or playlists on YouTube.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "search_term": {
+          "type": "string",
+          "description": "The query with which search should be performed. Must be a non-empty string."
+        },
+        "content_type": {
+          "type": "string",
+          "description": "Enum to specify search result type. Can be \"VIDEO\", \"CHANNEL\" or \"PLAYLIST\". Defaults to \"VIDEO\"."
+        }
+      },
+      "required": [
+        "search_term"
+      ]
+    }
+  }
+]

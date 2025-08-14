@@ -1,0 +1,1159 @@
+[
+  {
+    "name": "check_pr_combined_status",
+    "description": "Get the combined status of all status checks for a pull request.\n\nThis function retrieves the combined status of all status checks for a specified pull request.\nThe pull request is identified by its owner, repository, and pull number.\nThe returned status includes an overall state, commit SHA, total check count,\nand a detailed list of individual status checks.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "repository_holder_login": {
+          "type": "string",
+          "description": "The owner of the repository."
+        },
+        "repository_context_name": {
+          "type": "string",
+          "description": "The name of the repository."
+        },
+        "pull_request_identifier": {
+          "type": "integer",
+          "description": "The number identifying the pull request."
+        }
+      },
+      "required": [
+        "pull_request_identifier",
+        "repository_context_name",
+        "repository_holder_login"
+      ]
+    }
+  },
+  {
+    "name": "commit_file_change",
+    "description": "Create or update a single file in a repository.\n\nThis function creates a new file or updates an existing file at a specified\npath within a given repository. It requires the repository owner's identifier,\nthe repository name, the file's path, a commit message, and the file's\ncontent. Optional parameters include the branch name and, for file updates,\nthe SHA of the existing file blob to ensure the correct file version is modified.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "repo_owner_login": {
+          "type": "string",
+          "description": "The account owner of the repository (e.g., username or organization name)."
+        },
+        "repository_to_modify": {
+          "type": "string",
+          "description": "The name of the repository."
+        },
+        "target_file_path": {
+          "type": "string",
+          "description": "The path to the file in the repository."
+        },
+        "commit_summary_message": {
+          "type": "string",
+          "description": "The commit message."
+        },
+        "file_content_base64": {
+          "type": "string",
+          "description": "The new file content, base64 encoded."
+        },
+        "target_branch_for_commit": {
+          "type": "string",
+          "description": "The branch name. If not provided, the operation\ntypically targets the repository's default branch. Defaults to None."
+        },
+        "previous_file_blob_sha": {
+          "type": "string",
+          "description": "The blob SHA of the file being replaced. This is\nrequired if updating an existing file and is used to prevent conflicts\nby ensuring the file has not changed since the SHA was obtained.\nDefaults to None."
+        }
+      },
+      "required": [
+        "commit_summary_message",
+        "file_content_base64",
+        "repo_owner_login",
+        "repository_to_modify",
+        "target_file_path"
+      ]
+    }
+  },
+  {
+    "name": "commit_multiple_files",
+    "description": "Push multiple files in a single commit.\n\nThis function pushes multiple files in a single commit. It uses the provided\nrepository owner's username, repository name, target branch name, a list of\nfiles (each defined by its path and content), and a commit message to\nperform the operation.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "repo_owner_for_push": {
+          "type": "string",
+          "description": "The username of the account that owns the repository."
+        },
+        "repo_name_for_push": {
+          "type": "string",
+          "description": "The name of the repository."
+        },
+        "destination_branch_for_push": {
+          "type": "string",
+          "description": "The name of the branch to push the files to."
+        },
+        "file_changes_list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "description": "The full path of the file within the repository."
+              },
+              "content": {
+                "type": "string",
+                "description": "The content of the file."
+              }
+            },
+            "required": [
+              "content",
+              "path"
+            ]
+          },
+          "description": "A list of dictionaries, where each dictionary\nrepresents a file to be pushed. Each dictionary must contain the\nfollowing keys:"
+        },
+        "batch_commit_message": {
+          "type": "string",
+          "description": "The commit message for the push operation."
+        }
+      },
+      "required": [
+        "batch_commit_message",
+        "destination_branch_for_push",
+        "file_changes_list",
+        "repo_name_for_push",
+        "repo_owner_for_push"
+      ]
+    }
+  },
+  {
+    "name": "create_repository_fork",
+    "description": "Fork a repository.\n\nCreates a fork for the authenticated user. The user should have \n`Administration` repository permissions (write) to set up and configure the new repository (users fork) under the users account.\n`Contents` repository permissions (read) to read the `Contents` of the original repository to get all the data.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "source_repository_owner": {
+          "type": "string",
+          "description": "The account owner of the repository. The name is not case sensitive."
+        },
+        "source_repository_name": {
+          "type": "string",
+          "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+        },
+        "target_organization_name": {
+          "type": "string",
+          "description": "Optional parameter to specify the organization name if forking into an organization."
+        }
+      },
+      "required": [
+        "source_repository_name",
+        "source_repository_owner"
+      ]
+    }
+  },
+  {
+    "name": "discover_repositories_by_query",
+    "description": "Search for GitHub repositories.\n\nFind repositories via various criteria. This method returns up to 100 results per page.\nThe query can contain any combination of search keywords and qualifiers to narrow down the results.\n\nWhen no sort is specified, results are sorted by best match.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "repository_search_term": {
+          "type": "string",
+          "description": "The search query string. Can contain any combination of search keywords and qualifiers.\nFor example: `q=tetris+language:assembly+fork:true+stars:>=100`.\nSupported qualifiers:\n- `in:name,description`\n- `size:>=N`, `size:N..M`\n- `forks:N`, `stars:N`, `watchers:N` (with ranges)\n- `user:USERNAME`, `org:USERNAME`\n- `language:LANGUAGE`\n- `created:DATE`, `pushed:DATE`, `updated:DATE` (with ranges)\n- `is:public`, `is:private`, `is:archived`, `is:template`\n- `fork:true`, `fork:only`"
+        },
+        "repo_search_sort_key": {
+          "type": "string",
+          "description": "The field to sort by. Can be `stars`, `forks`, `updated`. Defaults to `None`."
+        },
+        "repo_search_sort_direction": {
+          "type": "string",
+          "description": "The direction to sort. Can be `asc` or `desc`. Defaults to `desc`."
+        },
+        "repository_page_number": {
+          "type": "integer",
+          "description": "Page number of the results to fetch. Defaults to 1."
+        },
+        "repositories_per_page": {
+          "type": "integer",
+          "description": "The number of results per page (max 100). Defaults to 30."
+        }
+      },
+      "required": [
+        "repository_search_term"
+      ]
+    }
+  },
+  {
+    "name": "enumerate_repo_branches",
+    "description": "List branches in a GitHub repository.\n\nLists branches in a GitHub repository, sorted by name. This function allows for pagination\nof the results.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "repository_owner_id": {
+          "type": "string",
+          "description": "The owner of the repository. Must not be empty."
+        },
+        "repository_name_for_branches": {
+          "type": "string",
+          "description": "The name of the repository. Must not be empty."
+        },
+        "results_page_index": {
+          "type": "integer",
+          "description": "The page number of the results to fetch. Defaults to 1.\nMust be a positive integer if provided."
+        },
+        "results_per_page_limit": {
+          "type": "integer",
+          "description": "The number of results per page. Defaults to 30.\nMust be a positive integer if provided."
+        }
+      },
+      "required": [
+        "repository_name_for_branches",
+        "repository_owner_id"
+      ]
+    }
+  },
+  {
+    "name": "establish_new_branch",
+    "description": "Create a new branch.\n\nThis function establishes a new branch of development within the repository.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "repo_owner_for_branching": {
+          "type": "string",
+          "description": "The account owner of the repository."
+        },
+        "repo_name_for_branching": {
+          "type": "string",
+          "description": "The name of the repository."
+        },
+        "new_branch_name_to_create": {
+          "type": "string",
+          "description": "The name of the new branch to create."
+        },
+        "source_commit_sha_for_branch": {
+          "type": "string",
+          "description": "The SHA of the commit from which the new branch will be created."
+        }
+      },
+      "required": [
+        "new_branch_name_to_create",
+        "repo_name_for_branching",
+        "repo_owner_for_branching",
+        "source_commit_sha_for_branch"
+      ]
+    }
+  },
+  {
+    "name": "execute_pull_request_merge",
+    "description": "Merge a pull request.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "repo_owner_for_merge": {
+          "type": "string",
+          "description": "The owner of the repository."
+        },
+        "repo_name_for_merge": {
+          "type": "string",
+          "description": "The name of the repository."
+        },
+        "pr_number_to_merge": {
+          "type": "integer",
+          "description": "The number identifying the pull request."
+        },
+        "merge_commit_subject": {
+          "type": "string",
+          "description": "An optional title for the merge commit."
+        },
+        "merge_commit_description": {
+          "type": "string",
+          "description": "An optional message for the merge commit."
+        },
+        "merge_strategy_type": {
+          "type": "string",
+          "description": "An optional merge method to use."
+        }
+      },
+      "required": [
+        "pr_number_to_merge",
+        "repo_name_for_merge",
+        "repo_owner_for_merge"
+      ]
+    }
+  },
+  {
+    "name": "fetch_all_issue_comments",
+    "description": "Get comments for a GitHub issue.\n\nThis function gets comments for a GitHub issue. The issue is identified using\nthe provided repository owner, repository name, and issue number.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "repo_account_holder": {
+          "type": "string",
+          "description": "The owner of the repository."
+        },
+        "target_repository_name": {
+          "type": "string",
+          "description": "The name of the repository."
+        },
+        "specific_issue_id": {
+          "type": "integer",
+          "description": "The number of the issue."
+        }
+      },
+      "required": [
+        "repo_account_holder",
+        "specific_issue_id",
+        "target_repository_name"
+      ]
+    }
+  },
+  {
+    "name": "fetch_current_user_profile",
+    "description": "Get details of the authenticated user.\n\nGets details of the authenticated user.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "fetch_pr_review_discussions",
+    "description": "Get the review comments on a pull request.\n\nRetrieves all review comments associated with a specific pull request.\nThe pull request is identified by the repository owner's identifier,\nthe repository name, and the pull request number.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "review_repo_owner_id": {
+          "type": "string",
+          "description": "The login name or identifier of the repository owner."
+        },
+        "review_repo_name_id": {
+          "type": "string",
+          "description": "The name of the repository."
+        },
+        "pull_req_number_for_comments": {
+          "type": "integer",
+          "description": "The number identifying the pull request."
+        }
+      },
+      "required": [
+        "pull_req_number_for_comments",
+        "review_repo_name_id",
+        "review_repo_owner_id"
+      ]
+    }
+  },
+  {
+    "name": "fetch_pull_request_data",
+    "description": "Get details of a specific pull request.\n\nThis function gets details of a specific pull request. It uses the provided\nowner, repository name, and pull request number to identify and retrieve\nthe comprehensive details of the pull request.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "pr_repository_owner": {
+          "type": "string",
+          "description": "The account owner of the repository."
+        },
+        "pr_repository_name": {
+          "type": "string",
+          "description": "The name of the repository."
+        },
+        "pull_request_id_number": {
+          "type": "integer",
+          "description": "The number that identifies the pull request."
+        }
+      },
+      "required": [
+        "pr_repository_name",
+        "pr_repository_owner",
+        "pull_request_id_number"
+      ]
+    }
+  },
+  {
+    "name": "fetch_repository_path_content",
+    "description": "Get contents of a file or directory.\n\nThis function retrieves the content of a specified file or directory within a\nrepository. The nature of the returned data depends on whether the specified\npath points to a file or a directory.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "repository_owner_handle": {
+          "type": "string",
+          "description": "The owner of the repository."
+        },
+        "target_repo_slug": {
+          "type": "string",
+          "description": "The name of the repository."
+        },
+        "content_path_in_repo": {
+          "type": "string",
+          "description": "The path to the file or directory within the repository."
+        },
+        "git_reference_pointer": {
+          "type": "string",
+          "description": "An optional Git reference (e.g., a branch name,\ntag, or commit SHA) specifying the version of the content to retrieve.\nDefaults to None."
+        }
+      },
+      "required": [
+        "content_path_in_repo",
+        "repository_owner_handle",
+        "target_repo_slug"
+      ]
+    }
+  },
+  {
+    "name": "find_code_in_repositories",
+    "description": "Search for code within repositories.\n\nSearches for query terms inside of files. This method returns up to 100 results per page.\nThe query can contain any combination of search keywords and qualifiers.\n\nNote: Due to the complexity of searching code, there are a few restrictions:\n- Only the default branch is considered. In most cases, this will be the master branch.\n- Only files smaller than 384 KB are searchable.\n- You must always include at least one search term when searching source code.\n  For example, searching for language:go is not valid, while amazing language:go is.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "code_search_expression": {
+          "type": "string",
+          "description": "The search query string. Can contain any combination of search keywords and qualifiers.\nExamples:\n- `\"addClass in:file language:js repo:jquery/jquery\"`: Find files containing 'addClass' in the jquery/jquery repository\n- `\"repo:octocat/Spoon-Knife css\"`: Find instances of 'css' in the octocat/Spoon-Knife repository\n- `\"shogun user:heroku language:ruby\"`: Find 'shogun' in Ruby files from heroku's repositories\n- `\"function size:>10000 language:python\"`: Find Python files containing 'function' larger than 10 KB\n\nSupported qualifiers:\n- `in:file,path`: Search in file contents and/or file paths. If not specified, searches in both.\n- `language:LANGUAGE`: Filter by programming language (based on file extension).\n    Supported languages: javascript (js), python (py), ruby (rb), go, java, c++ (cpp),\n    typescript (ts), php, c# (cs), html, css, shell (sh), markdown (md).\n- `repo:owner/repository`: Restrict search to a specific repository.\n- `user:USERNAME`, `org:USERNAME`: Search within a user's or organization's repositories.\n- `size:n`: Filter by file size (in bytes). Can use `>`, `<`, `>=`, `<=`, and `..` ranges.\n- `path:PATH`: Filter by file path.\n- `extension:EXTENSION`: Filter by file extension.\n- `is:public`, `is:private`: Filter by repository visibility.\n- `fork:true`, `fork:only`: Include forked repositories in the search."
+        },
+        "code_search_sort_field": {
+          "type": "string",
+          "description": "This field is closing down. Can only be 'indexed', which indicates how recently a file has been indexed.\nDefault is 'best match'."
+        },
+        "code_search_sort_order": {
+          "type": "string",
+          "description": "This field is closing down. The direction to sort. Can be 'asc' or 'desc'.\nOnly used when 'sort' is specified. Default is 'desc'."
+        },
+        "search_results_page": {
+          "type": "integer",
+          "description": "Page number of the results to fetch. Default is 1."
+        },
+        "search_results_per_page": {
+          "type": "integer",
+          "description": "The number of results per page (max 100). Default is 30."
+        }
+      },
+      "required": [
+        "code_search_expression"
+      ]
+    }
+  },
+  {
+    "name": "find_github_users",
+    "description": "Search for GitHub users.\n\nFind users via various criteria. This method returns up to 100 results per page.\nThe query can contain any combination of search keywords and qualifiers to narrow down the results.\n\nWhen no sort is specified, results are sorted by best match.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "user_search_query": {
+          "type": "string",
+          "description": "The search query string. Can contain any combination of search keywords and qualifiers.\nFor example: `q=tom+repos:>42+followers:>1000`.\nSupported qualifiers:\n- `in:login,name,email`: Restricts search to specified fields.\n- `repos:n`: Filters by repository count. Can use `>`, `<`, `>=`, `<=`, and `..` ranges.\n- `followers:n`: Filters by follower count. Can use `>`, `<`, `>=`, `<=`, and `..` ranges.\n- `created:YYYY-MM-DD`: Filters by creation date. Can use `>`, `<`, `>=`, `<=`, and `..` ranges.\n- `location:LOCATION`: Filters by location in the user's profile.\n- `type:user|org`: Restricts search to users or organizations.\n- `language:LANGUAGE`: Filters by the predominant language in the user's repositories."
+        },
+        "user_sort_criteria": {
+          "type": "string",
+          "description": "The field to sort the search results by. Can be one of 'followers', 'repositories', 'joined'.\nDefaults to 'None' (best match)."
+        },
+        "user_sort_order": {
+          "type": "string",
+          "description": "The order of sorting ('asc' or 'desc'). Defaults to 'desc'."
+        },
+        "user_results_page_num": {
+          "type": "integer",
+          "description": "The page number for paginated results. Defaults to 1."
+        },
+        "users_per_result_page": {
+          "type": "integer",
+          "description": "The number of results to return per page (max 100). Defaults to 30."
+        }
+      },
+      "required": [
+        "user_search_query"
+      ]
+    }
+  },
+  {
+    "name": "find_issues_and_prs",
+    "description": "Search for issues and pull requests.\n\nFinds issues and pull requests by searching against a query string.\nThe query can contain any combination of search keywords and qualifiers.\n\nSupported qualifiers:\n- `is:issue` or `is:pr`: Filters for either issues or pull requests.\n- `repo:owner/repository`: Restricts the search to a specific repository.\n- `author:username`: Finds items created by a specific user.\n- `assignee:username`: Finds items assigned to a specific user.\n- `label:\"label name\"`: Filters by a specific label. Use quotes for labels with spaces.\n- `state:open` or `state:closed`: Filters by the state.\n- `in:title,body`: Searches for keywords in the title, body, or both.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "search_query_string": {
+          "type": "string",
+          "description": "The search query string, including any qualifiers."
+        },
+        "results_sort_field": {
+          "type": "string",
+          "description": "The field to sort by. Can be 'created', 'updated', or 'comments'.\nDefaults to `None` (best-match)."
+        },
+        "results_sort_direction": {
+          "type": "string",
+          "description": "The direction to sort. Can be 'asc' or 'desc'. Defaults to 'desc'."
+        },
+        "current_page_of_results": {
+          "type": "integer",
+          "description": "Page number of the results to fetch. Defaults to 1."
+        },
+        "page_size_limit": {
+          "type": "integer",
+          "description": "The number of results per page (max 100). Defaults to 30."
+        }
+      },
+      "required": [
+        "search_query_string"
+      ]
+    }
+  },
+  {
+    "name": "find_repository_issues_by_filter",
+    "description": "List and filter repository issues.\n\nLists and filters issues for a specified repository. This function allows\nretrieval of issues based on criteria such as their state (e.g., open,\nclosed, all), associated labels, and a 'since' timestamp indicating the\nminimum update time. The results can be sorted by fields like 'created',\n'updated', or 'comments', in either ascending ('asc') or descending\n('desc') order. Pagination is supported through 'page' and 'per_page'\nparameters to manage the volume of returned data.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "repo_container_owner": {
+          "type": "string",
+          "description": "The owner of the repository."
+        },
+        "repo_identifier_name": {
+          "type": "string",
+          "description": "The name of the repository."
+        },
+        "issue_status_filter": {
+          "type": "string",
+          "description": "The state of the issues to return (e.g., 'open',\n'closed', 'all')."
+        },
+        "filter_by_label_names": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of label names to filter issues by."
+        },
+        "issue_sort_criterion": {
+          "type": "string",
+          "description": "The criteria for sorting the issues (e.g., 'created',\n'updated', 'comments')."
+        },
+        "sorting_order_direction": {
+          "type": "string",
+          "description": "The direction of sorting (e.g., 'asc', 'desc')."
+        },
+        "updated_after_timestamp": {
+          "type": "string",
+          "description": "An ISO 8601 timestamp to filter issues updated at\nor after this time."
+        },
+        "pagination_page_number": {
+          "type": "integer",
+          "description": "The page number for paginated results."
+        },
+        "items_per_page_count": {
+          "type": "integer",
+          "description": "The number of issues to return per page."
+        }
+      },
+      "required": [
+        "repo_container_owner",
+        "repo_identifier_name"
+      ]
+    }
+  },
+  {
+    "name": "get_commit_history",
+    "description": "Get a list of commits of a branch in a repository.\n\nThis function gets a list of commits of a branch in a repository.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "repo_owner_for_commits": {
+          "type": "string",
+          "description": "The owner of the repository."
+        },
+        "repo_name_for_commits": {
+          "type": "string",
+          "description": "The name of the repository."
+        },
+        "branch_or_commit_ref": {
+          "type": "string",
+          "description": "The commit SHA, branch name, or tag name to list commits from."
+        },
+        "filter_commits_by_path": {
+          "type": "string",
+          "description": "Only commits containing this file path will be returned."
+        },
+        "commit_list_page": {
+          "type": "integer",
+          "description": "Page number of the results to fetch for pagination."
+        },
+        "commits_per_page": {
+          "type": "integer",
+          "description": "The number of results per page for pagination."
+        }
+      },
+      "required": [
+        "repo_name_for_commits",
+        "repo_owner_for_commits"
+      ]
+    }
+  },
+  {
+    "name": "initialize_new_repository",
+    "description": "Create a new GitHub repository.\n\nCreates a new GitHub repository. The user specifies the name for the\nrepository and can optionally provide a description, set its visibility,\nand choose to auto-initialize it.\n\nDefault Repository Settings:\n    The following features are enabled by default for new repositories:\n    - has_issues: True (Issues are enabled)\n    - has_projects: True (Projects are enabled)\n    - has_downloads: True (Downloads are enabled)\n    - has_wiki: True (Wiki is enabled)\n    - has_pages: False (GitHub Pages are disabled)\n    - allow_forking: True (Repository can be forked)\n    - archived: False (Repository is not archived)\n    - disabled: False (Repository is not disabled)\n    - is_template: False (Repository is not a template)\n    - web_commit_signoff_required: False (Commit signoff not required)\n    - visibility: \"public\" or \"private\" (based on private parameter)",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "new_repository_name": {
+          "type": "string",
+          "description": "The name for the new repository."
+        },
+        "repository_summary_text": {
+          "type": "string",
+          "description": "An optional description for the repository. Defaults to None."
+        },
+        "is_private_repository": {
+          "type": "boolean",
+          "description": "If True, the repository will be private. Defaults to False."
+        },
+        "should_auto_initialize": {
+          "type": "boolean",
+          "description": "If True, creates an initial commit, potentially with a README. Defaults to False."
+        }
+      },
+      "required": [
+        "new_repository_name"
+      ]
+    }
+  },
+  {
+    "name": "initiate_pull_request",
+    "description": "Create a new pull request.\n\nThis function creates a new pull request in the specified repository.\nIt requires the owner of the repository, the repository name, the title for the pull request,\nthe head branch (the branch with the proposed changes), and the base branch (the branch\ninto which the changes will be merged). Optional parameters include the body of the\npull request, whether it should be a draft, and whether maintainers can modify it.\nThe function returns details of the created pull request.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target_repo_owner": {
+          "type": "string",
+          "description": "The account owner of the repository. The name is not case sensitive."
+        },
+        "target_repo_name": {
+          "type": "string",
+          "description": "The name of the repository without the .git extension. The name is not case sensitive."
+        },
+        "pull_request_subject": {
+          "type": "string",
+          "description": "The title of the new pull request."
+        },
+        "source_branch_name": {
+          "type": "string",
+          "description": "The name of the branch where your changes are implemented."
+        },
+        "destination_branch_name": {
+          "type": "string",
+          "description": "The name of the branch you want the changes pulled into."
+        },
+        "pull_request_description": {
+          "type": "string",
+          "description": "The contents of the pull request. Defaults to None."
+        },
+        "is_draft_pr": {
+          "type": "boolean",
+          "description": "Indicates whether the pull request is a draft. Defaults to False."
+        },
+        "allow_maintainer_edits": {
+          "type": "boolean",
+          "description": "Indicates whether maintainers can modify the pull request.\nDefaults to False."
+        }
+      },
+      "required": [
+        "destination_branch_name",
+        "pull_request_subject",
+        "source_branch_name",
+        "target_repo_name",
+        "target_repo_owner"
+      ]
+    }
+  },
+  {
+    "name": "list_changed_files_in_pr",
+    "description": "Get the list of files changed in a pull request.\n\nThis function retrieves the list of files changed in a specified pull request.\nThe pull request is identified using the `owner` of the repository,\nthe `repo` name, and the `pull_number`.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "pull_request_repo_owner": {
+          "type": "string",
+          "description": "The owner of the repository."
+        },
+        "pull_request_repo_name": {
+          "type": "string",
+          "description": "The name of the repository."
+        },
+        "target_pull_request_num": {
+          "type": "integer",
+          "description": "The number of the pull request."
+        }
+      },
+      "required": [
+        "pull_request_repo_name",
+        "pull_request_repo_owner",
+        "target_pull_request_num"
+      ]
+    }
+  },
+  {
+    "name": "modify_existing_issue",
+    "description": "Update an existing issue in a GitHub repository.\n\nThis function updates an existing issue within a specified GitHub repository.\nIt allows modification of the issue's title, body, state (open or closed),\nassociated labels, assigned users, and milestone. The title and body can\nbe cleared by passing `None`. Labels and assignees are replaced if new lists\nare provided; an empty list clears them.\nThe `updated_at` timestamp is always modified on a successful call.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "repository_account_owner": {
+          "type": "string",
+          "description": "The account owner of the repository. Case-insensitive."
+        },
+        "repository_to_update_in": {
+          "type": "string",
+          "description": "The name of the repository. Case-insensitive."
+        },
+        "issue_to_modify_id": {
+          "type": "integer",
+          "description": "The number that identifies the issue. Must be positive."
+        },
+        "updated_issue_title": {
+          "type": "string",
+          "description": "The new title for the issue. If `None` (default or explicit),\nthe title is cleared (set to `None`)."
+        },
+        "revised_issue_body": {
+          "type": "string",
+          "description": "The new contents of the issue. If `None` (default or explicit),\nthe body is cleared (set to `None`)."
+        },
+        "new_issue_state": {
+          "type": "string",
+          "description": "The new state (\"open\" or \"closed\"). If `None` (default),\nthe state is not changed."
+        },
+        "replacement_label_list": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of label names to apply. Replaces existing labels.\n- If `None` (default): Labels are not changed.\n- If `[]` (empty list): All labels are removed.\n- If list of strings: These become the new labels. Each name must exist.\nRequires push access."
+        },
+        "new_assignee_logins": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of assignee logins. Replaces existing assignees.\nThe first login becomes the primary assignee.\n- If `None` (default): Assignees are not changed.\n- If `[]` (empty list): All assignees are removed.\n- If list of logins: These become the new assignees. Each login must exist.\nRequires push access."
+        },
+        "target_milestone_number": {
+          "type": "integer",
+          "description": "The number of the milestone to assign.\n- If `None` (default or explicitly passed as `None`): Removes the current milestone.\n- If an integer: Assigns to this milestone. Must exist.\nRequires push access for any change to the milestone (setting or removing)."
+        }
+      },
+      "required": [
+        "issue_to_modify_id",
+        "repository_account_owner",
+        "repository_to_update_in"
+      ]
+    }
+  },
+  {
+    "name": "modify_pull_request_attributes",
+    "description": "Update an existing pull request in a GitHub repository.\n\nUpdates an existing pull request in a GitHub repository. This function allows\nfor updating attributes of a pull request such as its title, body, state\n(e.g., 'open' or 'closed'), the base branch it targets, and whether\nmaintainers are permitted to make modifications to it.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "repo_owner_to_update": {
+          "type": "string",
+          "description": "The owner of the repository."
+        },
+        "repo_name_to_update": {
+          "type": "string",
+          "description": "The name of the repository."
+        },
+        "pr_id_to_modify": {
+          "type": "integer",
+          "description": "The number identifying the pull request."
+        },
+        "new_pull_request_title": {
+          "type": "string",
+          "description": "The new title for the pull request. Defaults to None."
+        },
+        "updated_pull_request_body": {
+          "type": "string",
+          "description": "The new body content for the pull request. Defaults to None."
+        },
+        "new_pull_request_status": {
+          "type": "string",
+          "description": "The new state of the pull request (e.g., 'open' or 'closed').\nDefaults to None."
+        },
+        "new_base_branch_name": {
+          "type": "string",
+          "description": "The name of the branch to which the changes are proposed\n(the base branch). Defaults to None."
+        },
+        "can_maintainer_edit_flag": {
+          "type": "boolean",
+          "description": "Specifies whether maintainers can modify\nthe pull request. Defaults to False. (Note: If explicitly passed as None,\nthis field will not be updated. If not passed, it defaults to False,\nimplying an update to False if current value is different.)"
+        }
+      },
+      "required": [
+        "pr_id_to_modify",
+        "repo_name_to_update",
+        "repo_owner_to_update"
+      ]
+    }
+  },
+  {
+    "name": "open_new_github_issue",
+    "description": "Create a new issue in a GitHub repository.\n\nThis function facilitates the creation of a new issue within a designated GitHub repository.\nIt accepts details such as the issue's title, an optional body, optional assignees,\nand optional labels to initialize the issue.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "organization_or_user_name": {
+          "type": "string",
+          "description": "The owner of the repository."
+        },
+        "project_repository_name": {
+          "type": "string",
+          "description": "The name of the repository."
+        },
+        "new_issue_title": {
+          "type": "string",
+          "description": "The title for the new issue."
+        },
+        "issue_description_text": {
+          "type": "string",
+          "description": "The contents of the issue."
+        },
+        "assigned_user_logins": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of GitHub logins to assign to this issue."
+        },
+        "issue_category_labels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of label names to add to this issue."
+        }
+      },
+      "required": [
+        "new_issue_title",
+        "organization_or_user_name",
+        "project_repository_name"
+      ]
+    }
+  },
+  {
+    "name": "post_comment_to_issue",
+    "description": "Add a comment to an issue.\n\nThis function adds a comment to a specific issue. It takes the repository's\nowner, the repository name, the issue number, and the comment's body content\nas input. Upon successful execution, it provides a dictionary containing\ndetails of the newly created comment.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "repository_owner_username": {
+          "type": "string",
+          "description": "The owner of the repository."
+        },
+        "affected_repository": {
+          "type": "string",
+          "description": "The name of the repository."
+        },
+        "target_issue_number": {
+          "type": "integer",
+          "description": "The number that identifies the issue."
+        },
+        "comment_content_markdown": {
+          "type": "string",
+          "description": "The content of the comment."
+        }
+      },
+      "required": [
+        "affected_repository",
+        "comment_content_markdown",
+        "repository_owner_username",
+        "target_issue_number"
+      ]
+    }
+  },
+  {
+    "name": "post_pr_line_comment",
+    "description": "Add a review comment to a pull request or reply to an existing comment.\n\nThis function adds a review comment to a specified pull request or replies to an\nexisting comment. Depending on whether it's a new comment or a reply,\ndifferent parameters are required. For new comments, context like commit SHA,\nfile path, and line number may be necessary. For replies, the ID of the\nparent comment is used to inherit context.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "repository_account_login": {
+          "type": "string",
+          "description": "The account owner of the repository. The name is not case sensitive."
+        },
+        "repository_slug": {
+          "type": "string",
+          "description": "The name of the repository. The name is not case sensitive."
+        },
+        "pull_request_index": {
+          "type": "integer",
+          "description": "The number that identifies the pull request."
+        },
+        "comment_text_content": {
+          "type": "string",
+          "description": "The text of the review comment."
+        },
+        "comment_commit_sha": {
+          "type": "string",
+          "description": "The SHA of the commit to comment on. Required if\n`in_reply_to` is not provided and the comment is not a reply."
+        },
+        "file_path_for_comment": {
+          "type": "string",
+          "description": "The relative path to the file that necessitates a comment.\nRequired if `in_reply_to` is not provided and the comment is not a reply."
+        },
+        "diff_line_number": {
+          "type": "integer",
+          "description": "The line of the blob in the pull request diff that the\ncomment applies to. For a multi-line comment, this is the last line\nof the range. Required for new line-level comments (when `subject_type`\nis 'line' or inferred as such)."
+        },
+        "diff_side_to_comment": {
+          "type": "string",
+          "description": "The side of the diff to comment on. Valid values are\n'LEFT' (for the old version) or 'RIGHT' (for the new version).\nDefaults to 'RIGHT' if `line` is provided. Only used for line-level\ncomments."
+        },
+        "multi_line_comment_start": {
+          "type": "integer",
+          "description": "For a multi-line comment, the first line of the\nrange. `line` should be the end line. Only used for line-level comments."
+        },
+        "multi_line_start_side": {
+          "type": "string",
+          "description": "The side of the diff for `start_line`. Valid values\nare 'LEFT' or 'RIGHT'. Defaults to the `side` parameter if not\nprovided. Only used for multi-line comments."
+        },
+        "comment_target_type": {
+          "type": "string",
+          "description": "The type of subject for the comment. Valid values\nare 'line' or 'file'. If 'file', line-specific parameters (`line`,\n`side`, `start_line`, `start_side`) are ignored. If 'line', they are\nused. If not provided, the API may infer based on other parameters\n(e.g., presence of `line`)."
+        },
+        "parent_comment_id": {
+          "type": "integer",
+          "description": "The ID of an existing comment to which this\ncomment is a reply. If provided, parameters like `commit_id`, `path`,\n`line`, `side`, `start_line`, `start_side`, and `subject_type` are\ntypically ignored as the reply inherits context from the parent comment."
+        }
+      },
+      "required": [
+        "comment_text_content",
+        "pull_request_index",
+        "repository_account_login",
+        "repository_slug"
+      ]
+    }
+  },
+  {
+    "name": "query_repository_pull_requests",
+    "description": "List and filter repository pull requests.\n\nThis function lists and filters pull requests for a specified repository.\nIt allows querying for pull requests based on their state (open, closed, or all).\nResults can be sorted by various criteria such as creation date,\nupdate date, popularity (number of comments), or by identifying long-running\npull requests. The direction of sorting (ascending or descending) can also be\nspecified. Pagination options are available to control the number of results\nper page and to fetch specific pages of results, facilitating the handling of\nlarge datasets.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target_owner_login": {
+          "type": "string",
+          "description": "The account owner of the repository. The name is not case sensitive."
+        },
+        "source_repository_identifier": {
+          "type": "string",
+          "description": "The name of the repository without the .git extension. The name is not case sensitive."
+        },
+        "pull_request_state_filter": {
+          "type": "string",
+          "description": "Filter by state. Possible values: 'open', 'closed', 'all'. Default: 'open'."
+        },
+        "pull_request_sort_key": {
+          "type": "string",
+          "description": "What to sort results by. 'popularity' will sort by the number of comments. 'long-running' will sort by date created and will limit the results to pull requests that have been open for more than a month and have had activity within the past month. Possible values: 'created', 'updated', 'popularity', 'long-running'. Default: 'created'."
+        },
+        "sort_flow_direction": {
+          "type": "string",
+          "description": "The direction of the sort. Possible values: 'asc', 'desc'. Default: 'desc' when 'sort' is 'created' or not specified, otherwise 'asc'."
+        },
+        "page_result_limit": {
+          "type": "integer",
+          "description": "The number of results per page (max 100). For more information, see \"Using pagination in the REST API.\" Default: 30."
+        },
+        "page_index_to_fetch": {
+          "type": "integer",
+          "description": "The page number of the results to fetch. For more information, see \"Using pagination in the REST API.\" Default: 1."
+        }
+      },
+      "required": [
+        "source_repository_identifier",
+        "target_owner_login"
+      ]
+    }
+  },
+  {
+    "name": "retrieve_all_pr_reviews",
+    "description": "Lists all reviews for a specified pull request.\n\nLists all reviews for a specified pull request. The list of reviews returns in chronological order.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "account_owner_name": {
+          "type": "string",
+          "description": "The account owner of the repository. The name is not case sensitive."
+        },
+        "repository_name_context": {
+          "type": "string",
+          "description": "The name of the repository without the .git extension. The name is not case sensitive."
+        },
+        "pull_request_number_id": {
+          "type": "integer",
+          "description": "The number that identifies the pull request. Must be a positive integer."
+        }
+      },
+      "required": [
+        "account_owner_name",
+        "pull_request_number_id",
+        "repository_name_context"
+      ]
+    }
+  },
+  {
+    "name": "retrieve_issue_details",
+    "description": "Gets the contents of an issue within a repository.\n\nThis function retrieves detailed information about a specific issue identified\nby its number, belonging to the specified repository and owner. The returned\ndictionary is a direct representation of the data for the found issue.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "repository_owner_login": {
+          "type": "string",
+          "description": "The username of the account that owns the repository.\nMust be a non-empty string."
+        },
+        "repository_name_str": {
+          "type": "string",
+          "description": "The name of the repository. Must be a non-empty string."
+        },
+        "issue_identifier_num": {
+          "type": "integer",
+          "description": "The number that identifies the issue. Must be a positive integer."
+        }
+      },
+      "required": [
+        "issue_identifier_num",
+        "repository_name_str",
+        "repository_owner_login"
+      ]
+    }
+  },
+  {
+    "name": "retrieve_single_commit_data",
+    "description": "Get details for a commit from a repository.\n\nThis function gets details for a commit from a repository. The `page` and\n`per_page` parameters can be used to paginate the list of files affected\nby the commit, which is part of the returned details.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "commit_repo_owner": {
+          "type": "string",
+          "description": "The owner of the repository."
+        },
+        "commit_repo_name": {
+          "type": "string",
+          "description": "The name of the repository."
+        },
+        "commit_hash_to_fetch": {
+          "type": "string",
+          "description": "The SHA of the commit to retrieve."
+        },
+        "file_list_page_number": {
+          "type": "integer",
+          "description": "Page number for paginating the list of files affected by the commit. Defaults to None."
+        },
+        "files_per_page_limit": {
+          "type": "integer",
+          "description": "The number of files to return per page when paginating. Defaults to None."
+        }
+      },
+      "required": [
+        "commit_hash_to_fetch",
+        "commit_repo_name",
+        "commit_repo_owner"
+      ]
+    }
+  },
+  {
+    "name": "submit_pull_request_feedback",
+    "description": "Creates a review on a specified pull request.\n\nThis function simulates the GitHub API endpoint for creating a pull request review.\nIt allows for submitting reviews with different states (APPROVE, REQUEST_CHANGES, COMMENT, PENDING),\nan optional body text, and an array of inline draft review comments.\n\nThe creation of a review with states other than PENDING typically triggers notifications.\nPull request reviews created in the PENDING state (when the `event` parameter is\nleft blank or not provided) are not considered \"submitted\" and therefore do not\ninclude the `submitted_at` property in the response until they are explicitly submitted\nvia a separate action (not part of this function).",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "pr_review_repo_owner": {
+          "type": "string",
+          "description": "The account owner of the repository. The name is not case sensitive."
+        },
+        "pr_review_repo_name": {
+          "type": "string",
+          "description": "The name of the repository without the .git extension. The name is not case sensitive."
+        },
+        "subject_pull_request_id": {
+          "type": "integer",
+          "description": "The number that identifies the pull request within the repository."
+        },
+        "target_commit_hash": {
+          "type": "string",
+          "description": "The SHA of the commit to which the review applies.\nIf not provided, the review applies to the latest commit on the pull request's head branch.\nSpecifying an older commit SHA might result in comments being outdated if subsequent\ncommits modify the commented lines."
+        },
+        "review_summary_text": {
+          "type": "string",
+          "description": "The main body text of the pull request review.\nThis field is **required** if the `event` is 'REQUEST_CHANGES' or 'COMMENT'.\nIt can be an empty string."
+        },
+        "review_action_type": {
+          "type": "string",
+          "description": "The review action to perform. Valid values are:\n- 'APPROVE': Submits an approving review.\n- 'REQUEST_CHANGES': Submits a review requesting changes. Requires `body`.\n- 'COMMENT': Submits a general comment review. Requires `body`.\nIf `event` is `None` or an empty string, the review is created in a 'PENDING' state\nand is not considered submitted."
+        },
+        "inline_review_remarks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "description": "Required. The relative path to the file being commented on."
+              },
+              "body": {
+                "type": "string",
+                "description": "Required. The text of the review comment."
+              },
+              "position": {
+                "type": "integer",
+                "description": "The line index in the diff hunk to which the comment applies.\n  This is mutually exclusive with `line` for specifying a single-line comment location;\n  one of them must be provided if not a multi-line comment on the file.\n  Must be >= 1."
+              },
+              "line": {
+                "type": "integer",
+                "description": "The line number in the file's diff that the comment applies to.\n  For a multi-line comment, this is the last line of the range.\n  This is mutually exclusive with `position` for single-line comments. Must be >= 1."
+              },
+              "side": {
+                "type": "string",
+                "description": "The side of the diff to which the comment applies.\n  Can be 'LEFT' or 'RIGHT'. Defaults to 'RIGHT' if `line` is provided. Only used for line-level\n  comments."
+              },
+              "start_line": {
+                "type": "integer",
+                "description": "For a multi-line comment, the first line of the\n  comment's range. Requires `line` to also be provided. Must be <= `line` and >= 1."
+              },
+              "start_side": {
+                "type": "string",
+                "description": "For a multi-line comment, the side of the diff\n  for the `start_line`. Can be 'LEFT' or 'RIGHT'. Defaults to the value of `side`\n  if `start_line` is provided and `start_side` is not. Requires `start_line`."
+              }
+            },
+            "required": [
+              "body",
+              "path"
+            ]
+          },
+          "description": "An array of draft review comment objects to be\nincluded with this review. Each comment dictionary in the list should conform to the\nfollowing structure and validations (see `PullRequestReviewCommentInput` model):"
+        }
+      },
+      "required": [
+        "pr_review_repo_name",
+        "pr_review_repo_owner",
+        "subject_pull_request_id"
+      ]
+    }
+  },
+  {
+    "name": "sync_pr_branch_with_base",
+    "description": "Update a pull request branch with the latest changes from the base branch.\n\nThis function updates a pull request branch by incorporating the most recent changes\nfrom its base branch. If an `expected_head_sha` is provided, the update\nwill only proceed if this SHA matches the current head of the pull request's\nbranch, ensuring the update is based on the expected state.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "repo_owner_for_sync": {
+          "type": "string",
+          "description": "The account owner of the repository. The name is not case sensitive."
+        },
+        "repo_name_for_sync": {
+          "type": "string",
+          "description": "The name of the repository without the .git extension. The name\nis not case sensitive."
+        },
+        "pr_number_to_update": {
+          "type": "integer",
+          "description": "The number that identifies the pull request."
+        },
+        "current_head_commit_sha": {
+          "type": "string",
+          "description": "The expected SHA of the pull request's HEAD\nref. This is the most recent commit on the pull request's branch. If the\nexpected SHA does not match the pull request's HEAD, you will receive a\n422 Unprocessable Entity status. You can use the \"List commits\" endpoint\nto find the most recent commit SHA. Default: SHA of the pull request's\ncurrent HEAD ref."
+        }
+      },
+      "required": [
+        "pr_number_to_update",
+        "repo_name_for_sync",
+        "repo_owner_for_sync"
+      ]
+    }
+  }
+]

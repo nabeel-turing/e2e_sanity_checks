@@ -1,0 +1,21 @@
+[
+  {
+    "name": "perform_web_search",
+    "description": "Search Google for information from the internet.\n\nThis function performs web searches using Google Search.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "search_terms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "One or multiple queries to Google Search."
+        }
+      },
+      "required": [
+        "search_terms"
+      ]
+    }
+  }
+]

@@ -1,0 +1,65 @@
+[
+  {
+    "name": "fetch_device_messages",
+    "description": "Get Android notifications with optional filtering.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "filter_by_contact_name": {
+          "type": "string",
+          "description": "Filter notifications by sender/group name. \nMust be a non-empty string with maximum length of 256 characters if provided."
+        },
+        "filter_by_application_name": {
+          "type": "string",
+          "description": "Filter notifications by application name.\nMust be a non-empty string with maximum length of 256 characters if provided."
+        },
+        "retrieve_unread_only": {
+          "type": "boolean",
+          "description": "If True (default), fetches only unread notifications and marks them as read.\nIf False, fetches only read notifications without changing their read status."
+        }
+      }
+    }
+  },
+  {
+    "name": "prompt_for_incomplete_reply_info",
+    "description": "Handle cases where message body or recipient is missing.\n\nThis function is called when a reply attempt is made without\nproviding the necessary information (message body or recipient name).",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "send_notification_response",
+    "description": "Reply to a notification with confirmation.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target_bundle_identifier": {
+          "type": "string",
+          "description": "Unique bundle identifier to reply to. Must be a non-empty string\nwith maximum length of 256 characters."
+        },
+        "response_content": {
+          "type": "string",
+          "description": "The reply message text. Must be a non-empty string."
+        },
+        "addressee_name": {
+          "type": "string",
+          "description": "Display name of the recipient. Must be a non-empty string\nwith maximum length of 256 characters."
+        },
+        "responding_application_name": {
+          "type": "string",
+          "description": "Optional application name for the reply.\nMust be a non-empty string with maximum length of 256 characters if provided."
+        },
+        "target_package_identifier": {
+          "type": "string",
+          "description": "Optional package name. This parameter is not used \nin the current implementation but is validated for API compatibility.\nMust be a non-empty string with maximum length of 256 characters if provided."
+        }
+      },
+      "required": [
+        "addressee_name",
+        "response_content",
+        "target_bundle_identifier"
+      ]
+    }
+  }
+]

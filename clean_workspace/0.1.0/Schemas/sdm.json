@@ -1,0 +1,96 @@
+[
+  {
+    "name": "execute_command",
+    "description": "Executes a command on a specific device managed by the enterprise.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "device_id": {
+          "type": "string",
+          "description": "The unique identifier of the device within the enterprise. For example, \"CAM_001\""
+        },
+        "project_id": {
+          "type": "string",
+          "description": "The unique identifier of the enterprise or project."
+        },
+        "command_request": {
+          "type": "object",
+          "description": "The command request payload, Contains the keys:",
+          "properties": {
+            "command": {
+              "type": "string",
+              "description": "The name of the command to execute. One of the following (followed by a brief explanation):\n    - sdm.devices.commands.generate_camera_event_image (retrieve the image from a camera through a triggered event)\n    - sdm.devices.commands.generate_rtsp_stream (start the rtsp stream mode of a camera)\n    - sdm.devices.commands.stop_rtsp_stream (stop the rtsp stream mode of a camera)\n    - sdm.devices.commands.generate_image_from_rtsp_stream (retrieve the image from a camera through its ongoing rtsp stream)\n    - sdm.devices.commands.generate_web_rtc_stream (start the web_rtc stream mode of a camera)\n    - sdm.devices.commands.stop_web_rtc_stream (stop the web_rtc stream mode of a camera)\n    - sdm.devices.commands.generate_image_from_web_rtc_stream (retrieve the image from a camera through its ongoing web_rtc stream)"
+            },
+            "params": {
+              "type": "object",
+              "description": "Each command may have its own parameters, represented by key, value dictionaries. If None, the command does not have params. Use these as reference:\n    - sdm.devices.commands.generate_camera_event_image: \n        - event_id: (str): The ID of the triggered event.\n    - sdm.devices.commands.generate_rtsp_stream: \n        - None.\n    - sdm.devices.commands.stop_rtsp_stream:\n        - stream_extension_token: (str): The extension token of the stream to stop.\n    - sdm.devices.commands.generate_image_from_rtsp_stream: \n        - rtsp_url: (str): The RTSP URL of the stream.\n    - sdm.devices.commands.generate_web_rtc_stream:\n        - offer_sdp: (str): The SDP of the offer.\n    - sdm.devices.commands.stop_web_rtc_stream:\n        - stream_media_session_id: (str): The media session ID of the stream to stop.\n    - sdm.devices.commands.generate_image_from_web_rtc_stream:\n        - answer_sdp: (str): The SDP of the answer."
+            }
+          },
+          "required": [
+            "command",
+            "params"
+          ]
+        }
+      },
+      "required": [
+        "command_request",
+        "device_id",
+        "project_id"
+      ]
+    }
+  },
+  {
+    "name": "get_device_info",
+    "description": "Retrieves information about an authorized device.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "device_id": {
+          "type": "string",
+          "description": "The unique identifier of the device within the enterprise."
+        },
+        "project_id": {
+          "type": "string",
+          "description": "The unique identifier of the enterprise or project."
+        }
+      },
+      "required": [
+        "device_id",
+        "project_id"
+      ]
+    }
+  },
+  {
+    "name": "get_events_list",
+    "description": "Returns a list of events that were triggered.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "device_id": {
+          "type": "string",
+          "description": "Optional unique identifier of a device to filter events. For example, \"CAM_001\"."
+        },
+        "event_type": {
+          "type": "string",
+          "description": "Optional event_type to filter events.\nShould be one of: \"Motion\", \"Person\", \"Sound\" or \"Chime\".\nIt also accepts formats such as: \"sdm.devices.events.CameraMotion.Motion\".\nIf no device_id or event_type provided, returns all events."
+        }
+      }
+    }
+  },
+  {
+    "name": "list_devices",
+    "description": "Makes a GET call to retrieve a list of all devices that the user has authorized\n\nfor a given enterprise. The response typically includes a collection of device objects.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "list_structures",
+    "description": "Lists all the structures.\n\nMakes a GET call to retrieve a list of all structures that the user has authorized\nfor a given enterprise. The response typically includes a collection of structure objects.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  }
+]

@@ -1,0 +1,459 @@
+[
+  {
+    "name": "create_typescript_definitions_for_project",
+    "description": "Generates TypeScript types for a project.\n\nThis function generates TypeScript type definitions for a project, identified\nby its `project_id`. It processes the project information to produce a\nstring containing the TypeScript types.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "source_project_id_for_types": {
+          "type": "string",
+          "description": "The ID of the project."
+        }
+      },
+      "required": [
+        "source_project_id_for_types"
+      ]
+    }
+  },
+  {
+    "name": "enumerate_all_user_projects",
+    "description": "Lists all Supabase projects for the user.\n\nThis function lists all Supabase projects for the user. It helps discover\nthe project ID of the project that the user is working on.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "enumerate_project_branches",
+    "description": "Lists all development branches of a Supabase project.\n\nLists all development branches of a Supabase project. This function returns\nbranch details including status which can be used to check when\noperations like merge, rebase, or reset complete.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "parent_project_ref": {
+          "type": "string",
+          "description": "The unique identifier for the project."
+        }
+      },
+      "required": [
+        "parent_project_ref"
+      ]
+    }
+  },
+  {
+    "name": "enumerate_project_edge_functions",
+    "description": "Lists all Edge Functions in a Supabase project.\n\nThis function lists all Edge Functions available within a specified Supabase project.\nFor each Edge Function, it provides comprehensive details including its unique\nidentifier, slug, display name, current version, operational status, and\ntimestamps indicating its creation and last update.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "project_reference_for_functions": {
+          "type": "string",
+          "description": "The identifier of the Supabase project."
+        }
+      },
+      "required": [
+        "project_reference_for_functions"
+      ]
+    }
+  },
+  {
+    "name": "establish_development_branch",
+    "description": "Creates a development branch on a Supabase project.\n\nThis function creates a development branch on a Supabase project. It applies all migrations\nfrom the main project to a fresh branch database. Production data will not carry over.\nThe branch receives its own project_id via the resulting project_ref, which should be\nused to execute queries and migrations on the branch.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "main_project_identifier": {
+          "type": "string",
+          "description": "The identifier of the project."
+        },
+        "branch_cost_approval_id": {
+          "type": "string",
+          "description": "The cost confirmation ID. Call `confirm_cost` first."
+        },
+        "new_branch_label": {
+          "type": "string",
+          "description": "Name of the branch to create. Defaults to \"develop\"."
+        }
+      },
+      "required": [
+        "branch_cost_approval_id",
+        "main_project_identifier"
+      ]
+    }
+  },
+  {
+    "name": "execute_schema_migration",
+    "description": "Applies a migration to the database.\n\nApplies a migration to the database. Use this when executing DDL operations.\nDo not hardcode references to generated IDs in data migrations.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target_project_ref": {
+          "type": "string",
+          "description": "The ID of the project."
+        },
+        "migration_identifier_name": {
+          "type": "string",
+          "description": "The name of the migration in snake_case."
+        },
+        "migration_sql_script": {
+          "type": "string",
+          "description": "The SQL query to apply."
+        }
+      },
+      "required": [
+        "migration_identifier_name",
+        "migration_sql_script",
+        "target_project_ref"
+      ]
+    }
+  },
+  {
+    "name": "fetch_installed_database_extensions",
+    "description": "Lists all extensions in the database.\n\nThis function lists all extensions in the database associated with the specified project.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "project_id_for_extensions": {
+          "type": "string",
+          "description": "The identifier of the project."
+        }
+      },
+      "required": [
+        "project_id_for_extensions"
+      ]
+    }
+  },
+  {
+    "name": "fetch_project_information",
+    "description": "Gets details for a Supabase project.\n\nGets details for a Supabase project. This function retrieves information\nfor a project identified by its unique ID.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "project_reference_id": {
+          "type": "string",
+          "description": "The project ID."
+        }
+      },
+      "required": [
+        "project_reference_id"
+      ]
+    }
+  },
+  {
+    "name": "fetch_public_api_key",
+    "description": "Gets the anonymous API key for a project.\n\nThis function gets the anonymous API key for a project.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "project_reference_for_key": {
+          "type": "string",
+          "description": "The ID of the project."
+        }
+      },
+      "required": [
+        "project_reference_for_key"
+      ]
+    }
+  },
+  {
+    "name": "fetch_user_organizations",
+    "description": "Lists all organizations that the user is a member of.\n\nThis function retrieves a list of all organizations of which the user is a member.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "get_all_database_migrations",
+    "description": "Lists all migrations in the database.\n\nThis function lists all migrations in the database associated with the provided project_id.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "project_ref_for_migrations": {
+          "type": "string",
+          "description": "The identifier of the project."
+        }
+      },
+      "required": [
+        "project_ref_for_migrations"
+      ]
+    }
+  },
+  {
+    "name": "get_database_tables_by_schema",
+    "description": "Lists all tables in one or more schemas.\n\nThis function lists all tables found within one or more specified schemas for a given project.\nIf the `schemas` parameter is not provided, it defaults to listing tables from all available schemas\nassociated with the `project_id`.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "database_project_id": {
+          "type": "string",
+          "description": "The identifier of the project."
+        },
+        "target_schema_names": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of schemas to include. Defaults to all schemas if None."
+        }
+      },
+      "required": [
+        "database_project_id"
+      ]
+    }
+  },
+  {
+    "name": "integrate_branch_into_production",
+    "description": "Merges migrations and edge functions from a development branch to production.\n\nThis function processes the branch identified by `branch_id` to merge its\nassociated migrations and edge functions into the production environment.\nIt returns a dictionary detailing the status of this merge operation.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "source_branch_id_for_merge": {
+          "type": "string",
+          "description": "The ID of the development branch to be merged."
+        }
+      },
+      "required": [
+        "source_branch_id_for_merge"
+      ]
+    }
+  },
+  {
+    "name": "provision_supabase_project",
+    "description": "Creates a new Supabase project.\n\nCreates a new Supabase project. Always ask the user which organization to create the project in.\nThe project can take a few minutes to initialize - use `get_project` to check the status.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "new_project_name": {
+          "type": "string",
+          "description": "The name of the project."
+        },
+        "parent_organization_id": {
+          "type": "string",
+          "description": "The ID of the organization to create the project in."
+        },
+        "cost_confirmation_token": {
+          "type": "string",
+          "description": "The cost confirmation ID. Call `confirm_cost` first."
+        },
+        "deployment_region_name": {
+          "type": "string",
+          "description": "The region to create the project in. Defaults to the closest region.\nPossible values: \"us-west-1\", \"us-east-1\", \"us-east-2\", \"ca-central-1\",\n\"eu-west-1\", \"eu-west-2\", \"eu-west-3\", \"eu-central-1\", \"eu-central-2\",\n\"eu-north-1\", \"ap-south-1\", \"ap-southeast-1\", \"ap-northeast-1\",\n\"ap-northeast-2\", \"ap-southeast-2\", \"sa-east-1\". Defaults to None."
+        }
+      },
+      "required": [
+        "cost_confirmation_token",
+        "new_project_name",
+        "parent_organization_id"
+      ]
+    }
+  },
+  {
+    "name": "publish_edge_function_version",
+    "description": "Deploys an Edge Function to a Supabase project.\n\nThis function deploys an Edge Function to a specified Supabase project.\nIf the function already exists within the project, this operation will create\na new version of that function.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "deployment_target_project_id": {
+          "type": "string",
+          "description": "The identifier of the Supabase project."
+        },
+        "function_slug_name": {
+          "type": "string",
+          "description": "The name of the function."
+        },
+        "source_file_collection": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "function_slug_name": {
+                "type": "string",
+                "description": "The name of the file (e.g., 'index.ts', 'utils/helper.ts')."
+              },
+              "content": {
+                "type": "string",
+                "description": "The string content of the file."
+              }
+            },
+            "required": [
+              "content",
+              "function_slug_name"
+            ]
+          },
+          "description": "The files to upload. This should include the\nentrypoint and any relative dependencies. Each dictionary in the list\nrepresents a file and must contain the following keys:"
+        },
+        "main_executable_file_path": {
+          "type": "string",
+          "description": "The entrypoint of the function.\nDefaults to \"index.ts\"."
+        },
+        "dependency_import_map_location": {
+          "type": "string",
+          "description": "The import map for the function.\nDefaults to None."
+        }
+      },
+      "required": [
+        "deployment_target_project_id",
+        "function_slug_name",
+        "source_file_collection"
+      ]
+    }
+  },
+  {
+    "name": "reactivate_paused_project",
+    "description": "Restores a Supabase project.\n\nThis function restores a Supabase project. It uses the provided project ID\nto identify the project to be restored.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "project_identifier_to_restore": {
+          "type": "string",
+          "description": "The ID of the project."
+        }
+      },
+      "required": [
+        "project_identifier_to_restore"
+      ]
+    }
+  },
+  {
+    "name": "remove_development_branch",
+    "description": "Deletes a development branch.\n\nThis function deletes a specific development branch. The branch to be deleted\nis identified by the provided `branch_id`.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "branch_identifier_to_delete": {
+          "type": "string",
+          "description": "The ID of the branch to be deleted."
+        }
+      },
+      "required": [
+        "branch_identifier_to_delete"
+      ]
+    }
+  },
+  {
+    "name": "retrieve_organization_details",
+    "description": "Gets details for an organization. Includes subscription plan.\n\nGets details for an organization. Includes subscription plan.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "organization_identifier": {
+          "type": "string",
+          "description": "The organization ID."
+        }
+      },
+      "required": [
+        "organization_identifier"
+      ]
+    }
+  },
+  {
+    "name": "retrieve_project_api_endpoint",
+    "description": "Gets the API URL for a project.\n\nThis function gets the API URL for a project.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "project_ref_for_url": {
+          "type": "string",
+          "description": "The unique identifier of the project."
+        }
+      },
+      "required": [
+        "project_ref_for_url"
+      ]
+    }
+  },
+  {
+    "name": "retrieve_service_logs",
+    "description": "Gets logs for a Supabase project by service type.\n\nThis function retrieves logs for a specified Supabase project, filtered by service type,\nto aid in debugging application issues. It only returns logs generated within the\nlast minute. If logs older than one minute are required, the actions or tests\nthat produce these logs should be re-run to capture them.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "log_source_project_id": {
+          "type": "string",
+          "description": "The ID of the Supabase project."
+        },
+        "log_service_category": {
+          "type": "string",
+          "description": "The service to fetch logs for. Must be one of 'api',\n'branch-action', 'postgres', 'edge-function', 'auth', 'storage',\n'realtime'."
+        }
+      },
+      "required": [
+        "log_service_category",
+        "log_source_project_id"
+      ]
+    }
+  },
+  {
+    "name": "revert_branch_to_migration_version",
+    "description": "Resets migrations of a development branch.\n\nResets migrations of a development branch. Any untracked data or schema\nchanges will be lost.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target_branch_id_for_reset": {
+          "type": "string",
+          "description": "The ID of the development branch to be reset."
+        },
+        "target_migration_checkpoint": {
+          "type": "string",
+          "description": "Reset your development branch to a\nspecific migration version."
+        }
+      },
+      "required": [
+        "target_branch_id_for_reset"
+      ]
+    }
+  },
+  {
+    "name": "run_raw_sql_query",
+    "description": "Executes raw SQL in the Postgres database. Use `apply_migration` instead for DDL operations.\n\nThis function simulates PostgreSQL query execution for the Supabase API simulation.\nAll operations are performed in-memory with no persistence between sessions.\n\nSupported SQL Operations:\n- SELECT queries with WHERE, JOIN, GROUP BY, HAVING, ORDER BY, LIMIT\n- INSERT statements (single and multiple rows)\n- UPDATE statements with WHERE conditions\n- DELETE statements with WHERE conditions\n- Basic DDL: CREATE TABLE, ALTER TABLE, DROP TABLE\n- Transaction commands: BEGIN, COMMIT, ROLLBACK\n- Multi-schema support (e.g., public.users, analytics.products)\n\nSupported Data Types:\n- Text types: TEXT, VARCHAR, CHAR\n- Numeric types: INTEGER, BIGINT, SMALLINT, DECIMAL, NUMERIC, REAL, DOUBLE\n- Boolean: BOOLEAN\n- Date/Time: DATE, TIME, TIMESTAMP, TIMESTAMP WITH TIME ZONE\n- UUID (stored as VARCHAR internally)\n- JSON/JSONB (stored as JSON)\n- SERIAL/BIGSERIAL types (converted to INTEGER/BIGINT, auto-increment not supported)\n\nPostgreSQL Compatibility Notes:\n- SERIAL/BIGSERIAL columns are converted to INTEGER/BIGINT (manual ID management required)\n- PostgreSQL functions like now() and uuid_generate_v4() are automatically converted\n- Foreign key constraints across different schemas are not supported\n- Type OIDs in responses are approximated based on common PostgreSQL types\n\nLimitations of this simulation:\n- PostgreSQL-specific functions are limited (e.g., array functions, full-text search)\n- Advanced features like CTEs and window functions have limited support\n- Stored procedures, functions, and triggers are not supported\n- PostgreSQL extensions (postgis, pg_trgm, etc.) are not available\n- Transaction isolation levels are not enforced\n- Constraints are partially supported (PRIMARY KEY works, CHECK constraints work, but foreign keys have limitations)\n- No support for COPY, VACUUM, ANALYZE, or other maintenance commands\n- Limited support for advanced index types (only basic indexes work)\n- Sequences and auto-increment functionality not available\n- User-defined types and domains are not supported",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "project_db_identifier": {
+          "type": "string",
+          "description": "The project ID."
+        },
+        "sql_command_string": {
+          "type": "string",
+          "description": "The SQL query to execute."
+        }
+      },
+      "required": [
+        "project_db_identifier",
+        "sql_command_string"
+      ]
+    }
+  },
+  {
+    "name": "suspend_project_activity",
+    "description": "Pauses a Supabase project.\n\nPauses a Supabase project.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target_project_to_pause": {
+          "type": "string",
+          "description": "The ID of the project to pause."
+        }
+      },
+      "required": [
+        "target_project_to_pause"
+      ]
+    }
+  },
+  {
+    "name": "update_branch_with_production_changes",
+    "description": "Rebases a development branch on production.\n\nThe function effectively runs any newer migrations from production onto this\nbranch to help handle migration drift.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "branch_ref_to_rebase": {
+          "type": "string",
+          "description": "The unique identifier of the branch to be rebased."
+        }
+      },
+      "required": [
+        "branch_ref_to_rebase"
+      ]
+    }
+  }
+]

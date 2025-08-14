@@ -1,0 +1,189 @@
+[
+  {
+    "name": "get_installed_apps",
+    "description": "Gets the list of installed application on the device.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "open_app",
+    "description": "Opens the requested application on the device.\n\nAlternative app names:\n - If the user wants to open \"alarms\" or \"timers\" but there is no app with an\n   obviously matching name, open any clock app, if present, as a less-preferred fallback.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "app_name": {
+          "type": "string",
+          "description": "The name of the application to open.\nThis name has to exactly match one of the names produced by `get_installed_apps`."
+        },
+        "app_package_name": {
+          "type": "string",
+          "description": "The package name of the application to open."
+        },
+        "extras": {
+          "type": "string",
+          "description": "The extras in json string format to send to the application being opened.\nNote:\n* This should only be populated when opening \"Pixel Screenshots\".\n* When opening \"Pixel Screenshots\", always extract the information-seeking part of the user prompt and populate it in the extras field.\n* The key of the extras field is \"query\". The value of the extras field is the query extracted from the user prompt.\n* The query should be a full question/sentence, unless the original user prompt is too terse to infer one."
+        }
+      },
+      "required": [
+        "app_name"
+      ]
+    }
+  },
+  {
+    "name": "open_camera",
+    "description": "Opens the device's camera.\n\nThis method allows specifying which camera to use (e.g., front or rear)\nand the initial mode it should open in (e.g., photo or video mode).",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "camera_type": {
+          "type": "string",
+          "description": "The type of camera to open. Can be one of 'FRONT', 'REAR' or 'DEFAULT'."
+        },
+        "camera_operation": {
+          "type": "string",
+          "description": "The initial functional mode for the camera upon opening. Can be one of 'PHOTO' or 'VIDEO'."
+        },
+        "camera_mode": {
+          "type": "string",
+          "description": "Deprecated. Kept for binary compatibility."
+        }
+      }
+    }
+  },
+  {
+    "name": "open_home_screen",
+    "description": "Navigates to home screen on the device.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "open_url",
+    "description": "Opens the requested url in a browser.\n\nDo not use it unless the user prompt contains a url or explicitly asks to open a website.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "The URL to open.\nDo not include the protocol (e.g. https://) if the user prompt does not include it."
+        },
+        "website_name": {
+          "type": "string",
+          "description": "The name of the website to open. Do not include the top-level domain."
+        }
+      },
+      "required": [
+        "url"
+      ]
+    }
+  },
+  {
+    "name": "open_websearch",
+    "description": "Opens a Google search page with the provided query in the browser (e.g. Chrome).",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "The search query to open."
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "power_off_device",
+    "description": "Powers off the device. It can only open the power options menu.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "record_video",
+    "description": "Records a video using the device camera.\n\nIf the user requests to record a video with a delay, ignore the delay and start recording immediately.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "camera_type": {
+          "type": "string",
+          "description": "The type of camera to use. Can be one of 'FRONT', 'REAR' or 'DEFAULT'."
+        },
+        "self_timer_delay": {
+          "type": "string",
+          "description": "Deprecated. Kept for binary compatibility."
+        },
+        "video_duration": {
+          "type": "string",
+          "description": "Duration of the video recording, for example \"record a 15 second video\"."
+        }
+      }
+    }
+  },
+  {
+    "name": "restart_device",
+    "description": "Restarts the device. It can only open the power options menu.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "ring_phone",
+    "description": "Sends an action to the device requesting it to remotely ring the user's paired phone.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "take_photo",
+    "description": "Takes a photo using the device camera.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "camera_type": {
+          "type": "string",
+          "description": "The type of camera to open. Can be one of 'FRONT', 'REAR' or 'DEFAULT'. When the user asks to take a selfie, use the value FRONT."
+        },
+        "self_timer_delay": {
+          "type": "string",
+          "description": "Delay time to start taking a photo. If the user does not specify the delay time, always provide a default value '3 seconds'."
+        },
+        "camera_mode": {
+          "type": "string",
+          "description": "The mode the camera should use when taking a picture. Can be one of 'DEFAULT' or 'PORTRAIT'."
+        }
+      }
+    }
+  },
+  {
+    "name": "take_screenshot",
+    "description": "Takes a screenshot on the device.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "turn_off_flashlight",
+    "description": "Turns off the flashlight on the device. Nox can be used to turn off the flashlight.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "turn_on_flashlight",
+    "description": "Turns on the flashlight on the device. Lumos can be used to turn on the flashlight.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  }
+]

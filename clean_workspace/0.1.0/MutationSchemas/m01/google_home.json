@@ -1,0 +1,328 @@
+[
+  {
+    "name": "change_device_properties_immediately",
+    "description": "Changes traits of smart home devices and returns status of those changes.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "device_identifiers_to_modify": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Unique identifiers of smart home devices."
+        },
+        "property_names_to_change": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Name of the trait to change."
+        },
+        "commands_to_execute": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Name of the command. Valid values for command_names depend on trait_name."
+        },
+        "values_for_commands": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "New value of the command_name. Valid values for command_values depend on command_name. Default is None."
+        }
+      },
+      "required": [
+        "commands_to_execute",
+        "device_identifiers_to_modify",
+        "property_names_to_change"
+      ]
+    }
+  },
+  {
+    "name": "create_automation_script",
+    "description": "Generates a home automation script via the Home Agent, and returns the response.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "user_automation_request": {
+          "type": "string",
+          "description": "The query to pass to the Home Agent Bard Service"
+        },
+        "applicable_home_name": {
+          "type": "string",
+          "description": "The home name which the query applies to"
+        }
+      },
+      "required": [
+        "user_automation_request"
+      ]
+    }
+  },
+  {
+    "name": "execute_general_operation",
+    "description": "Runs a general operation on smart home devices and returns the status.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "devices_to_operate_on": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Unique identifiers of smart home devices."
+        },
+        "operation_to_perform": {
+          "type": "string",
+          "description": "Name of the operation to run."
+        },
+        "operation_parameters": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional list of values for the operation."
+        },
+        "op_execution_time": {
+          "type": "string",
+          "description": "Time to execute the operation, expected in the format of \"HH:MM:SS\""
+        },
+        "op_execution_date": {
+          "type": "string",
+          "description": "Date to execute the operation, expected in the format of \"YYYY-MM-DD\""
+        },
+        "op_time_period_specifier": {
+          "type": "string",
+          "description": "Whether time_of_day is AM or PM or UNKNOWN"
+        },
+        "op_execution_delay": {
+          "type": "string",
+          "description": "How long to wait before executing the operation. Example format are 5s, 20m, 1h"
+        },
+        "op_duration": {
+          "type": "string",
+          "description": "How long the operation should last. Example format are 5s, 20m, 1h"
+        }
+      },
+      "required": [
+        "devices_to_operate_on",
+        "operation_to_perform"
+      ]
+    }
+  },
+  {
+    "name": "fetch_device_status",
+    "description": "retrieves the state of devices in the user's home, such as the current temperature,\n\nthe current volume, or the current status of a light.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target_device_list": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Unique identifiers of smart home devices."
+        }
+      },
+      "required": [
+        "target_device_list"
+      ]
+    }
+  },
+  {
+    "name": "find_devices_by_properties",
+    "description": "Retrieves smart home devices set up by the user relevant to the query.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "required_traits": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional list of traits to filter for. If this is empty, all traits will\nbe allowed (no filter will be enforced)."
+        },
+        "report_dynamic_state": {
+          "type": "boolean",
+          "description": "Whether to include the dynamic state of the devices."
+        }
+      }
+    }
+  },
+  {
+    "name": "generate_device_info_table",
+    "description": "Retrieves smart home devices set up by the user.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "show_current_device_state": {
+          "type": "boolean",
+          "description": "Whether to include the dynamic state of the devices."
+        }
+      }
+    }
+  },
+  {
+    "name": "list_all_user_devices",
+    "description": "Retrieves all smart home devices set up by the user.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "trait_filter_hints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional list of traits to filter for. If this is empty, all traits will\nbe allowed (no filter will be enforced)."
+        },
+        "type_filter_hints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional list of device_types to filter for. If this is empty, all\ndevice_types will be allowed (no filter will be enforced)."
+        }
+      }
+    }
+  },
+  {
+    "name": "list_pending_device_actions",
+    "description": "View scheduled actions of smart home devices and returns status of those changes.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "devices_with_schedules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Unique identifiers of smart home devices."
+        }
+      }
+    }
+  },
+  {
+    "name": "query_home_activity_log",
+    "description": "Queries the home agent for events in the given home, such as those gathered by camera perception.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "event_search_query": {
+          "type": "string",
+          "description": "The query to pass to the Home Agent Bard Service"
+        },
+        "home_to_search": {
+          "type": "string",
+          "description": "The home name which the query applies to"
+        }
+      },
+      "required": [
+        "event_search_query"
+      ]
+    }
+  },
+  {
+    "name": "remove_scheduled_actions",
+    "description": "Cancel scheduled actions of smart home devices and returns status of those changes.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "device_ids_for_cancellation": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Unique identifiers of smart home devices."
+        }
+      }
+    }
+  },
+  {
+    "name": "schedule_device_state_change",
+    "description": "Changes traits of smart home devices and returns status of those changes.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target_device_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Unique identifiers of smart home devices."
+        },
+        "traits_to_change": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Name of the trait to change."
+        },
+        "action_commands": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Name of the command. Valid values for command_names depend on trait_name."
+        },
+        "new_action_values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "New value of the command_name. Valid values for command_values depend on command_name."
+        },
+        "execution_time_of_day": {
+          "type": "string",
+          "description": "time in the format of \"HH:MM:SS\""
+        },
+        "execution_calendar_date": {
+          "type": "string",
+          "description": "date in the format of \"YYYY-MM-DD\""
+        },
+        "time_period_specifier": {
+          "type": "string",
+          "description": "AM or PM or UNKNOWN"
+        },
+        "action_duration": {
+          "type": "string",
+          "description": "duration in the format of 5s, 20m, 1h"
+        }
+      },
+      "required": [
+        "action_commands",
+        "new_action_values",
+        "target_device_ids",
+        "traits_to_change"
+      ]
+    }
+  },
+  {
+    "name": "search_for_relevant_devices",
+    "description": "Retrieves smart home devices set up by the user relevant to the query.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "trait_search_suggestions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional list of traits to filter for. If this is empty, all traits will\nbe allowed (no filter will be enforced)."
+        },
+        "type_search_suggestions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional list of device_types to filter for. If this is empty, all\ndevice_types will be allowed (no filter will be enforced)."
+        },
+        "should_include_current_state": {
+          "type": "boolean",
+          "description": "Whether to include the dynamic state of the devices."
+        }
+      }
+    }
+  }
+]

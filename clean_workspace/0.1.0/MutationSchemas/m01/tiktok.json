@@ -1,0 +1,173 @@
+[
+  {
+    "name": "check_content_publication_status",
+    "description": "Get the publishing status of a TikTok video or photo post.\n\nThis endpoint allows you to check the current status of a post publishing task,\nincluding whether it has completed successfully or is still in progress.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "user_session_token": {
+          "type": "string",
+          "description": "Access token authorized by TikTok creators."
+        },
+        "company_account_id": {
+          "type": "string",
+          "description": "Application specific unique identifier for the TikTok account."
+        },
+        "submission_identifier": {
+          "type": "string",
+          "description": "Unique identifier for a post publishing task."
+        }
+      },
+      "required": [
+        "company_account_id",
+        "submission_identifier",
+        "user_session_token"
+      ]
+    }
+  },
+  {
+    "name": "retrieve_account_analytics",
+    "description": "Get profile data of a TikTok account, including analytics and insights.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "authorization_credential": {
+          "type": "string",
+          "description": "Access token authorized by TikTok creators."
+        },
+        "profile_identifier": {
+          "type": "string",
+          "description": "Application specific unique identifier for the TikTok account."
+        },
+        "analytics_start_date": {
+          "type": "string",
+          "description": "Query start date in YYYY-MM-DD format. Defaults to None."
+        },
+        "analytics_end_date": {
+          "type": "string",
+          "description": "Query end date in YYYY-MM-DD format. Defaults to None."
+        },
+        "requested_data_points": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of requested fields to include in the response. Defaults to None.\n- username\n- display_name\n- profile\n- analytics\n- settings"
+        }
+      },
+      "required": [
+        "authorization_credential",
+        "profile_identifier"
+      ]
+    }
+  },
+  {
+    "name": "upload_video_to_account",
+    "description": "Publish a public video post to a TikTok account.\n\nThis endpoint allows you to upload and publish a video to your TikTok account with various\ncustomization options for the post's visibility and interaction settings.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "api_access_key": {
+          "type": "string",
+          "description": "Access token authorized by TikTok creators."
+        },
+        "media_request_type": {
+          "type": "string",
+          "description": "Must be \"application/json\"."
+        },
+        "user_business_handle": {
+          "type": "string",
+          "description": "Application specific unique identifier for the TikTok account."
+        },
+        "source_video_uri": {
+          "type": "string",
+          "description": "URL of the video to be published."
+        },
+        "video_details_payload": {
+          "type": "object",
+          "description": "Additional information about the post.",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Title of the video."
+            },
+            "description": {
+              "type": "string",
+              "description": "Description of the video."
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of tags for the video."
+            },
+            "thumbnail_url": {
+              "type": "string",
+              "description": "URL of the thumbnail for the video."
+            },
+            "thumbnail_offset": {
+              "type": "integer",
+              "description": "Time offset in seconds for video thumbnail."
+            },
+            "is_ai_generated": {
+              "type": "boolean",
+              "description": "Whether the content is AI-generated."
+            }
+          },
+          "required": [
+            "description",
+            "is_ai_generated",
+            "tags",
+            "thumbnail_offset",
+            "thumbnail_url",
+            "title"
+          ]
+        },
+        "video_description": {
+          "type": "string",
+          "description": "Caption text for the video. Defaults to None."
+        },
+        "set_as_organic_brand_content": {
+          "type": "boolean",
+          "description": "Whether the post is organic branded content. Defaults to False."
+        },
+        "designate_as_branded_post": {
+          "type": "boolean",
+          "description": "Whether the post is branded content. Defaults to False."
+        },
+        "block_user_comments": {
+          "type": "boolean",
+          "description": "Whether to disable comments. Defaults to False."
+        },
+        "restrict_duet_creation": {
+          "type": "boolean",
+          "description": "Whether to disable duet feature. Defaults to False."
+        },
+        "prevent_video_stitching": {
+          "type": "boolean",
+          "description": "Whether to disable stitch feature. Defaults to False."
+        },
+        "thumbnail_start_time": {
+          "type": "integer",
+          "description": "Time offset in seconds for video thumbnail. Defaults to 0."
+        },
+        "flag_as_ai_created": {
+          "type": "boolean",
+          "description": "Whether the content is AI-generated. Defaults to False."
+        },
+        "save_post_as_draft": {
+          "type": "boolean",
+          "description": "Whether to save as draft instead of publishing. Defaults to False."
+        }
+      },
+      "required": [
+        "api_access_key",
+        "media_request_type",
+        "source_video_uri",
+        "user_business_handle",
+        "video_details_payload"
+      ]
+    }
+  }
+]

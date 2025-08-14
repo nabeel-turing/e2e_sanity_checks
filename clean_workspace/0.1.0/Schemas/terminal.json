@@ -1,0 +1,22 @@
+[
+  {
+    "name": "run_command",
+    "description": "Executes the provided terminal command in the current workspace context.\n\nUse this function to run shell commands. You need to provide the exact\ncommand string to be executed. Note that commands like 'cd', 'pwd', and\nenvironment commands ('export', 'unset', 'env') are handled internally;\nother commands are executed externally and may modify the workspace files.\n\nIMPORTANT: For any command that expects user interaction or uses a pager\n(like git diff, git log, less, more, etc.), you MUST append\n' | cat' to the command string yourself before passing it to this function.\nFailure to do so will cause the command to hang or fail.\n\nFor commands that are intended to run for a long time or indefinitely\n(e.g., starting a server, running a watch process), set the\n`is_background` parameter to True.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "command": {
+          "type": "string",
+          "description": "The exact terminal command string to execute. Remember\nto append ' | cat' for interactive/pager commands."
+        },
+        "is_background": {
+          "type": "boolean",
+          "description": "Set to True to run the command as a\nbackground process (e.g., for servers or watchers). Defaults to False,\nrunning the command in the foreground and waiting for completion."
+        }
+      },
+      "required": [
+        "command"
+      ]
+    }
+  }
+]

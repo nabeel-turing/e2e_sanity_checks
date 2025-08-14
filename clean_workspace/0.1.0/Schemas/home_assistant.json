@@ -1,0 +1,104 @@
+[
+  {
+    "name": "get_device_info",
+    "description": "Retrieve all informations of a specific Home Assistant entity, such as a light or sensor, by providing its device ID for real-time monitoring and control.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "device_id": {
+          "type": "string",
+          "description": "The device ID to get state for (e.g., \"LIGHT_001\")."
+        }
+      },
+      "required": [
+        "device_id"
+      ]
+    }
+  },
+  {
+    "name": "get_id_by_name",
+    "description": "Retrieve the device_id based on a device name.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of a device."
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  },
+  {
+    "name": "get_state",
+    "description": "Retrieve the current state (on/off) of a specific Home Assistant entity, such as a light or sensor, by providing its entity ID for real-time monitoring and control.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "entity_id": {
+          "type": "string",
+          "description": "The device ID to get state for (e.g., \"LIGHT_001\")."
+        }
+      },
+      "required": [
+        "entity_id"
+      ]
+    }
+  },
+  {
+    "name": "list_devices",
+    "description": "Retrieve all entities in Home Assistant, optionally filtered by domain, to monitor and manage devices, automations, and system components effectively.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "type": "string",
+          "description": "Optional domain filter (e.g., light, switch, automation).\nIf not provided, returns all entities."
+        }
+      }
+    }
+  },
+  {
+    "name": "set_device_property",
+    "description": "Update a specific Home Assistant device properties based on a dictionary containing the new attributes values, enabling automated control of connected devices and routines.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "entity_id": {
+          "type": "string",
+          "description": "The entity ID to update"
+        },
+        "new_attributes": {
+          "type": "object",
+          "description": "A dictionary containing key-value pairs representing the device's properties, which can be updated (e.g., {\"state\": \"On\", \"brightness\": 70})"
+        }
+      },
+      "required": [
+        "entity_id",
+        "new_attributes"
+      ]
+    }
+  },
+  {
+    "name": "toggle_device",
+    "description": "Controls the state of a Home Assistant device.\n\nIf 'state' is provided, sets the device to the state if it's valid for its type.\nIf 'state' is not provided, cycles to the next allowed state for the device.\nAllowed states are 'On'/'Off' for electronic devices and\n'Open'/'Closed' or 'Locked/Unlocked' for openable items like doors and windows.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "entity_id": {
+          "type": "string",
+          "description": "The entity ID to control (e.g., \"LIGHT_001\")."
+        },
+        "state": {
+          "type": "string",
+          "description": "The desired state to set.\nIf None, the device will cycle to its next allowed state. Defaults to None."
+        }
+      },
+      "required": [
+        "entity_id"
+      ]
+    }
+  }
+]

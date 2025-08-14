@@ -1,0 +1,116 @@
+{
+  "Event": {
+    "event-id-1": {
+      "Id": "event-id-1",
+      "Name": "Meeting with Client A",
+      "Location": "Conference Room 1",
+      "StartTime": "2024-03-15T10:00:00Z",
+      "EndTime": "2024-03-15T12:00:00Z",
+      "CreatedDate": "2024-03-10T08:00:00Z",
+      "IsDeleted": false,
+      "SystemModstamp": "2024-03-15T12:00:00Z"
+    },
+    "event-id-2": {
+      "Id": "event-id-2",
+      "Name": "Product Demo",
+      "Location": "Web Conference",
+      "StartTime": "2024-03-16T14:00:00Z",
+      "EndTime": "2024-03-16T15:00:00Z",
+      "CreatedDate": "2024-03-11T09:00:00Z",
+      "IsDeleted": false,
+      "SystemModstamp": "2024-03-16T15:00:00Z"
+    },
+    "event-id-3": {
+      "Id": "event-id-3",
+      "Name": "Team Lunch",
+      "Location": "Office Cafeteria",
+      "StartTime": "2024-03-17T12:30:00Z",
+      "EndTime": "2024-03-17T13:30:00Z",
+      "CreatedDate": "2024-03-12T10:00:00Z",
+      "IsDeleted": false,
+      "SystemModstamp": "2024-03-17T13:30:00Z"
+    },
+    "event-id-4": {
+      "Id": "event-id-4",
+      "Name": "Training Session",
+      "Location": "Training Room A",
+      "StartTime": "2024-03-18T09:00:00Z",
+      "EndTime": "2024-03-18T11:00:00Z",
+      "CreatedDate": "2024-03-13T11:00:00Z",
+      "IsDeleted": false,
+      "SystemModstamp": "2024-03-18T11:00:00Z"
+    },
+    "event-id-5": {
+      "Id": "event-id-5",
+      "Name": "Project Kickoff",
+      "Location": "Conference Room 2",
+      "StartTime": "2024-03-19T13:00:00Z",
+      "EndTime": "2024-03-19T14:00:00Z",
+      "CreatedDate": "2024-03-14T12:00:00Z",
+      "IsDeleted": false,
+      "SystemModstamp": "2024-03-19T14:00:00Z"
+    }
+  },
+  "Task": {
+    "task-id-1": {
+      "Id": "task-id-1",
+      "Name": "Follow up with Client A",
+      "Priority": "High",
+      "Status": "In Progress",
+      "DueDate": "2024-03-20",
+      "CreatedDate": "2024-03-15T09:00:00Z",
+      "IsDeleted": false,
+      "SystemModstamp": "2024-03-15T09:00:00Z"
+    },
+    "task-id-2": {
+      "Id": "task-id-2",
+      "Name": "Prepare Product Demo Slides",
+      "Priority": "Medium",
+      "Status": "Not Started",
+      "DueDate": "2024-03-16",
+      "CreatedDate": "2024-03-14T10:00:00Z",
+      "IsDeleted": false,
+      "SystemModstamp": "2024-03-14T10:00:00Z"
+    },
+    "task-id-3": {
+      "Id": "task-id-3",
+      "Name": "Send Team Lunch Reminder",
+      "Priority": "Low",
+      "Status": "Completed",
+      "DueDate": "2024-03-17",
+      "CreatedDate": "2024-03-13T11:00:00Z",
+      "IsDeleted": false,
+      "SystemModstamp": "2024-03-17T14:00:00Z"
+    },
+    "task-id-4": {
+      "Id": "task-id-4",
+      "Name": "Organize Training Materials",
+      "Priority": "High",
+      "Status": "Not Started",
+      "DueDate": "2024-03-18",
+      "CreatedDate": "2024-03-12T12:00:00Z",
+      "IsDeleted": false,
+      "SystemModstamp": "2024-03-12T12:00:00Z"
+    },
+    "task-id-5": {
+      "Id": "task-id-5",
+      "Name": "Prepare Project Kickoff Agenda",
+      "Priority": "Medium",
+      "Status": "In Progress",
+      "DueDate": "2024-03-19",
+      "CreatedDate": "2024-03-11T13:00:00Z",
+      "IsDeleted": false,
+      "SystemModstamp": "2024-03-19T13:00:00Z"
+    },
+    "task-id-6": {
+      "Id": "task-id-6",
+      "Name": "Contact VIP",
+      "Priority": "Medium",
+      "Status": "Open",
+      "DueDate": "2024-03-19",
+      "CreatedDate": "2024-03-11T13:00:00Z",
+      "IsDeleted": false,
+      "SystemModstamp": "2024-03-19T13:00:00Z"
+    }
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "workspace_root": "/home/user/project",
+  "cwd": "/home/user/project/src",
+  "file_system": {
+    "/home/user/project": {
+      "path": "/home/user/project",
+      "is_directory": true,
+      "content_lines": [],
+      "size_bytes": 0,
+      "last_modified": "2025-05-06T12:24:00Z",
+      "metadata": {
+        "timestamps": {
+          "access_time": "2025-05-06T12:24:00Z",
+          "modify_time": "2025-05-06T12:24:00Z",
+          "change_time": "2025-05-06T12:24:00Z"
+        },
+        "attributes": {
+          "is_symlink": false,
+          "symlink_target": null,
+          "is_hidden": false,
+          "is_readonly": false
+        },
+        "permissions": {
+          "mode": 493,
+          "uid": 1000,
+          "gid": 1000
+        }
+      }
+    },
+    "/home/user/project/README.md": {
+      "path": "/home/user/project/README.md",
+      "is_directory": false,
+      "content_lines": [
+        "# My Project\n",
+        "\n",
+        "This project does amazing things.\n"
+      ],
+      "size_bytes": 56,
+      "last_modified": "2025-05-06T12:24:10Z",
+      "metadata": {
+        "timestamps": {
+          "access_time": "2025-05-06T12:24:10Z",
+          "modify_time": "2025-05-06T12:24:10Z",
+          "change_time": "2025-05-06T12:24:10Z"
+        },
+        "attributes": {
+          "is_symlink": false,
+          "symlink_target": null,
+          "is_hidden": false,
+          "is_readonly": false
+        },
+        "permissions": {
+          "mode": 420,
+          "uid": 1000,
+          "gid": 1000
+        }
+      }
+    },
+    "/home/user/project/src": {
+      "path": "/home/user/project/src",
+      "is_directory": true,
+      "content_lines": [],
+      "size_bytes": 0,
+      "last_modified": "2025-05-06T12:24:05Z",
+      "metadata": {
+        "timestamps": {
+          "access_time": "2025-05-06T12:24:05Z",
+          "modify_time": "2025-05-06T12:24:05Z",
+          "change_time": "2025-05-06T12:24:05Z"
+        },
+        "attributes": {
+          "is_symlink": false,
+          "symlink_target": null,
+          "is_hidden": false,
+          "is_readonly": false
+        },
+        "permissions": {
+          "mode": 493,
+          "uid": 1000,
+          "gid": 1000
+        }
+      }
+    },
+    "/home/user/project/src/main.py": {
+      "path": "/home/user/project/src/main.py",
+      "is_directory": false,
+      "content_lines": [
+        "import utils\n",
+        "\n",
+        "def main():\n",
+        "    print(\"Starting application...\")\n",
+        "    utils.helper_function()\n",
+        "\n",
+        "if __name__ == \"__main__\":\n",
+        "    main()\n"
+      ],
+      "size_bytes": 174,
+      "last_modified": "2025-05-06T12:24:45Z",
+      "metadata": {
+        "timestamps": {
+          "access_time": "2025-05-06T12:24:45Z",
+          "modify_time": "2025-05-06T12:24:45Z",
+          "change_time": "2025-05-06T12:24:45Z"
+        },
+        "attributes": {
+          "is_symlink": false,
+          "symlink_target": null,
+          "is_hidden": false,
+          "is_readonly": false
+        },
+        "permissions": {
+          "mode": 420,
+          "uid": 1000,
+          "gid": 1000
+        }
+      }
+    },
+    "/home/user/project/src/utils.py": {
+      "path": "/home/user/project/src/utils.py",
+      "is_directory": false,
+      "content_lines": [
+        "def helper_function():\n",
+        "    print(\"Executing helper function.\")\n"
+      ],
+      "size_bytes": 68,
+      "last_modified": "2025-05-06T12:24:00Z",
+      "git_blame": [
+        {
+          "commit_hash": "e9b3a4a",
+          "author": "dev-user-1",
+          "timestamp": "2025-05-06T12:24:00Z",
+          "line_number": 1
+        },
+        {
+          "commit_hash": "e9b3a4a",
+          "author": "dev-user-1",
+          "timestamp": "2025-05-06T12:24:00Z",
+          "line_number": 2
+        }
+      ],
+      "metadata": {
+        "timestamps": {
+          "access_time": "2025-05-06T12:24:00Z",
+          "modify_time": "2025-05-06T12:24:00Z",
+          "change_time": "2025-05-06T12:24:00Z"
+        },
+        "attributes": {
+          "is_symlink": false,
+          "symlink_target": null,
+          "is_hidden": false,
+          "is_readonly": false
+        },
+        "permissions": {
+          "mode": 420,
+          "uid": 1000,
+          "gid": 1000
+        }
+      }
+    }
+  },
+  "last_edit_params": null,
+  "background_processes": {},
+  "available_instructions": {
+    "rule_1": "This is the content for rule 1.",
+    "rule_2": "This is the content for rule 2.",
+    "another_rule": "Details for another important rule."
+  },
+  "_next_pid": 1,
+  "pull_requests": {
+    "123": {
+      "title": "Fix bug in data processing",
+      "author": "dev-user-1",
+      "description": "This PR fixes a critical bug in the data processing module.\\n\\n- Added validation for input.\\n- Refactored the main loop.",
+      "diff": "diff --git a/src/utils.py b/src/utils.py\\nindex 6a8d7d8..e9b3a4a 100644\\n--- a/src/utils.py\\n+++ b/src/utils.py\\n@@ -1,2 +1,2 @@\\n def helper_function():\\n-    print(\\\"Executing helper function.\\\")\\n+    print(\\\"Executing a very helpful function indeed.\\\")\\n"
+    }
+  },
+  "commits": {
+    "e9b3a4a": {
+      "author": "dev-user-1",
+      "message": "feat: Improve helper function message\\n\\nThis provides a more descriptive message to the user when the helper function is executed.",
+      "diff": "diff --git a/src/utils.py b/src/utils.py\\nindex 6a8d7d8..e9b3a4a 100644\\n--- a/src/utils.py\\n+++ b/src/utils.py\\n@@ -1,2 +1,2 @@\\n def helper_function():\\n-    print(\\\"Executing helper function.\\\")\\n+    print(\\\"Executing a very helpful function indeed.\\\")\\n"
+    },
+    "6a8d7d8": {
+      "author": "initial-committer",
+      "message": "Initial commit",
+      "diff": "diff --git a/src/utils.py b/src/utils.py\\nnew file mode 100644\\nindex 0000000..6a8d7d8\\n--- /dev/null\\n+++ b/src/utils.py\\n@@ -0,0 +1,2 @@\\n+def helper_function():\\n+    print(\\\"Executing helper function.\\\")\\n"
+    },
+    "abc1234": {
+      "author": "dev-user-2",
+      "message": "fix: Handle authentication edge cases (#123)\\n\\nAdded proper validation for user authentication flows.\\nFixed issue where empty tokens were accepted.",
+      "diff": "diff --git a/src/main.py b/src/main.py\\nindex 2a3b4c5..abc1234 100644\\n--- a/src/main.py\\n+++ b/src/main.py\\n@@ -3,5 +3,7 @@\\n def main():\\n     print(\\\"Starting application...\\\")\\n+    # Added authentication check\\n+    if not validate_auth():\\n+        return\\n     utils.helper_function()\\n"
+    }
+  },
+  "knowledge_base": {
+    "k_001": {
+      "title": "NVM Usage",
+      "knowledge_to_store": "Before running terminal commands that involve Node.js, it is important to run 'nvm use' to ensure the correct Node.js version is active for the project."
+    }
+  },
+  "_next_knowledge_id": 2
+}

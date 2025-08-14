@@ -1,0 +1,392 @@
+[
+  {
+    "name": "amend_booking_luggage_details",
+    "description": "Update the baggage information of a reservation.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "booking_id_for_baggage_change": {
+          "type": "string",
+          "description": "The reservation ID to update."
+        },
+        "new_total_baggage_count": {
+          "type": "integer",
+          "description": "The new total number of baggage items."
+        },
+        "new_chargeable_baggage_count": {
+          "type": "integer",
+          "description": "The new number of non-free baggage items."
+        },
+        "payment_method_for_fees": {
+          "type": "string",
+          "description": "The ID of the payment method to use."
+        }
+      },
+      "required": [
+        "booking_id_for_baggage_change",
+        "new_chargeable_baggage_count",
+        "new_total_baggage_count",
+        "payment_method_for_fees"
+      ]
+    }
+  },
+  {
+    "name": "change_booking_itinerary",
+    "description": "Update the flight information of a reservation.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "booking_id_for_flight_change": {
+          "type": "string",
+          "description": "The reservation ID to update."
+        },
+        "new_cabin_selection": {
+          "type": "string",
+          "description": "The new cabin class."
+        },
+        "replacement_flight_segments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {}
+          },
+          "description": "The new list of flights."
+        },
+        "payment_source_for_update": {
+          "type": "string",
+          "description": "The ID of the payment method to use."
+        }
+      },
+      "required": [
+        "booking_id_for_flight_change",
+        "new_cabin_selection",
+        "payment_source_for_update",
+        "replacement_flight_segments"
+      ]
+    }
+  },
+  {
+    "name": "create_new_booking",
+    "description": "Book a reservation for flights with specified passengers and payment methods.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "traveler_user_id": {
+          "type": "string",
+          "description": "The ID of the user making the reservation (e.g., \"sara_doe_496\")."
+        },
+        "flight_origin_iata": {
+          "type": "string",
+          "description": "The origin airport code in three letters (e.g., \"JFK\")."
+        },
+        "flight_destination_iata": {
+          "type": "string",
+          "description": "The destination airport code in three letters (e.g., \"LAX\")."
+        },
+        "journey_type": {
+          "type": "string",
+          "description": "The type of flight (\"one_way\" or \"round_trip\")."
+        },
+        "selected_seating_class": {
+          "type": "string",
+          "description": "The cabin class (\"basic_economy\", \"economy\", or \"business\")."
+        },
+        "chosen_flight_legs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "flight_number": {
+                "type": "string",
+                "description": "The unique identifier for the flight (e.g., \"HAT001\")."
+              },
+              "date": {
+                "type": "string",
+                "description": "The flight date in \"YYYY-MM-DD\" format (e.g., \"2024-05-15\")."
+              }
+            },
+            "required": [
+              "date",
+              "flight_number"
+            ]
+          },
+          "description": "A list of flight dictionaries. Each flight dictionary\nmust contain the following structure:"
+        },
+        "list_of_travelers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "first_name": {
+                "type": "string",
+                "description": "The passenger's first name (e.g., \"John\")."
+              },
+              "last_name": {
+                "type": "string",
+                "description": "The passenger's last name (e.g., \"Doe\")."
+              },
+              "dob": {
+                "type": "string",
+                "description": "The passenger's date of birth in \"YYYY-MM-DD\" format (e.g., \"1990-01-01\")."
+              }
+            },
+            "required": [
+              "dob",
+              "first_name",
+              "last_name"
+            ]
+          },
+          "description": "A list of passenger dictionaries. Each passenger\ndictionary must contain the following structure:"
+        },
+        "payment_details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "payment_id": {
+                "type": "string",
+                "description": "The ID of the payment method to use (e.g., \"credit_card_4421486\")."
+              },
+              "amount": {
+                "type": "number",
+                "description": "The amount to be charged for this payment (e.g., 250.0)."
+              }
+            },
+            "required": [
+              "amount",
+              "payment_id"
+            ]
+          },
+          "description": "A list of payment method dictionaries. Each\npayment dictionary must contain the following structure:"
+        },
+        "total_luggage_count": {
+          "type": "integer",
+          "description": "The total number of baggage items (non-negative integer, e.g., 2)."
+        },
+        "paid_luggage_count": {
+          "type": "integer",
+          "description": "The number of non-free baggage items (non-negative integer, e.g., 1)."
+        },
+        "travel_protection_choice": {
+          "type": "string",
+          "description": "Whether to include insurance (\"yes\" or \"no\")."
+        }
+      },
+      "required": [
+        "chosen_flight_legs",
+        "flight_destination_iata",
+        "flight_origin_iata",
+        "journey_type",
+        "list_of_travelers",
+        "paid_luggage_count",
+        "payment_details",
+        "selected_seating_class",
+        "total_luggage_count",
+        "travel_protection_choice",
+        "traveler_user_id"
+      ]
+    }
+  },
+  {
+    "name": "escalate_to_support_agent",
+    "description": "Transfer the user to a human agent, with a summary of the user's issue.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "case_summary_for_escalation": {
+          "type": "string",
+          "description": "A summary of the user's issue."
+        }
+      },
+      "required": [
+        "case_summary_for_escalation"
+      ]
+    }
+  },
+  {
+    "name": "evaluate_mathematical_query",
+    "description": "Calculate the result of a mathematical expression.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "formula_to_compute": {
+          "type": "string",
+          "description": "The mathematical expression to calculate."
+        }
+      },
+      "required": [
+        "formula_to_compute"
+      ]
+    }
+  },
+  {
+    "name": "fetch_customer_profile",
+    "description": "Get the details of a user, including their reservations.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "customer_account_id": {
+          "type": "string",
+          "description": "The user id, such as 'sara_doe_496'."
+        }
+      },
+      "required": [
+        "customer_account_id"
+      ]
+    }
+  },
+  {
+    "name": "find_connecting_flights",
+    "description": "Search one-stop flights between two cities on a specific date.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "departure_city_code": {
+          "type": "string",
+          "description": "The origin city airport in three letters, such as 'JFK'."
+        },
+        "arrival_city_code": {
+          "type": "string",
+          "description": "The destination city airport in three letters, such as 'LAX'."
+        },
+        "desired_travel_date": {
+          "type": "string",
+          "description": "The date of the flight in the format 'YYYY-MM-DD'."
+        }
+      },
+      "required": [
+        "arrival_city_code",
+        "departure_city_code",
+        "desired_travel_date"
+      ]
+    }
+  },
+  {
+    "name": "find_nonstop_flights",
+    "description": "Search direct flights between two cities on a specific date.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "departure_airport_code": {
+          "type": "string",
+          "description": "The origin city airport in three letters, such as 'JFK'."
+        },
+        "arrival_airport_code": {
+          "type": "string",
+          "description": "The destination city airport in three letters, such as 'LAX'."
+        },
+        "flight_search_date": {
+          "type": "string",
+          "description": "The date of the flight in the format 'YYYY-MM-DD'."
+        }
+      },
+      "required": [
+        "arrival_airport_code",
+        "departure_airport_code",
+        "flight_search_date"
+      ]
+    }
+  },
+  {
+    "name": "get_available_airports",
+    "description": "List all airports and their corresponding cities based on available flights.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "issue_travel_voucher",
+    "description": "Send a certificate to a user.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "recipient_customer_id": {
+          "type": "string",
+          "description": "The ID of the user to send the certificate to."
+        },
+        "certificate_monetary_value": {
+          "type": "integer",
+          "description": "The amount of the certificate."
+        }
+      },
+      "required": [
+        "certificate_monetary_value",
+        "recipient_customer_id"
+      ]
+    }
+  },
+  {
+    "name": "log_internal_thought",
+    "description": "Use the tool to think about something. It will not obtain new information \n\nor change the database, but just append the thought to the log.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "thought_process_text": {
+          "type": "string",
+          "description": "A thought to think about."
+        }
+      },
+      "required": [
+        "thought_process_text"
+      ]
+    }
+  },
+  {
+    "name": "modify_booking_travelers",
+    "description": "Update the passenger information of a reservation.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target_booking_id": {
+          "type": "string",
+          "description": "The reservation ID to update."
+        },
+        "updated_passenger_list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {}
+          },
+          "description": "The new list of passengers."
+        }
+      },
+      "required": [
+        "target_booking_id",
+        "updated_passenger_list"
+      ]
+    }
+  },
+  {
+    "name": "retrieve_booking_information",
+    "description": "Get the details of a reservation.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "booking_reference_id": {
+          "type": "string",
+          "description": "The reservation id, such as '8JX2WO'."
+        }
+      },
+      "required": [
+        "booking_reference_id"
+      ]
+    }
+  },
+  {
+    "name": "void_flight_booking",
+    "description": "Cancel the whole reservation.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "booking_id_to_cancel": {
+          "type": "string",
+          "description": "The reservation ID to cancel."
+        }
+      },
+      "required": [
+        "booking_id_to_cancel"
+      ]
+    }
+  }
+]

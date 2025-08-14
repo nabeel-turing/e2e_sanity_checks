@@ -1,0 +1,102 @@
+[
+  {
+    "name": "create_generative_text",
+    "description": "Generates a text response from a Google Generative AI model.\n\nThis function sends a request to Google's Generative AI API and returns the \nmodel's text response. It supports both text prompts and file uploads in the same request.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "input_prompt_text": {
+          "type": "string",
+          "description": "The user's prompt or question."
+        },
+        "authentication_key": {
+          "type": "string",
+          "description": "Your Google AI API key for authentication. This should be \na valid API key with access to the specified model."
+        },
+        "attachment_file_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of file paths to upload to the model."
+        },
+        "model_behavior_instruction": {
+          "type": "string",
+          "description": "A system-level instruction that sets the \ncontext or behavior for the model. This is \nseparate from the user prompt and helps \nguide the model's responses."
+        },
+        "ai_model_identifier": {
+          "type": "string",
+          "description": "The name of the Google Generative AI model \nto use. Defaults to 'gemini-2.5-pro'."
+        }
+      },
+      "required": [
+        "authentication_key",
+        "input_prompt_text"
+      ]
+    }
+  },
+  {
+    "name": "invoke_model_with_tool_support",
+    "description": "Generates a response from a Google Generative AI model with function calling capabilities.\n\nThis function extends the basic LLM response generation by adding support for \nfunction calling. The model can choose to call one or more functions (tools) \nbased on the user's request, and the response includes both the model's text \nresponse and any function calls that were made. If a function call is made, \nthe caller is responsible for running the function and sending the result \nback to the model in a subsequent call using either `generate_llm_response()` or \n`generate_llm_response_with_tools()`.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "user_request_text": {
+          "type": "string",
+          "description": "The user's prompt or question."
+        },
+        "service_api_key": {
+          "type": "string",
+          "description": "Your Google AI API key for authentication. This should be \na valid API key with access to the specified model."
+        },
+        "uploaded_file_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of file paths to upload to the model."
+        },
+        "target_model_name": {
+          "type": "string",
+          "description": "The name of the Google Generative AI model \nto use. Defaults to 'gemini-2.5-pro'."
+        },
+        "model_instructional_context": {
+          "type": "string",
+          "description": "A system-level instruction that sets the \ncontext or behavior for the model. This is \nseparate from the user content and helps \nguide the model's responses."
+        },
+        "available_function_tools": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "A list of Tool objects that define functions the \nmodel can call. Each can be created using \nmake_tool_from_docstring() or similar methods."
+        }
+      },
+      "required": [
+        "service_api_key",
+        "user_request_text"
+      ]
+    }
+  },
+  {
+    "name": "parse_docstring_to_tool_object",
+    "description": "Converts a Python function's docstring into a Google Generative AI Tool object.\n\nThis function parses a docstring to extract function metadata (name, description, \nparameters) and creates a Tool object that can be used with Google's Generative AI \nmodels for function calling capabilities. The docstring should follow standard Python \ndocstring conventions with clear parameter descriptions.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "function_docstring_text": {
+          "type": "string",
+          "description": "The docstring of the function to convert. Should contain \nclear descriptions of the function's purpose and parameters."
+        },
+        "tool_function_identifier": {
+          "type": "string",
+          "description": "The name of the function that the docstring belongs to.\nThis will be used as the tool's function name."
+        }
+      },
+      "required": [
+        "function_docstring_text",
+        "tool_function_identifier"
+      ]
+    }
+  }
+]

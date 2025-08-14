@@ -1,0 +1,905 @@
+[
+  {
+    "name": "adjust_booking_baggage",
+    "description": "Updates baggage allowance for a booking with payment processing for additional bags.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "reservation_supplier": {
+          "type": "string",
+          "description": "The supplier's name that must match the booking."
+        },
+        "booking_reference_id": {
+          "type": "string",
+          "description": "Record locator for the booking."
+        },
+        "new_total_bag_quantity": {
+          "type": "integer",
+          "description": "Total number of bags for the booking."
+        },
+        "chargeable_bag_quantity": {
+          "type": "integer",
+          "description": "Number of bags that require payment."
+        },
+        "payment_instrument_id": {
+          "type": "string",
+          "description": "ID of the payment method to use. Required if adding paid bags."
+        }
+      },
+      "required": [
+        "booking_reference_id",
+        "chargeable_bag_quantity",
+        "new_total_bag_quantity",
+        "reservation_supplier"
+      ]
+    }
+  },
+  {
+    "name": "alter_booking_flight_details",
+    "description": "Updates flight details for a booking, handling multiple flight segments and payment processing.\n\nNote: This function preserves existing baggage information on a segment-by-segment basis.\nFor flights that match existing flight numbers and dates, the original baggage information\nis preserved. For new flights, baggage information from the first original segment is used\nas a fallback. To modify baggage information, use the update_reservation_baggages function.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "originating_supplier": {
+          "type": "string",
+          "description": "The supplier's name that must match the booking."
+        },
+        "pnr_locator": {
+          "type": "string",
+          "description": "Record locator for the booking."
+        },
+        "new_fare_basis_code": {
+          "type": "string",
+          "description": "Fare class for all flights (e.g., 'economy', 'business', 'first')."
+        },
+        "updated_flight_legs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "flight_number": {
+                "type": "string",
+                "description": "The flight number."
+              },
+              "date": {
+                "type": "string",
+                "description": "The date of the flight in ISO format."
+              },
+              "origin": {
+                "type": "string",
+                "description": "The origin airport code. Defaults to 'JFK' if not provided."
+              },
+              "destination": {
+                "type": "string",
+                "description": "The destination airport code. Defaults to 'LAX' if not provided."
+              },
+              "price": {
+                "type": "number",
+                "description": "The price of the flight. If not provided, it will be calculated."
+              }
+            },
+            "required": [
+              "date",
+              "flight_number"
+            ]
+          },
+          "description": "List of flights to update or add.\nEach flight can contain the following fields:"
+        },
+        "payment_source_identifier": {
+          "type": "string",
+          "description": "ID of the payment method to use for any price differences."
+        }
+      },
+      "required": [
+        "new_fare_basis_code",
+        "originating_supplier",
+        "payment_source_identifier",
+        "pnr_locator",
+        "updated_flight_legs"
+      ]
+    }
+  },
+  {
+    "name": "dispatch_user_certificate",
+    "description": "Sends a certificate to a user using the notification infrastructure.\n\nThis function issues digital certificates to users for various business activities\nsuch as travel completion, expense approval, or training completion. Certificates\nare delivered via the existing notification system and stored as notifications\nwith certificate-specific context data.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target_user_identifier": {
+          "type": "string",
+          "description": "The unique identifier of the user to receive the certificate."
+        },
+        "voucher_category": {
+          "type": "string",
+          "description": "Type of certificate to issue. Valid types are:\n- \"travel_completion\": Certificate for completed business travel\n- \"expense_approval\": Certificate for approved expense reports  \n- \"training_completion\": Certificate for completed training\n- \"refund_voucher\": Certificate for refund vouchers issued to users\n- \"goodwill_gesture\": Certificate for goodwill gestures provided to users\n- \"gift_card\": Certificate for gift cards issued to users"
+        },
+        "monetary_value": {
+          "type": "number",
+          "description": "Monetary amount associated with the certificate (e.g., trip cost, \napproved expense amount, training cost). Must be non-negative."
+        },
+        "associated_itinerary_ref": {
+          "type": "string",
+          "description": "Trip identifier when certificate is related to a specific trip.\nRequired for \"travel_completion\" certificates. Defaults to None."
+        },
+        "currency_iso_code": {
+          "type": "string",
+          "description": "Currency code for the amount (e.g., \"USD\", \"EUR\", \"GBP\"). \nDefaults to \"USD\"."
+        }
+      },
+      "required": [
+        "monetary_value",
+        "target_user_identifier",
+        "voucher_category"
+      ]
+    }
+  },
+  {
+    "name": "escalate_to_support_specialist",
+    "description": "Transfer the user to a human agent, with a summary of the user's issue.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "issue_description": {
+          "type": "string",
+          "description": "A summary of the user's issue."
+        }
+      },
+      "required": [
+        "issue_description"
+      ]
+    }
+  },
+  {
+    "name": "fetch_airport_city_map",
+    "description": "Retrieves a dictionary of all airports with their city.\n\nThis function iterates through the locations in the database, filters for those\nwith a location_type of 'airport', and returns them in a dictionary format.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "find_corporate_sites",
+    "description": "Retrieves details of locations valid at the user's company with optional filtering parameters.\n\nThis function retrieves details of locations valid at the user's company.\nIt allows for finding Concur locations by various optional filter\nparameters such as name, city, country, country subdivision, or\nadministrative region.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "page_cursor": {
+          "type": "string",
+          "description": "The starting point of the next set of results after the specified limit. Defaults to None."
+        },
+        "records_per_page": {
+          "type": "integer",
+          "description": "Number of records to return (default: 25). Defaults to None."
+        },
+        "location_name_query": {
+          "type": "string",
+          "description": "Common name associated with location (e.g., neighborhood, landmark, city). Defaults to None."
+        },
+        "city_filter": {
+          "type": "string",
+          "description": "City name of the location. Defaults to None."
+        },
+        "subdivision_code_filter": {
+          "type": "string",
+          "description": "ISO 3166-2 country subdivision code (e.g., US-WA). Defaults to None."
+        },
+        "country_code_filter": {
+          "type": "string",
+          "description": "2-letter ISO 3166-1 country code (e.g., US). Defaults to None."
+        },
+        "admin_region_filter": {
+          "type": "string",
+          "description": "Administrative region (e.g., county). Defaults to None."
+        }
+      }
+    }
+  },
+  {
+    "name": "find_user_by_login",
+    "description": "Retrieves user details and booking record locators for a given username.\n\nThis function searches for a user by their username and returns the\nuser's data along with their booking record locators, payment methods,\nand gift certificates if a match is found.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "user_login_name": {
+          "type": "string",
+          "description": "The username to search for."
+        }
+      },
+      "required": [
+        "user_login_name"
+      ]
+    }
+  },
+  {
+    "name": "process_itinerary_submission",
+    "description": "Creates a new trip or updates an existing one based on the provided input.\n\nThis function serves as a central point for trip management. If an `ItinLocator`\n(trip ID) is provided and exists, the corresponding trip will be updated.\nOtherwise, a new trip will be created. The update process is destructive;\nit replaces all existing bookings on the trip with the new ones provided.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "submitter_user_id": {
+          "type": "object",
+          "description": "The unique identifier of the user performing the action."
+        },
+        "trip_details_payload": {
+          "type": "object",
+          "properties": {
+            "ItinLocator": {
+              "type": "string",
+              "description": "Unique identifier for the trip. If provided and exists, updates the trip; otherwise creates a new one."
+            },
+            "TripName": {
+              "type": "string",
+              "description": "Name of the trip."
+            },
+            "StartDateLocal": {
+              "type": "string",
+              "description": "Start date of the trip in YYYY-MM-DD format."
+            },
+            "EndDateLocal": {
+              "type": "string",
+              "description": "End date of the trip in YYYY-MM-DD format."
+            },
+            "Comments": {
+              "type": "string",
+              "description": "Additional comments about the trip."
+            },
+            "IsVirtualTrip": {
+              "type": "boolean",
+              "description": "Whether this is a virtual trip."
+            },
+            "IsGuestBooking": {
+              "type": "boolean",
+              "description": "Whether this is a guest booking."
+            },
+            "Bookings": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "RecordLocator": {
+                    "type": "string",
+                    "description": "Booking record locator."
+                  },
+                  "BookingSource": {
+                    "type": "string",
+                    "description": "Source of the booking."
+                  },
+                  "ConfirmationNumber": {
+                    "type": "string",
+                    "description": "Confirmation number for the booking."
+                  },
+                  "Status": {
+                    "type": "string",
+                    "description": "Status of the booking (e.g., \"CONFIRMED\")."
+                  },
+                  "FormOfPaymentName": {
+                    "type": "string",
+                    "description": "Name of the payment method."
+                  },
+                  "FormOfPaymentType": {
+                    "type": "string",
+                    "description": "Type of payment method."
+                  },
+                  "Delivery": {
+                    "type": "string",
+                    "description": "Delivery method for the booking."
+                  },
+                  "Passengers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    },
+                    "description": "List of passenger information dictionaries."
+                  },
+                  "Segments": {
+                    "type": "object",
+                    "description": "Optional segments containing Air, Car, or Hotel bookings."
+                  }
+                },
+                "required": [
+                  "BookingSource",
+                  "ConfirmationNumber",
+                  "Delivery",
+                  "FormOfPaymentName",
+                  "FormOfPaymentType",
+                  "Passengers",
+                  "RecordLocator",
+                  "Status"
+                ]
+              },
+              "description": "List of booking dictionaries, each containing:"
+            }
+          },
+          "description": "A dictionary containing the trip details,\nwhich will be validated against the `CreateOrUpdateTripInput` model.\nExpected keys include:",
+          "required": [
+            "Bookings",
+            "EndDateLocal",
+            "IsGuestBooking",
+            "IsVirtualTrip",
+            "StartDateLocal",
+            "TripName"
+          ]
+        }
+      },
+      "required": [
+        "submitter_user_id",
+        "trip_details_payload"
+      ]
+    }
+  },
+  {
+    "name": "process_reservation_update",
+    "description": "Creates or updates a booking in SAP Concur.\n\nThis function creates a new booking or updates an existing one. It requires\nBookingSource and RecordLocator to be provided within the 'booking' dictionary.\nIf an update operation results in a new confirmation number, any pre-existing\nbooking associated with the old confirmation number must be explicitly cancelled\nby the caller.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "booking_data_payload": {
+          "type": "object",
+          "properties": {
+            "BookingSource": {
+              "type": "string",
+              "description": "The supplier's name. (Required)"
+            },
+            "RecordLocator": {
+              "type": "string",
+              "description": "Record locator for this booking (6+ alphanumeric characters). (Required)"
+            },
+            "Passengers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "NameFirst": {
+                    "type": "string",
+                    "description": "First name of passenger. (Required)"
+                  },
+                  "NameLast": {
+                    "type": "string",
+                    "description": "Last name of passenger. (Required)"
+                  },
+                  "NameMiddle": {
+                    "type": "string",
+                    "description": "Middle name of passenger."
+                  },
+                  "NamePrefix": {
+                    "type": "string",
+                    "description": "Name prefix (e.g., Mr., Ms.)."
+                  },
+                  "NameRemark": {
+                    "type": "string",
+                    "description": "Additional name details."
+                  },
+                  "NameSuffix": {
+                    "type": "string",
+                    "description": "Name suffix (e.g., Jr., Sr.)."
+                  },
+                  "NameTitle": {
+                    "type": "string",
+                    "description": "Professional title."
+                  },
+                  "TextName": {
+                    "type": "string",
+                    "description": "Full name as entered in booking tool."
+                  }
+                },
+                "required": [
+                  "NameFirst",
+                  "NameLast"
+                ]
+              },
+              "description": "A list of passenger objects. (Required)"
+            },
+            "DateBookedLocal": {
+              "type": "string",
+              "description": "Booking creation date in local time (YYYY-MM-DDThh:mm:ss)."
+            },
+            "FormOfPaymentName": {
+              "type": "string",
+              "description": "Name of the form of payment."
+            },
+            "FormOfPaymentType": {
+              "type": "string",
+              "description": "Type of the form of payment."
+            },
+            "TicketMailingAddress": {
+              "type": "string",
+              "description": "Mailing address for tickets."
+            },
+            "TicketPickupLocation": {
+              "type": "string",
+              "description": "Pickup location for tickets."
+            },
+            "TicketPickupNumber": {
+              "type": "string",
+              "description": "Confirmation number for ticket pickup."
+            },
+            "Segments": {
+              "type": "object",
+              "properties": {
+                "Car": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "Vendor": {
+                        "type": "string",
+                        "description": "Vendor code for the car rental company."
+                      },
+                      "VendorName": {
+                        "type": "string",
+                        "description": "Full name of the car rental company."
+                      },
+                      "Status": {
+                        "type": "string",
+                        "description": "Booking status of the segment."
+                      },
+                      "StartDateLocal": {
+                        "type": "string",
+                        "description": "Start date of the car rental."
+                      },
+                      "EndDateLocal": {
+                        "type": "string",
+                        "description": "End date of the car rental."
+                      },
+                      "ConfirmationNumber": {
+                        "type": "string",
+                        "description": "Confirmation number for the car rental."
+                      },
+                      "StartLocation": {
+                        "type": "string",
+                        "description": "Pickup location for the car."
+                      },
+                      "EndLocation": {
+                        "type": "string",
+                        "description": "Drop-off location for the car."
+                      },
+                      "TotalRate": {
+                        "type": "number",
+                        "description": "Total cost of the rental."
+                      },
+                      "Currency": {
+                        "type": "string",
+                        "description": "Currency code for the rate."
+                      },
+                      "CarType": {
+                        "type": "string",
+                        "description": "Type of car rented."
+                      },
+                      "Baggage": {
+                        "type": "object",
+                        "properties": {
+                          "count": {
+                            "type": "integer",
+                            "description": "Number of bags, defaults to 0."
+                          },
+                          "weight_kg": {
+                            "type": "integer",
+                            "description": "Weight of the bags in kilograms, defaults to 0."
+                          },
+                          "nonfree_count": {
+                            "type": "integer",
+                            "description": "Number of non-free bags, defaults to 0."
+                          }
+                        },
+                        "description": "Baggage allowance for the car rental.",
+                        "required": [
+                          "count",
+                          "nonfree_count",
+                          "weight_kg"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "Currency",
+                      "EndDateLocal",
+                      "EndLocation",
+                      "StartDateLocal",
+                      "StartLocation",
+                      "TotalRate",
+                      "Vendor"
+                    ]
+                  },
+                  "description": "List of car rental segments."
+                },
+                "Air": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "Vendor": {
+                        "type": "string",
+                        "description": "Airline vendor code."
+                      },
+                      "VendorName": {
+                        "type": "string",
+                        "description": "Full name of the airline."
+                      },
+                      "Status": {
+                        "type": "string",
+                        "description": "Booking status of the segment."
+                      },
+                      "DepartureDateTimeLocal": {
+                        "type": "string",
+                        "description": "Local departure date and time."
+                      },
+                      "ArrivalDateTimeLocal": {
+                        "type": "string",
+                        "description": "Local arrival date and time."
+                      },
+                      "ConfirmationNumber": {
+                        "type": "string",
+                        "description": "Confirmation number for the flight."
+                      },
+                      "DepartureAirport": {
+                        "type": "string",
+                        "description": "Departure airport code."
+                      },
+                      "ArrivalAirport": {
+                        "type": "string",
+                        "description": "Arrival airport code."
+                      },
+                      "FlightNumber": {
+                        "type": "string",
+                        "description": "Flight number."
+                      },
+                      "AircraftType": {
+                        "type": "string",
+                        "description": "Type of aircraft."
+                      },
+                      "FareClass": {
+                        "type": "string",
+                        "description": "Fare class for the ticket(e.g., \"economy\", \"business\", \"first\", \"premium_economy\")."
+                      },
+                      "TotalRate": {
+                        "type": "number",
+                        "description": "Total cost of the flight."
+                      },
+                      "Currency": {
+                        "type": "string",
+                        "description": "Currency code for the rate."
+                      },
+                      "IsDirect": {
+                        "type": "boolean",
+                        "description": "Whether the flight is direct."
+                      }
+                    },
+                    "required": [
+                      "ArrivalAirport",
+                      "ArrivalDateTimeLocal",
+                      "Currency",
+                      "DepartureAirport",
+                      "DepartureDateTimeLocal",
+                      "FlightNumber",
+                      "TotalRate",
+                      "Vendor"
+                    ]
+                  },
+                  "description": "List of air travel segments."
+                },
+                "Hotel": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "Vendor": {
+                        "type": "string",
+                        "description": "Hotel vendor code."
+                      },
+                      "VendorName": {
+                        "type": "string",
+                        "description": "Full name of the hotel."
+                      },
+                      "Status": {
+                        "type": "string",
+                        "description": "Booking status of the segment."
+                      },
+                      "CheckInDateLocal": {
+                        "type": "string",
+                        "description": "Local check-in date."
+                      },
+                      "CheckOutDateLocal": {
+                        "type": "string",
+                        "description": "Local check-out date."
+                      },
+                      "ConfirmationNumber": {
+                        "type": "string",
+                        "description": "Confirmation number for the hotel stay."
+                      },
+                      "HotelName": {
+                        "type": "string",
+                        "description": "Name of the hotel."
+                      },
+                      "Location": {
+                        "type": "string",
+                        "description": "Location of the hotel."
+                      },
+                      "RoomType": {
+                        "type": "string",
+                        "description": "Type of room booked."
+                      },
+                      "MealPlan": {
+                        "type": "string",
+                        "description": "Meal plan included."
+                      },
+                      "TotalRate": {
+                        "type": "number",
+                        "description": "Total cost of the stay."
+                      },
+                      "Currency": {
+                        "type": "string",
+                        "description": "Currency code for the rate."
+                      }
+                    },
+                    "required": [
+                      "CheckInDateLocal",
+                      "CheckOutDateLocal",
+                      "Currency",
+                      "Location",
+                      "TotalRate",
+                      "Vendor"
+                    ]
+                  },
+                  "description": "List of hotel stay segments."
+                }
+              },
+              "description": "Contains travel segments. Keys are segment types ('Car', 'Air', 'Hotel')."
+            },
+            "Delivery": {
+              "type": "string",
+              "description": "Booking delivery method."
+            },
+            "Warnings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Warnings associated with the booking."
+            },
+            "insurance": {
+              "type": "string",
+              "description": "Status of the insurance 'yes' or 'no'."
+            }
+          },
+          "description": "A dictionary containing the booking details.",
+          "required": [
+            "BookingSource",
+            "Passengers",
+            "RecordLocator"
+          ]
+        },
+        "target_trip_id": {
+          "type": "string",
+          "description": "Trip identifier from query parameter."
+        }
+      },
+      "required": [
+        "booking_data_payload",
+        "target_trip_id"
+      ]
+    }
+  },
+  {
+    "name": "query_connecting_flights",
+    "description": "Searches for one-stop (connecting) flights between two airports.\n\nThis function searches for flights with connections in the SAP Concur system\nbetween the specified departure and arrival airports on a specific date.\nIt returns individual flight segments that together form one-stop journeys,\nsimilar to how Tau bench data works. For example, when searching for JFK to SEA,\nit will return separate segments for JFK to ATL and ATL to SEA.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "departure_airport_iata": {
+          "type": "string",
+          "description": "Three-letter IATA airport code for departure (e.g., \"JFK\", \"LAX\")."
+        },
+        "arrival_airport_iata": {
+          "type": "string",
+          "description": "Three-letter IATA airport code for arrival (e.g., \"LAX\", \"ORD\")."
+        },
+        "outbound_travel_date": {
+          "type": "string",
+          "description": "Departure date filter in ISO format (YYYY-MM-DD).\nOnly flights departing on this date will be returned."
+        }
+      },
+      "required": [
+        "arrival_airport_iata",
+        "departure_airport_iata",
+        "outbound_travel_date"
+      ]
+    }
+  },
+  {
+    "name": "query_nonstop_flights",
+    "description": "Searches for direct flights between two airports.\n\nThis function searches for direct (non-stop) flights in the SAP Concur system\nbetween the specified departure and arrival airports on a specific date.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "origin_iata_code": {
+          "type": "string",
+          "description": "Three-letter IATA airport code for departure (e.g., \"JFK\", \"LAX\")."
+        },
+        "destination_iata_code": {
+          "type": "string",
+          "description": "Three-letter IATA airport code for arrival (e.g., \"LAX\", \"ORD\")."
+        },
+        "flight_search_date": {
+          "type": "string",
+          "description": "Departure date filter in ISO format (YYYY-MM-DD).\nOnly flights departing on this date will be returned."
+        }
+      },
+      "required": [
+        "destination_iata_code",
+        "flight_search_date",
+        "origin_iata_code"
+      ]
+    }
+  },
+  {
+    "name": "query_trip_overviews",
+    "description": "Retrieves trip summaries for a user or company.\n\nThis function retrieves trip summaries based on specified filter criteria.\nIt requires the ITINER scope for authorization. To access company-wide trip data\n(by setting `userid_value` to 'ALL'), the authenticated user must possess either\n'Web Services Administrator' or 'Can Administer' roles. All parameters for filtering\nare optional. It is important to note that this function is not recommended for\nextracting large volumes of historical data. For comprehensive company-wide data needs,\nusing Itinerary v4 is advised.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "filter_from_date": {
+          "type": "string",
+          "description": "UTC start date for trips (YYYY-MM-DD). Default: today - 30 days. Defaults to None."
+        },
+        "filter_to_date": {
+          "type": "string",
+          "description": "UTC end date for trips (YYYY-MM-DD). Default: today + 12 months. Defaults to None."
+        },
+        "filter_created_since": {
+          "type": "string",
+          "description": "UTC date for trips created on/after (YYYY-MM-DD). Defaults to None."
+        },
+        "filter_created_until": {
+          "type": "string",
+          "description": "UTC date for trips created on/before (YYYY-MM-DD). Defaults to None."
+        },
+        "filter_last_updated": {
+          "type": "string",
+          "description": "UTC last modified date/time of trips (format: date-time). Defaults to None."
+        },
+        "filter_by_booking_category": {
+          "type": "string",
+          "description": "Filter by booking type. Possible values: 'Air', 'Car', 'Dining', 'Hotel', 'Parking', 'Rail', 'Ride'. Defaults to None."
+        },
+        "scope_user_id": {
+          "type": "string",
+          "description": "User's login ID or 'ALL' for company-wide access. Defaults to None(company-wide access)."
+        },
+        "with_paging_details": {
+          "type": "boolean",
+          "description": "Include paging metadata in response. Defaults to False."
+        },
+        "page_size": {
+          "type": "integer",
+          "description": "Number of items per page (default: 200 if page provided). Defaults to None."
+        },
+        "with_virtual_trips": {
+          "type": "integer",
+          "description": "1 to include virtual trips. Possible values: 0, 1. Defaults to None (treated as 0)."
+        },
+        "with_cancelled_itineraries": {
+          "type": "boolean",
+          "description": "Include trips with Canceled status. Defaults to False."
+        },
+        "with_guest_bookings": {
+          "type": "boolean",
+          "description": "Include guest bookings. Defaults to False."
+        }
+      }
+    }
+  },
+  {
+    "name": "retrieve_booking_by_record_locator",
+    "description": "Retrieves reservation details for a given record locator.\n\nThis function finds a booking by its record locator and \nreturns the booking data if found.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "booking_pnr_code": {
+          "type": "string",
+          "description": "The record locator of the booking."
+        }
+      },
+      "required": [
+        "booking_pnr_code"
+      ]
+    }
+  },
+  {
+    "name": "retrieve_location_data",
+    "description": "Retrieves details of a specific location by its ID or UUID.\n\nThis function retrieves details of a specific location by its ID or UUID.\nIt is used when the exact identifier of a Concur location is known.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "location_unique_identifier": {
+          "type": "string",
+          "description": "Required ID or UUID of the location."
+        }
+      },
+      "required": [
+        "location_unique_identifier"
+      ]
+    }
+  },
+  {
+    "name": "revoke_reservation",
+    "description": "Cancels an existing booking.\n\nThis function cancels an existing booking. By default, the OAuth consumer must be the booking owner.\nTravel Management Companies (TMCs) can cancel on behalf of users when registered with SAP Concur\nand possessing appropriate admin roles (Web Services Administrator or Can Administer).\nBooking records can only be updated by their original source.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "supplier_name": {
+          "type": "string",
+          "description": "Unique supplier identifier configured during SAP Concur application review. Must match the booking's Supplier Name exactly."
+        },
+        "booking_locator_id": {
+          "type": "string",
+          "description": "Confirmation number of the booking to be canceled."
+        },
+        "owner_concur_login": {
+          "type": "string",
+          "description": "SAP Concur login ID of the booking owner (required only when canceling on behalf of another user). Defaults to None."
+        }
+      },
+      "required": [
+        "booking_locator_id",
+        "supplier_name"
+      ]
+    }
+  },
+  {
+    "name": "update_booking_travelers",
+    "description": "Updates all passenger information in a booking.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "data_source_supplier": {
+          "type": "string",
+          "description": "The supplier's name that must match the booking."
+        },
+        "reservation_code": {
+          "type": "string",
+          "description": "Record locator for the booking."
+        },
+        "new_passenger_list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name_first": {
+                "type": "string",
+                "description": "First name"
+              },
+              "name_last": {
+                "type": "string",
+                "description": "Last name"
+              },
+              "text_name": {
+                "type": "string",
+                "description": "Full name as entered"
+              },
+              "pax_type": {
+                "type": "string",
+                "description": "Passenger type (ADT/CHD/INF)"
+              },
+              "dob": {
+                "type": "string",
+                "description": "Date of birth in YYYY-MM-DD format"
+              }
+            },
+            "required": [
+              "dob",
+              "name_first",
+              "name_last",
+              "pax_type",
+              "text_name"
+            ]
+          },
+          "description": "List of passengers to update.\nEach passenger should contain:"
+        }
+      },
+      "required": [
+        "data_source_supplier",
+        "new_passenger_list",
+        "reservation_code"
+      ]
+    }
+  }
+]

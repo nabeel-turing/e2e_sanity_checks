@@ -1,0 +1,733 @@
+[
+  {
+    "name": "add_new_rectangle",
+    "description": "Create a new rectangle in Figma.\n\nCreates a new rectangle in Figma. The position is defined by the x and y\ncoordinates of its top-left corner on the canvas. The dimensions are\nspecified by its width and height, which must be positive values.\nAn optional name can be assigned to the new rectangle layer. The rectangle\ncan be parented to an existing node using `parent_id`; if not provided,\nit is added to the current page.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "position_x": {
+          "type": "number",
+          "description": "The x-coordinate of the top-left corner of the rectangle on the canvas."
+        },
+        "position_y": {
+          "type": "number",
+          "description": "The y-coordinate of the top-left corner of the rectangle on the canvas."
+        },
+        "rectangle_width": {
+          "type": "number",
+          "description": "The width of the rectangle. Must be a positive value."
+        },
+        "rectangle_height": {
+          "type": "number",
+          "description": "The height of the rectangle. Must be a positive value."
+        },
+        "layer_name": {
+          "type": "string",
+          "description": "An optional name for the new rectangle layer."
+        },
+        "container_node_id": {
+          "type": "string",
+          "description": "The optional ID of an existing node to parent the\nnew rectangle to. If not provided, the rectangle is added to the current page."
+        }
+      },
+      "required": [
+        "position_x",
+        "position_y",
+        "rectangle_height",
+        "rectangle_width"
+      ]
+    }
+  },
+  {
+    "name": "add_new_text_element",
+    "description": "Create a new text element in Figma.\n\nThis function creates a new text element on the Figma canvas. It positions\nthe text element using the provided `x` and `y` coordinates and sets its\ncontent using the `text` string. Optional styling attributes such as\n`font_size`, `font_weight`, and `font_color` (as a Figma Paint object)\ncan be applied. The created text layer can be assigned an optional `name`\nand can be parented under an existing container node specified by `parent_id`.\nIf `parent_id` is not provided, the text node is added to the current page.\nThe function returns a dictionary containing information about the newly\ncreated text node.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "text_node_x_pos": {
+          "type": "number",
+          "description": "The x-coordinate for the text node's position on the canvas."
+        },
+        "text_node_y_pos": {
+          "type": "number",
+          "description": "The y-coordinate for the text node's position on the canvas."
+        },
+        "initial_text_content": {
+          "type": "string",
+          "description": "The text content to display. Cannot be empty."
+        },
+        "text_font_pixel_size": {
+          "type": "number",
+          "description": "The font size of the text in pixels. Must be a\npositive value if provided. Defaults to Figma's standard size if\nnot provided."
+        },
+        "text_font_style_weight": {
+          "type": "number",
+          "description": "The font weight of the text (e.g., 400.0 for\nregular, 700.0 for bold). Defaults to Figma's standard weight if\nnot provided. Must be a positive value if provided."
+        },
+        "text_color_paint_object": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "The type of paint (e.g., 'SOLID')."
+            },
+            "color": {
+              "type": "object",
+              "properties": {
+                "r": {
+                  "type": "number",
+                  "description": "The red color component (0.0-1.0 range)."
+                },
+                "g": {
+                  "type": "number",
+                  "description": "The green color component (0.0-1.0 range)."
+                },
+                "b": {
+                  "type": "number",
+                  "description": "The blue color component (0.0-1.0 range)."
+                },
+                "a": {
+                  "type": "number",
+                  "description": "The alpha (opacity) component (0.0-1.0 range)."
+                }
+              },
+              "description": "A dictionary defining the color's RGBA components.",
+              "required": [
+                "a",
+                "b",
+                "g",
+                "r"
+              ]
+            }
+          },
+          "description": "The color of the text, specified as a\nFigma Paint object. Example: `{'type': 'SOLID', 'color': {'r': 0, 'g': 0, 'b': 0, 'a': 1}}`.\nDefaults to Figma's standard color if not provided.\nExpected keys:",
+          "required": [
+            "color",
+            "type"
+          ]
+        },
+        "text_layer_label": {
+          "type": "string",
+          "description": "An optional name for the created text layer in Figma.\nIf None, the `text` content will be used as the name."
+        },
+        "parent_element_identifier": {
+          "type": "string",
+          "description": "The ID of an existing container node (valid container type accepts:\nFRAME, GROUP, COMPONENT, INSTANCE, CANVAS) to parent the new text node under. If not provided,\nthe text node will be added to the current page."
+        }
+      },
+      "required": [
+        "initial_text_content",
+        "text_node_x_pos",
+        "text_node_y_pos"
+      ]
+    }
+  },
+  {
+    "name": "add_or_update_annotation",
+    "description": "Create or update an annotation.\n\nThis function creates a new annotation or updates an existing one. It associates an\nannotation with a specific `nodeId`. The annotation's content is provided via\n`labelMarkdown`. Optionally, an `annotationId` can be specified for updates,\na `categoryId` for classification, and custom `properties` can be added.\nThe function returns a dictionary containing details of the created or updated\nannotation.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "annotated_node_id": {
+          "type": "string",
+          "description": "The ID of the node to which this annotation is attached."
+        },
+        "annotation_content_in_markdown": {
+          "type": "string",
+          "description": "The content of the annotation, formatted as Markdown."
+        },
+        "existing_annotation_identifier": {
+          "type": "string",
+          "description": "The unique identifier of the annotation to update.\nIf `None`, a new annotation will be created. Defaults to `None`."
+        },
+        "annotation_category_id": {
+          "type": "string",
+          "description": "The ID of an existing category to assign to this\nannotation. Defaults to `None`."
+        },
+        "custom_metadata_properties": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Property name."
+              },
+              "value": {
+                "type": "object",
+                "description": "Property value."
+              }
+            },
+            "required": [
+              "name",
+              "value"
+            ]
+          },
+          "description": "A list of custom key-value\nproperties to associate with the annotation. Each dictionary in the list\nshould contain the following keys:"
+        }
+      },
+      "required": [
+        "annotated_node_id",
+        "annotation_content_in_markdown"
+      ]
+    }
+  },
+  {
+    "name": "adjust_element_dimensions",
+    "description": "Resize a node in Figma.\n\nThis function resizes a specified node in Figma to a target width and height.\nThe actual dimensions of the node after the resize operation, as detailed\nin the returned dictionary's `final_width` and `final_height` fields, may\ndiffer from the requested `width` and `height`. This potential discrepancy\nis due to Figma's layout engine constraints, which can include factors\nlike minimum/maximum dimensions, aspect ratio locks, or constraints\nimposed by parent elements.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "node_to_resize_id": {
+          "type": "string",
+          "description": "The unique identifier of the Figma node to be resized."
+        },
+        "target_width_in_pixels": {
+          "type": "number",
+          "description": "The target new width for the node in pixels. Must be a non-negative value."
+        },
+        "target_height_in_pixels": {
+          "type": "number",
+          "description": "The target new height for the node in pixels. Must be a non-negative value."
+        }
+      },
+      "required": [
+        "node_to_resize_id",
+        "target_height_in_pixels",
+        "target_width_in_pixels"
+      ]
+    }
+  },
+  {
+    "name": "apply_fill_color_to_node",
+    "description": "Set the fill color of a node in Figma can be TextNode or FrameNode.\n\nThis function sets the fill color of a specified node in Figma. The node\ncan be either a TextNode or a FrameNode. The color is specified using\nred (r), green (g), blue (b), and optionally alpha (a) components.\nEach of these color components must have a value between 0.0 and 1.0,\ninclusive. If the alpha (a) component is omitted or provided as null\n(None in Python), it defaults to 1.0, representing full opacity.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target_element_id": {
+          "type": "string",
+          "description": "The unique identifier for the Figma node whose fill\ncolor is to be set. This can be a TextNode or FrameNode."
+        },
+        "red_component": {
+          "type": "number",
+          "description": "The red component of the RGBA color. Value must be\nbetween 0.0 and 1.0 inclusive."
+        },
+        "green_component": {
+          "type": "number",
+          "description": "The green component of the RGBA color. Value must be\nbetween 0.0 and 1.0 inclusive."
+        },
+        "blue_component": {
+          "type": "number",
+          "description": "The blue component of the RGBA color. Value must be\nbetween 0.0 and 1.0 inclusive."
+        },
+        "alpha_component_opacity": {
+          "type": "number",
+          "description": "The alpha (opacity) component of the RGBA color.\nValue must be between 0.0 and 1.0 inclusive. If omitted or\nnull, it defaults to 1.0 (fully opaque)."
+        }
+      },
+      "required": [
+        "blue_component",
+        "green_component",
+        "red_component",
+        "target_element_id"
+      ]
+    }
+  },
+  {
+    "name": "apply_stroke_style",
+    "description": "Set the stroke color of a node in Figma.\n\nThis function sets the stroke color for a specified node within Figma. It requires the node's unique identifier (`node_id`) and the `red`, `green`, and `blue` components for the RGBA stroke color, where each component value must be between 0.0 and 1.0 inclusive.\nThe `alpha` component, representing opacity, can also be provided (0.0 for fully transparent, 1.0 for fully opaque); if not specified, it defaults to 1.0.\nOptionally, the `stroke_weight` (thickness of the stroke) can be set using a non-negative value. If `stroke_weight` is not provided, the node's existing stroke weight will be maintained, or a default weight might be used if a stroke is being added to a node that does not currently have one.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "element_to_stroke_id": {
+          "type": "string",
+          "description": "The unique identifier of the Figma node whose stroke color is to be set."
+        },
+        "stroke_red_value": {
+          "type": "number",
+          "description": "The red component of the RGBA stroke color. Value must be between 0.0 and 1.0 inclusive."
+        },
+        "stroke_green_value": {
+          "type": "number",
+          "description": "The green component of the RGBA stroke color. Value must be between 0.0 and 1.0 inclusive."
+        },
+        "stroke_blue_value": {
+          "type": "number",
+          "description": "The blue component of the RGBA stroke color. Value must be between 0.0 and 1.0 inclusive."
+        },
+        "stroke_alpha_opacity": {
+          "type": "number",
+          "description": "The alpha (opacity) component of the RGBA stroke color. Value must be between 0.0 (fully transparent) and 1.0 (fully opaque). If not provided, defaults to 1.0 (fully opaque)."
+        },
+        "outline_thickness": {
+          "type": "number",
+          "description": "The thickness of the stroke. Must be a non-negative value. If provided, this weight will be applied. If not provided, the node's existing stroke weight will be maintained, or a default weight might be used if adding a stroke to a node that doesn't currently have one."
+        }
+      },
+      "required": [
+        "element_to_stroke_id",
+        "stroke_blue_value",
+        "stroke_green_value",
+        "stroke_red_value"
+      ]
+    }
+  },
+  {
+    "name": "bulk_remove_figma_elements",
+    "description": "Delete multiple nodes from Figma at once.\n\nThis function deletes multiple nodes from Figma simultaneously. Based on a\nprovided list of node identifiers, it attempts to delete each corresponding\nnode. The function then returns a detailed status of these operations,\nspecifying which nodes were successfully deleted and, for those that were\nnot, the reasons for the failure.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "element_ids_for_deletion": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of unique identifiers for the nodes to be deleted from Figma."
+        }
+      },
+      "required": [
+        "element_ids_for_deletion"
+      ]
+    }
+  },
+  {
+    "name": "configure_frame_autolayout",
+    "description": "Set the layout mode and wrap behavior of a frame in Figma.\n\nThis function sets the layout mode for a specified Figma frame node, identified by `node_id`.\nThe `layout_mode` parameter determines the primary layout direction and accepts 'NONE', 'HORIZONTAL', or 'VERTICAL'.\nThe `layout_wrap` parameter is optional and defines the wrap behavior for auto-layout, accepting 'NO_WRAP' or 'WRAP'.\nThis `layout_wrap` parameter is only applicable if `layout_mode` is 'HORIZONTAL' or 'VERTICAL'.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "frame_node_id": {
+          "type": "string",
+          "description": "The unique identifier of the Figma node (frame) whose layout mode is to be set."
+        },
+        "autolayout_direction": {
+          "type": "string",
+          "description": "The layout mode to apply. Must be one of the values from LayoutModeEnum."
+        },
+        "content_wrapping_behavior": {
+          "type": "string",
+          "description": "The wrap behavior for auto-layout. Must be one of the values\nfrom LayoutWrapEnum if provided. This parameter is optional and only applies if\n`layout_mode` is 'HORIZONTAL' or 'VERTICAL'."
+        }
+      },
+      "required": [
+        "autolayout_direction",
+        "frame_node_id"
+      ]
+    }
+  },
+  {
+    "name": "construct_new_frame",
+    "description": "Create a new frame in Figma.\n\nThis function creates a new frame in Figma. It allows specifying the frame's\nposition (x, y), dimensions (width, height), name, parent node, fill color,\nstroke properties, and various auto-layout configurations.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "frame_x_coordinate": {
+          "type": "number",
+          "description": "The x-coordinate of the frame's top-left corner on the canvas."
+        },
+        "frame_y_coordinate": {
+          "type": "number",
+          "description": "The y-coordinate of the frame's top-left corner on the canvas."
+        },
+        "frame_width": {
+          "type": "number",
+          "description": "The width of the frame."
+        },
+        "frame_height": {
+          "type": "number",
+          "description": "The height of the frame."
+        },
+        "new_frame_name": {
+          "type": "string",
+          "description": "Optional name for the new frame."
+        },
+        "parent_container_id": {
+          "type": "string",
+          "description": "Optional ID of the parent node (e.g., another\nframe, page, component) to create the frame within. If not provided,\nthe frame is created on the current page."
+        },
+        "background_fill_properties": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "The type of paint, e.g., 'SOLID'."
+            },
+            "color": {
+              "type": "object",
+              "properties": {
+                "r": {
+                  "type": "number",
+                  "description": "Red component (0.0 to 1.0)."
+                },
+                "g": {
+                  "type": "number",
+                  "description": "Green component (0.0 to 1.0)."
+                },
+                "b": {
+                  "type": "number",
+                  "description": "Blue component (0.0 to 1.0)."
+                },
+                "a": {
+                  "type": "number",
+                  "description": "Alpha component (0.0 to 1.0)."
+                }
+              },
+              "description": "A dictionary defining the RGBA color.",
+              "required": [
+                "a",
+                "b",
+                "g",
+                "r"
+              ]
+            }
+          },
+          "description": "Optional properties for a single fill.\nThis should be a dictionary conforming to Figma's Paint object structure.\nFor a solid color, an example structure is:\n`{'type': 'SOLID', 'color': {'r': 0.5, 'g': 0.5, 'b': 0.5, 'a': 1.0}}`.\nKnown keys for a solid color fill:",
+          "required": [
+            "color",
+            "type"
+          ]
+        },
+        "border_stroke_properties": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "The type of paint, e.g., 'SOLID'."
+            },
+            "color": {
+              "type": "object",
+              "properties": {
+                "r": {
+                  "type": "number",
+                  "description": "Red component (0.0 to 1.0)."
+                },
+                "g": {
+                  "type": "number",
+                  "description": "Green component (0.0 to 1.0)."
+                },
+                "b": {
+                  "type": "number",
+                  "description": "Blue component (0.0 to 1.0)."
+                },
+                "a": {
+                  "type": "number",
+                  "description": "Alpha component (0.0 to 1.0)."
+                }
+              },
+              "description": "A dictionary defining the RGBA color.",
+              "required": [
+                "a",
+                "b",
+                "g",
+                "r"
+              ]
+            }
+          },
+          "description": "Optional properties for a single stroke.\nThis should be a dictionary conforming to Figma's Paint object structure\nfor the stroke color and type. For a solid color, an example structure is:\n`{'type': 'SOLID', 'color': {'r': 0.0, 'g': 0.0, 'b': 0.0, 'a': 1.0}}`.\nKnown keys for a solid color stroke:",
+          "required": [
+            "color",
+            "type"
+          ]
+        },
+        "border_thickness": {
+          "type": "number",
+          "description": "Optional stroke weight (thickness) for the\nframe. Applied if `stroke_color` is also provided."
+        },
+        "auto_layout_orientation": {
+          "type": "string",
+          "description": "Enables auto-layout and sets its direction.\nValid values: \"NONE\", \"HORIZONTAL\", \"VERTICAL\"."
+        },
+        "auto_layout_wrap_behavior": {
+          "type": "string",
+          "description": "Specifies wrap behavior for auto-layout when\n`layout_mode` is HORIZONTAL or VERTICAL. Valid values: \"NO_WRAP\", \"WRAP\".\nRequires `layout_mode` to be set."
+        },
+        "top_padding_value": {
+          "type": "number",
+          "description": "Top padding for an auto-layout frame.\nRequires `layout_mode` to be set to HORIZONTAL or VERTICAL."
+        },
+        "right_padding_value": {
+          "type": "number",
+          "description": "Right padding for an auto-layout frame.\nRequires `layout_mode` to be set to HORIZONTAL or VERTICAL."
+        },
+        "bottom_padding_value": {
+          "type": "number",
+          "description": "Bottom padding for an auto-layout frame.\nRequires `layout_mode` to be set to HORIZONTAL or VERTICAL."
+        },
+        "left_padding_value": {
+          "type": "number",
+          "description": "Left padding for an auto-layout frame.\nRequires `layout_mode` to be set to HORIZONTAL or VERTICAL."
+        },
+        "main_axis_alignment": {
+          "type": "string",
+          "description": "Alignment of items along the\nprimary axis (horizontal for `layout_mode` HORIZONTAL, vertical for\nVERTICAL). Valid values: \"MIN\", \"MAX\", \"CENTER\", \"SPACE_BETWEEN\".\nRequires `layout_mode` to be set to HORIZONTAL or VERTICAL."
+        },
+        "cross_axis_alignment": {
+          "type": "string",
+          "description": "Alignment of items along the\ncounter axis (vertical for `layout_mode` HORIZONTAL, horizontal for\nVERTICAL). Valid values: \"MIN\", \"MAX\", \"CENTER\", \"BASELINE\" (for text).\nRequires `layout_mode` to be set to HORIZONTAL or VERTICAL."
+        },
+        "horizontal_resizing_rule": {
+          "type": "string",
+          "description": "Optional horizontal resizing\nbehavior for the frame when it is a child of an auto-layout parent.\nValid values: \"FIXED\" (default), \"HUG\", \"FILL\"."
+        },
+        "vertical_resizing_rule": {
+          "type": "string",
+          "description": "Optional vertical resizing\nbehavior for the frame when it is a child of an auto-layout parent.\nValid values: \"FIXED\" (default), \"HUG\", \"FILL\"."
+        },
+        "inter_item_gap": {
+          "type": "number",
+          "description": "Optional spacing between items in an\nauto-layout frame. Requires `layout_mode` to be HORIZONTAL or VERTICAL."
+        }
+      },
+      "required": [
+        "frame_height",
+        "frame_width",
+        "frame_x_coordinate",
+        "frame_y_coordinate"
+      ]
+    }
+  },
+  {
+    "name": "duplicate_figma_element",
+    "description": "Clone an existing node (represented as a dict) in Figma.\n\nThis function clones an existing node. It takes the `node_id`\nof the node to be cloned and optionally new `x` and `y` coordinates\nfor the clone's position. It returns basic information about the newly\ncreated cloned node. All node and document structures are assumed to be dictionaries.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "source_node_to_clone_id": {
+          "type": "string",
+          "description": "The identifier of the node to be cloned."
+        },
+        "clone_x_coordinate": {
+          "type": "number",
+          "description": "The optional x-coordinate for the cloned node's position."
+        },
+        "clone_y_coordinate": {
+          "type": "number",
+          "description": "The optional y-coordinate for the cloned node's position."
+        }
+      },
+      "required": [
+        "source_node_to_clone_id"
+      ]
+    }
+  },
+  {
+    "name": "export_node_images_locally",
+    "description": "Downloads images for specified nodes from a Figma file to a local path.\n\nThis version simulates the download by copying files from a local './files/'\ndirectory to the `local_path` destination. It assumes source files in './files/'\nare named based on their 'node_id' (e.g., '{node_id}.png'). The 'file_name'\nparameter in the input 'nodes' specifies the desired name for the output file.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "source_file_key": {
+          "type": "string",
+          "description": "The unique identifier of the Figma file (used for context)."
+        },
+        "image_export_requests": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "node_id": {
+                "type": "string",
+                "description": "The unique identifier of the node. The corresponding\n               source image in './files/' is assumed to be named\n               based on this ID (e.g., '{node_id}.png')."
+              },
+              "file_name": {
+                "type": "string",
+                "description": "The desired file name for the downloaded image\n                 to be saved in `local_path` (e.g., 'image.png')."
+              }
+            },
+            "required": [
+              "file_name",
+              "node_id"
+            ]
+          },
+          "description": "A list of nodes to \"download\" as images.\nEach item must be a dictionary with:"
+        },
+        "destination_directory_path": {
+          "type": "string",
+          "description": "The local directory path where the images should be saved."
+        }
+      },
+      "required": [
+        "destination_directory_path",
+        "image_export_requests",
+        "source_file_key"
+      ]
+    }
+  },
+  {
+    "name": "fetch_detailed_node_properties",
+    "description": "Get detailed information about a specific node in Figma.\n\nGets detailed information about a specific node in Figma.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "node_identifier_to_inspect": {
+          "type": "string",
+          "description": "The unique identifier of the Figma node to retrieve."
+        }
+      },
+      "required": [
+        "node_identifier_to_inspect"
+      ]
+    }
+  },
+  {
+    "name": "fetch_document_styles",
+    "description": "Get all styles from the current Figma document.\n\nThis function retrieves all styles defined in the current Figma document.\nEach style is represented as a dictionary containing its properties.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "fetch_figma_file_details",
+    "description": "Retrieves data for a Figma file, optionally scoped to a specific node.\n\nThis function retrieves data for a Figma file. If a `node_id` is provided,\ndata retrieval focuses on that specific node; otherwise, data for all\ntop-level nodes (e.g., canvases/pages) in the file is returned. The function\nfetches metadata about the file, detailed information about the relevant nodes\n(including their properties and any child nodes in a recursive structure),\nand global styles defined within the file.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "figma_file_identifier": {
+          "type": "string",
+          "description": "The unique identifier of the Figma file."
+        },
+        "target_node_identifier": {
+          "type": "string",
+          "description": "The unique identifier of a specific node within\nthe file. If provided, the 'nodes' field in the response will be\nfocused on this node. If omitted, data for all top-level nodes\n(e.g., canvases/pages) in the file is returned."
+        }
+      },
+      "required": [
+        "figma_file_identifier"
+      ]
+    }
+  },
+  {
+    "name": "fetch_file_defined_components",
+    "description": "Get all local components from the Figma document for current file.\n\nThis function retrieves all local components that are defined within the Figma document for current file.\nIt returns a list where each item is a dictionary representing a local component.\nEach dictionary contains details for the component, including its unique identifier ('id'),\na unique 'key' for API usage or instance creation, its user-defined 'name', an\noptional 'description', an optional 'componentSetId' if the component is part of\na component set (variants), and the 'parentId' indicating the page or frame\nthat contains the main component definition.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "find_descendant_nodes_by_type",
+    "description": "Scan for child nodes with specific types in the selected Figma node.\n\nThis function scans for child nodes with specific types within the Figma node\nidentified by `node_id`. It searches through the descendants of the specified\ncontainer node and returns a list of nodes that match the types provided in\nthe `types` list. Each found node is represented as a dictionary containing\nits basic information.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "container_node_to_scan_id": {
+          "type": "string",
+          "description": "The ID of the Figma node to be scanned for descendant nodes."
+        },
+        "node_types_to_find": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of node type strings (e.g., 'RECTANGLE', 'TEXT')\nto filter the search. Only nodes of these types will be returned."
+        }
+      },
+      "required": [
+        "container_node_to_scan_id",
+        "node_types_to_find"
+      ]
+    }
+  },
+  {
+    "name": "remove_figma_element",
+    "description": "Delete a node from Figma.\n\nDeletes a node from Figma using its unique identifier. This function\ntakes the unique identifier of the Figma node to be deleted and returns\nan operation status message indicating successful deletion of the node.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "element_to_delete_id": {
+          "type": "string",
+          "description": "The unique identifier of the Figma node to be deleted."
+        }
+      },
+      "required": [
+        "element_to_delete_id"
+      ]
+    }
+  },
+  {
+    "name": "reposition_figma_element",
+    "description": "Move a node to a new position in Figma.\n\nThis function moves a node, identified by node_id, to a new position\nin Figma defined by the x and y coordinates. Upon success, it\nreturns a status message.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "element_to_move_id": {
+          "type": "string",
+          "description": "The unique identifier of the node to be moved."
+        },
+        "new_x_position": {
+          "type": "number",
+          "description": "The new x-coordinate for the node's position."
+        },
+        "new_y_position": {
+          "type": "number",
+          "description": "The new y-coordinate for the node's position."
+        }
+      },
+      "required": [
+        "element_to_move_id",
+        "new_x_position",
+        "new_y_position"
+      ]
+    }
+  },
+  {
+    "name": "retrieve_current_selection_info",
+    "description": "Get information about the current selection in Figma.\n\nGets information about the current selection in Figma. This function returns\na list of dictionaries, where each dictionary represents a currently\nselected node. Each dictionary provides a summary of the node, including\nits unique identifier ('id'), name ('name'), type ('type'), and the ID\nof its parent node ('parentId').",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "retrieve_design_annotations",
+    "description": "Get all annotations in the current document or specific node.\n\nThis function retrieves all annotations. If the `nodeId` parameter is provided,\nit fetches annotations specifically for the node identified by that ID.\nIf `nodeId` is omitted, the function returns annotations from the entire\ncurrent document. If the `includeCategories` parameter is true, and an\nannotation has a 'categoryId', the full category object is included with\nthat annotation's details.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "scope_annotations_to_node_id": {
+          "type": "string",
+          "description": "The ID of a specific node for which to retrieve\nannotations. If omitted, annotations from the entire current document\nare returned."
+        },
+        "expand_category_details": {
+          "type": "boolean",
+          "description": "If true, the full category object\nwill be included for each annotation that has a 'categoryId'.\nDefaults to false if not provided."
+        }
+      }
+    }
+  },
+  {
+    "name": "switch_active_document",
+    "description": "Finds a file by its key in the DB and sets it as the current_file.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "figma_document_key_to_activate": {
+          "type": "string",
+          "description": "The fileKey of the file to set as the current file.\nMust be a non-empty string."
+        }
+      },
+      "required": [
+        "figma_document_key_to_activate"
+      ]
+    }
+  },
+  {
+    "name": "update_text_node_value",
+    "description": "Set the text content of an existing text node in Figma.\n\nThis function sets the text content of an existing text node in Figma. It uses the `node_id` to identify the specific Figma node and applies the new `text` as its content.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "text_node_identifier": {
+          "type": "string",
+          "description": "The unique identifier of the Figma node to modify."
+        },
+        "new_text_string": {
+          "type": "string",
+          "description": "The new text content to set for the node."
+        }
+      }
+    }
+  }
+]

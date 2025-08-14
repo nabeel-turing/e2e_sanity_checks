@@ -1,0 +1,1311 @@
+[
+  {
+    "name": "azmcp_appconfig_account_list",
+    "description": "List all App Configuration stores in a subscription.\n\nThis function retrieves and displays all App Configuration stores available in the\nspecified subscription. The results are returned as a list of dictionaries,\nwhere each dictionary contains details of an App Configuration store,\nincluding its name, ID, and location.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be either\nthe GUID identifier or the display name of the Azure subscription to use."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options:\n'credential' (Azure CLI/managed identity), 'key' (access key),\nor 'connectionString'. Defaults to None."
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name.\nThis can be either the GUID identifier or the display name of your\nAzure AD tenant. Defaults to None."
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for\nfailed operations before giving up. Defaults to None."
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry\nattempts. For exponential backoff, this value is used as the base.\nDefaults to None."
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries,\nregardless of the retry strategy. Defaults to None."
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses\nconsistent delays, 'exponential' increases delay between attempts.\nDefaults to None."
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in\nseconds. Operations taking longer than this will be cancelled.\nDefaults to None."
+        }
+      },
+      "required": [
+        "subscription"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_appconfig_kv_delete",
+    "description": "Delete a key-value pair from an App Configuration store.\n\nThis command removes the specified key-value pair from the store.\nIf a label is specified, only the labeled version is deleted. If no label is specified, the key-value with the matching\nkey and the default label will be deleted.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be either the GUID identifier or the display name of the Azure subscription to use."
+        },
+        "account_name": {
+          "type": "string",
+          "description": "The name of the App Configuration store (e.g., my-appconfig)."
+        },
+        "key": {
+          "type": "string",
+          "description": "The name of the key to access within the App Configuration store."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options: 'credential' (Azure CLI/managed identity), 'key' (access key), or 'connectionString'."
+        },
+        "label": {
+          "type": "string",
+          "description": "The label to apply to the configuration key. Labels are used to group and organize settings."
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry attempts. For exponential backoff, this value is used as the base."
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries, regardless of the retry strategy."
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for failed operations before giving up."
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses consistent delays, 'exponential' increases delay between attempts."
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in seconds. Operations taking longer than this will be cancelled."
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name. This can be either the GUID identifier or the display name of your Azure AD tenant."
+        }
+      },
+      "required": [
+        "account_name",
+        "key",
+        "subscription"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_appconfig_kv_list",
+    "description": "List all key-values in an App Configuration store.\n\nThis command retrieves and displays all key-value pairs\nfrom the specified store. Each key-value includes its key, value, label, content type, ETag, last modified\ntime, and lock status.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be either the GUID\nidentifier or the display name of the Azure subscription to use."
+        },
+        "account_name": {
+          "type": "string",
+          "description": "The name of the App Configuration store (e.g., my-appconfig)."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options: 'credential'\n(Azure CLI/managed identity), 'key' (access key), or 'connectionString'."
+        },
+        "key": {
+          "type": "string",
+          "description": "Specifies the key filter, if any, to be used when retrieving\nkey-values. The filter can be an exact match, for example a filter of \"foo\"\nwould get all key-values with a key of \"foo\", or the filter can include a '*'\ncharacter at the end of the string for wildcard searches (e.g., 'App*').\nIf omitted all keys will be retrieved."
+        },
+        "label": {
+          "type": "string",
+          "description": "Specifies the label filter, if any, to be used when retrieving\nkey-values. The filter can be an exact match, for example a filter of \"foo\"\nwould get all key-values with a label of \"foo\", or the filter can include a '*'\ncharacter at the end of the string for wildcard searches (e.g., 'Prod*').\nThis filter is case-sensitive. If omitted, all labels will be retrieved."
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry attempts. For\nexponential backoff, this value is used as the base."
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries, regardless\nof the retry strategy."
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for failed\noperations before giving up."
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses consistent delays,\n'exponential' increases delay between attempts."
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in seconds. Operations\ntaking longer than this will be cancelled."
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name. This can be\neither the GUID identifier or the display name of your Azure AD tenant."
+        }
+      },
+      "required": [
+        "account_name",
+        "subscription"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_appconfig_kv_lock",
+    "description": "Lock a key-value in an App Configuration store.\n\nThis function sets a key-value in an App Configuration store to read-only mode,\npreventing any modifications to its value. It requires an account name and key\nto be specified. Optionally, a label can be provided to lock a specific\nlabeled version of the key-value.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be either the GUID identifier or the display name of the Azure subscription to use."
+        },
+        "account_name": {
+          "type": "string",
+          "description": "The name of the App Configuration store (e.g., my-appconfig)."
+        },
+        "key": {
+          "type": "string",
+          "description": "The name of the key to access within the App Configuration store."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options: 'credential' (Azure CLI/managed identity), 'key' (access key), or 'connectionString'. Defaults to None."
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name. This can be either the GUID identifier or the display name of your Azure AD tenant. Defaults to None."
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for failed operations before giving up. Defaults to None."
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry attempts. For exponential backoff, this value is used as the base. Defaults to None."
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries, regardless of the retry strategy. Defaults to None."
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses consistent delays, 'exponential' increases delay between attempts. Defaults to None."
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in seconds. Operations taking longer than this will be cancelled. Defaults to None."
+        },
+        "label": {
+          "type": "string",
+          "description": "The label to apply to the configuration key. Labels are used to group and organize settings. Defaults to None."
+        }
+      }
+    }
+  },
+  {
+    "name": "azmcp_appconfig_kv_set",
+    "description": "Set a key-value setting in an App Configuration store.\n\nThis function sets a key-value setting in an App Configuration store. It creates or\nupdates a key-value setting with the specified value. An account name, key, and\nvalue must be specified. Optionally, a label can be specified; otherwise, the\ndefault label is used.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be either the\nGUID identifier or the display name of the Azure subscription to use."
+        },
+        "account_name": {
+          "type": "string",
+          "description": "The name of the App Configuration store (e.g., my-appconfig)."
+        },
+        "key": {
+          "type": "string",
+          "description": "The name of the key to access within the App Configuration store."
+        },
+        "value": {
+          "type": "string",
+          "description": "The value to set for the configuration key."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options: 'credential'\n(Azure CLI/managed identity), 'key' (access key), or 'connectionString'."
+        },
+        "label": {
+          "type": "string",
+          "description": "The label to apply to the configuration key. Labels are\nused to group and organize settings."
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry attempts.\nFor exponential backoff, this value is used as the base."
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries,\nregardless of the retry strategy."
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for\nfailed operations before giving up."
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses consistent\ndelays, 'exponential' increases delay between attempts."
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in seconds.\nOperations taking longer than this will be cancelled."
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name. This can\nbe either the GUID identifier or the display name of your Azure AD tenant."
+        }
+      },
+      "required": [
+        "account_name",
+        "key",
+        "subscription",
+        "value"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_appconfig_kv_show",
+    "description": "Show a specific key-value setting in an App Configuration store.\n\nThis function retrieves and displays the value, label, content type, ETag,\nlast modified time, and lock status for a specific key-value setting.\nAn account name and key must be specified. Optionally, a label can be\nspecified; if no label is provided, the setting with the default label\nwill be retrieved.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be either the GUID\nidentifier or the display name of the Azure subscription to use."
+        },
+        "account_name": {
+          "type": "string",
+          "description": "The name of the App Configuration store (e.g., my-appconfig)."
+        },
+        "key": {
+          "type": "string",
+          "description": "The name of the key to access within the App Configuration store."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options: 'credential'\n(Azure CLI/managed identity), 'key' (access key), or 'connectionString'.\nDefaults to None."
+        },
+        "label": {
+          "type": "string",
+          "description": "The label to apply to the configuration key. Labels are used\nto group and organize settings. Defaults to None, which implies the default\nlabel."
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry attempts. For\nexponential backoff, this value is used as the base. Defaults to None."
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries,\nregardless of the retry strategy. Defaults to None."
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for failed\noperations before giving up. Defaults to None."
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses consistent delays,\n'exponential' increases delay between attempts. Defaults to None."
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in seconds.\nOperations taking longer than this will be cancelled. Defaults to None."
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name. This can be\neither the GUID identifier or the display name of your Azure AD tenant.\nDefaults to None."
+        }
+      },
+      "required": [
+        "account_name",
+        "key",
+        "subscription"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_appconfig_kv_unlock",
+    "description": "Unlock a key-value setting in an App Configuration store.\n\nThis command removes the read-only mode from a key-value setting, allowing modifications to its value.\nIt requires an account name and key to be specified. Optionally, a label can be specified to unlock\na specific labeled version of the setting; otherwise, the setting with the default label will be unlocked.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "account_name": {
+          "type": "string",
+          "description": "The name of the App Configuration store (e.g., my-appconfig)."
+        },
+        "key": {
+          "type": "string",
+          "description": "The name of the key to access within the App Configuration store."
+        },
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be either the GUID identifier or the display name of the Azure subscription to use."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options: 'credential' (Azure CLI/managed identity), 'key' (access key), or 'connectionString'."
+        },
+        "label": {
+          "type": "string",
+          "description": "The label to apply to the configuration key. Labels are used to group and organize settings."
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry attempts. For exponential backoff, this value is used as the base."
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries, regardless of the retry strategy."
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for failed operations before giving up."
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses consistent delays, 'exponential' increases delay between attempts."
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in seconds. Operations taking longer than this will be cancelled."
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name. This can be either the GUID identifier or the display name of your Azure AD tenant."
+        }
+      },
+      "required": [
+        "account_name",
+        "key",
+        "subscription"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_cosmos_account_create",
+    "description": "Create a new Cosmos DB account in Azure.\n\nThis function creates a new Cosmos DB account with the specified parameters in the given\nresource group and subscription. The account will be created with the specified kind\n(GlobalDocumentDB, MongoDB, or Parse) and location.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be either the GUID\nidentifier or the display name of the Azure subscription to use."
+        },
+        "resource_group": {
+          "type": "string",
+          "description": "The name of the resource group where the Cosmos DB account\nwill be created."
+        },
+        "account_name": {
+          "type": "string",
+          "description": "The name of the Cosmos DB account to create. Must be globally\nunique across all Azure subscriptions."
+        },
+        "location": {
+          "type": "string",
+          "description": "The Azure region where the Cosmos DB account will be created\n(e.g., \"eastus\", \"westus2\", \"northeurope\")."
+        },
+        "kind": {
+          "type": "string",
+          "description": "The kind of Cosmos DB account to create. Options:\n'GlobalDocumentDB' (default), 'MongoDB', 'Parse'. Defaults to \"GlobalDocumentDB\"."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options: 'credential'\n(Azure CLI/managed identity), 'key' (access key), or 'connectionString'.\nDefaults to None. (not implemented)"
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name. This can be\neither the GUID identifier or the display name of your Azure AD tenant.\nDefaults to None. (not implemented)"
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for failed\noperations before giving up. Defaults to None. (not implemented)"
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry attempts.\nFor exponential backoff, this value is used as the base. Defaults to None. (not implemented)"
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries,\nregardless of the retry strategy. Defaults to None. (not implemented)"
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses consistent delays,\n'exponential' increases delay between attempts. Defaults to None. (not implemented)"
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in seconds.\nOperations taking longer than this will be cancelled. Defaults to None. (not implemented)"
+        }
+      },
+      "required": [
+        "account_name",
+        "location",
+        "resource_group",
+        "subscription"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_cosmos_account_list",
+    "description": "List all Cosmos DB accounts in a subscription.\n\nThis command retrieves and displays all Cosmos DB accounts available in the specified subscription. Results include account names and are returned as a JSON array.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be either the GUID identifier or the display name of the Azure subscription to use."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options: 'credential' (Azure CLI/managed identity), 'key' (access key), or 'connectionString'. (not implemented)"
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name. This can be either the GUID identifier or the display name of your Azure AD tenant. (not implemented)"
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for failed operations before giving up.(not implemented)"
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry attempts. For exponential backoff, this value is used as the base. (not implemented)    "
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries, regardless of the retry strategy. (not implemented)"
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses consistent delays, 'exponential' increases delay between attempts. (not implemented)"
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in seconds. Operations taking longer than this will be cancelled. (not implemented)"
+        }
+      },
+      "required": [
+        "subscription"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_cosmos_database_container_list",
+    "description": "List all containers in a Cosmos DB database.\n\nThis function retrieves and displays all containers within the specified database and Cosmos DB account.\nResults include container names and are returned as a JSON array. Both an account name and a\ndatabase name must be specified.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be either the GUID\nidentifier or the display name of the Azure subscription to use."
+        },
+        "account_name": {
+          "type": "string",
+          "description": "The name of the Cosmos DB account to query (e.g., my-cosmos-account)."
+        },
+        "database_name": {
+          "type": "string",
+          "description": "The name of the database to query (e.g., my-database)."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options: 'credential'\n(Azure CLI/managed identity), 'key' (access key), or 'connectionString'. (not implemented)"
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry attempts. For\nexponential backoff, this value is used as the base. (not implemented)"
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries, regardless\nof the retry strategy. (not implemented)"
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for failed\noperations before giving up. (not implemented)"
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses consistent delays,\n'exponential' increases delay between attempts. (not implemented)"
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in seconds. Operations\ntaking longer than this will be cancelled. (not implemented)"
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name. This can be\neither the GUID identifier or the display name of your Azure AD tenant. (not implemented)"
+        }
+      },
+      "required": [
+        "account_name",
+        "database_name",
+        "subscription"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_cosmos_database_list",
+    "description": "List all databases in a Cosmos DB account.\n\nThis function retrieves and displays all databases available in the specified Cosmos DB account.\nResults include database names and are returned as a list of dictionaries, where each dictionary\nrepresents a database resource.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be either the GUID\nidentifier or the display name of the Azure subscription to use."
+        },
+        "account_name": {
+          "type": "string",
+          "description": "The name of the Cosmos DB account to query (e.g., my-cosmos-account)."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options: 'credential'\n(Azure CLI/managed identity), 'key' (access key), or 'connectionString'.\nDefaults to None. (not implemented)"
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name. This can be\neither the GUID identifier or the display name of your Azure AD tenant.\nDefaults to None. (not implemented)"
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for failed\noperations before giving up. Defaults to None. (not implemented)"
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry attempts.\nFor exponential backoff, this value is used as the base. Defaults to None. (not implemented)"
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries,\nregardless of the retry strategy. Defaults to None. (not implemented)"
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses consistent delays,\n'exponential' increases delay between attempts. Defaults to None. (not implemented)"
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in seconds.\nOperations taking longer than this will be cancelled. Defaults to None. (not implemented)"
+        }
+      },
+      "required": [
+        "account_name",
+        "subscription"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_group_list",
+    "description": "List all resource groups in a subscription.\n\nThis function retrieves all resource groups available in the specified subscription.\nResults include resource group names and IDs, returned as a list of dictionaries,\nwhere each dictionary represents a resource group.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be either the\nGUID identifier or the display name of the Azure subscription to use."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options: 'credential'\n(Azure CLI/managed identity), 'key' (access key), or 'connectionString'."
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name. This can\nbe either the GUID identifier or the display name of your Azure AD tenant."
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for\nfailed operations before giving up. Expected to be a string representing an integer."
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry attempts.\nFor exponential backoff, this value is used as the base. Expected to be a string representing an integer."
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries,\nregardless of the retry strategy. Expected to be a string representing an integer."
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses consistent\ndelays, 'exponential' increases delay between attempts."
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in seconds.\nOperations taking longer than this will be cancelled. Expected to be a string representing an integer."
+        }
+      },
+      "required": [
+        "subscription"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_keyvault_key_create",
+    "description": "Create a new key in an Azure Key Vault.\n\nThis function creates a key with the specified name and type in the given vault.\nKey types include RSA (RSA key pair), EC (Elliptic Curve key pair), and OCT (ES cryptographic pair).",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be either the\nGUID identifier or the display name of the Azure subscription to use."
+        },
+        "vault": {
+          "type": "string",
+          "description": "The name of the Key Vault."
+        },
+        "key": {
+          "type": "string",
+          "description": "The name of the key to retrieve/modify from the Key Vault."
+        },
+        "key_type": {
+          "type": "string",
+          "description": "The type of key to create (RSA, EC)."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options: 'credential'\n(Azure CLI/managed identity), 'key' (access key), or 'connectionString'."
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry attempts.\nFor exponential backoff, this value is used as the base.\nMust be a string representing a non-negative integer."
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries,\nregardless of the retry strategy.\nMust be a string representing a non-negative integer."
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for\nfailed operations before giving up.\nMust be a string representing a non-negative integer."
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses consistent\ndelays, 'exponential' increases delay between attempts."
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in seconds.\nOperations taking longer than this will be cancelled.\nMust be a string representing a non-negative integer."
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name. This can\nbe either the GUID identifier or the display name of your Azure AD tenant."
+        }
+      },
+      "required": [
+        "key",
+        "key_type",
+        "subscription",
+        "vault"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_keyvault_key_get",
+    "description": "Get a key from an Azure Key Vault.\n\nThis function retrieves and displays details about a specific key in the specified vault.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be either the GUID identifier or the display name of the Azure subscription to use."
+        },
+        "vault": {
+          "type": "string",
+          "description": "The name of the Key Vault."
+        },
+        "key": {
+          "type": "string",
+          "description": "The name of the key to retrieve/modify from the Key Vault."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options: 'credential' (Azure CLI/managed identity), 'key' (access key), or 'connectionString'."
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry attempts. For exponential backoff, this value is used as the base."
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries, regardless of the retry strategy."
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for failed operations before giving up."
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses consistent delays, 'exponential' increases delay between attempts."
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in seconds. Operations taking longer than this will be cancelled."
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name. This can be either the GUID identifier or the display name of your Azure AD tenant."
+        }
+      },
+      "required": [
+        "key",
+        "subscription",
+        "vault"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_keyvault_key_list",
+    "description": "List all keys in an Azure Key Vault.\n\nThis command retrieves and displays the names of all keys stored in the specified vault.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be either the GUID identifier or the display name of the Azure subscription to use."
+        },
+        "vault": {
+          "type": "string",
+          "description": "The name of the Key Vault."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options: 'credential' (Azure CLI/managed identity), 'key' (access key), or 'connectionString'."
+        },
+        "include_managed": {
+          "type": "string",
+          "description": "Whether or not to include managed keys in results."
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry attempts. For exponential backoff, this value is used as the base."
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries, regardless of the retry strategy."
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for failed operations before giving up."
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses consistent delays, 'exponential' increases delay between attempts."
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in seconds. Operations taking longer than this will be cancelled."
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name. This can be either the GUID identifier or the display name of your Azure AD tenant."
+        }
+      },
+      "required": [
+        "subscription",
+        "vault"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_monitor_healthmodels_entity_gethealth",
+    "description": "Gets the health of an entity from a specified Azure Monitor Health Model.\n\nThis function retrieves the health of a specific entity from an Azure Monitor Health Model.\nIt returns detailed entity health information. To perform this operation, the entity identifier,\nthe health model name, the Azure resource group, and the subscription must be provided.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "entity": {
+          "type": "string",
+          "description": "The entity to get health for."
+        },
+        "model_name": {
+          "type": "string",
+          "description": "The name of the health model for which to get the health."
+        },
+        "resource_group": {
+          "type": "string",
+          "description": "The name of the Azure resource group. This is a logical container for Azure resources."
+        },
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be either the GUID identifier or the display name of the Azure subscription to use."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options: 'credential' (Azure CLI/managed identity), 'key' (access key), or 'connectionString'. Defaults to None."
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry attempts. For exponential backoff, this value is used as the base. Defaults to None."
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries, regardless of the retry strategy. Defaults to None."
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for failed operations before giving up. Defaults to None."
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses consistent delays, 'exponential' increases delay between attempts. Defaults to None."
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in seconds. Operations taking longer than this will be cancelled. Defaults to None."
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name. This can be either the GUID identifier or the display name of your Azure AD tenant. Defaults to None."
+        }
+      },
+      "required": [
+        "entity",
+        "model_name",
+        "resource_group",
+        "subscription"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_monitor_table_list",
+    "description": "List all tables in a Log Analytics workspace.\n\nThis function lists all tables in a specified Log Analytics workspace. It requires the workspace\nidentifier and returns the names and schemas of the tables. This information can be utilized\nfor constructing KQL (Kusto Query Language) queries.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "resource_group": {
+          "type": "string",
+          "description": "The name of the Azure resource group. This is a logical container for Azure resources."
+        },
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be either the GUID identifier or the display name of the Azure subscription to use."
+        },
+        "table_type": {
+          "type": "string",
+          "description": "The type of table to query. Options: 'CustomLog', 'AzureMetrics', etc."
+        },
+        "workspace": {
+          "type": "string",
+          "description": "The Log Analytics workspace ID or name. This can be either the unique identifier (GUID) or the display name of your workspace."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options: 'credential' (Azure CLI/managed identity), 'key' (access key), or 'connectionString'. Defaults to None."
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry attempts. For exponential backoff, this value is used as the base. Defaults to None."
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries, regardless of the retry strategy. Defaults to None."
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for failed operations before giving up. Defaults to None."
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses consistent delays, 'exponential' increases delay between attempts. Defaults to None."
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in seconds. Operations taking longer than this will be cancelled. Defaults to None."
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name. This can be either the GUID identifier or the display name of your Azure AD tenant. Defaults to None."
+        }
+      },
+      "required": [
+        "resource_group",
+        "subscription",
+        "table_type",
+        "workspace"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_monitor_table_type_list",
+    "description": "List available table types in a Log Analytics workspace. Returns table type names.\n\nThis function lists the available table types within a specified Log Analytics workspace.\nIt returns a list containing the names of these table types.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be either the GUID\nidentifier or the display name of the Azure subscription to use."
+        },
+        "workspace": {
+          "type": "string",
+          "description": "The Log Analytics workspace ID or name. This can be either the\nunique identifier (GUID) or the display name of your workspace."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options: 'credential'\n(Azure CLI/managed identity), 'key' (access key), or 'connectionString'."
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name. This can be\neither the GUID identifier or the display name of your Azure AD tenant."
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for failed\noperations before giving up."
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry attempts.\nFor exponential backoff, this value is used as the base."
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries,\nregardless of the retry strategy."
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses consistent\ndelays, 'exponential' increases delay between attempts."
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in seconds.\nOperations taking longer than this will be cancelled."
+        }
+      },
+      "required": [
+        "subscription",
+        "workspace"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_monitor_workspace_list",
+    "description": "List Log Analytics workspaces in a subscription.\n\nThis command retrieves all Log Analytics workspaces available in the specified Azure subscription,\ndisplaying their names, IDs, and other key properties. Use this command to identify\nworkspaces before querying their logs or tables.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be either the GUID\nidentifier or the display name of the Azure subscription to use."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options: 'credential'\n(Azure CLI/managed identity), 'key' (access key), or 'connectionString'.\nDefaults to None."
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name. This can be\neither the GUID identifier or the display name of your Azure AD tenant.\nDefaults to None."
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for failed\noperations before giving up. Defaults to None."
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry attempts.\nFor exponential backoff, this value is used as the base. Defaults to None."
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries,\nregardless of the retry strategy. Defaults to None."
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses consistent\ndelays, 'exponential' increases delay between attempts. Defaults to None."
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in seconds.\nOperations taking longer than this will be cancelled. Defaults to None."
+        }
+      },
+      "required": [
+        "subscription"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_storage_account_list",
+    "description": "List all Storage accounts in a subscription.\n\nThis command retrieves all Storage accounts available in the specified\nsubscription. Results include account names and are returned as a JSON array.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be\neither the GUID identifier or the display name of the Azure\nsubscription to use."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options:\n'credential' (Azure CLI/managed identity), 'key' (access key),\nor 'connectionString'. Defaults to None."
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry\nattempts. For exponential backoff, this value is used as the base.\nDefaults to None."
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between\nretries, regardless of the retry strategy. Defaults to None."
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts\nfor failed operations before giving up. Defaults to None."
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses\nconsistent delays, 'exponential' increases delay between attempts.\nDefaults to None."
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in\nseconds. Operations taking longer than this will be cancelled.\nDefaults to None."
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name.\nThis can be either the GUID identifier or the display name of your\nAzure AD tenant. Defaults to None."
+        }
+      },
+      "required": [
+        "subscription"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_storage_blob_container_details",
+    "description": "Gets detailed properties of a storage container including metadata, lease status, and access level.\n\nThis function gets detailed properties of a storage container, including its metadata,\nlease status, and access level. It requires an account-name and container-name\nfor identification of the target container.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be either the GUID identifier or the display name of the Azure subscription to use."
+        },
+        "account_name": {
+          "type": "string",
+          "description": "The name of the Azure Storage account. This is the unique name you chose for your storage account (e.g., 'mystorageaccount')."
+        },
+        "container_name": {
+          "type": "string",
+          "description": "The name of the container to access within the storage account."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options: 'credential' (Azure CLI/managed identity), 'key' (access key), or 'connectionString'."
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name. This can be either the GUID identifier or the display name of your Azure AD tenant."
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for failed operations before giving up."
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry attempts. For exponential backoff, this value is used as the base."
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries, regardless of the retry strategy."
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses consistent delays, 'exponential' increases delay between attempts."
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in seconds. Operations taking longer than this will be cancelled."
+        }
+      },
+      "required": [
+        "account_name",
+        "container_name",
+        "subscription"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_storage_blob_container_list",
+    "description": "List all containers in a Storage account.\n\nThis command retrieves and displays all containers available in the specified account.\nResults include container names and are returned as a JSON array. Requires account-name.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be either the GUID\nidentifier or the display name of the Azure subscription to use."
+        },
+        "account_name": {
+          "type": "string",
+          "description": "The name of the Azure Storage account. This is the unique name\nyou chose for your storage account (e.g., 'mystorageaccount')."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options: 'credential'\n(Azure CLI/managed identity), 'key' (access key), or 'connectionString'."
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name. This can be\neither the GUID identifier or the display name of your Azure AD tenant."
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for failed\noperations before giving up."
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry attempts. For\nexponential backoff, this value is used as the base."
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries,\nregardless of the retry strategy."
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses consistent delays,\n'exponential' increases delay between attempts."
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in seconds.\nOperations taking longer than this will be cancelled."
+        }
+      },
+      "required": [
+        "account_name",
+        "subscription"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_storage_blob_list",
+    "description": "List all blobs in a Storage container.\n\nThis command retrieves and displays all blobs available in the specified\ncontainer and Storage account. Results include blob names, sizes, and\ncontent types, returned as a JSON array. Requires account-name and\ncontainer-name.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be\neither the GUID identifier or the display name of the Azure\nsubscription to use."
+        },
+        "account_name": {
+          "type": "string",
+          "description": "The name of the Azure Storage account. This is the\nunique name you chose for your storage account (e.g.,\n'mystorageaccount')."
+        },
+        "container_name": {
+          "type": "string",
+          "description": "The name of the container to access within the\nstorage account."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options:\n'credential' (Azure CLI/managed identity), 'key' (access key),\nor 'connectionString'. Defaults to None."
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry\nattempts. For exponential backoff, this value is used as the base.\nDefaults to None."
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between\nretries, regardless of the retry strategy. Defaults to None."
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts\nfor failed operations before giving up. Defaults to None."
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses\nconsistent delays, 'exponential' increases delay between attempts.\nDefaults to None."
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in\nseconds. Operations taking longer than this will be cancelled.\nDefaults to None."
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name.\nThis can be either the GUID identifier or the display name of your\nAzure AD tenant. Defaults to None."
+        }
+      },
+      "required": [
+        "account_name",
+        "container_name",
+        "subscription"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_storage_table_list",
+    "description": "List all tables in a Storage account.\n\nThis function retrieves and displays all tables available in the specified Storage\naccount. Results include table names and are returned as a list of dictionaries.\nIt requires an account name and subscription ID. This function is used to explore\nStorage resources or to verify table existence before performing operations on\nspecific tables.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "type": "string",
+          "description": "The Azure subscription ID or name. This can be either\nthe GUID identifier or the display name of the Azure subscription to use."
+        },
+        "account_name": {
+          "type": "string",
+          "description": "The name of the Azure Storage account. This is the unique\nname you chose for your storage account (e.g., 'mystorageaccount')."
+        },
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options:\n'credential' (Azure CLI/managed identity), 'key' (access key),\nor 'connectionString'. Defaults to None."
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name. This\ncan be either the GUID identifier or the display name of your Azure AD\ntenant. Defaults to None."
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for\nfailed operations before giving up. Defaults to None."
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry attempts.\nFor exponential backoff, this value is used as the base. Defaults to None."
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries,\nregardless of the retry strategy. Defaults to None."
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses consistent\ndelays, 'exponential' increases delay between attempts. Defaults to None."
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in seconds.\nOperations taking longer than this will be cancelled. Defaults to None."
+        }
+      },
+      "required": [
+        "account_name",
+        "subscription"
+      ]
+    }
+  },
+  {
+    "name": "azmcp_subscription_list",
+    "description": "List all Azure subscriptions accessible to your account.\n\nThis function lists all Azure subscriptions accessible to the account. It optionally allows specifying a tenant and authentication method. Results include subscription names and IDs, returned as a list of dictionaries.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "auth_method": {
+          "type": "string",
+          "description": "Authentication method to use. Options: 'credential' (Azure CLI/managed identity), 'key' (access key), or 'connectionString'."
+        },
+        "tenant": {
+          "type": "string",
+          "description": "The Azure Active Directory tenant ID or name. This can be either the GUID identifier or the display name of your Azure AD tenant."
+        },
+        "retry_max_retries": {
+          "type": "string",
+          "description": "Maximum number of retry attempts for failed operations before giving up."
+        },
+        "retry_delay": {
+          "type": "string",
+          "description": "Initial delay in seconds between retry attempts. For exponential backoff, this value is used as the base."
+        },
+        "retry_max_delay": {
+          "type": "string",
+          "description": "Maximum delay in seconds between retries, regardless of the retry strategy."
+        },
+        "retry_mode": {
+          "type": "string",
+          "description": "Retry strategy to use. 'fixed' uses consistent delays, 'exponential' increases delay between attempts."
+        },
+        "retry_network_timeout": {
+          "type": "string",
+          "description": "Network operation timeout in seconds. Operations taking longer than this will be cancelled."
+        }
+      }
+    }
+  }
+]

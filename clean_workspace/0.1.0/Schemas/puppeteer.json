@@ -1,0 +1,113 @@
+[
+  {
+    "name": "click",
+    "description": "Clicks an element on the current page.\n\nLocates an element using the provided CSS selector and performs a click action on it.\nWaits for the element to be visible before attempting to click. The element must be \nclickable (not obscured, disabled, or hidden) for the operation to succeed.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "selector": {
+          "type": "string",
+          "description": "CSS selector for the element to click."
+        }
+      },
+      "required": [
+        "selector"
+      ]
+    }
+  },
+  {
+    "name": "fill",
+    "description": "Fills an input field with a value.\n\nLocates an input field using the provided CSS selector and fills it with the specified value.\nWaits for the element to be visible and editable before attempting to fill it. The target \nelement must be an input field, textarea, or other editable element for the operation to succeed.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "selector": {
+          "type": "string",
+          "description": "CSS selector for the input element to fill."
+        },
+        "value": {
+          "type": "string",
+          "description": "Value to enter into the input field."
+        }
+      },
+      "required": [
+        "selector",
+        "value"
+      ]
+    }
+  },
+  {
+    "name": "navigate",
+    "description": "Navigates to a URL in the browser.\n\nOpens a new browser context and navigates to the specified URL. Validates the URL format, \ninitializes a browser session, loads the page, and stores the navigation details in the \ndatabase for subsequent operations.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "The URL to navigate to. Must be a valid HTTP/HTTPS URL."
+        },
+        "launch_options": {
+          "type": "object",
+          "properties": {},
+          "description": "Browser launch configuration options.\nCommon options include headless mode, viewport size, and user agent settings."
+        },
+        "allow_dangerous": {
+          "type": "boolean",
+          "description": "Whether to allow navigation to potentially unsafe URLs.\nDefaults to False for security."
+        }
+      },
+      "required": [
+        "url"
+      ]
+    }
+  },
+  {
+    "name": "screenshot",
+    "description": "Takes a screenshot of the current page or a specific element.\n\nCaptures a screenshot identified by the name parameter. If a selector is provided, captures \nthe specific element on the page that matches the CSS selector. If no selector is given, \ncaptures the entire current page. The dimensions can be customized using the width and \nheight parameters, which default to 800 and 600 pixels respectively.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name for the screenshot."
+        },
+        "selector": {
+          "type": "string",
+          "description": "CSS selector for element to screenshot."
+        },
+        "width": {
+          "type": "integer",
+          "description": "Width in pixels (default: 800)."
+        },
+        "height": {
+          "type": "integer",
+          "description": "Height in pixels (default: 600)."
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  },
+  {
+    "name": "select_option",
+    "description": "Selects an option in a dropdown element.\n\nLocates a select dropdown using the provided CSS selector and selects the specified option.\nWaits for the select element to be visible before attempting to select an option. The value \ncan match either the option's value attribute or its text content. The target element must \nbe a select element with available options for the operation to succeed.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "selector": {
+          "type": "string",
+          "description": "CSS selector for the select element."
+        },
+        "value": {
+          "type": "string",
+          "description": "Value or text of the option to select."
+        }
+      },
+      "required": [
+        "selector",
+        "value"
+      ]
+    }
+  }
+]

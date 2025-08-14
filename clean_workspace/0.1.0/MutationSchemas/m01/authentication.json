@@ -1,0 +1,87 @@
+[
+  {
+    "name": "authorize_service_access",
+    "description": "Authenticate a service by setting its authentication status to True.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "service_identifier": {
+          "type": "string",
+          "description": "The name of the service to authenticate"
+        }
+      },
+      "required": [
+        "service_identifier"
+      ]
+    }
+  },
+  {
+    "name": "check_service_authorization",
+    "description": "Checks if a service is authenticated and returns a simple boolean result.\n\nThis function checks the runtime authentication state from the framework config.\nIt uses the authentication manager to determine if authentication is required.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "service_to_query": {
+          "type": "string",
+          "description": "The name of the service to check. Can be any string,\nincluding names of services that don't exist in the system."
+        }
+      },
+      "required": [
+        "service_to_query"
+      ]
+    }
+  },
+  {
+    "name": "clear_all_service_authorizations",
+    "description": "Reset authentication status for all services.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "generate_secured_function_wrapper",
+    "description": "Creates an authenticated version of a function that checks authentication before execution.\n\nThis function wraps an existing function with authentication checking logic.\nThe wrapped function will only execute if the specified service is authenticated,\notherwise it raises an AuthenticationError with a helpful message.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "function_to_secure": {
+          "type": "object",
+          "description": "The function to wrap with authentication checking."
+        },
+        "target_service_identifier": {
+          "type": "string",
+          "description": "The name of the service that needs to be authenticated."
+        }
+      },
+      "required": [
+        "function_to_secure",
+        "target_service_identifier"
+      ]
+    }
+  },
+  {
+    "name": "retrieve_authorized_services",
+    "description": "List all authenticated services.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "revoke_service_access",
+    "description": "Deauthenticate a service by setting its authentication status to False.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "service_to_revoke": {
+          "type": "string",
+          "description": "The name of the service to deauthenticate"
+        }
+      },
+      "required": [
+        "service_to_revoke"
+      ]
+    }
+  }
+]

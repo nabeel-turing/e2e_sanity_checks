@@ -1,0 +1,1637 @@
+[
+  {
+    "name": "add_new_channel_layout_section",
+    "description": "Inserts a new channel section.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "response_section_parts": {
+          "type": "string",
+          "description": "The part parameter specifies the channelSection resource properties that the API response will include."
+        },
+        "new_section_details": {
+          "type": "string",
+          "description": "The snippet object contains details about the channel section."
+        },
+        "request_as_content_owner_id": {
+          "type": "string",
+          "description": "The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value. Currently not used!"
+        },
+        "target_owner_channel_id": {
+          "type": "string",
+          "description": "The onBehalfOfContentOwnerChannel parameter specifies the YouTube channel ID of the channel to which the user is being added. Currently not used!"
+        }
+      },
+      "required": [
+        "new_section_details",
+        "response_section_parts"
+      ]
+    }
+  },
+  {
+    "name": "add_new_channel_member",
+    "description": "Creates a new membership.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "new_member_response_parts": {
+          "type": "string",
+          "description": "The part parameter specifies the membership resource properties that the API response will include."
+        },
+        "new_membership_information": {
+          "type": "object",
+          "properties": {},
+          "description": "The snippet object containing membership details."
+        }
+      },
+      "required": [
+        "new_member_response_parts",
+        "new_membership_information"
+      ]
+    }
+  },
+  {
+    "name": "add_new_channel_subscription",
+    "description": "Inserts a new subscription.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription_response_parts": {
+          "type": "string",
+          "description": "The part parameter specifies the subscription resource properties that the API response will include."
+        },
+        "new_subscription_details": {
+          "type": "object",
+          "description": "The snippet object contains details about the subscription."
+        }
+      },
+      "required": [
+        "subscription_response_parts"
+      ]
+    }
+  },
+  {
+    "name": "cancel_channel_subscription",
+    "description": "Deletes a subscription.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription_identifier_to_cancel": {
+          "type": "string",
+          "description": "The ID of the subscription to delete."
+        }
+      },
+      "required": [
+        "subscription_identifier_to_cancel"
+      ]
+    }
+  },
+  {
+    "name": "change_playlist_video_sequence",
+    "description": "Reorders videos in a playlist.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "playlist_to_reorder_id": {
+          "type": "string",
+          "description": "The playlist_id parameter specifies the YouTube playlist ID."
+        },
+        "new_video_id_sequence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The video_order parameter specifies the new order of video IDs."
+        }
+      },
+      "required": [
+        "new_video_id_sequence",
+        "playlist_to_reorder_id"
+      ]
+    }
+  },
+  {
+    "name": "configure_subscriber_count_visibility",
+    "description": "Checks whether the subscriber count is hidden.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "is_subscriber_count_hidden": {
+          "type": "boolean",
+          "description": "If provided, sets whether the subscriber count is hidden.\nIf None, retrieves the current setting."
+        }
+      }
+    }
+  },
+  {
+    "name": "edit_channel_properties",
+    "description": "Updates metadata of a YouTube channel.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "channel_identifier_for_edit": {
+          "type": "string",
+          "description": "The unique identifier of the channel to update."
+        },
+        "new_channel_property_values": {
+          "type": "object",
+          "properties": {
+            "categoryId": {
+              "type": "string",
+              "description": "Channel category"
+            },
+            "forUsername": {
+              "type": "string",
+              "description": "Channel username"
+            },
+            "hl": {
+              "type": "string",
+              "description": "Language setting"
+            },
+            "managedByMe": {
+              "type": "boolean",
+              "description": "Management status"
+            },
+            "mine": {
+              "type": "boolean",
+              "description": "Ownership status"
+            },
+            "mySubscribers": {
+              "type": "boolean",
+              "description": "Subscription status"
+            },
+            "onBehalfOfContentOwner": {
+              "type": "string",
+              "description": "CMS user information"
+            }
+          },
+          "description": "Key-value pairs of channel properties to update. Valid properties include:",
+          "required": [
+            "categoryId",
+            "forUsername",
+            "hl",
+            "managedByMe",
+            "mine",
+            "mySubscribers",
+            "onBehalfOfContentOwner"
+          ]
+        }
+      },
+      "required": [
+        "channel_identifier_for_edit"
+      ]
+    }
+  },
+  {
+    "name": "edit_existing_comment",
+    "description": "Updates an existing comment.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "comment_id_for_editing": {
+          "type": "string",
+          "description": "The ID of the comment to update."
+        },
+        "updated_comment_content": {
+          "type": "object",
+          "description": "The snippet object contains details about the comment."
+        },
+        "updated_moderation_status": {
+          "type": "string",
+          "description": "The new moderation status for the comment."
+        },
+        "update_author_ban_status": {
+          "type": "boolean",
+          "description": "Whether the author of the comment is banned."
+        }
+      },
+      "required": [
+        "comment_id_for_editing"
+      ]
+    }
+  },
+  {
+    "name": "execute_content_search_query",
+    "description": "Returns a collection of search results that match the query parameters.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "search_result_components": {
+          "type": "string",
+          "description": "The part parameter specifies a comma-separated list of one or more search resource properties."
+        },
+        "search_keyword_query": {
+          "type": "string",
+          "description": "The query term to search for."
+        },
+        "limit_search_to_channel_id": {
+          "type": "string",
+          "description": "Filter results to only contain resources created by the specified channel."
+        },
+        "filter_by_channel_type": {
+          "type": "string",
+          "description": "Filter results to only contain channels of a particular type."
+        },
+        "search_result_limit": {
+          "type": "integer",
+          "description": "The maximum number of items that should be returned in the result set."
+        },
+        "search_result_sort_method": {
+          "type": "string",
+          "description": "The order in which to sort the returned resources."
+        },
+        "resource_type_filter": {
+          "type": "string",
+          "description": "A comma-separated list of resource types that should be included in the search response."
+        },
+        "caption_availability_filter": {
+          "type": "string",
+          "description": "Filter videos based on the presence, absence, or type of captions."
+        },
+        "video_genre_id_filter": {
+          "type": "string",
+          "description": "Filter videos by category ID."
+        },
+        "video_quality_filter": {
+          "type": "string",
+          "description": "Filter videos by definition (high or standard)."
+        },
+        "video_length_filter": {
+          "type": "string",
+          "description": "Filter videos by duration."
+        },
+        "embeddable_status_filter": {
+          "type": "string",
+          "description": "Filter videos that can be embedded."
+        },
+        "video_license_type_filter": {
+          "type": "string",
+          "description": "Filter videos by license type."
+        },
+        "syndication_status_filter": {
+          "type": "string",
+          "description": "Filter videos by syndication status."
+        },
+        "video_content_type_filter": {
+          "type": "string",
+          "description": "Filter videos by type."
+        }
+      },
+      "required": [
+        "search_result_components"
+      ]
+    }
+  },
+  {
+    "name": "fetch_available_video_genres",
+    "description": "Retrieves a list of video categories with optional filters.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "category_data_sections": {
+          "type": "string",
+          "description": "The part parameter specifies the videoCategory resource properties that the API response will include."
+        },
+        "localization_language_code": {
+          "type": "string",
+          "description": "The hl parameter instructs the API to retrieve localized resource metadata for a specific application language that the YouTube website supports. Currently unused!"
+        },
+        "specific_category_id": {
+          "type": "string",
+          "description": "The id parameter identifies the video category that is being retrieved."
+        },
+        "category_region_code": {
+          "type": "string",
+          "description": "The regionCode parameter instructs the API to select a video category available in the specified region."
+        },
+        "result_set_size_limit": {
+          "type": "integer",
+          "description": "The maximum number of items that should be returned in the result set."
+        }
+      },
+      "required": [
+        "category_data_sections"
+      ]
+    }
+  },
+  {
+    "name": "fetch_caption_track_file",
+    "description": "Downloads a caption track.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "caption_track_id_to_download": {
+          "type": "string",
+          "description": "The ID of the caption to be downloaded."
+        },
+        "requesting_cms_user_id": {
+          "type": "string",
+          "description": "CMS user making the request on behalf of the content owner. (Currently not used in implementation)"
+        },
+        "caption_content_owner_id": {
+          "type": "string",
+          "description": "Content owner the user is acting on behalf of. (Currently not used in implementation)"
+        },
+        "caption_file_format": {
+          "type": "string",
+          "description": "Desired format of the caption file ('srt', 'vtt', 'sbv')."
+        },
+        "caption_translation_language": {
+          "type": "string",
+          "description": "Target language for translation (simulated)."
+        }
+      },
+      "required": [
+        "caption_track_id_to_download"
+      ]
+    }
+  },
+  {
+    "name": "fetch_playlist_by_id",
+    "description": "Retrieves a specific playlist by ID.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "playlist_identifier": {
+          "type": "string",
+          "description": "The playlist_id parameter specifies the YouTube playlist ID."
+        }
+      },
+      "required": [
+        "playlist_identifier"
+      ]
+    }
+  },
+  {
+    "name": "find_channels_by_criteria",
+    "description": "Retrieves a list of channels with optional filters.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "filter_by_guide_category_id": {
+          "type": "string",
+          "description": "The categoryId parameter specifies a YouTube guide category ID.\nThe API response will only include channels from that category."
+        },
+        "find_by_username": {
+          "type": "string",
+          "description": "The forUsername parameter specifies a YouTube username.\nThe API response will only include the channel associated with that username."
+        },
+        "preferred_language_code": {
+          "type": "string",
+          "description": "The hl parameter instructs the API to retrieve localized resource metadata\nfor a specific application language that the YouTube website supports."
+        },
+        "filter_by_channel_ids": {
+          "type": "string",
+          "description": "The id parameter specifies a comma-separated list of the YouTube channel ID(s)\nfor the resource(s) that are being retrieved."
+        },
+        "show_managed_channels_only": {
+          "type": "boolean",
+          "description": "The managedByMe parameter can be used to instruct the API\nto only return channels that the user is allowed to manage."
+        },
+        "channel_list_page_size": {
+          "type": "integer",
+          "description": "The maxResults parameter specifies the maximum number of items\nthat should be returned in the result set. Must be between 1 and 50."
+        },
+        "show_my_channels_only": {
+          "type": "boolean",
+          "description": "The mine parameter can be used to instruct the API to only return\nchannels owned by the authenticated user."
+        },
+        "show_channels_subscribed_to": {
+          "type": "boolean",
+          "description": "The mySubscribers parameter can be used to instruct the API\nto only return channels to which the authenticated user has subscribed."
+        },
+        "act_as_content_owner_for_request": {
+          "type": "string",
+          "description": "The onBehalfOfContentOwner parameter indicates that the\nrequest's authorization credentials identify a YouTube CMS user\nwho is acting on behalf of the content owner specified\nin the parameter value."
+        }
+      }
+    }
+  },
+  {
+    "name": "flag_comment_as_spam",
+    "description": "Marks a comment as spam.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "comment_id_to_flag": {
+          "type": "string",
+          "description": "The ID of the comment to mark as spam."
+        }
+      },
+      "required": [
+        "comment_id_to_flag"
+      ]
+    }
+  },
+  {
+    "name": "flag_video_for_abuse",
+    "description": "Reports a video for abuse.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "abusive_video_id": {
+          "type": "string",
+          "description": "The ID of the video to report."
+        },
+        "abuse_reason_code": {
+          "type": "string",
+          "description": "The ID of the reason for reporting the video."
+        },
+        "reporting_content_owner_id": {
+          "type": "string",
+          "description": "The ID of the content owner on whose behalf the report is being made."
+        }
+      },
+      "required": [
+        "abuse_reason_code",
+        "abusive_video_id"
+      ]
+    }
+  },
+  {
+    "name": "generate_new_playlist",
+    "description": "Creates a new playlist.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "channel_owner_id": {
+          "type": "string",
+          "description": "The ownerId parameter specifies the YouTube channel ID of the user who owns the playlist."
+        },
+        "playlist_name": {
+          "type": "string",
+          "description": "The title parameter specifies the title of the playlist."
+        },
+        "playlist_summary": {
+          "type": "string",
+          "description": "The description parameter specifies the description of the playlist. Defaults to empty string."
+        },
+        "visibility_level": {
+          "type": "string",
+          "description": "The privacyStatus parameter specifies the privacy status of the playlist. Defaults to \"public\". Must be one of ['public', 'private', 'unlisted']."
+        },
+        "initial_video_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The list_of_videos parameter specifies the list of videos in the playlist. Defaults to empty list."
+        },
+        "playlist_images": {
+          "type": "object",
+          "properties": {},
+          "description": "The thumbnails parameter specifies the thumbnails of the playlist. Defaults to empty dictionary or thumbnail of the first video in the list_of_videos if list_of_videos is provided.\ndefault - Dictionary with default thumbnail\n    url - URL of the thumbnail\n    height - Height of the thumbnail\n    width - Width of the thumbnail\nmedium - Dictionary with medium thumbnail\n    url - URL of the thumbnail\n    height - Height of the thumbnail\n    width - Width of the thumbnail\nhigh - Dictionary with high thumbnail\n    url - URL of the thumbnail\n    height - Height of the thumbnail\n    width - Width of the thumbnail"
+        }
+      },
+      "required": [
+        "channel_owner_id",
+        "playlist_name"
+      ]
+    }
+  },
+  {
+    "name": "get_channel_members_list",
+    "description": "Retrieves a list of members that match the request criteria for a channel.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "membership_data_to_return": {
+          "type": "string",
+          "description": "The part parameter specifies the membership resource properties that the API response will include."
+        },
+        "filter_by_access_level_id": {
+          "type": "string",
+          "description": "The hasAccessToLevel parameter specifies the membership level that the member has access to."
+        },
+        "filter_by_member_ids": {
+          "type": "string",
+          "description": "The filterByMemberChannelId parameter specifies a comma-separated list of YouTube channel IDs. The API will only return memberships from those channels."
+        },
+        "member_list_size": {
+          "type": "integer",
+          "description": "The maxResults parameter specifies the maximum number of items that should be returned in the result set."
+        },
+        "filter_by_membership_mode": {
+          "type": "string",
+          "description": "The mode parameter specifies the membership mode."
+        },
+        "member_list_page_cursor": {
+          "type": "string",
+          "description": "The pageToken parameter identifies a specific page in the result set that should be returned. (Currently not used in implementation)"
+        }
+      },
+      "required": [
+        "membership_data_to_return"
+      ]
+    }
+  },
+  {
+    "name": "get_or_set_channel_comment_total",
+    "description": "Retrieves or sets the number of comments for the channel.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "new_comment_total_value": {
+          "type": "integer",
+          "description": "If provided, sets the comment count to this value.\nIf None, retrieves the current comment count."
+        }
+      }
+    }
+  },
+  {
+    "name": "get_or_set_channel_subscriber_total",
+    "description": "Retrieves or sets the number of subscribers of the channel.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "new_subscriber_total_value": {
+          "type": "integer",
+          "description": "If provided, sets the subscriber count to this value.\nIf None, retrieves the current subscriber count."
+        }
+      }
+    }
+  },
+  {
+    "name": "get_or_set_channel_video_total",
+    "description": "Retrieves or sets the number of videos uploaded to the channel.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "new_video_total_value": {
+          "type": "integer",
+          "description": "If provided, sets the video count to this value.\nIf None, retrieves the current video count."
+        }
+      }
+    }
+  },
+  {
+    "name": "get_or_set_channel_view_total",
+    "description": "Retrieves or sets the total view count of the channel.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "new_view_total_value": {
+          "type": "integer",
+          "description": "If provided, sets the view count to this value.\nIf None, retrieves the current view count."
+        }
+      }
+    }
+  },
+  {
+    "name": "get_video_caption_tracks",
+    "description": "Retrieves a list of captions.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "caption_track_data_to_include": {
+          "type": "string",
+          "description": "Must be 'id' or 'snippet'."
+        },
+        "source_video_id": {
+          "type": "string",
+          "description": "ID of the video to retrieve captions for."
+        },
+        "filter_by_caption_track_id": {
+          "type": "string",
+          "description": "Specific caption ID to filter results."
+        },
+        "list_as_cms_user_id": {
+          "type": "string",
+          "description": "CMS user making the request on behalf of the content owner. (Currently not used in implementation)"
+        },
+        "list_for_content_owner_id": {
+          "type": "string",
+          "description": "Content owner the user is acting on behalf of. (Currently not used in implementation)"
+        }
+      },
+      "required": [
+        "caption_track_data_to_include",
+        "source_video_id"
+      ]
+    }
+  },
+  {
+    "name": "initiate_new_comment_discussion",
+    "description": "Inserts a new comment thread.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "thread_resource_parts": {
+          "type": "string",
+          "description": "The part parameter specifies the commentThread resource properties\nthat the API response will include. Currently, only \"snippet\" is supported."
+        },
+        "thread_metadata_details": {
+          "type": "object",
+          "description": "The snippet object contains details about the comment thread.\nThis is treated as arbitrary thread metadata."
+        },
+        "initial_thread_comment_data": {
+          "type": "object",
+          "description": "The top-level comment for the thread.\nIf provided, it's expected to be a dictionary\npotentially containing an 'id' (str) key."
+        }
+      },
+      "required": [
+        "thread_resource_parts"
+      ]
+    }
+  },
+  {
+    "name": "insert_video_into_playlist",
+    "description": "Adds a video to a playlist.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "destination_playlist_id": {
+          "type": "string",
+          "description": "The playlist_id parameter specifies the YouTube playlist ID."
+        },
+        "video_to_add_id": {
+          "type": "string",
+          "description": "The video_id parameter specifies the YouTube video ID to add."
+        }
+      },
+      "required": [
+        "destination_playlist_id",
+        "video_to_add_id"
+      ]
+    }
+  },
+  {
+    "name": "moderate_single_comment",
+    "description": "Sets the moderation status of a comment.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target_comment_id_for_moderation": {
+          "type": "string",
+          "description": "The ID of the comment to moderate."
+        },
+        "new_moderation_state": {
+          "type": "string",
+          "description": "The new moderation status. Valid values:\n- \"heldForReview\"\n- \"published\"\n- \"rejected\""
+        },
+        "should_ban_author_on_rejection": {
+          "type": "boolean",
+          "description": "If True, bans the author of the comment when rejecting it. Default to false"
+        }
+      },
+      "required": [
+        "new_moderation_state",
+        "target_comment_id_for_moderation"
+      ]
+    }
+  },
+  {
+    "name": "modify_channel_layout_section",
+    "description": "Updates a channel section.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "updated_section_parts": {
+          "type": "string",
+          "description": "The part parameter specifies the channelSection resource properties that the API response will include."
+        },
+        "section_id_to_modify": {
+          "type": "string",
+          "description": "The ID of the channel section to update."
+        },
+        "updated_section_details": {
+          "type": "string",
+          "description": "The snippet object contains details about the channel section."
+        },
+        "cms_acting_content_owner_id": {
+          "type": "string",
+          "description": "The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value. Currently not used !"
+        }
+      },
+      "required": [
+        "section_id_to_modify",
+        "updated_section_parts"
+      ]
+    }
+  },
+  {
+    "name": "modify_channel_membership_details",
+    "description": "Updates an existing membership.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "membership_parts_to_update": {
+          "type": "string",
+          "description": "The part parameter specifies the membership resource properties that the API response will include."
+        },
+        "membership_id_for_update": {
+          "type": "string",
+          "description": "The ID of the membership to update."
+        },
+        "updated_membership_information": {
+          "type": "object",
+          "properties": {},
+          "description": "The updated snippet object containing membership details."
+        }
+      },
+      "required": [
+        "membership_id_for_update",
+        "membership_parts_to_update",
+        "updated_membership_information"
+      ]
+    }
+  },
+  {
+    "name": "modify_comment_discussion",
+    "description": "Updates an existing comment thread.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "discussion_id_for_update": {
+          "type": "string",
+          "description": "The ID of the comment thread to update."
+        },
+        "updated_thread_metadata": {
+          "type": "object",
+          "description": "The snippet object contains details about the comment thread."
+        },
+        "updated_comment_id_list": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of comment IDs associated with the thread."
+        }
+      },
+      "required": [
+        "discussion_id_for_update"
+      ]
+    }
+  },
+  {
+    "name": "modify_playlist_details",
+    "description": "Updates an existing playlist.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target_playlist_id": {
+          "type": "string",
+          "description": "The playlist_id parameter specifies the YouTube playlist ID."
+        },
+        "new_playlist_title": {
+          "type": "string",
+          "description": "The title parameter specifies the new title of the playlist."
+        },
+        "updated_playlist_description": {
+          "type": "string",
+          "description": "The description parameter specifies the new description of the playlist."
+        },
+        "new_visibility_setting": {
+          "type": "string",
+          "description": "The privacyStatus parameter specifies the new privacy status of the playlist. Must be one of ['public', 'private', 'unlisted']."
+        },
+        "new_playlist_thumbnails": {
+          "type": "object",
+          "properties": {},
+          "description": "The thumbnails parameter specifies the new thumbnails of the playlist."
+        }
+      },
+      "required": [
+        "target_playlist_id"
+      ]
+    }
+  },
+  {
+    "name": "modify_video_caption_track",
+    "description": "Updates a caption resource.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "caption_parts_to_be_updated": {
+          "type": "string",
+          "description": "The part parameter specifies the caption resource properties that the API response will include."
+        },
+        "caption_track_id_to_modify": {
+          "type": "string",
+          "description": "The id parameter identifies the caption track that is being updated."
+        },
+        "updated_caption_track_details": {
+          "type": "object",
+          "properties": {},
+          "description": "The snippet object contains details about the caption track."
+        },
+        "update_as_cms_user_id": {
+          "type": "string",
+          "description": "The onBehalfOf parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the onBehalfOfContentOwner parameter. (Currently not used in implementation)"
+        },
+        "update_for_content_owner_id": {
+          "type": "string",
+          "description": "The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value. (Currently not used in implementation)"
+        },
+        "resynchronize_with_video": {
+          "type": "boolean",
+          "description": "The sync parameter indicates whether the caption track should be synchronized with the video. (Currently not used in implementation)"
+        }
+      },
+      "required": [
+        "caption_parts_to_be_updated",
+        "caption_track_id_to_modify"
+      ]
+    }
+  },
+  {
+    "name": "modify_video_details",
+    "description": "Updates a video.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "video_parts_being_updated": {
+          "type": "string",
+          "description": "The part parameter specifies the video resource properties that the API request is setting."
+        },
+        "updated_video_resource_body": {
+          "type": "object",
+          "properties": {},
+          "description": "The video resource to update."
+        },
+        "modify_as_user_id": {
+          "type": "string",
+          "description": "The ID of the user on whose behalf the request is being made."
+        },
+        "modify_for_content_owner_id": {
+          "type": "string",
+          "description": "The ID of the content owner on whose behalf the request is being made."
+        }
+      },
+      "required": [
+        "updated_video_resource_body",
+        "video_parts_being_updated"
+      ]
+    }
+  },
+  {
+    "name": "post_new_comment",
+    "description": "Inserts a new comment.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "comment_response_data_parts": {
+          "type": "string",
+          "description": "The part parameter specifies the comment resource properties that the API response will include."
+        },
+        "new_comment_content": {
+          "type": "object",
+          "description": "The snippet object contains details about the comment."
+        },
+        "initial_moderation_status": {
+          "type": "string",
+          "description": "The initial moderation status for the comment.\nDefaults to \"published\"."
+        },
+        "is_author_banned": {
+          "type": "boolean",
+          "description": "Whether the author of the comment is banned.\nDefaults to False."
+        }
+      },
+      "required": [
+        "comment_response_data_parts"
+      ]
+    }
+  },
+  {
+    "name": "publish_new_video",
+    "description": "Uploads a video.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "video_details": {
+          "type": "object",
+          "properties": {
+            "snippet": {
+              "type": "object",
+              "properties": {
+                "channelId": {
+                  "type": "string",
+                  "description": "The ID of the channel that the video is uploaded to."
+                },
+                "title": {
+                  "type": "string",
+                  "description": "The title of the video."
+                },
+                "description": {
+                  "type": "string",
+                  "description": "The description of the video."
+                },
+                "thumbnails": {
+                  "type": "object",
+                  "properties": {
+                    "default": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string",
+                          "description": "The URL of the default thumbnail."
+                        },
+                        "width": {
+                          "type": "integer",
+                          "description": "The width of the default thumbnail."
+                        },
+                        "height": {
+                          "type": "integer",
+                          "description": "The height of the default thumbnail."
+                        }
+                      },
+                      "description": "The default thumbnail of the video.",
+                      "required": [
+                        "height",
+                        "url",
+                        "width"
+                      ]
+                    },
+                    "medium": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string",
+                          "description": "The URL of the medium thumbnail."
+                        },
+                        "width": {
+                          "type": "integer",
+                          "description": "The width of the medium thumbnail."
+                        },
+                        "height": {
+                          "type": "integer",
+                          "description": "The height of the medium thumbnail."
+                        }
+                      },
+                      "description": "The medium thumbnail of the video.",
+                      "required": [
+                        "height",
+                        "url",
+                        "width"
+                      ]
+                    },
+                    "high": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string",
+                          "description": "The URL of the high thumbnail."
+                        },
+                        "width": {
+                          "type": "integer",
+                          "description": "The width of the high thumbnail."
+                        },
+                        "height": {
+                          "type": "integer",
+                          "description": "The height of the high thumbnail."
+                        }
+                      },
+                      "description": "The high thumbnail of the video.",
+                      "required": [
+                        "height",
+                        "url",
+                        "width"
+                      ]
+                    }
+                  },
+                  "description": "The thumbnails of the video.",
+                  "required": [
+                    "default",
+                    "high",
+                    "medium"
+                  ]
+                },
+                "channelTitle": {
+                  "type": "string",
+                  "description": "The title of the channel that the video is uploaded to."
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "The tags of the video."
+                },
+                "categoryId": {
+                  "type": "string",
+                  "description": "The ID of the category that the video belongs to."
+                }
+              },
+              "description": "The snippet of the video to upload.",
+              "required": [
+                "categoryId",
+                "channelId",
+                "channelTitle",
+                "description",
+                "tags",
+                "thumbnails",
+                "title"
+              ]
+            },
+            "status": {
+              "type": "object",
+              "properties": {
+                "uploadStatus": {
+                  "type": "string",
+                  "description": "The upload status of the video. Must be one of ['processed', 'failed', 'rejected', 'uploaded', 'deleted']."
+                },
+                "privacyStatus": {
+                  "type": "string",
+                  "description": "The privacy status of the video. Must be one of ['public', 'unlisted', 'private']."
+                },
+                "embeddable": {
+                  "type": "boolean",
+                  "description": "Whether the video is embeddable."
+                },
+                "madeForKids": {
+                  "type": "boolean",
+                  "description": "Whether the video is made for kids."
+                }
+              },
+              "description": "The status of the video to upload.",
+              "required": [
+                "embeddable",
+                "madeForKids",
+                "privacyStatus",
+                "uploadStatus"
+              ]
+            }
+          },
+          "description": "The video resource to upload.",
+          "required": [
+            "snippet",
+            "status"
+          ]
+        }
+      },
+      "required": [
+        "video_details"
+      ]
+    }
+  },
+  {
+    "name": "query_comment_discussions",
+    "description": "Retrieves a list of comment threads with optional filters.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "comment_thread_data_parts": {
+          "type": "string",
+          "description": "The part parameter specifies the commentThread resource properties that the API response will include. Cannot be empty."
+        },
+        "specific_discussion_id": {
+          "type": "string",
+          "description": "The id parameter identifies the comment thread that is being retrieved."
+        },
+        "filter_by_channel_id": {
+          "type": "string",
+          "description": "The channelId parameter specifies a YouTube channel ID. The API will only return that channel's comment threads."
+        },
+        "filter_by_video_id": {
+          "type": "string",
+          "description": "The videoId parameter identifies the video for which the API should return comment threads."
+        },
+        "fetch_all_channel_related_threads_id": {
+          "type": "string",
+          "description": "The allThreadsRelatedToChannelId parameter specifies a YouTube channel ID. The API will return all comment threads related to that channel."
+        },
+        "discussion_search_query": {
+          "type": "string",
+          "description": "The searchTerms parameter specifies the search terms to use when filtering comment threads."
+        },
+        "comment_moderation_filter": {
+          "type": "string",
+          "description": "The moderationStatus parameter specifies the moderation status of comments to include in the response."
+        },
+        "discussion_sort_order": {
+          "type": "string",
+          "description": "The order parameter specifies the order in which the API response should list comment threads."
+        },
+        "max_discussions_per_page": {
+          "type": "integer",
+          "description": "The maxResults parameter specifies the maximum number of items that should be returned in the result set. Must be a positive integer if provided."
+        },
+        "discussion_page_identifier": {
+          "type": "string",
+          "description": "The pageToken parameter identifies a specific page in the result set that should be returned."
+        },
+        "comment_text_output_format": {
+          "type": "string",
+          "description": "The textFormat parameter specifies the format of the text in the comments."
+        }
+      },
+      "required": [
+        "comment_thread_data_parts"
+      ]
+    }
+  },
+  {
+    "name": "register_new_channel",
+    "description": "Creates a new channel resource in the simulated database.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "initial_channel_data_parts": {
+          "type": "string",
+          "description": "The part parameter specifies the channel resource properties that the API response will include."
+        },
+        "new_channel_guide_category": {
+          "type": "string",
+          "description": "The categoryId parameter specifies a YouTube guide category ID for the new channel."
+        },
+        "new_channel_username": {
+          "type": "string",
+          "description": "The forUsername parameter specifies a YouTube username for the new channel."
+        },
+        "new_channel_language": {
+          "type": "string",
+          "description": "The hl parameter instructs the API to retrieve localized resource metadata for a specific application language that the YouTube website supports."
+        },
+        "predefined_channel_id": {
+          "type": "string",
+          "description": "The id parameter specifies the YouTube channel ID for the new channel. Currently not used!"
+        },
+        "is_managed_by_creator": {
+          "type": "boolean",
+          "description": "The managedByMe parameter indicates whether the channel is managed by the authenticated user."
+        },
+        "creation_response_limit": {
+          "type": "integer",
+          "description": "The maxResults parameter specifies the maximum number of items that should be returned in the result set."
+        },
+        "is_owned_by_creator": {
+          "type": "boolean",
+          "description": "The mine parameter indicates whether the channel is owned by the authenticated user."
+        },
+        "is_subscribed_by_creator": {
+          "type": "boolean",
+          "description": "The mySubscribers parameter indicates whether the authenticated user has subscribed to the channel."
+        },
+        "create_as_content_owner_id": {
+          "type": "string",
+          "description": "The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value."
+        }
+      },
+      "required": [
+        "initial_channel_data_parts"
+      ]
+    }
+  },
+  {
+    "name": "remove_channel_layout_section",
+    "description": "Deletes a channel section from the simulated database.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "section_identifier_to_remove": {
+          "type": "string",
+          "description": "The unique identifier of the channel section to delete."
+        },
+        "acting_as_content_owner_id": {
+          "type": "string",
+          "description": "Content owner ID for CMS user operations."
+        }
+      },
+      "required": [
+        "section_identifier_to_remove"
+      ]
+    }
+  },
+  {
+    "name": "remove_channel_membership",
+    "description": "Deletes a membership.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "membership_id_to_delete": {
+          "type": "string",
+          "description": "The ID of the membership to delete."
+        }
+      },
+      "required": [
+        "membership_id_to_delete"
+      ]
+    }
+  },
+  {
+    "name": "remove_comment_discussion",
+    "description": "Deletes a comment thread by its ID.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "discussion_identifier_to_delete": {
+          "type": "string",
+          "description": "The ID of the comment thread to delete."
+        }
+      },
+      "required": [
+        "discussion_identifier_to_delete"
+      ]
+    }
+  },
+  {
+    "name": "remove_individual_comment",
+    "description": "Deletes a comment.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "comment_identifier_to_remove": {
+          "type": "string",
+          "description": "The ID of the comment to delete."
+        }
+      },
+      "required": [
+        "comment_identifier_to_remove"
+      ]
+    }
+  },
+  {
+    "name": "remove_playlist_by_id",
+    "description": "Deletes a playlist.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "playlist_to_delete_id": {
+          "type": "string",
+          "description": "The playlist_id parameter specifies the YouTube playlist ID."
+        }
+      },
+      "required": [
+        "playlist_to_delete_id"
+      ]
+    }
+  },
+  {
+    "name": "remove_video_by_id",
+    "description": "Deletes a video.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "video_id_to_be_deleted": {
+          "type": "string",
+          "description": "The ID of the video to delete."
+        },
+        "delete_for_content_owner_id": {
+          "type": "string",
+          "description": "The ID of the content owner on whose behalf the deletion is being made."
+        }
+      },
+      "required": [
+        "video_id_to_be_deleted"
+      ]
+    }
+  },
+  {
+    "name": "remove_video_caption_track",
+    "description": "Deletes a caption.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "caption_track_id_to_delete": {
+          "type": "string",
+          "description": "The id parameter identifies the caption track that is being deleted."
+        },
+        "cms_user_agent_id": {
+          "type": "string",
+          "description": "The onBehalfOf parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the onBehalfOfContentOwner parameter. (Currently not used in implementation)"
+        },
+        "cms_content_owner_id_for_action": {
+          "type": "string",
+          "description": "The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value. (Currently not used in implementation)"
+        }
+      },
+      "required": [
+        "caption_track_id_to_delete"
+      ]
+    }
+  },
+  {
+    "name": "remove_video_from_playlist_items",
+    "description": "Removes a video from a playlist.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "source_playlist_id": {
+          "type": "string",
+          "description": "The playlist_id parameter specifies the YouTube playlist ID."
+        },
+        "video_to_remove_id": {
+          "type": "string",
+          "description": "The video_id parameter specifies the YouTube video ID to remove."
+        }
+      },
+      "required": [
+        "source_playlist_id",
+        "video_to_remove_id"
+      ]
+    }
+  },
+  {
+    "name": "retrieve_channel_activity_feed",
+    "description": "Retrieves a list of activities with optional filters.\n\nThis method allows fetching activities from YouTube based on various criteria such as\nchannel ID, publication date range, and region code. Activities represent various\nactions that occur on YouTube, such as uploads, likes, comments, etc.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "response_content_parts": {
+          "type": "string",
+          "description": "The part parameter specifies the activity resource properties that\nthe API response will include."
+        },
+        "target_channel_identifier": {
+          "type": "string",
+          "description": "The channelId parameter specifies a YouTube channel ID.\nThe API will only return that channel's activities."
+        },
+        "fetch_for_authenticated_user": {
+          "type": "boolean",
+          "description": "Set this parameter's value to true to retrieve a feed of\nthe authenticated user's activities."
+        },
+        "page_item_limit": {
+          "type": "integer",
+          "description": "The maxResults parameter specifies the maximum number\nof items that should be returned in the result set."
+        },
+        "results_page_cursor": {
+          "type": "string",
+          "description": "The pageToken parameter identifies a specific page in\nthe result set that should be returned."
+        },
+        "activity_start_timestamp": {
+          "type": "string",
+          "description": "The publishedAfter parameter specifies the earliest\ndate and time that an activity could have occurred."
+        },
+        "activity_end_timestamp": {
+          "type": "string",
+          "description": "The publishedBefore parameter specifies the latest\ndate and time that an activity could have occurred."
+        },
+        "geographical_region_filter": {
+          "type": "string",
+          "description": "The regionCode parameter instructs the API to select a\nvideo chart available in the specified region."
+        }
+      },
+      "required": [
+        "response_content_parts"
+      ]
+    }
+  },
+  {
+    "name": "retrieve_channel_layout_sections",
+    "description": "Retrieves a list of channel sections with optional filters.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "section_resource_properties": {
+          "type": "string",
+          "description": "The part parameter specifies the channelSection resource properties that the API response will include.\nIt should be a comma-separated string of valid parts (e.g., \"id,snippet,contentDetails\").\nAt least one specified part must be valid. An empty string, a string consisting only of\ncommas/whitespace, or a string with no valid parts after parsing will raise an error."
+        },
+        "owning_channel_id": {
+          "type": "string",
+          "description": "The channelId parameter specifies a YouTube channel ID.\nThe API will only return that channel's sections."
+        },
+        "metadata_language_preference": {
+          "type": "string",
+          "description": "The hl parameter instructs the API to retrieve localized resource metadata\nfor a specific application language that the YouTube website supports."
+        },
+        "specific_section_ids_list": {
+          "type": "string",
+          "description": "The id parameter specifies a comma-separated list of the YouTube channel section ID(s)\nfor the resource(s) that are being retrieved. This is expected as a single string.\nThe original core logic appears to treat this as a single ID for filtering if provided,\nrather than parsing a list of IDs from this string."
+        },
+        "fetch_my_channel_sections": {
+          "type": "boolean",
+          "description": "The mine parameter can be used to instruct the API to only return channel sections\nowned by the authenticated user."
+        },
+        "cms_content_owner_id": {
+          "type": "string",
+          "description": "The onBehalfOfContentOwner parameter indicates that the request's\nauthorization credentials identify a YouTube CMS user who is acting\non behalf of the content owner specified in the parameter value."
+        }
+      },
+      "required": [
+        "section_resource_properties"
+      ]
+    }
+  },
+  {
+    "name": "retrieve_comments_for_thread",
+    "description": "Retrieves a list of comments with optional filters.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "comment_data_fields": {
+          "type": "string",
+          "description": "The part parameter specifies the comment resource properties that the API response will include."
+        },
+        "filter_by_specific_comment_id": {
+          "type": "string",
+          "description": "The id parameter identifies the comment that is being retrieved."
+        },
+        "fetch_replies_for_comment_id": {
+          "type": "string",
+          "description": "The parentId parameter identifies the comment for which replies should be retrieved."
+        },
+        "comment_page_size_limit": {
+          "type": "integer",
+          "description": "The maxResults parameter specifies the maximum number of items that should be returned in the result set."
+        },
+        "comment_results_page_token": {
+          "type": "string",
+          "description": "The pageToken parameter identifies a specific page in the result set that should be returned. Currently not used !"
+        },
+        "response_text_format": {
+          "type": "string",
+          "description": "The textFormat parameter specifies the format of the text in the comment. Currently not used !"
+        }
+      },
+      "required": [
+        "comment_data_fields"
+      ]
+    }
+  },
+  {
+    "name": "retrieve_playlists",
+    "description": "Retrieves a list of playlists with optional filters.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "youtube_channel_identifier": {
+          "type": "string",
+          "description": "The channelId parameter specifies a YouTube channel ID. If not provided, all playlists will be returned."
+        },
+        "result_limit": {
+          "type": "integer",
+          "description": "The max_results parameter specifies the maximum number of items that should be returned in the result set. Defaults to 50."
+        }
+      }
+    }
+  },
+  {
+    "name": "retrieve_user_or_channel_subscriptions",
+    "description": "Retrieves a list of subscriptions with optional filters.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "subscription_data_to_include": {
+          "type": "string",
+          "description": "The part parameter specifies the subscription resource properties that the API response will include."
+        },
+        "filter_subscriptions_by_owning_channel_id": {
+          "type": "string",
+          "description": "The channelId parameter specifies a YouTube channel ID. The API will only return that channel's subscriptions."
+        },
+        "filter_by_specific_subscription_id": {
+          "type": "string",
+          "description": "The id parameter identifies the subscription that is being retrieved."
+        },
+        "fetch_my_subscriptions_flag": {
+          "type": "boolean",
+          "description": "The mine parameter can be used to instruct the API to only return subscriptions owned by the authenticated user."
+        },
+        "fetch_my_recent_subscribers_flag": {
+          "type": "boolean",
+          "description": "The myRecentSubscribers parameter can be used to instruct the API to only return subscriptions to the authenticated user's channel from the last 30 days."
+        },
+        "fetch_all_my_subscribers_flag": {
+          "type": "boolean",
+          "description": "The mySubscribers parameter can be used to instruct the API to only return subscriptions to the authenticated user's channel."
+        },
+        "filter_subscriptions_to_a_channel_id": {
+          "type": "string",
+          "description": "The forChannelId parameter specifies a YouTube channel ID. The API will only return subscriptions to that channel."
+        },
+        "subscription_list_page_limit": {
+          "type": "integer",
+          "description": "The maxResults parameter specifies the maximum number of items that should be returned in the result set."
+        },
+        "subscription_request_as_owner_id": {
+          "type": "string",
+          "description": "The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value."
+        },
+        "subscription_request_for_owner_channel_id": {
+          "type": "string",
+          "description": "The onBehalfOfContentOwnerChannel parameter specifies the YouTube channel ID of the channel to which the user is being added."
+        },
+        "subscription_list_sort_order": {
+          "type": "string",
+          "description": "The order parameter specifies the order in which the API response should list subscriptions."
+        },
+        "subscription_list_page_marker": {
+          "type": "string",
+          "description": "The pageToken parameter identifies a specific page in the result set that should be returned."
+        }
+      },
+      "required": [
+        "subscription_data_to_include"
+      ]
+    }
+  },
+  {
+    "name": "search_for_videos",
+    "description": "Retrieves a list of videos with optional filters.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "video_resource_data_parts": {
+          "type": "string",
+          "description": "The part parameter specifies the video resource properties that the API response will include."
+        },
+        "filter_by_chart_type": {
+          "type": "string",
+          "description": "Set this parameter to retrieve a list of videos that match the criteria specified by the chart parameter value."
+        },
+        "filter_by_video_ids": {
+          "type": "string",
+          "description": "The id parameter specifies a comma-separated list of the YouTube video ID(s) for the resource(s) that are being retrieved."
+        },
+        "filter_by_my_rating": {
+          "type": "string",
+          "description": "Set this parameter to retrieve a list of videos that match the criteria specified by the myRating parameter value."
+        },
+        "video_results_per_page": {
+          "type": "integer",
+          "description": "The maxResults parameter specifies the maximum number of items that should be returned in the result set."
+        },
+        "video_list_page_cursor": {
+          "type": "string",
+          "description": "The pageToken parameter identifies a specific page in the result set that should be returned."
+        },
+        "authenticated_user_id_for_rating": {
+          "type": "string",
+          "description": "The user_id parameter is required when using my_rating parameter."
+        }
+      },
+      "required": [
+        "video_resource_data_parts"
+      ]
+    }
+  },
+  {
+    "name": "set_video_rating",
+    "description": "Rates a video by adjusting like/dislike counts directly.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "video_identifier_to_rate": {
+          "type": "string",
+          "description": "The ID of the video to rate."
+        },
+        "rating_value": {
+          "type": "string",
+          "description": "Must be one of: \"like\", \"dislike\", \"none\"."
+        },
+        "acting_user_identifier": {
+          "type": "string",
+          "description": "Ignored (no user data is stored)."
+        }
+      },
+      "required": [
+        "rating_value",
+        "video_identifier_to_rate"
+      ]
+    }
+  },
+  {
+    "name": "upload_channel_header_image",
+    "description": "Inserts a new channel banner.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target_channel_id_for_banner": {
+          "type": "string",
+          "description": "The ID of the channel for which to insert a banner."
+        },
+        "banner_upload_as_owner_id": {
+          "type": "string",
+          "description": "The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value."
+        },
+        "banner_upload_for_owner_channel_id": {
+          "type": "string",
+          "description": "The onBehalfOfContentOwnerChannel parameter specifies the YouTube channel ID of the channel to which the user is being added."
+        }
+      }
+    }
+  },
+  {
+    "name": "upload_new_caption_track",
+    "description": "Inserts a new caption.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "caption_resource_parts": {
+          "type": "string",
+          "description": "The part parameter specifies the caption resource properties that the API response will include."
+        },
+        "new_caption_track_details": {
+          "type": "object",
+          "properties": {},
+          "description": "The snippet object contains details about the caption track."
+        },
+        "upload_as_cms_user_id": {
+          "type": "string",
+          "description": "The onBehalfOf parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the onBehalfOfContentOwner parameter. (Currently not used in implementation)"
+        },
+        "upload_for_content_owner_id": {
+          "type": "string",
+          "description": "The onBehalfOfContentOwner parameter indicates that the request's authorization credentials identify a YouTube CMS user who is acting on behalf of the content owner specified in the parameter value. (Currently not used in implementation)"
+        },
+        "synchronize_with_video_timing": {
+          "type": "boolean",
+          "description": "The sync parameter indicates whether the caption track should be synchronized with the video. (Currently not used in implementation)"
+        }
+      },
+      "required": [
+        "caption_resource_parts",
+        "new_caption_track_details"
+      ]
+    }
+  }
+]

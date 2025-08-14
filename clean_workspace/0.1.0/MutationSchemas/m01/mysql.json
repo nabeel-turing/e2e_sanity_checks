@@ -1,0 +1,42 @@
+[
+  {
+    "name": "enumerate_database_resources",
+    "description": "Enumerate every user database and its tables.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "execute_sql_statement",
+    "description": "Execute SQL and return a content envelope.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "sql_command_string": {
+          "type": "string",
+          "description": "Non-empty SQL string."
+        }
+      },
+      "required": [
+        "sql_command_string"
+      ]
+    }
+  },
+  {
+    "name": "fetch_table_column_schema",
+    "description": "Return column schema for a table resource.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "resource_path_identifier": {
+          "type": "string",
+          "description": "Resource URI in the form '<db>/<table>/schema'."
+        }
+      },
+      "required": [
+        "resource_path_identifier"
+      ]
+    }
+  }
+]

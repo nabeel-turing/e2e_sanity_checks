@@ -1,0 +1,1291 @@
+[
+  {
+    "name": "add_message_reaction",
+    "description": "Creates a reaction and adds it to a message.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "parent": {
+          "type": "string",
+          "description": "Required. Resource name of the message to which the reaction is added.\nFormat: \"spaces/{space}/messages/{message}\""
+        },
+        "reaction": {
+          "type": "object",
+          "description": "Required. The Reaction resource to create with fields:",
+          "properties": {
+            "emoji": {
+              "type": "object",
+              "description": "",
+              "properties": {
+                "unicode": {
+                  "type": "string",
+                  "description": "Optional. A basic emoji represented by a unicode string."
+                },
+                "customEmoji": {
+                  "type": "object",
+                  "description": "",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Identifier. Format: customEmojis/{customEmoji}"
+                    },
+                    "uid": {
+                      "type": "string",
+                      "description": "Output only. Unique key for the custom emoji."
+                    },
+                    "emojiName": {
+                      "type": "string",
+                      "description": "Optional. User-defined emoji name, must be valid format."
+                    },
+                    "temporaryImageUri": {
+                      "type": "string",
+                      "description": "Output only. Temporary image URL."
+                    },
+                    "payload": {
+                      "type": "object",
+                      "description": "",
+                      "properties": {
+                        "fileContent": {
+                          "type": "string",
+                          "description": "Required. Image binary data."
+                        },
+                        "filename": {
+                          "type": "string",
+                          "description": "Required. Image file name (.png, .jpg, .gif)."
+                        }
+                      },
+                      "required": [
+                        "fileContent",
+                        "filename"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "emojiName",
+                    "name",
+                    "payload",
+                    "temporaryImageUri",
+                    "uid"
+                  ]
+                }
+              },
+              "required": [
+                "customEmoji",
+                "unicode"
+              ]
+            },
+            "user": {
+              "type": "object",
+              "description": "",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Required. Format: users/{user}"
+                },
+                "displayName": {
+                  "type": "string",
+                  "description": "Output only. User's display name."
+                },
+                "domainId": {
+                  "type": "string",
+                  "description": "Output only. Workspace domain ID."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Enum: TYPE_UNSPECIFIED, HUMAN, BOT"
+                },
+                "isAnonymous": {
+                  "type": "boolean",
+                  "description": "Output only. True if user is deleted or hidden."
+                }
+              },
+              "required": [
+                "displayName",
+                "domainId",
+                "isAnonymous",
+                "name",
+                "type"
+              ]
+            }
+          },
+          "required": [
+            "emoji",
+            "user"
+          ]
+        }
+      },
+      "required": [
+        "parent",
+        "reaction"
+      ]
+    }
+  },
+  {
+    "name": "add_space_member",
+    "description": "Creates a membership for a user or group in the specified Chat space.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "parent": {
+          "type": "string",
+          "description": "Required. The resource name of the space.\nFormat: spaces/{space}"
+        },
+        "membership": {
+          "type": "object",
+          "properties": {
+            "role": {
+              "type": "string",
+              "description": "Optional. Defaults to 'ROLE_MEMBER'. One of:\n    - 'MEMBERSHIP_ROLE_UNSPECIFIED'\n    - 'ROLE_MEMBER'\n    - 'ROLE_MANAGER'"
+            },
+            "state": {
+              "type": "string",
+              "description": "Optional. Defaults to 'INVITED'. One of:\n    - 'MEMBERSHIP_STATE_UNSPECIFIED'\n    - 'JOINED'\n    - 'INVITED'\n    - 'NOT_A_MEMBER'"
+            },
+            "deleteTime": {
+              "type": "string",
+              "description": "Optional. Timestamp of deletion."
+            },
+            "member": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Format: users/{user} or users/app"
+                },
+                "displayName": {
+                  "type": "string",
+                  "description": "Optional. The user's display name."
+                },
+                "domainId": {
+                  "type": "string",
+                  "description": "Optional. Workspace domain ID."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "One of:\n        - 'TYPE_UNSPECIFIED'\n        - 'HUMAN'\n        - 'BOT'"
+                },
+                "isAnonymous": {
+                  "type": "boolean",
+                  "description": "Optional. True if the user is deleted or profile is hidden."
+                }
+              },
+              "description": "Required. Member information, with fields:",
+              "required": [
+                "displayName",
+                "domainId",
+                "isAnonymous",
+                "name",
+                "type"
+              ]
+            },
+            "groupMember": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Format: groups/{group}"
+                }
+              },
+              "description": "Optional. Group information, with field:",
+              "required": [
+                "name"
+              ]
+            }
+          },
+          "description": "Required. Represents the membership to be created, with the following fields:",
+          "required": [
+            "deleteTime",
+            "groupMember",
+            "member",
+            "role",
+            "state"
+          ]
+        },
+        "useAdminAccess": {
+          "type": "boolean",
+          "description": "If True, uses administrator privileges.\nAdmin access cannot be used to create memberships for bots or users outside the domain."
+        }
+      },
+      "required": [
+        "membership",
+        "parent"
+      ]
+    }
+  },
+  {
+    "name": "create_message",
+    "description": "Creates a message in a space.\n\nThe space is identified by `parent`, for example, \"spaces/AAA\". The caller must be a member\nof \"spaces/{space}/members/{CURRENT_USER_ID}\" to create a message.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "parent": {
+          "type": "string",
+          "description": "Required. Resource name of the space to create the message in.\nFormat: \"spaces/{space}\"."
+        },
+        "message_body": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Plain-text body of the message."
+            },
+            "thread": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Resource name of the thread (e.g., \"spaces/AAA/threads/BBB\")."
+                }
+              },
+              "description": "Thread information based on ThreadDetailInput model:"
+            },
+            "attachment": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Attachment resource name."
+                  },
+                  "contentName": {
+                    "type": "string",
+                    "description": "File name."
+                  },
+                  "contentType": {
+                    "type": "string",
+                    "description": "MIME type."
+                  },
+                  "thumbnailUri": {
+                    "type": "string",
+                    "description": "Thumbnail preview image."
+                  },
+                  "downloadUri": {
+                    "type": "string",
+                    "description": "Direct download URL."
+                  },
+                  "source": {
+                    "type": "string",
+                    "description": "One of \"DRIVE_FILE\", \"UPLOADED_CONTENT\"."
+                  },
+                  "attachmentDataRef": {
+                    "type": "object",
+                    "properties": {
+                      "resourceName": {
+                        "type": "string",
+                        "description": "Reference to the media."
+                      },
+                      "attachmentUploadToken": {
+                        "type": "string",
+                        "description": "Token for uploaded content."
+                      }
+                    },
+                    "description": "For uploading files:",
+                    "required": [
+                      "attachmentUploadToken",
+                      "resourceName"
+                    ]
+                  },
+                  "driveDataRef": {
+                    "type": "object",
+                    "properties": {
+                      "driveFileId": {
+                        "type": "string",
+                        "description": "ID of the file in Google Drive."
+                      }
+                    },
+                    "description": "Drive file metadata:",
+                    "required": [
+                      "driveFileId"
+                    ]
+                  }
+                },
+                "required": [
+                  "attachmentDataRef",
+                  "contentName",
+                  "contentType",
+                  "downloadUri",
+                  "driveDataRef",
+                  "name",
+                  "source",
+                  "thumbnailUri"
+                ]
+              },
+              "description": "List of message attachments (defaults to empty list):"
+            }
+          },
+          "description": "Required. A dictionary representing the message resource object. Based on the\nMessageBodyInput model, the following core fields are supported:"
+        },
+        "requestId": {
+          "type": "string",
+          "description": "A unique ID for the message request. If reused by the same user,\nthe same message is returned. If reused incorrectly, results in a conflict and returns an\nempty dictionary."
+        },
+        "messageReplyOption": {
+          "type": "string",
+          "description": "Controls whether the message starts a new thread or replies\nto an existing one. Valid values:\n- 'MESSAGE_REPLY_OPTION_UNSPECIFIED': Default behavior\n- 'REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD': Reply to existing thread if specified, otherwise create new thread\n- 'REPLY_MESSAGE_OR_FAIL': Reply to existing thread if specified, otherwise fail\n- 'NEW_THREAD': Always create a new thread"
+        },
+        "messageId": {
+          "type": "string",
+          "description": "A custom ID that must start with \"client-\". Included in the message's\nresource name if provided."
+        }
+      },
+      "required": [
+        "message_body",
+        "parent"
+      ]
+    }
+  },
+  {
+    "name": "create_space",
+    "description": "Creates a Chat space.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "description": "Unique ID for request. If reused, returns existing space."
+        },
+        "space": {
+          "type": "object",
+          "description": "Space resource to create. Expected structure defined by SpaceInputModel.\nRequired fields include:",
+          "properties": {
+            "spaceType": {
+              "type": "string",
+              "description": "\"SPACE\", \"GROUP_CHAT\", \"DIRECT_MESSAGE\""
+            },
+            "displayName": {
+              "type": "string",
+              "description": "Required and cannot be empty if spaceType is \"SPACE\"."
+            },
+            "spaceDetails": {
+              "type": "object",
+              "description": "{\"description\": str, \"guidelines\": str}"
+            },
+            "predefinedPermissionSettings": {
+              "type": "string",
+              "description": "e.g., \"COLLABORATION_SPACE\""
+            },
+            "accessSettings": {
+              "type": "object",
+              "description": "{\"audience\": str}"
+            }
+          },
+          "required": [
+            "spaceType"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "delete_message",
+    "description": "Deletes a message.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. Resource name of the message.\nFormat: `spaces/{space}/messages/{message}`.\nIf you've set a custom ID for your message, you can use the value from\nthe `clientAssignedMessageId` field for `{message}`. For details, see\nhttps://developers.google.com/workspace/chat/create-messages#name_a_created_message"
+        },
+        "force": {
+          "type": "boolean",
+          "description": "When `true`, deleting a message also deletes its threaded\nreplies. When `false`, if the message has threaded replies, deletion fails.\nOnly applies when authenticating as a user. Has no effect when authenticating\nas a Chat app."
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  },
+  {
+    "name": "delete_message_reaction",
+    "description": "Deletes a reaction by its resource name.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. The resource name of the reaction to delete.\nFormat: \"spaces/{space}/messages/{message}/reactions/{reaction}\""
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  },
+  {
+    "name": "delete_space",
+    "description": "Deletes a Chat space and all its child resources.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. Resource name of the space. Format: \"spaces/{space}\"."
+        },
+        "useAdminAccess": {
+          "type": "boolean",
+          "description": "When True, allows deletion without membership check."
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  },
+  {
+    "name": "download_media",
+    "description": "Downloads media using the specified resource name.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "resourceName": {
+          "type": "string",
+          "description": "Name of the media to download.\nSee ReadRequest.resource_name."
+        }
+      },
+      "required": [
+        "resourceName"
+      ]
+    }
+  },
+  {
+    "name": "get_message",
+    "description": "Returns details about a message by name.\n\nThe `name` should follow the format: \"spaces/{space}/messages/{message}\".\nThis function performs the following steps:\n    1. Parses the space portion from the name.\n    2. Checks if the current user is a member of the space.\n    3. Finds the message in DB[\"Message\"].\n    4. Returns the message if found and authorized, else returns {}.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. Resource name of the message.\nFormat: \"spaces/{space}/messages/{message}\" or\n\"spaces/{space}/messages/client-custom-id\"."
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  },
+  {
+    "name": "get_message_attachment",
+    "description": "Retrieves attachment metadata by its resource name.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. Resource name of the attachment.\nFormat: \"spaces/{space}/messages/{message}/attachments/{attachment}\""
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  },
+  {
+    "name": "get_space_details",
+    "description": "Returns details of a Chat space by resource name.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. Resource name of the space. Format: \"spaces/{space}\"."
+        },
+        "useAdminAccess": {
+          "type": "boolean",
+          "description": "When True, the caller can view any space\nas an admin. Otherwise, the user must be a member."
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  },
+  {
+    "name": "get_space_event",
+    "description": "Retrieves a space event resource by its name.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. The resource name of the space event.\nFormat: `spaces/{space}/spaceEvents/{spaceEvent}`"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  },
+  {
+    "name": "get_space_member",
+    "description": "Retrieves details about a specific membership in a Chat space.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. The resource name of the membership to retrieve.\nFormat:\n- spaces/{space}/members/{member}\n- spaces/{space}/members/app (for the app itself)\nYou can use an email address as an alias for {member}, e.g., spaces/{space}/members/user@example.com."
+        },
+        "useAdminAccess": {
+          "type": "boolean",
+          "description": "If True, runs with the caller's Workspace admin privileges.\nNote: App memberships (i.e., .../members/app) cannot be fetched with admin access."
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  },
+  {
+    "name": "get_space_notification_settings_for_user",
+    "description": "Retrieves the space notification setting for a user.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. Resource name of the space notification setting to retrieve.\nOnly supports the calling user's identifier.\nFormat:\n- users/me/spaces/{space}/spaceNotificationSetting\n- users/user@example.com/spaces/{space}/spaceNotificationSetting\n- users/123456789/spaces/{space}/spaceNotificationSetting"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  },
+  {
+    "name": "get_space_read_state_for_user",
+    "description": "Retrieves the read state of a user within a space.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. Resource name of the space read state to retrieve.\nOnly supports getting read state for the calling user.\nTo refer to the calling user, set one of the following:\n- The `me` alias. For example, `users/me/spaces/{space}/spaceReadState`.\n- Their Workspace email address. For example, `users/user@example.com/spaces/{space}/spaceReadState`.\n- Their user ID. For example, `users/123456789/spaces/{space}/spaceReadState`.\nFormat: users/{user}/spaces/{space}/spaceReadState"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  },
+  {
+    "name": "get_thread_read_state_for_user",
+    "description": "Retrieves the read state of a user within a thread.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. Resource name of the thread read state to retrieve.\nOnly supports getting read state for the calling user.\nTo refer to the calling user, set one of the following:\n- The `me` alias. For example: users/me/spaces/{space}/threads/{thread}/threadReadState\n- Their Workspace email address. For example: users/user@example.com/spaces/{space}/threads/{thread}/threadReadState\n- Their user ID. For example: users/123456789/spaces/{space}/threads/{thread}/threadReadState\nFormat: users/{user}/spaces/{space}/threads/{thread}/threadReadState"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  },
+  {
+    "name": "list_message_reactions",
+    "description": "Lists reactions to a message.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "parent": {
+          "type": "string",
+          "description": "Required. The resource name of the message to list reactions for.\nFormat: \"spaces/{space}/messages/{message}\""
+        },
+        "pageSize": {
+          "type": "integer",
+          "description": "Optional. Maximum number of reactions to return. Defaults to 25.\nMaximum value is 200."
+        },
+        "pageToken": {
+          "type": "string",
+          "description": "Optional. Token from a previous list call to retrieve the next page."
+        },
+        "filter": {
+          "type": "string",
+          "description": "Optional. Filter reactions by emoji or user fields. Examples:\n- emoji.unicode = \"🙂\"\n- emoji.custom_emoji.uid = \"XYZ\"\n- user.name = \"users/USER123\"\n- (emoji.unicode = \"🙂\" OR emoji.unicode = \"👍\") AND user.name = \"users/USER123\""
+        }
+      },
+      "required": [
+        "parent"
+      ]
+    }
+  },
+  {
+    "name": "list_messages",
+    "description": "Lists messages in a space where the caller is a member.\n\nThe space is identified by `parent`, e.g., \"spaces/AAA\". The caller must be a member of the specified space to retrieve messages.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "parent": {
+          "type": "string",
+          "description": "Required. The resource name of the space to list messages from. Format: `spaces/{space}`."
+        },
+        "pageSize": {
+          "type": "integer",
+          "description": "The maximum number of messages to return. Defaults to 25 if unspecified. Maximum is 1000. Negative values raise an error."
+        },
+        "pageToken": {
+          "type": "string",
+          "description": "Token for fetching the next page of results. Should be passed unchanged to retrieve paginated data."
+        },
+        "filter": {
+          "type": "string",
+          "description": "A query string for filtering messages by `create_time` and/or `thread.name`. Examples:\n- create_time > \"2023-04-21T11:30:00-04:00\"\n- create_time > \"2023-04-21T11:30:00-04:00\" AND thread.name = spaces/AAA/threads/123"
+        },
+        "orderBy": {
+          "type": "string",
+          "description": "Order of the returned messages. Valid values:\n- \"createTime desc\": Sort by createTime in descending order (newest first)\n- \"createTime asc\": Sort by createTime in ascending order (oldest first)\nDefaults to \"createTime desc\" if unspecified."
+        },
+        "showDeleted": {
+          "type": "boolean",
+          "description": "Whether to include deleted messages. If False, messages with `deleteTime` are excluded."
+        }
+      },
+      "required": [
+        "parent"
+      ]
+    }
+  },
+  {
+    "name": "list_space_events",
+    "description": "Lists space events for a specified Google Chat space.\n\nRetrieves event records such as message creations, updates, deletions, membership changes,\nreactions, and space updates in a specific Google Chat space. Filtering supports event types,\nas well as time-based queries. Pagination is also supported.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "parent": {
+          "type": "string",
+          "description": "Required. Resource name of the Google Chat space.\nFormat: `spaces/{space}`."
+        },
+        "filter": {
+          "type": "string",
+          "description": "Required. A query string to filter events.\nMust include at least one `event_type` using the `:` operator.\nCan also include `start_time` and `end_time` in RFC-3339 format.\nExample valid filter:\n    start_time=\"2023-08-23T19:20:33+00:00\" AND event_types:\"google.workspace.chat.message.v1.created\""
+        },
+        "pageSize": {
+          "type": "integer",
+          "description": "Maximum number of events to return. If not set, the service defaults."
+        },
+        "pageToken": {
+          "type": "string",
+          "description": "Token to retrieve the next page of results."
+        }
+      },
+      "required": [
+        "parent"
+      ]
+    }
+  },
+  {
+    "name": "list_space_members",
+    "description": "Lists memberships in a space.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "parent": {
+          "type": "string",
+          "description": "Required. The resource name of the space to list memberships for.\nFormat: spaces/{space}"
+        },
+        "pageSize": {
+          "type": "integer",
+          "description": "Maximum number of memberships to return.\nIf unspecified, at most 100 are returned. Value must be between 1 and 1000, inclusive, if provided."
+        },
+        "pageToken": {
+          "type": "string",
+          "description": "Token to retrieve the next page from a previous response."
+        },
+        "filter": {
+          "type": "string",
+          "description": "Query filter string to filter memberships by:\n- role = \"ROLE_MEMBER\" or \"ROLE_MANAGER\"\n- member.type = \"HUMAN\" or \"BOT\"\nYou may also use:\n- member.type != \"BOT\"\n- AND/OR operators (restrictions apply)\nIf 'useAdminAccess' is True and a filter is provided, the filter must include\na condition on 'member.type' (e.g., 'member.type = \"HUMAN\"' or 'member.type != \"BOT\"')."
+        },
+        "showGroups": {
+          "type": "boolean",
+          "description": "If True, includes memberships associated with Google Groups."
+        },
+        "showInvited": {
+          "type": "boolean",
+          "description": "If True, includes memberships in the INVITED state."
+        },
+        "useAdminAccess": {
+          "type": "boolean",
+          "description": "If True, enables admin privileges for the listing operation."
+        }
+      },
+      "required": [
+        "parent"
+      ]
+    }
+  },
+  {
+    "name": "list_spaces",
+    "description": "Lists spaces the current user is a member of, with optional filtering and pagination.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "integer",
+          "description": "Max number of spaces to return (default 100, max 1000).\nMust be between 1 and 1000 if provided."
+        },
+        "pageToken": {
+          "type": "string",
+          "description": "Pagination token (used as an offset)."
+        },
+        "filter": {
+          "type": "string",
+          "description": "Filter by space type using 'OR' operator only, no 'AND' operator is allowed. Example:\n'spaceType = \"SPACE\" OR spaceType = \"GROUP_CHAT\"'.\nAllowed values for spaceType:\n    - \"SPACE\"\n    - \"GROUP_CHAT\"\n    - \"DIRECT_MESSAGE\""
+        }
+      }
+    }
+  },
+  {
+    "name": "patch_message",
+    "description": "Updates an existing message resource using the PATCH method.\n\nThis method updates the fields of a Chat message identified by its resource\nname. It supports partial updates via the `updateMask` parameter. If the message\nis not found and `allowMissing` is True, a new message is created (requires a\nclient-assigned message ID).",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. Resource name of the message to update.\nFormat: `spaces/{space}/messages/{message}`.\nExamples:\n- `spaces/AAA/messages/BBB.CCC`\n- `spaces/AAA/messages/client-custom-name`\nSee: https://developers.google.com/workspace/chat/create-messages#name_a_created_message"
+        },
+        "updateMask": {
+          "type": "string",
+          "description": "Required. Comma-separated list of fields to update, or `*` for all.\nSupported values include:\n- `text`\n- `attachment`\n- `cards`\n- `cards_v2`\n- `accessory_widgets`"
+        },
+        "allowMissing": {
+          "type": "boolean",
+          "description": "Optional. If True, creates the message if not found (requires a\nclient-assigned ID). Ignores `updateMask` in that case."
+        },
+        "message": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Plain-text body of the message."
+            },
+            "fallbackText": {
+              "type": "string",
+              "description": "Fallback text for message cards."
+            },
+            "cards": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {}
+              },
+              "description": "List of cards to include in the message."
+            },
+            "cards_v2": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {}
+              },
+              "description": "List of version 2 cards (advanced formatting)."
+            },
+            "attachment": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {}
+              },
+              "description": "Attachments such as files or media."
+            },
+            "thread": {
+              "type": "object",
+              "properties": {},
+              "description": "Thread info, including `name` or `threadKey`."
+            },
+            "annotations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {}
+              },
+              "description": "Annotations like user mentions, rich links, etc."
+            },
+            "clientAssignedMessageId": {
+              "type": "string",
+              "description": "Optional custom ID to identify the message."
+            }
+          },
+          "description": "A dictionary representing the fields of the message to update.\nPossible keys include:",
+          "required": [
+            "annotations",
+            "attachment",
+            "cards",
+            "cards_v2",
+            "clientAssignedMessageId",
+            "fallbackText",
+            "text",
+            "thread"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "updateMask"
+      ]
+    }
+  },
+  {
+    "name": "remove_space_member",
+    "description": "Deletes a membership from a space. ",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. Resource name of the membership to delete.\nFormat: spaces/{space}/members/{member}\nExample values:\n- spaces/AAA/members/user@example.com\n- spaces/AAA/members/app"
+        },
+        "useAdminAccess": {
+          "type": "boolean",
+          "description": "Optional. If True, uses Workspace admin privileges.\nNote: Deleting app memberships using admin access is not supported."
+        }
+      },
+      "required": [
+        "name"
+      ]
+    }
+  },
+  {
+    "name": "search_spaces",
+    "description": "Searches for Chat spaces in a Google Workspace organization using administrator access.\n\nSupported fields in the query include:\n- display_name: Uses the HAS (`:`) operator.\n- external_user_allowed: Accepts \"true\" or \"false\".\n- create_time, last_active_time: Accepts `=`, `<`, `>`, `<=`, `>=` with timestamps in RFC-3339 format.\n- space_history_state: Accepts specific enum values.\n- space_type: Only \"SPACE\" is allowed (required).\n- customer: Must be \"customers/my_customer\" (required).",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "useAdminAccess": {
+          "type": "boolean",
+          "description": "Required. Must be `True`. Enables administrator-only\naccess. Requires admin scopes such as:\n- `chat.admin.spaces.readonly`\n- `chat.admin.spaces`"
+        },
+        "pageSize": {
+          "type": "integer",
+          "description": "The maximum number of spaces to return. If unspecified,\nup to 100 spaces are returned. Maximum allowed value is 1000. Values greater\nthan 1000 are capped at 1000. Negative values are ignored and default to 100."
+        },
+        "pageToken": {
+          "type": "string",
+          "description": "A token received from a previous search call.\nUsed for pagination; represents an offset."
+        },
+        "query": {
+          "type": "string",
+          "description": "Required. A query string combining fields using the `AND` operator.\nRequired conditions:\n    - customer = \"customers/my_customer\"\n    - space_type = \"SPACE\"\nSupported query fields:\n    - display_name: e.g., `display_name:\"hello world\"`\n    - create_time: e.g., `create_time >= \"2022-01-01T00:00:00Z\"`\n    - last_active_time: e.g., `last_active_time < \"2024-12-01T00:00:00Z\"`\n    - external_user_allowed: \"true\" or \"false\"\n    - space_history_state: One of the enum values below\nOperators:\n    - Allowed: `=`, `<`, `>`, `<=`, `>=`, `:`\n    - Only `AND` is supported between conditions"
+        },
+        "orderBy": {
+          "type": "string",
+          "description": "Specifies result ordering. Format:\n`field ASC|DESC`. Supported fields:\n- `membership_count.joined_direct_human_user_count`\n- `last_active_time`\n- `create_time`\nDefault is `create_time ASC`."
+        }
+      },
+      "required": [
+        "useAdminAccess"
+      ]
+    }
+  },
+  {
+    "name": "setup_space",
+    "description": "Sets up a Chat space and adds initial members.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "setup_body": {
+          "type": "object",
+          "description": "Request body with the following fields:",
+          "properties": {
+            "space": {
+              "type": "object",
+              "description": "Required. Space resource:",
+              "properties": {
+                "spaceType": {
+                  "type": "string",
+                  "description": "\"SPACE\", \"GROUP_CHAT\", \"DIRECT_MESSAGE\""
+                },
+                "spaceDetails": {
+                  "type": "object",
+                  "description": "- description (str, optional)\n        - guidelines (str, optional)"
+                },
+                "predefinedPermissionSettings": {
+                  "type": "string",
+                  "description": "\"PREDEFINED_PERMISSION_SETTINGS_UNSPECIFIED\",\n        \"COLLABORATION_SPACE\", \"ANNOUNCEMENT_SPACE\""
+                },
+                "accessSettings": {
+                  "type": "object",
+                  "description": "- audience (str, optional)"
+                }
+              },
+              "required": [
+                "spaceType"
+              ]
+            },
+            "memberships": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "member": {
+                    "type": "object",
+                    "description": "",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "e.g. \"users/user@example.com\""
+                      },
+                      "type": {
+                        "type": "string",
+                        "description": "\"HUMAN\" or \"BOT\""
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "type"
+                    ]
+                  },
+                  "role": {
+                    "type": "string",
+                    "description": "\"ROLE_MEMBER\", \"ROLE_MANAGER\""
+                  },
+                  "state": {
+                    "type": "string",
+                    "description": "\"JOINED\", \"INVITED\""
+                  }
+                },
+                "required": [
+                  "member"
+                ]
+              },
+              "description": "Memberships to add:"
+            }
+          },
+          "required": [
+            "space"
+          ]
+        }
+      },
+      "required": [
+        "setup_body"
+      ]
+    }
+  },
+  {
+    "name": "update_message",
+    "description": "Updates a message in a Google Chat space or creates a new one if allowed.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. Resource name of the message to update. Format:\n`spaces/{space}/messages/{message}`. If using a client-assigned ID,\nuse `spaces/{space}/messages/client-{custom_id}`."
+        },
+        "updateMask": {
+          "type": "string",
+          "description": "Required. Comma-separated list of fields to update. Use `\"*\"` to update all fields.\nValid fields: \"text\", \"attachment\", \"cards\", \"cards_v2\", \"accessory_widgets\"."
+        },
+        "allowMissing": {
+          "type": "boolean",
+          "description": "Optional. If True and the message is not found, creates a new message\n(only allowed with a client-assigned message ID)."
+        },
+        "body": {
+          "type": "object",
+          "description": "Required. The message fields to apply updates to. May include any of the following keys:",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "The plain-text message body."
+            },
+            "attachment": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              },
+              "description": "List of attachments."
+            },
+            "cards": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              },
+              "description": "Legacy UI card structure."
+            },
+            "cardsV2": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              },
+              "description": "Enhanced modern card structure."
+            },
+            "accessoryWidgets": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              },
+              "description": "Interactive widgets shown below the message."
+            }
+          },
+          "required": [
+            "accessoryWidgets",
+            "attachment",
+            "cards",
+            "cardsV2",
+            "text"
+          ]
+        }
+      },
+      "required": [
+        "allowMissing",
+        "body",
+        "name",
+        "updateMask"
+      ]
+    }
+  },
+  {
+    "name": "update_space_details",
+    "description": "Updates a Chat space.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. Resource name of the space. Format: \"spaces/{space}\"."
+        },
+        "updateMask": {
+          "type": "string",
+          "description": "Required. Comma-separated list of field paths to update, or \"*\" to update all supported:\n- \"space_details\"\n- \"display_name\"\n- \"space_type\"\n- \"space_history_state\"\n- \"access_settings.audience\"\n- \"permission_settings\""
+        },
+        "space_updates": {
+          "type": "object",
+          "description": "Space object with updated field values."
+        },
+        "useAdminAccess": {
+          "type": "boolean",
+          "description": "Run as admin. Some update masks are restricted."
+        }
+      },
+      "required": [
+        "name",
+        "space_updates",
+        "updateMask"
+      ]
+    }
+  },
+  {
+    "name": "update_space_member",
+    "description": "Updates a membership.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. Resource name of the membership to update.\nFormat: spaces/{space}/members/{member}"
+        },
+        "updateMask": {
+          "type": "string",
+          "description": "Required. Comma-separated list of fields to update.\nSupported values:\n- 'role'"
+        },
+        "membership": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Resource name of the membership.\n    Format: spaces/{space}/members/{member}"
+            },
+            "role": {
+              "type": "string",
+              "description": "Optional. One of:\n    - 'MEMBERSHIP_ROLE_UNSPECIFIED'\n    - 'ROLE_MEMBER'\n    - 'ROLE_MANAGER'"
+            },
+            "state": {
+              "type": "string",
+              "description": "Output only. One of:\n    - 'MEMBERSHIP_STATE_UNSPECIFIED'\n    - 'JOINED'\n    - 'INVITED'\n    - 'NOT_A_MEMBER'"
+            },
+            "createTime": {
+              "type": "string",
+              "description": "Output only. Timestamp when the membership was created."
+            },
+            "deleteTime": {
+              "type": "string",
+              "description": "Output only. Timestamp when the membership was deleted."
+            },
+            "member": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Format: users/{user}"
+                },
+                "displayName": {
+                  "type": "string",
+                  "description": "Output only. Display name of the user."
+                },
+                "domainId": {
+                  "type": "string",
+                  "description": "Output only. Workspace domain ID."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "One of:\n        - 'TYPE_UNSPECIFIED'\n        - 'HUMAN'\n        - 'BOT'"
+                },
+                "isAnonymous": {
+                  "type": "boolean",
+                  "description": "Output only. True if user is deleted or hidden."
+                }
+              },
+              "description": "Member details with the following structure:",
+              "required": [
+                "displayName",
+                "domainId",
+                "isAnonymous",
+                "name",
+                "type"
+              ]
+            },
+            "groupMember": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Format: groups/{group}"
+                }
+              },
+              "description": "Optional group information with the following structure:",
+              "required": [
+                "name"
+              ]
+            }
+          },
+          "description": "Dictionary containing the updated membership fields. Supported structure:",
+          "required": [
+            "createTime",
+            "deleteTime",
+            "groupMember",
+            "member",
+            "name",
+            "role",
+            "state"
+          ]
+        },
+        "useAdminAccess": {
+          "type": "boolean",
+          "description": "If True, runs the method using administrator privileges."
+        }
+      },
+      "required": [
+        "membership",
+        "name",
+        "updateMask"
+      ]
+    }
+  },
+  {
+    "name": "update_space_notification_settings_for_user",
+    "description": "Updates the space notification setting for a user.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. Resource name of the space notification setting to update.\nFormat: users/{user}/spaces/{space}/spaceNotificationSetting"
+        },
+        "updateMask": {
+          "type": "string",
+          "description": "Required. Comma-separated list of fields to update.\nSupported fields:\n- \"notification_setting\"\n- \"mute_setting\""
+        },
+        "requestBody": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Resource name of the space notification setting."
+            },
+            "notification_setting": {
+              "type": "string",
+              "description": "New notification level. One of:\n    - 'NOTIFICATION_SETTING_UNSPECIFIED'\n    - 'ALL'\n    - 'MAIN_CONVERSATIONS'\n    - 'FOR_YOU'\n    - 'OFF'"
+            },
+            "mute_setting": {
+              "type": "string",
+              "description": "New mute setting. One of:\n    - 'MUTE_SETTING_UNSPECIFIED'\n    - 'UNMUTED'\n    - 'MUTED'"
+            }
+          },
+          "description": "A dictionary representing the SpaceNotificationSetting resource with the following keys:",
+          "required": [
+            "mute_setting",
+            "name",
+            "notification_setting"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "requestBody",
+        "updateMask"
+      ]
+    }
+  },
+  {
+    "name": "update_space_read_state_for_user",
+    "description": "Updates a user's space read state.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Resource name of the space read state to update.\nFormat: users/{user}/spaces/{space}/spaceReadState"
+        },
+        "updateMask": {
+          "type": "string",
+          "description": "Required. Comma-separated list of fields to update.\nCurrently only \"last_read_time\" is supported."
+        },
+        "requestBody": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Resource name of the space read state.\n    Format: users/{user}/spaces/{space}/spaceReadState"
+            },
+            "last_read_time": {
+              "type": "string",
+              "description": "Optional. The time when the user's space read state was updated.\n    This corresponds with either the timestamp of the last read message, or a user-specified timestamp."
+            }
+          },
+          "description": "A dictionary representing the SpaceReadState resource with the following key:",
+          "required": [
+            "last_read_time",
+            "name"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "requestBody",
+        "updateMask"
+      ]
+    }
+  },
+  {
+    "name": "upload_media",
+    "description": "Uploads an attachment to the specified Chat space.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "parent": {
+          "type": "string",
+          "description": "Required. Resource name of the Chat space in which the attachment is uploaded. Format \"spaces/{space}\"."
+        },
+        "attachment_request": {
+          "type": "object",
+          "description": "Dictionary with keys:",
+          "properties": {
+            "filename": {
+              "type": "string",
+              "description": "Filename of the uploaded attachment."
+            }
+          },
+          "required": [
+            "filename"
+          ]
+        }
+      },
+      "required": [
+        "attachment_request",
+        "parent"
+      ]
+    }
+  }
+]

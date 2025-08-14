@@ -1,0 +1,1160 @@
+[
+  {
+    "name": "clear_primary_calendar",
+    "description": "Clears a primary calendar. This operation deletes all events associated with the specified calendar.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The identifier of the calendar.\n- To retrieve calendar IDs, call the `calendarList.list` method.\n- Use the keyword \"primary\" to access the primary calendar of the currently logged-in user."
+        }
+      },
+      "required": [
+        "calendarId"
+      ]
+    }
+  },
+  {
+    "name": "create_access_control_rule",
+    "description": "Creates a new access control rule for the specified calendar.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The ID of the calendar to create the rule for."
+        },
+        "sendNotifications": {
+          "type": "boolean",
+          "description": "Whether to send notifications to the rule's scope. Defaults to True."
+        },
+        "resource": {
+          "type": "object",
+          "properties": {
+            "role": {
+              "type": "string",
+              "description": "The role to assign (e.g., 'reader', 'writer')."
+            },
+            "scope": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "The type of scope (e.g., 'user', 'group')."
+                },
+                "value": {
+                  "type": "string",
+                  "description": "The value of the scope (e.g., email address)."
+                }
+              },
+              "description": "The scope of the rule:",
+              "required": [
+                "type",
+                "value"
+              ]
+            },
+            "ruleId": {
+              "type": "string",
+              "description": "The ID of the rule. If not provided, one will be generated."
+            }
+          },
+          "description": "The rule details:",
+          "required": [
+            "role",
+            "scope"
+          ]
+        }
+      },
+      "required": [
+        "calendarId"
+      ]
+    }
+  },
+  {
+    "name": "create_calendar_list_entry",
+    "description": "Creates a new calendar list entry in the user's calendar list.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "resource": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The ID of the calendar list entry. If not provided, a UUID will be generated."
+            },
+            "summary": {
+              "type": "string",
+              "description": "The summary of the calendar list entry."
+            },
+            "description": {
+              "type": "string",
+              "description": "The description of the calendar list entry."
+            },
+            "timeZone": {
+              "type": "string",
+              "description": "The time zone of the calendar list entry (e.g. \"America/New_York\")."
+            }
+          },
+          "description": "The resource to create the calendar list entry with.",
+          "required": [
+            "description",
+            "summary",
+            "timeZone"
+          ]
+        }
+      },
+      "required": [
+        "resource"
+      ]
+    }
+  },
+  {
+    "name": "create_event",
+    "description": "Creates a new event in the specified calendar.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The identifier of the calendar. Defaults to the user's primary calendar."
+        },
+        "resource": {
+          "type": "object",
+          "properties": {},
+          "description": "The event to create:"
+        },
+        "sendUpdates": {
+          "type": "string",
+          "description": "Whether to send updates about the creation.\nPossible values: \"all\", \"externalOnly\", \"none\". Defaults to None.\nNote: sendUpdates functionality is not implemented yet.\n- id (str, optional): The identifier of the event. If not provided,\n    a new UUID will be generated.\n- summary (str): The summary/title of the event.\n- description (str, optional): The description of the event.\n- start (Dict[str, Any]): The start time of the event.\n    - dateTime (str): The date and time of the start time in ISO 8601(YYYY-MM-DDTHH:MM:SSZ) format.\n- end (Dict[str, Any]): The end time of the event.\n    - dateTime (str): The date and time of the end time.\n- recurrence (Optional[List[str]]): The recurrence rules of the event in RRULE format.\n    Examples:\n    - Daily for 5 occurrences: [\"RRULE:FREQ=DAILY;COUNT=5\"]\n    - Weekly on Monday and Wednesday: [\"RRULE:FREQ=WEEKLY;BYDAY=MO,WE\"]\n    - Monthly on the 15th: [\"RRULE:FREQ=MONTHLY;BYMONTHDAY=15\"]\n    - Yearly on January 1st: [\"RRULE:FREQ=YEARLY;BYMONTH=1;BYMONTHDAY=1\"]\n    - Every 2 weeks: [\"RRULE:FREQ=WEEKLY;INTERVAL=2\"]\n    - Until a specific date: [\"RRULE:FREQ=DAILY;UNTIL=20241231T235959Z\"]\n    \n    Supported RRULE parameters:\n    - FREQ: SECONDLY, MINUTELY, HOURLY, DAILY, WEEKLY, MONTHLY, YEARLY (required)\n    - INTERVAL: Positive integer (default: 1)\n    - COUNT: Positive integer (number of occurrences)\n    - UNTIL: YYYYMMDDTHHMMSSZ or YYYYMMDDTHHMMSS format\n    - BYDAY: SU,MO,TU,WE,TH,FR,SA (with optional ordinal: 1SU, -1MO)\n    - BYMONTH: 1-12\n    - BYMONTHDAY: 1-31\n    - BYYEARDAY: 1-366\n    - BYWEEKNO: 1-53\n    - BYHOUR: 0-23\n    - BYMINUTE: 0-59\n    - BYSECOND: 0-59\n    - BYSETPOS: 1-366 or -366 to -1\n    - WKST: SU,MO,TU,WE,TH,FR,SA (week start)\n    \n- attendees (Optional[List[Dict[str, Any]]]): List of event attendees. Each attendee can have:\n    - email (Optional[str]): The attendee's email address\n    - displayName (Optional[str]): The attendee's display name\n    - organizer (Optional[bool]): Whether the attendee is the organizer\n    - self (Optional[bool]): Whether the attendee is the user\n    - resource (Optional[bool]): Whether the attendee is a resource\n    - optional (Optional[bool]): Whether the attendee's presence is optional\n    - responseStatus (Optional[str]): The attendee's response status\n    - comment (Optional[str]): The attendee's comment\n    - additionalGuests (Optional[int]): Number of additional guests\n\n- reminders (Optional[Dict[str, Any]]): The reminders of the event.\n    - useDefault (bool): Whether to use the default reminders.\n    - overrides (Optional[List[Dict[str, Any]]]): The list of overrides.\n        - method (str): The method of the reminder.\n        - minutes (int): The minutes of the reminder.\n- location (Optional[str]): The location of the event."
+        }
+      }
+    }
+  },
+  {
+    "name": "create_secondary_calendar",
+    "description": "Creates a secondary calendar.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "resource": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The identifier of the calendar."
+            },
+            "summary": {
+              "type": "string",
+              "description": "The Title of the calendar."
+            },
+            "description": {
+              "type": "string",
+              "description": "The description of the calendar."
+            },
+            "timeZone": {
+              "type": "string",
+              "description": "The time zone of the calendar (e.g. \"America/New_York\")."
+            },
+            "location": {
+              "type": "string",
+              "description": "Geographic location of the calendar as free-form text."
+            },
+            "etag": {
+              "type": "string",
+              "description": "ETag of the resource. Used for optimistic concurrency control."
+            },
+            "kind": {
+              "type": "string",
+              "description": "Type of the resource (\"calendar#calendar\")."
+            },
+            "conferenceProperties": {
+              "type": "object",
+              "properties": {
+                "allowedConferenceSolutionTypes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of conference solution types that are supported for this calendar.\n        Each string in the list can be one of:\n        - \"eventHangout\"\n        - \"eventNamedHangout\"\n        - \"hangoutsMeet\""
+                }
+              },
+              "description": "Conference-related properties."
+            }
+          },
+          "description": "The resource to create the calendar with."
+        }
+      }
+    }
+  },
+  {
+    "name": "delete_access_control_rule",
+    "description": "Deletes an access control rule from the specified calendar.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The ID of the calendar to delete the rule from."
+        },
+        "ruleId": {
+          "type": "string",
+          "description": "The ID of the rule to delete."
+        }
+      },
+      "required": [
+        "calendarId",
+        "ruleId"
+      ]
+    }
+  },
+  {
+    "name": "delete_calendar_list_entry",
+    "description": "Deletes a calendar list entry from the user's calendar list.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The ID of the calendar list entry to delete."
+        }
+      },
+      "required": [
+        "calendarId"
+      ]
+    }
+  },
+  {
+    "name": "delete_event",
+    "description": "Deletes an event from the specified calendar.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The identifier of the calendar containing the event to delete. If \"primary\" is provided, the primary calendar will be used."
+        },
+        "eventId": {
+          "type": "string",
+          "description": "The identifier of the event to delete."
+        },
+        "sendUpdates": {
+          "type": "string",
+          "description": "Whether to send updates about the deletion.\nPossible values: \"all\", \"externalOnly\", \"none\". Defaults to None.\nNote: sendUpdates functionality is not implemented yet."
+        }
+      },
+      "required": [
+        "calendarId",
+        "eventId"
+      ]
+    }
+  },
+  {
+    "name": "delete_secondary_calendar",
+    "description": "Deletes a secondary calendar. This operation removes the calendar from the user's calendar list.\n\nNote: Primary calendars cannot be deleted.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The identifier of the secondary calendar to delete.\nTo retrieve calendar IDs, call the `calendarList.list` method."
+        }
+      },
+      "required": [
+        "calendarId"
+      ]
+    }
+  },
+  {
+    "name": "get_access_control_rule",
+    "description": "Retrieves an access control rule from the specified calendar.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The ID of the calendar to get the rule from."
+        },
+        "ruleId": {
+          "type": "string",
+          "description": "The ID of the rule to retrieve."
+        }
+      },
+      "required": [
+        "calendarId",
+        "ruleId"
+      ]
+    }
+  },
+  {
+    "name": "get_calendar_and_event_colors",
+    "description": "Returns the color definitions for calendars and events.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "get_calendar_list_entry",
+    "description": "Retrieves a calendar list entry from the user's calendar list.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The ID of the calendar list entry to retrieve. If \"primary\" is provided, the primary calendar will be returned."
+        }
+      },
+      "required": [
+        "calendarId"
+      ]
+    }
+  },
+  {
+    "name": "get_calendar_metadata",
+    "description": "Retrieves metadata for a specified calendar.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The identifier of the calendar.\n- To retrieve calendar IDs, call the `calendarList.list` method.\n- Use the keyword \"primary\" to access the primary calendar of the currently logged-in user."
+        }
+      },
+      "required": [
+        "calendarId"
+      ]
+    }
+  },
+  {
+    "name": "get_event",
+    "description": "Retrieves an event from the specified calendar.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "alwaysIncludeEmail": {
+          "type": "boolean",
+          "description": "Deprecated. This parameter is ignored as email addresses\nare always included in the response. Defaults to False."
+        },
+        "calendarId": {
+          "type": "string",
+          "description": "The identifier of the calendar. Defaults to \"primary\".\nTo retrieve calendar IDs call the calendarList.list method.\nIf you want to access the primary calendar of the currently logged in user,\nuse the \"primary\" keyword."
+        },
+        "eventId": {
+          "type": "string",
+          "description": "The identifier of the event to retrieve. This is mandatory."
+        },
+        "maxAttendees": {
+          "type": "integer",
+          "description": "The maximum number of attendees to return (must be non-negative).\nDefaults to None (return all attendees)."
+        },
+        "timeZone": {
+          "type": "string",
+          "description": "The time zone to use for the response (e.g. \"America/New_York\").\nDefaults to the calendar's time zone."
+        }
+      }
+    }
+  },
+  {
+    "name": "import_event",
+    "description": "Imports an event into the specified calendar.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The identifier of the calendar."
+        },
+        "conferenceDataVersion": {
+          "type": "integer",
+          "description": "The version of the conference data.\nDefaults to 0."
+        },
+        "supportsAttachments": {
+          "type": "boolean",
+          "description": "Whether the event supports attachments.\nDefaults to False."
+        },
+        "resource": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The identifier of the event. If not provided,\n    a new UUID will be generated."
+            },
+            "summary": {
+              "type": "string",
+              "description": "The summary/title of the event."
+            },
+            "description": {
+              "type": "string",
+              "description": "The description of the event."
+            },
+            "start": {
+              "type": "object",
+              "properties": {
+                "dateTime": {
+                  "type": "string",
+                  "description": "The date and time of the start time in ISO 8601(YYYY-MM-DDTHH:MM:SSZ) format."
+                }
+              },
+              "description": "The start time of the event.",
+              "required": [
+                "dateTime"
+              ]
+            },
+            "end": {
+              "type": "object",
+              "properties": {
+                "dateTime": {
+                  "type": "string",
+                  "description": "The date and time of the end time in ISO 8601(YYYY-MM-DDTHH:MM:SSZ) format."
+                }
+              },
+              "description": "The end time of the event.",
+              "required": [
+                "dateTime"
+              ]
+            }
+          },
+          "description": "The event to import:",
+          "required": [
+            "end",
+            "start",
+            "summary"
+          ]
+        }
+      },
+      "required": [
+        "calendarId"
+      ]
+    }
+  },
+  {
+    "name": "list_access_control_rules",
+    "description": "Lists all access control rules for the specified calendar.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The ID of the calendar to list rules for."
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum number of rules to return. Defaults to 100."
+        },
+        "pageToken": {
+          "type": "string",
+          "description": "Token for pagination. Not implemented."
+        },
+        "showDeleted": {
+          "type": "boolean",
+          "description": "Whether to include deleted rules. Not implemented."
+        },
+        "syncToken": {
+          "type": "string",
+          "description": "Token for synchronization. Not implemented."
+        }
+      },
+      "required": [
+        "calendarId"
+      ]
+    }
+  },
+  {
+    "name": "list_calendar_list_entries",
+    "description": "Lists all calendar list entries in the user's calendar list.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum number of calendar list entries to return.\nMust be a positive integer. Defaults to 100.\n        "
+        }
+      }
+    }
+  },
+  {
+    "name": "list_event_instances",
+    "description": "Returns instances of a specified recurring event.\n\nThis is a mock, so we won't actually expand recurrences.\nWe'll pretend the event itself is the only instance.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "alwaysIncludeEmail": {
+          "type": "boolean",
+          "description": "Whether to include the email address of the event creator.\nDefaults to False."
+        },
+        "calendarId": {
+          "type": "string",
+          "description": "The identifier of the calendar. If not provided, defaults to \"primary\"."
+        },
+        "eventId": {
+          "type": "string",
+          "description": "The identifier of the event."
+        },
+        "maxAttendees": {
+          "type": "integer",
+          "description": "The maximum number of attendees to return.\nMust be non-negative. Defaults to None (return all attendees)."
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "The maximum number of instances to return.\nMust be a positive integer. Defaults to 250."
+        },
+        "originalStart": {
+          "type": "string",
+          "description": "The original start time of the instance in ISO 8601 format."
+        },
+        "pageToken": {
+          "type": "string",
+          "description": "The token for the next page of results."
+        },
+        "showDeleted": {
+          "type": "boolean",
+          "description": "Whether to include deleted instances.\nDefaults to False."
+        },
+        "timeMax": {
+          "type": "string",
+          "description": "The maximum time of the instances to return in ISO 8601(YYYY-MM-DDTHH:MM:SSZ) format."
+        },
+        "timeMin": {
+          "type": "string",
+          "description": "The minimum time of the instances to return in ISO 8601(YYYY-MM-DDTHH:MM:SSZ) format."
+        },
+        "timeZone": {
+          "type": "string",
+          "description": "The time zone to use for the response (e.g. \"America/New_York\").\nMust be in format 'Continent/City'. Defaults to the calendar's time zone."
+        }
+      }
+    }
+  },
+  {
+    "name": "list_events",
+    "description": "Lists events from the specified calendar.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The identifier of the calendar. Defaults to \"primary\"."
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "The maximum number of events to return.\nMust be a positive integer. Defaults to 250."
+        },
+        "timeMin": {
+          "type": "string",
+          "description": "The minimum time of the events to return (ISO datetime string)."
+        },
+        "timeMax": {
+          "type": "string",
+          "description": "The maximum time of the events to return (ISO datetime string)."
+        },
+        "q": {
+          "type": "string",
+          "description": "The query string to filter events by."
+        },
+        "singleEvents": {
+          "type": "boolean",
+          "description": "Whether to expand recurring events into individual instances.\nWhen True, recurring events are expanded into separate instances within the time range.\nWhen False, only the base recurring event is returned. Defaults to False."
+        },
+        "orderBy": {
+          "type": "string",
+          "description": "The order of the events.\nMust be one of: \"startTime\", \"updated\". Defaults to None."
+        }
+      }
+    }
+  },
+  {
+    "name": "move_event",
+    "description": "Moves an event from one calendar to another. We simulate by removing from old\n\nand creating in new with same ID.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The identifier of the source calendar."
+        },
+        "eventId": {
+          "type": "string",
+          "description": "The identifier of the event to move."
+        },
+        "destination": {
+          "type": "string",
+          "description": "The identifier of the destination calendar."
+        },
+        "sendNotifications": {
+          "type": "boolean",
+          "description": "Whether to send notifications about the move.\nDefaults to False."
+        },
+        "sendUpdates": {
+          "type": "string",
+          "description": "Whether to send updates about the move.\nPossible values: \"all\", \"externalOnly\", \"none\". Defaults to None."
+        }
+      },
+      "required": [
+        "calendarId",
+        "destination",
+        "eventId"
+      ]
+    }
+  },
+  {
+    "name": "patch_access_control_rule",
+    "description": "Updates specific fields of an existing access control rule.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The ID of the calendar containing the rule."
+        },
+        "ruleId": {
+          "type": "string",
+          "description": "The ID of the rule to update."
+        },
+        "sendNotifications": {
+          "type": "boolean",
+          "description": "Whether to send notifications. Defaults to True."
+        },
+        "resource": {
+          "type": "object",
+          "properties": {
+            "role": {
+              "type": "string",
+              "description": "New role to assign."
+            },
+            "scope": {
+              "type": "object",
+              "properties": {},
+              "description": "New scope settings."
+            }
+          },
+          "description": "The fields to update:",
+          "required": [
+            "role",
+            "scope"
+          ]
+        }
+      },
+      "required": [
+        "calendarId",
+        "ruleId"
+      ]
+    }
+  },
+  {
+    "name": "patch_calendar_list_entry",
+    "description": "Updates specific fields of an existing calendar list entry.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The ID of the calendar list entry to patch. If \"primary\" is provided, the primary calendar will be patched."
+        },
+        "colorRgbFormat": {
+          "type": "boolean",
+          "description": "Whether to use RGB color format. Defaults to False."
+        },
+        "resource": {
+          "type": "object",
+          "properties": {
+            "summary": {
+              "type": "string",
+              "description": "The summary of the calendar list entry."
+            },
+            "description": {
+              "type": "string",
+              "description": "The description of the calendar list entry."
+            },
+            "timeZone": {
+              "type": "string",
+              "description": "The time zone of the calendar list entry (e.g. \"America/New_York\")."
+            }
+          },
+          "description": "The resource to patch the calendar list entry with.",
+          "required": [
+            "description",
+            "summary",
+            "timeZone"
+          ]
+        }
+      },
+      "required": [
+        "calendarId"
+      ]
+    }
+  },
+  {
+    "name": "patch_calendar_metadata",
+    "description": "Updates specific fields of an existing calendar.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The identifier of the calendar.\n- To retrieve calendar IDs, call the `calendarList.list` method.\n- Use the keyword \"primary\" to access the primary calendar of the currently logged-in user."
+        },
+        "resource": {
+          "type": "object",
+          "properties": {
+            "summary": {
+              "type": "string",
+              "description": "The summary of the calendar."
+            },
+            "description": {
+              "type": "string",
+              "description": "The description of the calendar."
+            },
+            "timeZone": {
+              "type": "string",
+              "description": "The time zone of the calendar (e.g. \"America/New_York\")."
+            }
+          },
+          "description": "The resource to patch the calendar with."
+        }
+      },
+      "required": [
+        "calendarId"
+      ]
+    }
+  },
+  {
+    "name": "patch_event",
+    "description": "Updates specific fields of an existing event.\n\nThis function allows partial updates to an event by providing only the fields \nthat need to be changed.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The identifier of the calendar. Defaults to \"primary\"."
+        },
+        "eventId": {
+          "type": "string",
+          "description": "The identifier of the event to update."
+        },
+        "resource": {
+          "type": "object",
+          "properties": {},
+          "description": "The fields to update."
+        },
+        "sendUpdates": {
+          "type": "string",
+          "description": "Whether to send updates about the patch.\nPossible values: \"all\", \"externalOnly\", \"none\". Defaults to None.\nNote: sendUpdates functionality is not implemented yet.\nValidated structure:\n- summary (Optional[str]): The new summary/title of the event.\n- description (Optional[str]): The new description of the event.\n- start (Optional[Dict[str, Any]]): The new start time of the event.\n    - dateTime (Optional[str]): The date and time in ISO 8601 format (e.g., \"2025-03-10T09:00:00Z\").\n- end (Optional[Dict[str, Any]]): The new end time of the event.\n    - dateTime (Optional[str]): The date and time in ISO 8601 format (e.g., \"2025-03-10T09:30:00Z\").\n- attendees (Optional[List[Dict[str, Any]]]): The new list of attendees.\n    Each attendee dict contains:\n    - email (Optional[str]): The attendee's email address.\n    - displayName (Optional[str]): The attendee's name.\n    - organizer (Optional[bool]): Whether the attendee is the organizer.\n    - self (Optional[bool]): Whether this represents the calendar owner.\n    - resource (Optional[bool]): Whether the attendee is a resource (room, equipment).\n    - optional (Optional[bool]): Whether this is an optional attendee.\n    - responseStatus (Optional[str]): Response status (\"needsAction\", \"declined\", \"tentative\", \"accepted\").\n    - comment (Optional[str]): The attendee's comment.\n    - additionalGuests (Optional[int]): Number of additional guests.\n- location (Optional[str]): The new location of the event.\n- recurrence (Optional[List[str]]): The new recurrence rules of the event.\n- reminders (Optional[Dict[str, Any]]): The new reminders of the event.\n    - useDefault (Optional[bool]): Whether to use default calendar reminders.\n    - overrides (Optional[List[Dict[str, Any]]]): Custom reminder overrides.\n        Each override dict contains:\n        - method (Optional[str]): Reminder method.\n        - minutes (Optional[int]): Minutes before event start."
+        }
+      }
+    }
+  },
+  {
+    "name": "quick_add_event",
+    "description": "Creates an event based on a simple text string.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The identifier of the calendar."
+        },
+        "sendNotifications": {
+          "type": "boolean",
+          "description": "Whether to send notifications about the creation.\nDefaults to False."
+        },
+        "sendUpdates": {
+          "type": "string",
+          "description": "Whether to send updates about the creation.\nPossible values: \"all\", \"externalOnly\", \"none\". Defaults to None."
+        },
+        "text": {
+          "type": "string",
+          "description": "The text to parse into an event. This should be a natural language\ndescription of the event, such as \"Lunch with John at noon tomorrow\"."
+        }
+      },
+      "required": [
+        "calendarId"
+      ]
+    }
+  },
+  {
+    "name": "stop_notification_channel",
+    "description": "Stops watching resources through a channel. This operation removes the channel from the\n\nlist of active channels and prevents further notifications from being sent.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "resource": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The identifier of the channel."
+            }
+          },
+          "description": "The resource to stop the channel with.",
+          "required": [
+            "id"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "update_access_control_rule",
+    "description": "Replaces an existing access control rule with new data.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The ID of the calendar containing the rule."
+        },
+        "ruleId": {
+          "type": "string",
+          "description": "The ID of the rule to update."
+        },
+        "sendNotifications": {
+          "type": "boolean",
+          "description": "Whether to send notifications. Defaults to True."
+        },
+        "resource": {
+          "type": "object",
+          "properties": {
+            "role": {
+              "type": "string",
+              "description": "New role to assign."
+            },
+            "scope": {
+              "type": "object",
+              "properties": {},
+              "description": "New scope settings."
+            }
+          },
+          "description": "The complete new rule data:",
+          "required": [
+            "role",
+            "scope"
+          ]
+        }
+      },
+      "required": [
+        "calendarId",
+        "ruleId"
+      ]
+    }
+  },
+  {
+    "name": "update_calendar_list_entry",
+    "description": "Replaces an existing calendar list entry with new data.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The ID of the calendar list entry to replace. If \"primary\" is provided, the primary calendar will be replaced."
+        },
+        "colorRgbFormat": {
+          "type": "boolean",
+          "description": "Whether to use RGB color format. Defaults to False."
+        },
+        "resource": {
+          "type": "object",
+          "properties": {
+            "summary": {
+              "type": "string",
+              "description": "The summary of the calendar list entry."
+            },
+            "description": {
+              "type": "string",
+              "description": "The description of the calendar list entry."
+            },
+            "timeZone": {
+              "type": "string",
+              "description": "The time zone of the calendar list entry (e.g. \"America/New_York\")."
+            }
+          },
+          "description": "The resource to replace the calendar list entry with.",
+          "required": [
+            "description",
+            "summary",
+            "timeZone"
+          ]
+        }
+      },
+      "required": [
+        "calendarId"
+      ]
+    }
+  },
+  {
+    "name": "update_calendar_metadata",
+    "description": "Replaces an existing calendar with new data.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The identifier of the calendar.\n- To retrieve calendar IDs, call the `calendarList.list` method.\n- Use the keyword \"primary\" to access the primary calendar of the currently logged-in user."
+        },
+        "resource": {
+          "type": "object",
+          "properties": {
+            "summary": {
+              "type": "string",
+              "description": "The summary of the calendar."
+            },
+            "description": {
+              "type": "string",
+              "description": "The description of the calendar."
+            },
+            "timeZone": {
+              "type": "string",
+              "description": "The time zone of the calendar (e.g. \"America/New_York\")."
+            }
+          },
+          "description": "The resource to update the calendar with."
+        }
+      },
+      "required": [
+        "calendarId"
+      ]
+    }
+  },
+  {
+    "name": "update_event",
+    "description": "Replaces an existing event with new data.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "eventId": {
+          "type": "string",
+          "description": "The identifier of the event to update."
+        },
+        "calendarId": {
+          "type": "string",
+          "description": "The identifier of the calendar."
+        },
+        "resource": {
+          "type": "object",
+          "properties": {},
+          "description": "The event to update. Must contain:"
+        },
+        "sendUpdates": {
+          "type": "string",
+          "description": "Whether to send updates about the update.\nPossible values: \"all\", \"externalOnly\", \"none\". Defaults to None.\nNote: sendUpdates functionality is not implemented yet.\n- summary (str): The summary/title of the event.\n- id (Optional[str]): The identifier of the event.\n- description (Optional[str]): The description of the event.\n- start (Optional[Dict[str, Any]]): The start time of the event.\n    - dateTime (Optional[str]): The date and time of the start time in ISO 8601(YYYY-MM-DDTHH:MM:SSZ) format.\n    - timeZone (Optional[str]): The time zone of the start time.\n- end (Optional[Dict[str, Any]]): The end time of the event.\n    - dateTime (Optional[str]): The date and time of the end time in ISO 8601(YYYY-MM-DDTHH:MM:SSZ) format.\n    - timeZone (Optional[str]): The time zone of the end time.\n- recurrence (Optional[List[str]]): The recurrence rules of the event in RRULE format.\n    Examples:\n    - Daily for 5 occurrences: [\"RRULE:FREQ=DAILY;COUNT=5\"]\n    - Weekly on Monday and Wednesday: [\"RRULE:FREQ=WEEKLY;BYDAY=MO,WE\"]\n    - Monthly on the 15th: [\"RRULE:FREQ=MONTHLY;BYMONTHDAY=15\"]\n    - Yearly on January 1st: [\"RRULE:FREQ=YEARLY;BYMONTH=1;BYMONTHDAY=1\"]\n    - Every 2 weeks: [\"RRULE:FREQ=WEEKLY;INTERVAL=2\"]\n    - Until a specific date: [\"RRULE:FREQ=DAILY;UNTIL=20241231T235959Z\"]\n    \n    Supported RRULE parameters:\n    - FREQ: SECONDLY, MINUTELY, HOURLY, DAILY, WEEKLY, MONTHLY, YEARLY (required)\n    - INTERVAL: Positive integer (default: 1)\n    - COUNT: Positive integer (number of occurrences)\n    - UNTIL: YYYYMMDDTHHMMSSZ or YYYYMMDDTHHMMSS format\n    - BYDAY: SU,MO,TU,WE,TH,FR,SA (with optional ordinal: 1SU, -1MO)\n    - BYMONTH: 1-12\n    - BYMONTHDAY: 1-31\n    - BYYEARDAY: 1-366\n    - BYWEEKNO: 1-53\n    - BYHOUR: 0-23\n    - BYMINUTE: 0-59\n    - BYSECOND: 0-59\n    - BYSETPOS: 1-366 or -366 to -1\n    - WKST: SU,MO,TU,WE,TH,FR,SA (week start)\n    \n- attendees (Optional[List[Dict[str, Any]]]): List of event attendees. Each attendee can have:\n    - email (Optional[str]): The attendee's email address\n    - displayName (Optional[str]): The attendee's display name\n    - organizer (Optional[bool]): Whether the attendee is the organizer\n    - self (Optional[bool]): Whether the attendee is the user\n    - resource (Optional[bool]): Whether the attendee is a resource\n    - optional (Optional[bool]): Whether the attendee's presence is optional\n    - responseStatus (Optional[str]): The attendee's response status\n    - comment (Optional[str]): The attendee's comment\n    - additionalGuests (Optional[int]): Number of additional guests\n- reminders (Optional[Dict[str, Any]]): The reminders of the event.\n    - useDefault (Optional[bool]): Whether to use the default reminders.\n    - overrides (Optional[List[Dict[str, Any]]]): The list of overrides.\n        - method (Optional[str]): The method of the reminder.\n        - minutes (Optional[int]): The minutes of the reminder.\n- location (Optional[str]): The location of the event."
+        }
+      },
+      "required": [
+        "eventId"
+      ]
+    }
+  },
+  {
+    "name": "watch_access_control_rule_changes",
+    "description": "Sets up a watch for changes to access control rules.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "calendarId": {
+          "type": "string",
+          "description": "The ID of the calendar to watch."
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum number of rules to return. Defaults to 100."
+        },
+        "pageToken": {
+          "type": "string",
+          "description": "Token for pagination. Not implemented."
+        },
+        "showDeleted": {
+          "type": "boolean",
+          "description": "Whether to include deleted rules. Not implemented."
+        },
+        "syncToken": {
+          "type": "string",
+          "description": "Token for synchronization. Not implemented."
+        },
+        "resource": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Type of watch (defaults to \"web_hook\")."
+            },
+            "id": {
+              "type": "string",
+              "description": "Channel ID. If not provided, one will be generated."
+            }
+          },
+          "description": "Watch configuration:",
+          "required": [
+            "type"
+          ]
+        }
+      },
+      "required": [
+        "calendarId"
+      ]
+    }
+  },
+  {
+    "name": "watch_calendar_list_changes",
+    "description": "Sets up a watch for changes to calendar list entries.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "maxResults": {
+          "type": "integer",
+          "description": "Maximum number of calendar list entries to return.\nMust be between 1 and 250. Defaults to 100."
+        },
+        "minAccessRole": {
+          "type": "string",
+          "description": "The minimum access role required to view the\ncalendar list entries. Must be one of: \"freeBusyReader\", \"owner\", \"reader\", \"writer\"."
+        },
+        "pageToken": {
+          "type": "string",
+          "description": "Token specifying which result page to return."
+        },
+        "showDeleted": {
+          "type": "boolean",
+          "description": "Whether to include deleted calendar list entries\nin the result. Defaults to False."
+        },
+        "showHidden": {
+          "type": "boolean",
+          "description": "Whether to show hidden entries. Defaults to False."
+        },
+        "syncToken": {
+          "type": "string",
+          "description": "Token obtained from the nextSyncToken field returned\non the last page of results from the previous list request. Cannot be used\ntogether with minAccessRole."
+        },
+        "resource": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Channel ID. If not provided, one will be generated."
+            },
+            "type": {
+              "type": "string",
+              "description": "Type of watch. Defaults to \"web_hook\"."
+            }
+          },
+          "description": "Watch configuration:",
+          "required": [
+            "id",
+            "type"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "name": "watch_event_changes",
+    "description": "Sets up a watch for changes to events in the specified calendar.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "alwaysIncludeEmail": {
+          "type": "boolean",
+          "description": "Whether to always include the email address\nof the event creator. Defaults to False."
+        },
+        "calendarId": {
+          "type": "string",
+          "description": "The identifier of the calendar. If not provided,\ndefaults to the user's primary calendar."
+        },
+        "eventTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The types of events to watch for.\nMust be one or more of: \"default\", \"focusTime\", \"outOfOffice\"."
+        },
+        "iCalUID": {
+          "type": "string",
+          "description": "The iCalUID of the event to filter by."
+        },
+        "maxAttendees": {
+          "type": "integer",
+          "description": "The maximum number of attendees to return per event.\nMust be a positive integer if provided."
+        },
+        "maxResults": {
+          "type": "integer",
+          "description": "The maximum number of events to return.\nMust be a positive integer. Defaults to 250."
+        },
+        "orderBy": {
+          "type": "string",
+          "description": "The order of the events.\nMust be one of: \"startTime\", \"updated\"."
+        },
+        "pageToken": {
+          "type": "string",
+          "description": "Token specifying which result page to return."
+        },
+        "privateExtendedProperty": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Private extended property filters\nin the form \"key=value\"."
+        },
+        "q": {
+          "type": "string",
+          "description": "Free text search terms to find events that match."
+        },
+        "sharedExtendedProperty": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Shared extended property filters\nin the form \"key=value\"."
+        },
+        "showDeleted": {
+          "type": "boolean",
+          "description": "Whether to include deleted events.\nDefaults to False."
+        },
+        "showHiddenInvitations": {
+          "type": "boolean",
+          "description": "Whether to include hidden invitations.\nDefaults to False."
+        },
+        "singleEvents": {
+          "type": "boolean",
+          "description": "Whether to expand recurring events into instances.\nDefaults to False."
+        },
+        "syncToken": {
+          "type": "string",
+          "description": "Token obtained from the nextSyncToken field returned on the\nlast page of results from the previous list request."
+        },
+        "timeMax": {
+          "type": "string",
+          "description": "Upper bound (exclusive) for an event's start time in\nISO 8601 format (YYYY-MM-DDTHH:MM:SSZ)."
+        },
+        "timeMin": {
+          "type": "string",
+          "description": "Lower bound (inclusive) for an event's end time in\nISO 8601 format (YYYY-MM-DDTHH:MM:SSZ)."
+        },
+        "timeZone": {
+          "type": "string",
+          "description": "Time zone used in the response (e.g. \"America/New_York\").\nThe default is the calendar's time zone."
+        },
+        "updatedMin": {
+          "type": "string",
+          "description": "Lower bound for an event's last modification time in\nISO 8601 format (YYYY-MM-DDTHH:MM:SSZ)."
+        },
+        "resource": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The identifier of the watch. If not provided,\n    a new UUID will be generated."
+            },
+            "type": {
+              "type": "string",
+              "description": "The type of the watch. Defaults to \"web_hook\"."
+            },
+            "address": {
+              "type": "string",
+              "description": "The address to send notifications to."
+            }
+          },
+          "description": "The watch configuration:"
+        }
+      }
+    }
+  }
+]

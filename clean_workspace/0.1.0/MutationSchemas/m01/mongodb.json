@@ -1,0 +1,409 @@
+[
+  {
+    "name": "add_multiple_documents",
+    "description": "Insert an array of documents into a MongoDB collection.\n\nMongoDB typically creates collections automatically during the first insert\noperation if they do not already exist, provided the collection name is valid\nand permissions allow.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target_db_for_insert": {
+          "type": "string",
+          "description": "Database name."
+        },
+        "target_collection_for_insert": {
+          "type": "string",
+          "description": "Collection name."
+        },
+        "list_of_documents_to_add": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {}
+          },
+          "description": "The array of documents to insert.\nEach item in the list should be a dictionary representing a\nMongoDB document. The list must not be empty as per model validation."
+        }
+      },
+      "required": [
+        "list_of_documents_to_add",
+        "target_collection_for_insert",
+        "target_db_for_insert"
+      ]
+    }
+  },
+  {
+    "name": "analyze_collection_structure",
+    "description": "Describe the schema for a collection.\n\nThis function describes the schema for a collection. It provides an analysis\nof the collection's schema, which is typically derived by sampling\ndocuments within that collection.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "db_identifier": {
+          "type": "string",
+          "description": "Database name."
+        },
+        "collection_identifier": {
+          "type": "string",
+          "description": "Collection name."
+        }
+      },
+      "required": [
+        "collection_identifier",
+        "db_identifier"
+      ]
+    }
+  },
+  {
+    "name": "build_collection_index",
+    "description": "Create an index for a collection.\n\nThis function creates an index for a specified collection within a given database.\nIt uses the provided 'database' and 'collection' names, and an index\ndefinition specified by 'keys'. An optional 'name' can be given to the index.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "database_location": {
+          "type": "string",
+          "description": "Database name."
+        },
+        "collection_target": {
+          "type": "string",
+          "description": "Collection name."
+        },
+        "index_key_specification": {
+          "type": "object",
+          "properties": {},
+          "description": "The index definition."
+        },
+        "custom_index_name": {
+          "type": "string",
+          "description": "The name of the index. Defaults to None."
+        }
+      },
+      "required": [
+        "collection_target",
+        "database_location",
+        "index_key_specification"
+      ]
+    }
+  },
+  {
+    "name": "change_active_mongodb_server",
+    "description": "Switch to a different MongoDB connection.\n\nSwitches to a different MongoDB connection. If the user has configured a\nconnection string or has previously called the connect tool, a connection\nis already established, and there is no need to call this function unless\nthe user has explicitly requested to switch to a new instance. Options for\nswitching the current MongoDB connection can be provided via the\n`connectionString` parameter. If a `connectionString` argument is not\nsupplied, the function will attempt to use a connection string from the\nexisting configuration.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "new_connection_uri": {
+          "type": "string",
+          "description": "MongoDB connection string to switch to\n(in the mongodb:// or mongodb+srv:// format). Defaults to None,\nin which case a default connection string will be used."
+        }
+      }
+    }
+  },
+  {
+    "name": "count_documents_matching_query",
+    "description": "Gets the number of documents in a MongoDB collection.\n\nThis function counts documents in a specified collection of a\nMongoDB database. An optional query can be provided to filter\nthe documents before counting.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "db_to_count_in": {
+          "type": "string",
+          "description": "Database name."
+        },
+        "collection_to_count_in": {
+          "type": "string",
+          "description": "Collection name."
+        },
+        "document_match_filter": {
+          "type": "object",
+          "properties": {},
+          "description": "A filter/query parameter. Allows\nusers to filter the documents to count. Matches the syntax of\nthe filter argument of db.collection.count(). If None or\nomitted, all documents in the collection are counted."
+        }
+      },
+      "required": [
+        "collection_to_count_in",
+        "db_to_count_in"
+      ]
+    }
+  },
+  {
+    "name": "delete_database_permanently",
+    "description": "Removes the specified database, deleting the associated data files.\n\nThis function removes the specified database. In doing so, it deletes\nthe associated data files.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "database_to_remove": {
+          "type": "string",
+          "description": "Database name."
+        }
+      },
+      "required": [
+        "database_to_remove"
+      ]
+    }
+  },
+  {
+    "name": "describe_collection_indices",
+    "description": "Describe the indexes for a collection.\n\nThis function describes the indexes for a specified collection. It provides\ndetails for each index associated with the collection, such as its version,\nthe fields it indexes along with their sort order, its unique name, and\nits namespace (typically 'database_name.collection_name').",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "database_for_index_scan": {
+          "type": "string",
+          "description": "Database name."
+        },
+        "collection_for_index_scan": {
+          "type": "string",
+          "description": "Collection name."
+        }
+      },
+      "required": [
+        "collection_for_index_scan",
+        "database_for_index_scan"
+      ]
+    }
+  },
+  {
+    "name": "enumerate_collections_in_database",
+    "description": "List all collections for a given database.\n\nThis function lists all collections for a given database. Collection names\nare expected to be strings.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target_database_name": {
+          "type": "string",
+          "description": "Database name."
+        }
+      },
+      "required": [
+        "target_database_name"
+      ]
+    }
+  },
+  {
+    "name": "erase_documents_by_filter",
+    "description": "Removes all documents that match the filter from a MongoDB collection.\n\nThis function removes all documents that match the specified filter from a MongoDB collection.\nIt operates on a given database and collection, using a filter query to identify the documents for deletion.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "database_for_deletion": {
+          "type": "string",
+          "description": "Database name."
+        },
+        "collection_for_deletion": {
+          "type": "string",
+          "description": "Collection name."
+        },
+        "deletion_criteria_query": {
+          "type": "object",
+          "properties": {},
+          "description": "The query filter, specifying the deletion criteria.\nMatches the syntax of the filter argument of db.collection.deleteMany(). Defaults to None,\nwhich typically means no filter is applied (behavior might depend on MongoDB driver if filter is truly omitted or passed as empty)."
+        }
+      },
+      "required": [
+        "collection_for_deletion",
+        "database_for_deletion"
+      ]
+    }
+  },
+  {
+    "name": "establish_new_collection",
+    "description": "Creates a new collection in a database.\n\nThis function creates a new collection within the specified database.\nIf the database does not already exist, it will be created automatically as part of this operation.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "destination_database": {
+          "type": "string",
+          "description": "Database name."
+        },
+        "new_collection_name": {
+          "type": "string",
+          "description": "Collection name."
+        }
+      },
+      "required": [
+        "destination_database",
+        "new_collection_name"
+      ]
+    }
+  },
+  {
+    "name": "execute_aggregation_pipeline",
+    "description": "Run an aggregation against a MongoDB collection.\n\nThis function runs an aggregation against a specified MongoDB collection within a given database.\nIt executes an array of aggregation pipeline stages provided as input and returns the\nresults of this aggregation.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "database_for_aggregation": {
+          "type": "string",
+          "description": "Database name."
+        },
+        "collection_for_aggregation": {
+          "type": "string",
+          "description": "Collection name."
+        },
+        "aggregation_stage_list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {}
+          },
+          "description": "An array of aggregation stages to execute."
+        }
+      },
+      "required": [
+        "aggregation_stage_list",
+        "collection_for_aggregation",
+        "database_for_aggregation"
+      ]
+    }
+  },
+  {
+    "name": "get_all_database_names",
+    "description": "List all databases for a MongoDB connection.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "get_collection_disk_usage",
+    "description": "Gets the size of the collection.\n\nThis function gets the size of the collection. It retrieves detailed storage statistics for a specified collection within a database.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "selected_database": {
+          "type": "string",
+          "description": "Database name."
+        },
+        "selected_collection": {
+          "type": "string",
+          "description": "Collection name."
+        }
+      },
+      "required": [
+        "selected_collection",
+        "selected_database"
+      ]
+    }
+  },
+  {
+    "name": "modify_matching_documents",
+    "description": "Updates all documents that match the specified filter for a collection.\n\nModifies existing documents in a collection that match the filter\ncriteria. Optionally, if 'upsert' is true, a new document will be\ninserted if no documents match the filter.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "database_to_update_in": {
+          "type": "string",
+          "description": "Database name."
+        },
+        "collection_to_update_in": {
+          "type": "string",
+          "description": "Collection name."
+        },
+        "modification_instructions": {
+          "type": "object",
+          "properties": {},
+          "description": "An update document describing the\nmodifications to apply using update operator expressions (e.g.,\n'$set', '$inc')."
+        },
+        "document_selection_filter": {
+          "type": "object",
+          "properties": {},
+          "description": "The selection criteria for the\nupdate. If None or an empty dictionary, all documents in the\ncollection are candidates for update. Defaults to None (empty filter)."
+        },
+        "create_if_not_found": {
+          "type": "boolean",
+          "description": "Controls whether to insert a new document\nif no documents match the filter. Defaults to False."
+        }
+      },
+      "required": [
+        "collection_to_update_in",
+        "database_to_update_in",
+        "modification_instructions"
+      ]
+    }
+  },
+  {
+    "name": "query_documents_in_collection",
+    "description": "Run a find query against a MongoDB collection.\n\nThis function executes a find query against a specified MongoDB database and collection.\nIt allows for filtering documents using a query filter, specifying which fields to\nreturn using a projection, limiting the maximum number of documents returned, and\ndefining a sort order for the results. The filter, projection, and sort criteria\nshould match the syntax used in MongoDB's `db.collection.find()` and `cursor.sort()`\nmethods, respectively.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "search_database": {
+          "type": "string",
+          "description": "Database name."
+        },
+        "search_collection": {
+          "type": "string",
+          "description": "Collection name."
+        },
+        "document_selector_query": {
+          "type": "object",
+          "properties": {},
+          "description": "The query filter, matching the syntax of the\nquery argument of db.collection.find(). Defaults to None."
+        },
+        "field_return_specification": {
+          "type": "object",
+          "properties": {},
+          "description": "The projection, matching the syntax of the\nprojection argument of db.collection.find(). Defaults to None."
+        },
+        "max_results_to_return": {
+          "type": "integer",
+          "description": "The maximum number of documents to return. Defaults to 10."
+        },
+        "result_ordering_criteria": {
+          "type": "object",
+          "properties": {},
+          "description": "A document, describing the sort order, matching\nthe syntax of the sort argument of cursor.sort(). Defaults to None."
+        }
+      },
+      "required": [
+        "search_collection",
+        "search_database"
+      ]
+    }
+  },
+  {
+    "name": "relabel_collection",
+    "description": "Renames a collection in a MongoDB database.\n\nThis function changes the name of an existing collection within a specified database to a new name.\nIf a collection with the `newName` already exists, the behavior is controlled by the `dropTarget`\nparameter: if `dropTarget` is true, the existing target collection is dropped before the rename;\notherwise, if the target collection exists and `dropTarget` is false, an error is raised.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "database_context": {
+          "type": "string",
+          "description": "Database name."
+        },
+        "source_collection_name": {
+          "type": "string",
+          "description": "Collection name."
+        },
+        "target_collection_name": {
+          "type": "string",
+          "description": "The new name for the collection."
+        },
+        "overwrite_existing_target": {
+          "type": "boolean",
+          "description": "If true, drops the target collection if it exists. Defaults to False."
+        }
+      },
+      "required": [
+        "database_context",
+        "source_collection_name",
+        "target_collection_name"
+      ]
+    }
+  },
+  {
+    "name": "remove_collection_from_db",
+    "description": "Removes a collection or view from the database. The method also removes any indexes associated with the dropped collection.\n\nThis function removes a collection or view from the database. The method also removes any indexes associated with the dropped collection.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "db_name_for_deletion": {
+          "type": "string",
+          "description": "Database name."
+        },
+        "collection_to_delete": {
+          "type": "string",
+          "description": "Collection name."
+        }
+      },
+      "required": [
+        "collection_to_delete",
+        "db_name_for_deletion"
+      ]
+    }
+  }
+]

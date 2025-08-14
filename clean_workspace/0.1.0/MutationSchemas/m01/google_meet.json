@@ -1,0 +1,346 @@
+[
+  {
+    "name": "catalog_attendee_connections",
+    "description": "Lists the sessions of a participant.\n\nRetrieves all sessions associated with the specified participant, with optional\nfiltering and pagination. Results are sorted by join time in ascending order.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "participant_id": {
+          "type": "string",
+          "description": "The parent participant resource name (participant ID)."
+        },
+        "session_filter_criteria": {
+          "type": "string",
+          "description": "An optional filter string to apply to the sessions. The filter is applied\nto the string representation of each session object."
+        },
+        "maximum_sessions_to_return": {
+          "type": "integer",
+          "description": "The maximum number of sessions to return per page."
+        },
+        "pagination_marker": {
+          "type": "string",
+          "description": "The token for continued list pagination, representing the start index."
+        }
+      },
+      "required": [
+        "participant_id"
+      ]
+    }
+  },
+  {
+    "name": "enumerate_all_meeting_attendees",
+    "description": "Lists participants of a conference record.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "parent_conference_resource_name": {
+          "type": "string",
+          "description": "The parent conference record resource name."
+        },
+        "page_item_limit": {
+          "type": "integer",
+          "description": "The maximum number of participants to return."
+        },
+        "continuation_token": {
+          "type": "string",
+          "description": "The token for continued list pagination."
+        }
+      },
+      "required": [
+        "parent_conference_resource_name"
+      ]
+    }
+  },
+  {
+    "name": "enumerate_all_meeting_recordings",
+    "description": "Lists the recordings of a conference.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "parent_resource_identifier": {
+          "type": "string",
+          "description": "The parent resource name."
+        },
+        "source_conference_record_id": {
+          "type": "string",
+          "description": "The parent conference record."
+        },
+        "results_per_page": {
+          "type": "integer",
+          "description": "The maximum number of recordings to return."
+        },
+        "pagination_cursor": {
+          "type": "string",
+          "description": "The token for continued list pagination."
+        }
+      },
+      "required": [
+        "parent_resource_identifier",
+        "source_conference_record_id"
+      ]
+    }
+  },
+  {
+    "name": "establish_new_virtual_room",
+    "description": "Creates a new meeting space.\n\nThis function adds a new meeting space to the database with the specified\nname and content details.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "new_room_label": {
+          "type": "string",
+          "description": "The name of the new space. Must be a non-empty string."
+        },
+        "room_initial_properties": {
+          "type": "object",
+          "properties": {
+            "meetingCode": {
+              "type": "string",
+              "description": "A unique code for joining the meeting"
+            },
+            "meetingUri": {
+              "type": "string",
+              "description": "A URI that can be used to join the meeting"
+            },
+            "accessType": {
+              "type": "string",
+              "description": "The access level for the space"
+            }
+          },
+          "description": "A dictionary containing the details of the new space.",
+          "required": [
+            "accessType",
+            "meetingCode",
+            "meetingUri"
+          ]
+        }
+      },
+      "required": [
+        "new_room_label",
+        "room_initial_properties"
+      ]
+    }
+  },
+  {
+    "name": "fetch_attendee_information",
+    "description": "Gets a participant by ID.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "participant_resource_name": {
+          "type": "string",
+          "description": "Resource name of the participant."
+        }
+      },
+      "required": [
+        "participant_resource_name"
+      ]
+    }
+  },
+  {
+    "name": "fetch_conference_room_info",
+    "description": "Gets details about a meeting space.\n\nRetrieves comprehensive information about a specific meeting space.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "room_name_to_query": {
+          "type": "string",
+          "description": "The name of the space to retrieve."
+        }
+      },
+      "required": [
+        "room_name_to_query"
+      ]
+    }
+  },
+  {
+    "name": "fetch_meeting_details_by_id",
+    "description": "Gets a conference record by conference ID.\n\nRetrieves detailed information about a specific conference record.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "conference_record_resource_name": {
+          "type": "string",
+          "description": "Resource name of the conference to retrieve."
+        }
+      },
+      "required": [
+        "conference_record_resource_name"
+      ]
+    }
+  },
+  {
+    "name": "fetch_single_transcript_segment",
+    "description": "Gets a transcript entry by entry ID.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "entry_resource_identifier": {
+          "type": "string",
+          "description": "Resource name of the entry."
+        }
+      },
+      "required": [
+        "entry_resource_identifier"
+      ]
+    }
+  },
+  {
+    "name": "find_attendee_session_by_id",
+    "description": "Gets a participant session by session ID.\n\nRetrieves detailed information about a specific participant session.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "session_resource_id": {
+          "type": "string",
+          "description": "Resource name (ID) of the session to retrieve."
+        }
+      },
+      "required": [
+        "session_resource_id"
+      ]
+    }
+  },
+  {
+    "name": "find_transcript_by_name",
+    "description": "Gets a transcript by transcript ID.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "transcript_resource_identifier": {
+          "type": "string",
+          "description": "Resource name of the transcript."
+        }
+      },
+      "required": [
+        "transcript_resource_identifier"
+      ]
+    }
+  },
+  {
+    "name": "get_all_transcript_segments",
+    "description": "Lists the entries of a transcript.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "transcript_resource_id": {
+          "type": "string",
+          "description": "The parent transcript resource name."
+        },
+        "page_limit": {
+          "type": "integer",
+          "description": "The maximum number of entries to return."
+        },
+        "next_page_token_value": {
+          "type": "string",
+          "description": "The token for continued list pagination."
+        }
+      },
+      "required": [
+        "transcript_resource_id"
+      ]
+    }
+  },
+  {
+    "name": "get_all_transcripts_for_conference",
+    "description": "Lists the transcripts of a conference.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "parent_resource_path": {
+          "type": "string",
+          "description": "The parent resource name."
+        },
+        "target_conference_record_id": {
+          "type": "string",
+          "description": "The parent conference record."
+        },
+        "next_page_cursor": {
+          "type": "string",
+          "description": "The token for continued list pagination."
+        },
+        "results_limit_per_page": {
+          "type": "integer",
+          "description": "The maximum number of transcripts to return."
+        }
+      },
+      "required": [
+        "parent_resource_path",
+        "target_conference_record_id"
+      ]
+    }
+  },
+  {
+    "name": "modify_conference_room",
+    "description": "Updates details about a meeting space.\n\nThis function modifies the specified fields of an existing meeting space. Only fields\nthat are included in the update_mask will be changed.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "space_identifier": {
+          "type": "string",
+          "description": "The name of the space to update."
+        },
+        "field_modifications": {
+          "type": "object",
+          "properties": {},
+          "description": "A dictionary containing the fields to update\nand their new values. If provided, known fields like 'id', 'meetingCode',\n'meetingUri', 'accessType', 'entryPointAccess' must adhere to their\nexpected types (typically string). Additional arbitrary fields and their\nvalues are also permitted, aligning with the Pydantic model SpaceUpdateMaskModel."
+        }
+      },
+      "required": [
+        "space_identifier"
+      ]
+    }
+  },
+  {
+    "name": "retrieve_meeting_history_list",
+    "description": "Lists the conference records.\n\nRetrieves a list of conference records with optional filtering and pagination.\nBy default, results are ordered by start time in descending order (most recent first).",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "search_query_filter": {
+          "type": "string",
+          "description": "An optional filter string to apply to the records. The filter is applied\nto the string representation of each record object."
+        },
+        "pagination_start_token": {
+          "type": "string",
+          "description": "An optional token for pagination, representing the start index."
+        },
+        "max_records_per_page": {
+          "type": "integer",
+          "description": "An optional maximum number of records to return per page."
+        }
+      }
+    }
+  },
+  {
+    "name": "retrieve_meeting_recording_by_id",
+    "description": "Gets a recording by recording ID.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "recording_resource_name": {
+          "type": "string",
+          "description": "Resource name of the recording."
+        }
+      },
+      "required": [
+        "recording_resource_name"
+      ]
+    }
+  },
+  {
+    "name": "terminate_current_conference",
+    "description": "Ends an active conference in a meeting space, if one exists.\n\nThis function removes the activeConference field from the specified space,\neffectively marking any active conference as ended.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target_space_name": {
+          "type": "string",
+          "description": "The name of the space."
+        }
+      },
+      "required": [
+        "target_space_name"
+      ]
+    }
+  }
+]

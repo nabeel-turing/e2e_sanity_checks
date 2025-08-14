@@ -1,0 +1,175 @@
+[
+  {
+    "name": "make_call",
+    "description": "Make a call to a single recipient with exactly one phone number endpoint.\n\nTo resolve the phone number endpoint, you may have to call one or more tools\nprior to calling this operation. Before calling this operation, always check\nif the Geofencing Policy applies. If there is a recipient with more than one\nphone number endpoints, ask the user for the intended endpoint by invoking\nshow_call_recipient_choices. Do not call this operation until the user has\nchosen a single recipient with exactly one phone number endpoint.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "recipient": {
+          "type": "object",
+          "properties": {
+            "contact_id": {
+              "type": "string",
+              "description": "Unique identifier for the contact"
+            },
+            "contact_name": {
+              "type": "string",
+              "description": "Name of the contact"
+            },
+            "contact_endpoints": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              },
+              "description": "List of endpoints for the contact"
+            },
+            "contact_photo_url": {
+              "type": "string",
+              "description": "URL to the contact's profile photo"
+            },
+            "recipient_type": {
+              "type": "string",
+              "description": "Type of recipient (\"CONTACT\", \"BUSINESS\", \"DIRECT\", \"VOICEMAIL\")"
+            },
+            "address": {
+              "type": "string",
+              "description": "Address of the recipient"
+            },
+            "distance": {
+              "type": "string",
+              "description": "Distance to the recipient"
+            }
+          },
+          "description": "The recipient of the phone call. Contains:"
+        },
+        "on_speakerphone": {
+          "type": "boolean",
+          "description": "If True, the phone call will be placed on the\nspeakerphone. Defaults to False."
+        },
+        "recipient_name": {
+          "type": "string",
+          "description": "The recipient's name."
+        },
+        "recipient_phone_number": {
+          "type": "string",
+          "description": "The phone number of the\nrecipient to make the call to, e.g. \"+11234567890\"."
+        },
+        "recipient_photo_url": {
+          "type": "string",
+          "description": "The url to the profile photo\nof the recipient."
+        }
+      }
+    }
+  },
+  {
+    "name": "prepare_call",
+    "description": "Prepare a call to one or more recipients, given provided recipient information.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "recipients": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "contact_id": {
+                "type": "string",
+                "description": "Unique identifier for the contact"
+              },
+              "contact_name": {
+                "type": "string",
+                "description": "Name of the contact"
+              },
+              "contact_endpoints": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                },
+                "description": "List of endpoints for the contact"
+              },
+              "contact_photo_url": {
+                "type": "string",
+                "description": "URL to the contact's profile photo"
+              },
+              "recipient_type": {
+                "type": "string",
+                "description": "Type of recipient (\"CONTACT\", \"BUSINESS\", \"DIRECT\", \"VOICEMAIL\")"
+              },
+              "address": {
+                "type": "string",
+                "description": "Address of the recipient"
+              },
+              "distance": {
+                "type": "string",
+                "description": "Distance to the recipient"
+              }
+            }
+          },
+          "description": "A list of recipient objects to\nprepare call cards for. Each recipient dict contains:"
+        }
+      }
+    }
+  },
+  {
+    "name": "show_call_recipient_choices",
+    "description": "Show a list of one or more recipients to the user to choose from.\n\nThis operation uses a UI component to show the list of choices. You do not\nneed to enumerate the list of choices in your final response. If you call\nthis operation, you may not call other operations from this tool before\ndrafting the final response.\n\nInvoke this operation in the following scenarios:\n    * There are multiple recipients (contacts or businesses) to choose from.\n    * There are multiple phone number endpoints for a business to choose from.\n    * There are multiple phone number endpoints for a single contact to choose from.\n    * There is a single contact recipient with `confidence_level` LOW.\n    * The Geofencing Policy applies.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "recipients": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "contact_id": {
+                "type": "string",
+                "description": "Unique identifier for the contact"
+              },
+              "contact_name": {
+                "type": "string",
+                "description": "Name of the contact"
+              },
+              "contact_endpoints": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                },
+                "description": "List of endpoints for the contact"
+              },
+              "contact_photo_url": {
+                "type": "string",
+                "description": "URL to the contact's profile photo"
+              },
+              "recipient_type": {
+                "type": "string",
+                "description": "Type of recipient (\"CONTACT\", \"BUSINESS\", \"DIRECT\", \"VOICEMAIL\")"
+              },
+              "address": {
+                "type": "string",
+                "description": "Address of the recipient"
+              },
+              "distance": {
+                "type": "string",
+                "description": "Distance to the recipient"
+              }
+            }
+          },
+          "description": "A list of recipient objects to\ndisplay as choices. Each recipient dict contains:"
+        }
+      }
+    }
+  },
+  {
+    "name": "show_call_recipient_not_found_or_specified",
+    "description": "Show a message to the user when the call recipient is not found or not specified.\n\nYou must attempt to search for a recipient before calling this operation.\nCall this operation when no match is found for a recipient, or when the user\nexpresses an intent to call without specifying a recipient.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "contact_name": {
+          "type": "string",
+          "description": "The recipient name that was searched for."
+        }
+      }
+    }
+  }
+]

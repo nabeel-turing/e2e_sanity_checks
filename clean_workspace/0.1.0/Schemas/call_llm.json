@@ -1,0 +1,102 @@
+[
+  {
+    "name": "generate_llm_response",
+    "description": "Generates a text response from a Google Generative AI model.\n\nThis function sends a request to Google's Generative AI API and returns the \nmodel's text response. It supports both text prompts and file uploads in the same request.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "prompt": {
+          "type": "string",
+          "description": "The user's prompt or question."
+        },
+        "api_key": {
+          "type": "string",
+          "description": "Your Google AI API key for authentication. This should be \na valid API key with access to the specified model."
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of file paths to upload to the model."
+        },
+        "system_prompt": {
+          "type": "string",
+          "description": "A system-level instruction that sets the \ncontext or behavior for the model. This is \nseparate from the user prompt and helps \nguide the model's responses."
+        },
+        "model_name": {
+          "type": "string",
+          "description": "The name of the Google Generative AI model \nto use. Defaults to 'gemini-2.5-pro'."
+        }
+      },
+      "required": [
+        "api_key",
+        "prompt"
+      ]
+    }
+  },
+  {
+    "name": "generate_llm_response_with_tools",
+    "description": "Generates a response from a Google Generative AI model with function calling capabilities.\n\nThis function extends the basic LLM response generation by adding support for \nfunction calling. The model can choose to call one or more functions (tools) \nbased on the user's request, and the response includes both the model's text \nresponse and any function calls that were made. If a function call is made, \nthe caller is responsible for running the function and sending the result \nback to the model in a subsequent call using either `generate_llm_response()` or \n`generate_llm_response_with_tools()`.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "prompt": {
+          "type": "string",
+          "description": "The user's prompt or question."
+        },
+        "api_key": {
+          "type": "string",
+          "description": "Your Google AI API key for authentication. This should be \na valid API key with access to the specified model."
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of file paths to upload to the model."
+        },
+        "model_name": {
+          "type": "string",
+          "description": "The name of the Google Generative AI model \nto use. Defaults to 'gemini-2.5-pro'."
+        },
+        "system_prompt": {
+          "type": "string",
+          "description": "A system-level instruction that sets the \ncontext or behavior for the model. This is \nseparate from the user content and helps \nguide the model's responses."
+        },
+        "tools": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "A list of Tool objects that define functions the \nmodel can call. Each can be created using \nmake_tool_from_docstring() or similar methods."
+        }
+      },
+      "required": [
+        "api_key",
+        "prompt"
+      ]
+    }
+  },
+  {
+    "name": "make_tool_from_docstring",
+    "description": "Converts a Python function's docstring into a Google Generative AI Tool object.\n\nThis function parses a docstring to extract function metadata (name, description, \nparameters) and creates a Tool object that can be used with Google's Generative AI \nmodels for function calling capabilities. The docstring should follow standard Python \ndocstring conventions with clear parameter descriptions.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "docstring": {
+          "type": "string",
+          "description": "The docstring of the function to convert. Should contain \nclear descriptions of the function's purpose and parameters."
+        },
+        "function_name": {
+          "type": "string",
+          "description": "The name of the function that the docstring belongs to.\nThis will be used as the tool's function name."
+        }
+      },
+      "required": [
+        "docstring",
+        "function_name"
+      ]
+    }
+  }
+]

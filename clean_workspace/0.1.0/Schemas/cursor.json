@@ -1,0 +1,331 @@
+[
+  {
+    "name": "add_to_memory",
+    "description": "Makes a suggestion to the user to store a piece of learned knowledge\n\n(e.g., about deprecated functions, new patterns, facts about the codebase)\ninto a persistent knowledge base for future reference by the AI.\nUser must accept the tool call before the knowledge is stored.\nEspecially important things to add to the knowledge base are operational\nknowledge about the codebase that are not obvious from just the code.\nAs an example, using 'nvm use' before running terminal commands.\nIf the user asks to remember something, for something to be saved,\nor to create a memory, you MUST use this tool. To update existing knowledge,\nprovide the existing_knowledge_id parameter.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "knowledge_to_store": {
+          "type": "string",
+          "description": "The specific piece of knowledge or fact to be stored.\nIt should be no more than a paragraph in length (max 500 characters). \nIf the knowledge is an update or contradiction of previous\nknowledge, do not mention or refer to the previous\nknowledge."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the knowledge to be stored. This will be used to look\nup and retrieve the knowledge later. This should be a short title\nthat captures the essence of the knowledge."
+        },
+        "existing_knowledge_id": {
+          "type": "string",
+          "description": "Optional. The ID of existing knowledge\nto update instead of creating new\nknowledge. If provided, the\nknowledge_to_store and title will\nreplace the existing knowledge entry."
+        }
+      },
+      "required": [
+        "knowledge_to_store",
+        "title"
+      ]
+    }
+  },
+  {
+    "name": "codebase_search",
+    "description": "Finds code snippets semantically relevant to a natural language query,\n\nfiltered by target directories if specified.\n\nThis function searches the codebase for code segments that match the meaning\nand intent of the user's query, rather than just exact keywords. It also\nsearches git repository metadata for additional context related to the query,\nproviding both code snippets and relevant git information when available.\nResults include commit hash information for integration with git history tools.\n\nGuidelines for use:\n- To find code related to a specific task, feature description, or conceptual question \n  (e.g., \"find how user authentication is handled\", \"show me data validation logic\", \n  \"where are API request parsers defined?\").\n- When the exact file names or function/class names are unknown.\n- To get an understanding of how certain concepts are implemented across various \n  parts of the codebase.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "The natural language search query describing the functionality,\nconcept, or implementation to find. Should be descriptive rather than\nusing exact function or variable names."
+        },
+        "explanation": {
+          "type": "string",
+          "description": "Optional description of the search purpose\nfor logging and debugging. Used to track search patterns. Defaults to None."
+        },
+        "target_directories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional list of glob patterns to\nrestrict search scope to specific directories or file patterns.\nExamples: ['src/**', 'lib/*.py', 'components/*']. Defaults to None\nfor full codebase search."
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "create_diagram",
+    "description": "Creates a Mermaid diagram that will be rendered in the chat UI. Provide the raw Mermaid DSL string via `content`.\n\nUse <br/> for line breaks, always wrap diagram texts/tags in double quotes, do not use custom colors, do not use :::, and do not use beta features.\nThe diagram will be pre-rendered to validate syntax - if there are any Mermaid syntax errors, a MermaidSyntaxError exception will be raised.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string",
+          "description": "Raw Mermaid diagram definition (e.g., 'graph TD; A-->B;')."
+        }
+      },
+      "required": [
+        "content"
+      ]
+    }
+  },
+  {
+    "name": "deep_search",
+    "description": "Ask a specialized search model to find relevant files, code blocks, and other context within the codebase.\n\nThis tool is expensive since it requires waiting for a sub-agent to do a full search, so you should try to\ninclude all the relevant information in the query and avoid doing multiple searches about the same topic.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "The search query to ask the search model. The search model will receive NO other context\nbesides this. It should be a broad query that includes as much information as needed about\nthe user's high-level goal, so that the search model can provide a comprehensive answer\nand you won't need to do additional searching.\nMust be between 3 and 1000 characters long and contain at least one alphanumeric character."
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "delete_file",
+    "description": "Deletes a specified file from the application's managed file system.\n\nResolves the provided path relative to the workspace root and attempts to\nremove the corresponding file entry from the application's internal file\nsystem representation.\n\nThis operation raises appropriate errors for failure scenarios: if the file does\nnot exist, if the target path refers to a directory, or if path resolution fails.\nOnly successful deletions return a success dictionary.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target_file": {
+          "type": "string",
+          "description": "The path of the file to be deleted, relative to the\nworkspace root. Leading slashes are stripped to ensure the path is\ntreated as relative."
+        },
+        "explanation": {
+          "type": "string",
+          "description": "A description of the reason for\nthis deletion. Not used in the return value but may be utilized for\nlogging or auditing. Defaults to None."
+        }
+      },
+      "required": [
+        "target_file"
+      ]
+    }
+  },
+  {
+    "name": "edit_file",
+    "description": "Proposes an edit to an existing file or creates a new file.\n\nThis function generates a structured edit that is read and applied by a less intelligent model.\nThe edit specifies changes clearly while minimizing the amount of unchanged code. Changes are\nspecified in sequence, with the special comment `// ... existing code ...` representing\nunchanged code between edited lines.\n\nFor example:\n```\n// ... existing code ...\nFIRST_EDIT\n// ... existing code ...\nSECOND_EDIT\n// ... existing code ...\nTHIRD_EDIT\n// ... existing code ...\n```\n\nThe edit repeats as few lines of the original file as possible, but contains sufficient\ncontext of unchanged lines to resolve ambiguity. Omitting the `// ... existing code ...`\ncomment for pre-existing code may cause the model to inadvertently delete those lines.\nCreating a new file involves specifying the entire file content in the `code_edit` field.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target_file": {
+          "type": "string",
+          "description": "The target file to modify. This argument is always specified first. Its path can be relative to the workspace or absolute, and an absolute path is preserved."
+        },
+        "code_edit": {
+          "type": "string",
+          "description": "Contains only the precise lines of code to edit. It never contains unchanged code; instead, it represents unchanged code using a language-appropriate comment like `// ... existing code ...`."
+        },
+        "instructions": {
+          "type": "string",
+          "description": "A single sentence instruction describing the change being made in the sketched edit. It assists the less intelligent model in applying the edit by providing a concise summary that avoids repeating information from previous messages and disambiguates any uncertainty in the edit."
+        }
+      },
+      "required": [
+        "code_edit",
+        "instructions",
+        "target_file"
+      ]
+    }
+  },
+  {
+    "name": "fetch_pull_request",
+    "description": "Looks up a pull request by number or a commit by commit hash and returns the diff.\n\nThis function integrates with the git repository to fetch real diffs and commit information.\nIt can resolve PR numbers by finding commits that reference them in commit messages, or \ndirectly show commit diffs. The function returns comprehensive information including the\nformatted diff, author details, and file changes.\n\nPull requests and commit hashes related to files can be found via the\n'read_file' and 'codebase_search' tools. You should generally use this\ntool following a 'codebase_search' toolcall rather than making a new\n'codebase_search' or 'read_file' tool call.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "pullNumberOrCommitHash": {
+          "type": "string",
+          "description": "The pull request number (without '#' prefix) or \ncommit hash (full or abbreviated). For PR numbers, the function searches \nfor commits referencing that PR in their messages."
+        }
+      },
+      "required": [
+        "pullNumberOrCommitHash"
+      ]
+    }
+  },
+  {
+    "name": "fetch_rules",
+    "description": "Fetches rules provided by the user to help with navigating the codebase.\n\nThis function fetches rules provided by the user to help with navigating the codebase.\nRules contain information about the codebase that can be used to help with generating code.\nIf a user's request seems like it would benefit from a rule, this tool is used to fetch the rule.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "rule_names": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The names of the rules to fetch. Each string in the list\nis the name of the rule to fetch."
+        }
+      },
+      "required": [
+        "rule_names"
+      ]
+    }
+  },
+  {
+    "name": "file_search",
+    "description": "Performs a fuzzy search for files based on matching a query against file paths.\n\nSearches through the file paths within the application's internal file system\nrepresentation using fuzzy matching algorithms. This is useful when part of \na file path or name is known, but the exact location is not. It returns a \nranked list of file paths (excluding directories) based on similarity to the query.\n\nResults are capped at a maximum of 10 matches; more specific queries will\nyield narrower results.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "The string to search for within file paths. Fuzzy matching\nattempts to account for typos and partial matches."
+        },
+        "explanation": {
+          "type": "string",
+          "description": "A required sentence explaining the reason for this search,\ntypically for logging or auditing purposes."
+        }
+      },
+      "required": [
+        "explanation",
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "fix_lints",
+    "description": "Attempts to fix linting errors from the last edit by generating and applying new code edits.\n\nThis function should be called if a previous edit introduced linting errors.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "run": {
+          "type": "boolean",
+          "description": "A flag to execute the function. Must be True."
+        }
+      },
+      "required": [
+        "run"
+      ]
+    }
+  },
+  {
+    "name": "grep_search",
+    "description": "Performs a text search using a regular expression across applicable files.\n\nScans the content of files within the application's internal file system\nrepresentation, optionally filtering by include/exclude glob patterns.\nIt searches each line using the provided regex query, respecting case\nsensitivity. This function is optimized for finding exact text matches or\nspecific patterns and is generally more precise than semantic search for\nlocating known symbols, function names, or literal strings.\n\nThe query must be a valid regex pattern; ensure special characters intended\nfor literal matching are properly escaped (e.g., '\\.' to match a period).\nFound matches include file path, line number, and content, capped at the\nfirst 50 matches found across all searched files.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "The regular expression pattern to search for. Callers should\nensure the pattern is valid and escape special characters if\nliteral matching is intended (e.g., '\\.' for a literal dot)."
+        },
+        "explanation": {
+          "type": "string",
+          "description": "A description of the reason for\nthis search, primarily for logging or auditing. Defaults to None."
+        },
+        "case_sensitive": {
+          "type": "boolean",
+          "description": "Determines if the regex search respects\ncharacter case (True) or ignores case (False). Defaults to True."
+        },
+        "include_pattern": {
+          "type": "string",
+          "description": "A glob pattern (e.g., '*.py', 'src/**')\nto filter which file paths are included in the search. If omitted,\nall files passing the exclude filter are considered. Defaults to None."
+        },
+        "exclude_pattern": {
+          "type": "string",
+          "description": "A glob pattern to filter\nwhich file paths are excluded from the search. Exclusions override\ninclusions. Defaults to None."
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "list_dir",
+    "description": "Lists the immediate contents of a directory within the configured workspace.\n\nResolves the provided path relative to the workspace root and queries the\ninternal file system representation to find direct children (files and\nsubdirectories).\n\nThis function is primarily intended for exploring the workspace structure\nand discovering file/directory names at a specific location. It often serves\nas a preliminary step before using more targeted tools like `read_file`,\n`grep_search`, or `codebase_search` on specific items found in the listing.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "relative_workspace_path": {
+          "type": "string",
+          "description": "The path of the directory to list,\nrelative to the workspace root. An empty string or '.' refers\nto the workspace root itself. Leading slashes are stripped."
+        },
+        "explanation": {
+          "type": "string",
+          "description": "A description of the reason for\nthis operation, potentially used for logging or auditing. Defaults to None."
+        }
+      },
+      "required": [
+        "relative_workspace_path"
+      ]
+    }
+  },
+  {
+    "name": "read_file",
+    "description": "Read the contents of a file from the application's managed file system.\n\nThis function reads a specified range of lines from a file within the workspace and provides the summary of the\nfile content outside of that specified range of lines. It can read a specific range of lines or the entire file based on the\nshould_read_entire_file parameter. The function handles path resolution, validates the file exists, and ensures the\nrequested line range is valid. If the requested `start_line_one_indexed` is out of bounds (greater than the total\nnumber of lines), the function will instead read up to the last 250 lines of the file.\n\nGuidelines for use:\n    - You can view up to 250 lines at a time.\n    - After each read, check if you have enough context to proceed with your task.\n    - Note any lines that were not shown, and if you suspect important information is outside the viewed range,\n      read those lines as well.\n    - When unsure, read additional lines to ensure you have the complete context.\n    - Avoid reading the entire file unless absolutely necessary as this can be slow and inefficient for large files.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target_file": {
+          "type": "string",
+          "description": "The path of the file to read. Can be relative to the workspace root or absolute.\nIf absolute, it will be used as is. If relative, it will be joined with workspace root."
+        },
+        "should_read_entire_file": {
+          "type": "boolean",
+          "description": "Whether to read the entire file. If True,\nstart_line_one_indexed and end_line_one_indexed_inclusive are ignored."
+        },
+        "start_line_one_indexed": {
+          "type": "integer",
+          "description": "The one-indexed line number to start reading from (inclusive).\nMust be >= 1 and <= end_line_one_indexed_inclusive."
+        },
+        "end_line_one_indexed_inclusive": {
+          "type": "integer",
+          "description": "The one-indexed line number to end reading at (inclusive).\nMust be >= start_line_one_indexed and <= total lines in file."
+        },
+        "explanation": {
+          "type": "string",
+          "description": "A description of why this operation is being performed.\nNot used in the return value but may be utilized for logging or auditing.\nDefaults to None."
+        }
+      },
+      "required": [
+        "end_line_one_indexed_inclusive",
+        "start_line_one_indexed",
+        "target_file"
+      ]
+    }
+  },
+  {
+    "name": "reapply",
+    "description": "Re-applies the last attempted edit for a file using enhanced processing.\n\nThis function retrieves the instructions and code edit details from the\npreviously recorded edit operation for the specified `target_file`. It then\ninvokes an LLM, providing the original instructions, the prior edit attempt,\nand the file's current content. The LLM generates the intended complete,\nfinal content of the file. This new content directly replaces the existing\ncontent in the application's internal file representation.\n\nUse this function only if a preceding `edit_file` operation produced an\nunexpected or incorrect result.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target_file": {
+          "type": "string",
+          "description": "The path of the file to re-apply the last edit to\n(relative to CWD or absolute within the workspace)."
+        }
+      },
+      "required": [
+        "target_file"
+      ]
+    }
+  },
+  {
+    "name": "run_terminal_cmd",
+    "description": "Executes the provided terminal command in the current workspace context.\n\nUse this function to run shell commands. You need to provide the exact\ncommand string to be executed. Note that commands like 'cd', 'pwd', and\nenvironment commands ('export', 'unset', 'env') are handled internally;\nother commands are executed externally and may modify the workspace files.\n\nIMPORTANT: For any command that expects user interaction or uses a pager\n(like git diff, git log, less, more, etc.), you MUST append\n' | cat' to the command string yourself before passing it to this function.\nFailure to do so will cause the command to hang or fail.\n\nFor commands that are intended to run for a long time or indefinitely\n(e.g., starting a server, running a watch process), set the\n`is_background` parameter to True.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "command": {
+          "type": "string",
+          "description": "The exact terminal command string to execute. Remember\nto append ' | cat' for interactive/pager commands."
+        },
+        "explanation": {
+          "type": "string",
+          "description": "A brief justification for running this command, which\nmay be shown to the user or used for logging."
+        },
+        "is_background": {
+          "type": "boolean",
+          "description": "Set to True to run the command as a\nbackground process (e.g., for servers or watchers). Defaults to False,\nrunning the command in the foreground and waiting for completion."
+        }
+      },
+      "required": [
+        "command",
+        "explanation"
+      ]
+    }
+  }
+]

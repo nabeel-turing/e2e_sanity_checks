@@ -1,0 +1,173 @@
+{
+    "global": {
+        "default_strategy_name": "substring",
+        "custom_engine_definitions": [],
+        "strategy_configs": {
+            "keyword": {},
+            "semantic": {
+                "score_threshold": 0.9
+            },
+            "fuzzy": {
+                "score_cutoff": 80
+            },
+            "hybrid": {
+                "rapidfuzz_config": {
+                    "score_cutoff": 80
+                },
+                "semantic_config": {
+                    "score_threshold": 0.9
+                }
+            },
+            "substring": {
+                "case_sensitive": false
+            }
+        }
+    },
+    "services": {
+        "gmail": {
+            "default_strategy_name": "substring",
+            "custom_engine_definitions": [],
+            "strategy_configs": {
+                "keyword": {},
+                "semantic": {
+                    "score_threshold": 0.9
+                },
+                "fuzzy": {
+                    "score_cutoff": 70
+                },
+                "hybrid": {
+                    "rapidfuzz_config": {
+                        "score_cutoff": 70
+                    },
+                    "semantic_config": {
+                        "score_threshold": 0.9
+                    }
+                },
+                "substring": {
+                    "case_sensitive": false
+                }
+            }
+        },
+        "gdrive": {
+            "default_strategy_name": "substring",
+            "custom_engine_definitions": [],
+            "strategy_configs": {
+                "keyword": {},
+                "semantic": {
+                    "score_threshold": 0.8
+                },
+                "fuzzy": {
+                    "score_cutoff": 70
+                },
+                "hybrid": {
+                    "rapidfuzz_config": {
+                        "score_cutoff": 70
+                    },
+                    "semantic_config": {
+                        "score_threshold": 0.8
+                    }
+                },
+                "substring": {
+                    "case_sensitive": false
+                }
+            }
+        },
+        "generic_media": {
+            "default_strategy_name": "semantic",
+            "custom_engine_definitions": [],
+            "strategy_configs": {
+                "keyword": {},
+                "semantic": {
+                    "score_threshold": 0.83
+                },
+                "fuzzy": {
+                    "score_cutoff": 70
+                },
+                "hybrid": {
+                    "rapidfuzz_config": {
+                        "score_cutoff": 70
+                    },
+                    "semantic_config": {
+                        "score_threshold": 0.83
+                    }
+                },
+                "substring": {
+                    "case_sensitive": false
+                }
+            }
+        },
+        "slack": {
+            "default_strategy_name": "substring",
+            "custom_engine_definitions": [
+                {
+                    "id": "search_messages_text",
+                    "strategy_name": "keyword"
+                },
+                {
+                    "id": "search_files_name",
+                    "strategy_name": "keyword"
+                },
+                {
+                    "id": "search_files_title",
+                    "strategy_name": "keyword"
+                },
+                {
+                    "id": "search_files_filetype",
+                    "strategy_name": "keyword"
+                }
+            ],
+            "strategy_configs": {
+                "keyword": {},
+                "semantic": {
+                    "score_threshold": 0.50
+                },
+                "fuzzy": {
+                    "score_cutoff": 70
+                },
+                "hybrid": {
+                    "rapidfuzz_config": {
+                        "score_cutoff": 70
+                    },
+                    "semantic_config": {
+                        "score_threshold": 0.50
+                    }
+                },
+                "substring": {
+                    "case_sensitive": false
+                }
+            }
+        },
+        "jira": {
+            "default_strategy_name": "substring",
+            "custom_engine_definitions": [
+                {
+                    "id": "search_issues_substring",
+                    "strategy_name": "substring",
+                    "metadata": {
+                        "used_for": [
+                            "JIRA issue search with substring matching"
+                        ]
+                    }
+                }
+            ],
+            "strategy_configs": {
+                "keyword": {},
+                "semantic": {
+                    "score_threshold": 0.60
+                },
+                "fuzzy": {
+                    "score_cutoff": 70
+                },
+                "hybrid": {
+                    "qdrant_config": {
+                        "score_threshold": 0.60
+                    },
+                    "rapidfuzz_config": {
+                        "score_cutoff": 70
+                    }
+                },
+                "substring": {}
+            }
+        }
+    }
+}

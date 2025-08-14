@@ -1,0 +1,232 @@
+[
+  {
+    "name": "apply_polyhaven_texture_to_object",
+    "description": "Apply a previously downloaded Polyhaven texture to an object.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "destination_object_name": {
+          "type": "string",
+          "description": "Name of the object to apply the texture to."
+        },
+        "polyhaven_texture_identifier": {
+          "type": "string",
+          "description": "ID of the Polyhaven texture to apply (must be downloaded first)."
+        }
+      },
+      "required": [
+        "destination_object_name",
+        "polyhaven_texture_identifier"
+      ]
+    }
+  },
+  {
+    "name": "check_hyper3d_generation_progress",
+    "description": "Check if the Hyper3D Rodin generation task is completed.\n\nThis function checks the status of a Hyper3D Rodin generation task. Its behavior\nand the interpretation of status depend on the operational mode, inferred from\nwhich identifier (`subscription_key` or `request_id`) is provided.\n\nFor Hyper3D Rodin mode MAIN_SITE (when `subscription_key` is provided):\nThe function assesses completion based on a list of statuses related to the job.\nThe task is considered done if all these statuses are \"Done\". If \"Failed\"\nappears among the statuses, the generating process has failed. This function\nis designed for polling; callers should only proceed if the statuses are\nfinally determined (e.g., \"Done\" or \"Canceled\").\n\nFor Hyper3D Rodin mode FAL_AI (when `request_id` is provided):\nThe function assesses completion based on the overall generation task status.\nThe task is considered done if this status is \"COMPLETED\". The task is\nin progress if the status is \"IN_PROGRESS\". If a status other than\n\"COMPLETED\", \"IN_PROGRESS\", or \"IN_QUEUE\" is encountered, the generating\nprocess might have failed. This function is designed for polling; callers\nshould only proceed if the status is finally determined (e.g., \"COMPLETED\"\nor a recognized failed state).",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "main_site_subscription_token": {
+          "type": "string",
+          "description": "The subscription_key given in the generate model step,\nused for polling in MAIN_SITE mode. Defaults to None."
+        },
+        "fal_ai_request_identifier": {
+          "type": "string",
+          "description": "The request_id given in the generate model step,\nused for polling in FAL_AI mode. Defaults to None."
+        }
+      }
+    }
+  },
+  {
+    "name": "check_hyper3d_integration_status",
+    "description": "Check if Hyper3D Rodin integration is enabled in Blender.\n\nThis function checks if Hyper3D Rodin integration is enabled in Blender.\nIt returns a message indicating whether Hyper3D Rodin features are available.\nThe function is also instructed not to emphasize the key type in the returned\nmessage, but to silently remember it.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "create_3d_asset_from_images",
+    "description": "Generate 3D asset using Hyper3D by giving images of the wanted asset, and import the generated asset into Blender.\n\nThis function generates a 3D asset using Hyper3D by providing images of the\ndesired asset, and subsequently imports the generated asset into Blender.\nThe 3D asset created comes with built-in materials. The model generated\nhas a normalized size, so re-scaling might be beneficial after generation.\nOnly one of `input_image_paths` or `input_image_urls` should be provided\nat a time, depending on the current mode of Hyper3D Rodin.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "local_image_filepaths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The **absolute** paths of input\nimages. Even if only one image is provided, wrap it into a list.\nRequired if Hyper3D Rodin in MAIN_SITE mode. Defaults to None."
+        },
+        "remote_image_urls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The URLs of input images. Even\nif only one image is provided, wrap it into a list. Required if\nHyper3D Rodin in FAL_AI mode. Defaults to None."
+        },
+        "output_dimensions_ratio": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "description": "Optional. If given, it has to be a\nlist of ints of length 3. Controls the ratio between\n[Length, Width, Height] of the model. Defaults to None."
+        }
+      }
+    }
+  },
+  {
+    "name": "create_3d_asset_from_text",
+    "description": "Generate 3D asset using Hyper3D by giving description of the desired asset, and import the asset into Blender.\n\nThe 3D asset has built-in materials. The generated model has a normalized size, so re-scaling after generation can be useful.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "model_description": {
+          "type": "string",
+          "description": "A short description of the desired model in **English**."
+        },
+        "bounding_box_ratio": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "description": "Optional. If given, it has to be a list of floats of length 3. Controls the ratio between [Length, Width, Height] of the model."
+        }
+      },
+      "required": [
+        "model_description"
+      ]
+    }
+  },
+  {
+    "name": "execute_blender_python_code",
+    "description": "Execute arbitrary Python code in Blender simulation environment.\n\nAllows access to functions/classes from dynamically discovered API modules \n(in the same directory as this file, e.g., object.py, scene.py),\nclasses from SimulationEngine.models, and the _simulation_db object.\n\nThis function facilitates the execution of arbitrary Python code within Blender.\nIt operates on a step-by-step basis, meaning the provided code should be\nbroken into smaller, manageable chunks. The 'code' parameter accepts the\nPython code string for execution.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "python_script_string": {
+          "type": "string",
+          "description": "Code."
+        }
+      },
+      "required": [
+        "python_script_string"
+      ]
+    }
+  },
+  {
+    "name": "fetch_and_import_polyhaven_asset",
+    "description": "This function downloads a Polyhaven asset, identified by its `asset_id` and `asset_type`, and imports it into Blender.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "polyhaven_asset_identifier": {
+          "type": "string",
+          "description": "The ID of the asset to download."
+        },
+        "polyhaven_resource_type": {
+          "type": "string",
+          "description": "The type of asset (hdris, textures, models)."
+        },
+        "download_quality_setting": {
+          "type": "string",
+          "description": "The resolution to download (e.g., 1k, 2k, 4k). Defaults to \"1k\"."
+        },
+        "asset_file_extension": {
+          "type": "string",
+          "description": "Optional file format (e.g., hdr, exr for HDRIs; jpg, png for textures; gltf, fbx for models). Defaults to None."
+        }
+      },
+      "required": [
+        "polyhaven_asset_identifier",
+        "polyhaven_resource_type"
+      ]
+    }
+  },
+  {
+    "name": "find_polyhaven_resources",
+    "description": "Search for assets on Polyhaven with optional filtering.\n\nThis function searches for assets on Polyhaven. It allows specifying the\n`asset_type` (such as 'hdris', 'textures', 'models', or 'all') and an\noptional comma-separated list of `categories` for filtering. The function\nreturns a list of matching assets, where each asset includes basic\ninformation.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "resource_type_filter": {
+          "type": "object",
+          "description": "Asset Type. Defaults to \"all\". Type validation is handled internally."
+        },
+        "category_filter_list": {
+          "type": "object",
+          "description": "Categories. Defaults to None. Type validation is handled internally."
+        }
+      }
+    }
+  },
+  {
+    "name": "list_polyhaven_asset_categories",
+    "description": "Get a list of categories for a specific asset type on Polyhaven.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "polyhaven_asset_class": {
+          "type": "string",
+          "description": "The type of asset to get categories for \n(hdris, textures, models, all). Defaults to \"hdris\"."
+        }
+      }
+    }
+  },
+  {
+    "name": "load_completed_hyper3d_model",
+    "description": "Import the asset generated by Hyper3D Rodin after the generation task is completed.\n\nThis function imports an asset generated by Hyper3D Rodin. It requires specific identifiers\n(`task_uuid` or `request_id`) based on the Hyper3D Rodin mode used for generation.\nOnly one of these identifiers should be provided. The function's output details\nthe success of the import operation.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "new_object_name_in_scene": {
+          "type": "string",
+          "description": "The name of the object in scene."
+        },
+        "main_site_task_identifier": {
+          "type": "string",
+          "description": "For Hyper3D Rodin mode MAIN_SITE: The task_uuid given in the generate model step. Defaults to string \"null\"."
+        },
+        "fal_ai_job_identifier": {
+          "type": "string",
+          "description": "For Hyper3D Rodin mode FAL_AI: The request_id given in the generate model step. Defaults to string \"null\"."
+        }
+      },
+      "required": [
+        "new_object_name_in_scene"
+      ]
+    }
+  },
+  {
+    "name": "retrieve_current_scene_details",
+    "description": "Get detailed information about the current Blender scene.\n\nThis function retrieves comprehensive information about the current Blender scene.\nThe details encompass the scene's name, counts of cameras, objects, and\nlights, the name of the active camera if one exists, settings for the world\nenvironment including ambient and horizon colors, and various rendering\nconfigurations like the engine, resolution, and output filepath.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  {
+    "name": "retrieve_object_details",
+    "description": "Get detailed information about a specific object in the Blender scene.\n\nThis function gets detailed information about a specific object in the Blender scene.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "target_object_name": {
+          "type": "string",
+          "description": "The name of the object to get information about."
+        }
+      },
+      "required": [
+        "target_object_name"
+      ]
+    }
+  },
+  {
+    "name": "verify_polyhaven_addon_enabled",
+    "description": "Checks if PolyHaven integration is enabled in Blender and returns a message indicating whether\n\nPolyHaven features are available.",
+    "parameters": {
+      "type": "object",
+      "properties": {}
+    }
+  }
+]

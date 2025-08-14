@@ -1,0 +1,224 @@
+[
+  {
+    "name": "analyze_places",
+    "description": "Analyze places using natural language queries.\n\nThis function provides intelligent analysis of places based on natural language questions.\nAll inputs are validated using Pydantic models.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "place_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of place ids."
+        },
+        "question": {
+          "type": "string",
+          "description": "Question in natural language form."
+        }
+      },
+      "required": [
+        "place_ids",
+        "question"
+      ]
+    }
+  },
+  {
+    "name": "find_directions",
+    "description": "Find directions between two places.\n\nThis function generates intelligent route analysis and returns structured direction data.\nAll inputs are validated using Pydantic models.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "destination": {
+          "type": "string",
+          "description": "The destination place (required)."
+        },
+        "origin": {
+          "type": "string",
+          "description": "The origin place. If not provided, will use \"current location\" \nCan be empty if origin is not found in user query."
+        },
+        "travel_mode": {
+          "type": "string",
+          "description": "The travel mode to use. Supported values: driving, walking, \nbicycling, transit, bus, rail, subway, train, tram. \nDefaults to \"driving\" if not specified."
+        },
+        "waypoints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of locations to pass through or stop over at, \ne.g. [\"Googleplex, Mountain View, CA\", \"Computer History Museum, Mountain View, CA\"]"
+        },
+        "avoid": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of features to avoid for the routes. Supports: tolls, \nhighways, ferries, indoor. e.g. [\"tolls\", \"highways\", \"ferries\"]"
+        },
+        "origin_location_bias": {
+          "type": "string",
+          "description": "Location bias for origin. \nCan be a place name string, coordinate dict \n{\"latitude\": float, \"longitude\": float}, or string names of environment variables:\n- \"MY_HOME\": User's home location from environment\n- \"MY_LOCATION\": User's current location from environment  \n- \"MY_WORK\": User's work location from environment"
+        },
+        "destination_location_bias": {
+          "type": "string",
+          "description": "Location bias for destination. \nCan be a place name string, coordinate dict \n{\"latitude\": float, \"longitude\": float}, or string names of environment variables:\n- \"MY_HOME\": User's home location from environment\n- \"MY_LOCATION\": User's current location from environment\n- \"MY_WORK\": User's work location from environment"
+        },
+        "search_along_route": {
+          "type": "boolean",
+          "description": "Whether to search along the route (currently unsupported)."
+        },
+        "departure_time": {
+          "type": "integer",
+          "description": "Desired time of departure in seconds since Unix epoch. \nCannot be used with arrival_time."
+        },
+        "arrival_time": {
+          "type": "integer",
+          "description": "Desired time of arrival in seconds since Unix epoch. \nCannot be used with departure_time."
+        }
+      },
+      "required": [
+        "destination"
+      ]
+    }
+  },
+  {
+    "name": "lookup_place_details",
+    "description": "Fetch detailed information about places using their IDs.\n\nThis function retrieves enriched place details for the specified place IDs.\nAll inputs are validated using Pydantic models.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "place_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of place ids."
+        },
+        "query": {
+          "type": "string",
+          "description": "Optional query which query can be used for semantic filtering \nof place data, e.g. finding relevant reviews."
+        }
+      },
+      "required": [
+        "place_ids"
+      ]
+    }
+  },
+  {
+    "name": "navigate",
+    "description": "Navigate from current location to a destination.\n\nThis function is similar to find_directions but specifically designed for navigation\nfrom the user's current location. It generates intelligent route analysis\nand returns structured direction data. All inputs are validated using Pydantic models.\n\nNote: This function assumes \"current location\" as the starting point.\nFor real-world applications, you would need to provide actual GPS coordinates.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "destination": {
+          "type": "string",
+          "description": "The destination place (required)."
+        },
+        "travel_mode": {
+          "type": "string",
+          "description": "The travel mode to use. Supported values: driving, walking, \nbicycling, transit, bus, rail, subway, train, tram. \nDefaults to \"driving\" if not specified."
+        },
+        "waypoints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of locations to pass through or stop over at, \ne.g. [\"Googleplex, Mountain View, CA\", \"Computer History Museum, Mountain View, CA\"]"
+        },
+        "avoid": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of features to avoid for the routes. Supports: tolls, \nhighways, ferries, indoor. e.g. [\"tolls\", \"highways\", \"ferries\"]"
+        },
+        "origin_location_bias": {
+          "type": "string",
+          "description": "Location bias for origin. \nCan be a place name string, coordinate dict \n{\"latitude\": float, \"longitude\": float}, or string names of environment variables:\n- \"MY_HOME\": User's home location from environment\n- \"MY_LOCATION\": User's current location from environment  \n- \"MY_WORK\": User's work location from environment"
+        },
+        "destination_location_bias": {
+          "type": "string",
+          "description": "Location bias for destination. \nCan be a place name string, coordinate dict \n{\"latitude\": float, \"longitude\": float}, or string names of environment variables:\n- \"MY_HOME\": User's home location from environment\n- \"MY_LOCATION\": User's current location from environment\n- \"MY_WORK\": User's work location from environment"
+        }
+      },
+      "required": [
+        "destination"
+      ]
+    }
+  },
+  {
+    "name": "query_places",
+    "description": "Query and locate places or geographical entities.\n\nThis function searches for businesses, stores, restaurants, parks, attractions, cities, \ncountries, and other places of interest. It can handle multiple queries and returns \nstructured place data. All inputs are validated using Pydantic models.\n\nNote: This API cannot handle generic Google search queries or image search queries.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of search queries describing desired characteristics of places.\nMust contain at least one query. Examples: [\"coffee shops\", \"parks near me\"]"
+        },
+        "location_bias": {
+          "type": "string",
+          "description": "Location bias for search results. \nCan be a place name string, coordinate dict \n{\"latitude\": float, \"longitude\": float}, or string names of environment variables:\n- \"MY_HOME\": User's home location from environment\n- \"MY_LOCATION\": User's current location from environment\n- \"MY_WORK\": User's work location from environment"
+        },
+        "only_open_now": {
+          "type": "boolean",
+          "description": "If True, filters results to show only places currently open."
+        },
+        "min_rating": {
+          "type": "number",
+          "description": "Minimum rating filter (1.0 to 5.0). Returns only places with \nthis rating or higher."
+        },
+        "price_levels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Price level filters. Supported values: \"inexpensive\", \n\"moderate\", \"expensive\", \"very_expensive\"."
+        },
+        "rank_preference": {
+          "type": "string",
+          "description": "Ranking preference for results. Supported values: \"default\", \"distance\"."
+        },
+        "search_along_route": {
+          "type": "object",
+          "properties": {},
+          "description": "Parameters for searching along a route (currently unsupported)."
+        },
+        "in_history": {
+          "type": "boolean",
+          "description": "Whether to search in history (currently unsupported)."
+        },
+        "is_saved": {
+          "type": "boolean",
+          "description": "Whether to search saved places (currently unsupported)."
+        },
+        "immersive_view": {
+          "type": "boolean",
+          "description": "Whether to include immersive views (currently unsupported)."
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "show_on_map",
+    "description": "Display places on a map.\n\nThis function generates a map containing pins for the specified places.\nAll inputs are validated using Pydantic models.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "places": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of place ids or place names to be shown on the map. \nIf place ids are provided, they should always have a prefix 'place_id://'."
+        }
+      }
+    }
+  }
+]

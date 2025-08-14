@@ -1,0 +1,52 @@
+[
+  {
+    "name": "find_media_content",
+    "description": "Search for songs, artists, albums, playlists or podcasts on a media provider.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "lookup_phrase": {
+          "type": "string",
+          "description": "Content that the user is looking for. Must be a non-empty string, even for generic types."
+        },
+        "target_content_type": {
+          "type": "string",
+          "description": "The type of content to search for. One of: \"ALBUM\", \"ARTIST\", \"GENERIC_MUSIC\", \"GENERIC_PODCAST\", \"GENERIC_MUSIC_NEW\", \"GENERIC_SOMETHING_ELSE\", \"LIKED_SONGS\", \"PERSONAL_PLAYLIST\", \"PODCAST_EPISODE\", \"PODCAST_SHOW\", \"PUBLIC_PLAYLIST\", \"TRACK\"."
+        },
+        "result_limiter": {
+          "type": "string",
+          "description": "The type of content to filter by. One of: \"ALBUM\", \"PLAYLIST\", \"TRACK\"."
+        }
+      },
+      "required": [
+        "lookup_phrase",
+        "target_content_type"
+      ]
+    }
+  },
+  {
+    "name": "initiate_media_playback",
+    "description": "Play songs, artists, albums, playlists or podcasts on a media provider.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "media_request": {
+          "type": "string",
+          "description": "Content that the user is looking for. Must be a non-empty string, even for generic types."
+        },
+        "content_classification": {
+          "type": "string",
+          "description": "The type of content to play. One of: \"ALBUM\", \"ARTIST\", \"GENERIC_MUSIC\", \"GENERIC_PODCAST\", \"GENERIC_MUSIC_NEW\", \"GENERIC_SOMETHING_ELSE\", \"LIKED_SONGS\", \"PERSONAL_PLAYLIST\", \"PODCAST_EPISODE\", \"PODCAST_SHOW\", \"PUBLIC_PLAYLIST\", \"TRACK\"."
+        },
+        "refinement_category": {
+          "type": "string",
+          "description": "The type of content to filter by. One of: \"ALBUM\", \"PLAYLIST\", \"TRACK\"."
+        }
+      },
+      "required": [
+        "content_classification",
+        "media_request"
+      ]
+    }
+  }
+]

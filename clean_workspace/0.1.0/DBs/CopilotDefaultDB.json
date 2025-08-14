@@ -1,0 +1,15 @@
+{
+    "workspace_root": "/home/user/project",
+    "cwd": "/home/user/project",
+    "file_system": {
+        "/home/user/project": {
+            "path": "/home/user/project",
+            "is_directory": true,
+            "content_lines": [],
+            "size_bytes": 0,
+            "last_modified": "2024-03-19T12:00:00Z"
+        }
+    },
+    "background_processes": {},
+    "_next_pid": 1
+} 

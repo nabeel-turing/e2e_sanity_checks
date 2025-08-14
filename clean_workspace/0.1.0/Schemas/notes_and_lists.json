@@ -1,0 +1,400 @@
+[
+  {
+    "name": "add_to_list",
+    "description": "Use this function to add items to an existing list.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "list_id": {
+          "type": "string",
+          "description": "The ID of the list to add items to."
+        },
+        "query": {
+          "type": "string",
+          "description": "A search query to find the list."
+        },
+        "search_term": {
+          "type": "string",
+          "description": "The name of the list to find."
+        },
+        "query_expansion": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Synonyms to expand the search."
+        },
+        "list_name": {
+          "type": "string",
+          "description": "The name of the list to be created if one doesn't exist."
+        },
+        "elements_to_add": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The items to add to the list. "
+        },
+        "is_bulk_mutation": {
+          "type": "boolean",
+          "description": "Indicates if the intent is to modify multiple lists. Not implemented yet."
+        }
+      }
+    }
+  },
+  {
+    "name": "append_to_note",
+    "description": "This can be used to add content to an existing note.\n\nThis function adds specified text content to an existing note, which can be identified either by its ID or by a search query.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional query to be used for searching notes and lists items. This should not be set if the title is not specified."
+        },
+        "query_expansion": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional search query expansion using synonyms or related terms."
+        },
+        "note_id": {
+          "type": "string",
+          "description": "The id of the note to which the text content will be appended."
+        },
+        "text_content": {
+          "type": "string",
+          "description": "Text content to be appended to the existing note."
+        }
+      }
+    }
+  },
+  {
+    "name": "create_list",
+    "description": "Use this function to create a new list.\n\nThis function handles the creation of a list with optional initial list items.\nThe `list_name` argument should always be populated if the `elements_to_add`\nargument is non-empty. The list is always created in the user's query\nlanguage unless suggested otherwise.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "list_name": {
+          "type": "string",
+          "description": "Name of the list. If the user explicitly\nspecifies a list name, use it. Otherwise, a suitable name must be\ngenerated based on the value of the `elements_to_add` argument and\nthe overall prompt context. If `elements_to_add` is empty as well,\nthen this argument should be left empty."
+        },
+        "elements_to_add": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The items to include in the list.\nThis can be initial list items provided by the user, or the result\ncontent of a `google_search` operation. The items to add to the list\nshould always be in the user's query language unless suggested\notherwise."
+        },
+        "generated_title": {
+          "type": "string",
+          "description": "Required if the `list_name` argument is\nempty. If the user provides the items to add to the list but not a\nlist name, a suitable name should always be generated, based on the\nitems to add and the overall prompt context."
+        }
+      }
+    }
+  },
+  {
+    "name": "create_note",
+    "description": "Use this function to create a new note.\n\nThis function handles the creation of a note with initial content. The title\nargument must always be populated if text content is non-empty. The note is\nalways created in the user's query language unless suggested otherwise.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Title of the note. If the user explicitly specifies\na title, use it. Otherwise, a suitable title must be generated,\nbased on the value of the `text_content` argument and the\noverall prompt context. If `text_content` is empty as well, then\nleave this argument empty."
+        },
+        "text_content": {
+          "type": "string",
+          "description": "The text content of the note. This can be\ninitial content provided by the user, or the result content of a\n`google_search` operation. The text_content should always be in\nuser's query language unless suggested otherwise."
+        },
+        "generated_title": {
+          "type": "string",
+          "description": "Required if the `title` argument is\nempty. If the user provides the text content of the note but not\na title, a suitable title should be generated, based on the text\ncontent and overall prompt context."
+        }
+      }
+    }
+  },
+  {
+    "name": "delete_list_item",
+    "description": "This can be used to delete items in a notes and lists list.\n\nThis function allows deletion of specific items from lists by searching for lists \nthrough various methods or by direct list ID, and then deleting specified items \nby their IDs or through search criteria.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "search_term": {
+          "type": "string",
+          "description": "The name of the list or keywords to search for \nthe list. Defaults to None."
+        },
+        "query": {
+          "type": "string",
+          "description": "Optional query to be used for searching notes and lists \nitems. This should not be set if the title is not specified. Defaults to None."
+        },
+        "query_expansion": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional search query expansion using \nsynonyms or related terms. Defaults to None."
+        },
+        "list_id": {
+          "type": "string",
+          "description": "The id of list which contains the items to be deleted. \nDefaults to None."
+        },
+        "elements_to_delete": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The ids of list items to be deleted. \nDefaults to None."
+        }
+      }
+    }
+  },
+  {
+    "name": "delete_notes_and_lists",
+    "description": "This can be used to delete lists and/or notes.\n\nThis function allows deletion of notes and lists by searching through various \nmethods including search terms, queries, query expansion, or direct item IDs.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "search_term": {
+          "type": "string",
+          "description": "The name of the lists or notes, or keywords to \nsearch for the lists or notes. Defaults to None."
+        },
+        "query": {
+          "type": "string",
+          "description": "Optional query to be used for searching notes and lists \nitems. This should not be set if the title is not specified. Defaults to None."
+        },
+        "query_expansion": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional search query expansion using \nsynonyms or related terms. Defaults to None."
+        },
+        "item_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The IDs of the notes and/or lists to delete. \nIf available from the context, use this instead of search_term. Defaults to None."
+        },
+        "item_id": {
+          "type": "string",
+          "description": "The id of note or list which is to be deleted. \nDefaults to None."
+        }
+      }
+    }
+  },
+  {
+    "name": "get_notes_and_lists",
+    "description": "Use this function to retrieve notes or lists.\n\nThe content of retrieved notes and lists can be empty. Do not call the \nget_notes_and_lists again with the returned item IDs to retrieve the full content.\nThis function can search by specific IDs, query terms, search terms, and can be \nfiltered by hint type.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "item_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The IDs of the notes and lists to retrieve. \nUse this if you know the IDs from previous interactions. Defaults to None."
+        },
+        "query": {
+          "type": "string",
+          "description": "Query to be used for searching notes and lists items. \nDefaults to None."
+        },
+        "search_term": {
+          "type": "string",
+          "description": "The exact name of the list or note, or search terms \nto find the lists or notes, only if it is not in NotesAndListsProvider values. \nDo not use this if the user refers to a provider. This field should be populated \nwith the core identifying name of the note or list, even if a verb like \"show,\" \n\"display,\" or \"get\" is present in the user's request. Defaults to None."
+        },
+        "hint": {
+          "type": "string",
+          "description": "Type of the object to retrieve. Infer it from the user prompt. \nIf the user explicitly asks for lists or notes, use 'LIST' or 'NOTE' respectively. \nOtherwise, use 'ANY'. Valid values are \"NOTE\", \"LIST\", or \"ANY\". Defaults to None."
+        }
+      }
+    }
+  },
+  {
+    "name": "search_notes_and_lists",
+    "description": "Searches notes and lists by query with optional type hint.\n\nIf legacy=True, returns a flat list of matching notes and lists (for backward compatibility).",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "The query to search for."
+        },
+        "hint": {
+          "type": "string",
+          "description": "The type of item to search for."
+        },
+        "legacy": {
+          "type": "boolean",
+          "description": "Whether to return a flat list of matching notes and lists (for backward compatibility)."
+        }
+      }
+    }
+  },
+  {
+    "name": "share_notes_and_lists",
+    "description": "This function is not supported.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "options": {
+          "type": "object",
+          "properties": {},
+          "description": "An optional dictionary of parameters."
+        }
+      }
+    }
+  },
+  {
+    "name": "show_all",
+    "description": "Displays all notes or lists based on the provided hint.\n\nThis function retrieves all notes and/or lists from the database and returns\nthem in a structured format. The details of the items are provided through\na side channel, eliminating the need to call show_notes_and_lists after this function.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "hint": {
+          "type": "string",
+          "description": "The type of item to show. Can be:\n- \"LIST\": Show only lists\n- \"NOTE\": Show only notes  \n- \"ANY\": Show both notes and lists\n- None: Show both notes and lists (default behavior)"
+        }
+      }
+    }
+  },
+  {
+    "name": "show_notes_and_lists",
+    "description": "Use this function to display specific notes or lists.\n\nThis function performs an implicit search to find the relevant items, so you \ndon't need to call search_notes_and_lists before using it. You can either \nspecify exact item IDs or provide a search query to find relevant notes and lists.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "item_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The IDs of the notes and/or lists to show. \nUse this if you know the IDs from previous interactions. Defaults to None."
+        },
+        "query": {
+          "type": "string",
+          "description": "A query to search for the notes and lists. Use this \nif you don't know the IDs of the specific items. Defaults to None."
+        }
+      }
+    }
+  },
+  {
+    "name": "undo",
+    "description": "Reverts one or more previous operations based on their IDs.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "undo_operation_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of operation IDs to be undone."
+        }
+      },
+      "required": [
+        "undo_operation_ids"
+      ]
+    }
+  },
+  {
+    "name": "update_list_item",
+    "description": "Updates an existing item in a specified list.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "list_id": {
+          "type": "string",
+          "description": "The ID of the list containing the item."
+        },
+        "list_item_id": {
+          "type": "string",
+          "description": "The ID of the list item to update."
+        },
+        "updated_element": {
+          "type": "string",
+          "description": "The new content for the list item."
+        },
+        "search_term": {
+          "type": "string",
+          "description": "A search term to find the list if the ID is not known."
+        }
+      },
+      "required": [
+        "list_item_id",
+        "updated_element"
+      ]
+    }
+  },
+  {
+    "name": "update_note",
+    "description": "This can be used to update (add/append/prepend/insert to) an existing note content.\n\nThis function updates an existing note's content. The note to be updated can be\nidentified by a search term, a query, or a specific note ID. The content can be\nadded, appended, prepended, or inserted based on the specified update type.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "search_term": {
+          "type": "string",
+          "description": "The name of the note or keywords to search for the note."
+        },
+        "query": {
+          "type": "string",
+          "description": "Optional query to be used for searching notes."
+        },
+        "query_expansion": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional search query expansion using synonyms or related terms."
+        },
+        "note_id": {
+          "type": "string",
+          "description": "The id of the note to be updated. If available from the context, use this instead of search_term."
+        },
+        "text_content": {
+          "type": "string",
+          "description": "Text content to update the existing note with."
+        },
+        "update_type": {
+          "type": "string",
+          "description": "The type of update operation to be performed on the note. \nPossible values: \"APPEND\",\"PREPEND\",\"REPLACE\",\"MOVE\",\"EDIT\""
+        }
+      }
+    }
+  },
+  {
+    "name": "update_title",
+    "description": "This can be used to update the title of an existing list or note.\n\nThis function updates the title of an existing list or note. \nIt can identify the target item using a search term, a more specific query, or a direct item ID.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "search_term": {
+          "type": "string",
+          "description": "The name of the note or list. or keywords to search for the note or list."
+        },
+        "query": {
+          "type": "string",
+          "description": "Optional query to be used for searching notes and lists items. This should not be set if the title is not specified."
+        },
+        "query_expansion": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional search query expansion using synonyms or related terms."
+        },
+        "item_id": {
+          "type": "string",
+          "description": "The id of the note or list to be updated. If available from the context, use this instead of search_term."
+        },
+        "updated_title": {
+          "type": "string",
+          "description": "The updated title of the notes and lists item."
+        }
+      }
+    }
+  }
+]

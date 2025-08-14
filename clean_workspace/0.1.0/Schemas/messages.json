@@ -1,0 +1,263 @@
+[
+  {
+    "name": "ask_for_message_body",
+    "description": "Display recipient and ask user for message body.\n\nThis method displays the recipient in a card shown to the user, with the intent \nto ask the user to provide the message body. It is used when there is a single \nrecipient with a single endpoint, but the user has not specified a message body.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "recipient": {
+          "type": "object",
+          "properties": {
+            "contact_id": {
+              "type": "string",
+              "description": "Unique identifier for the contact"
+            },
+            "contact_name": {
+              "type": "string",
+              "description": "The name of the contact (required)"
+            },
+            "contact_endpoints": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              },
+              "description": "List of endpoints for the contact"
+            },
+            "contact_photo_url": {
+              "type": "string",
+              "description": "URL to the contact's photo"
+            }
+          },
+          "description": "The recipient to send the \nmessage to. The recipient is auxiliary information that is displayed \nin the card shown to the user. Should contain:",
+          "required": [
+            "contact_endpoints",
+            "contact_name"
+          ]
+        }
+      },
+      "required": [
+        "recipient"
+      ]
+    }
+  },
+  {
+    "name": "prepare_chat_message",
+    "description": "Prepare to send a message to one or more candidate recipients via SMS/MMS.\n\nThis method prepares message cards that show information and can be interacted \nwith to send messages. It validates the message body and recipient list but \ndoes not actually send any messages.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "message_body": {
+          "type": "string",
+          "description": "The text message content to send to the recipients.\nMust be a non-empty string."
+        },
+        "recipients": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "contact_id": {
+                "type": "string",
+                "description": "Unique identifier for the contact"
+              },
+              "contact_name": {
+                "type": "string",
+                "description": "The name of the contact (required)"
+              },
+              "contact_endpoints": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                },
+                "description": "List of endpoints for the contact"
+              },
+              "contact_photo_url": {
+                "type": "string",
+                "description": "URL to the contact's photo"
+              }
+            },
+            "required": [
+              "contact_endpoints",
+              "contact_name"
+            ]
+          },
+          "description": "List of recipient \nobjects. Each recipient should contain:"
+        }
+      },
+      "required": [
+        "message_body",
+        "recipients"
+      ]
+    }
+  },
+  {
+    "name": "send_chat_message",
+    "description": "Send a message to a recipient containing a single endpoint.\n\nThis method sends a message to a recipient via SMS/MMS. Always invoke this method \nwith `get_confirmation=True`. The method validates the recipient has exactly one \nendpoint before sending the message.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "recipient": {
+          "type": "object",
+          "properties": {
+            "contact_id": {
+              "type": "string",
+              "description": "Unique identifier for the contact"
+            },
+            "contact_name": {
+              "type": "string",
+              "description": "The name of the contact (required)"
+            },
+            "contact_endpoints": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "endpoint_type": {
+                    "type": "string",
+                    "description": "Must be \"PHONE_NUMBER\""
+                  },
+                  "endpoint_value": {
+                    "type": "string",
+                    "description": "The phone number"
+                  },
+                  "endpoint_label": {
+                    "type": "string",
+                    "description": "Label for the endpoint"
+                  }
+                },
+                "required": [
+                  "endpoint_type",
+                  "endpoint_value"
+                ]
+              },
+              "description": "List with exactly one endpoint containing:"
+            },
+            "contact_photo_url": {
+              "type": "string",
+              "description": "URL to the contact's photo"
+            }
+          },
+          "description": "The recipient object containing \ncontact information. Must have exactly one endpoint for sending messages.\nExpected structure:",
+          "required": [
+            "contact_endpoints",
+            "contact_name"
+          ]
+        },
+        "message_body": {
+          "type": "string",
+          "description": "The text message content to send to the recipient. \nThis field must be non-empty. Should use correct grammar, capitalization, \nand punctuation. If the message body contains a list of items, format \nit as a bulleted list with asterisks."
+        },
+        "media_attachments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "media_id": {
+                "type": "string",
+                "description": "Unique identifier of the media"
+              },
+              "media_type": {
+                "type": "string",
+                "description": "Type of media, defaults to \"IMAGE\""
+              },
+              "source": {
+                "type": "string",
+                "description": "Source of media (\"IMAGE_RETRIEVAL\", \"IMAGE_GENERATION\",\n  \"IMAGE_UPLOAD\", or \"GOOGLE_PHOTO\")"
+              }
+            },
+            "required": [
+              "media_id",
+              "media_type",
+              "source"
+            ]
+          },
+          "description": "Metadata associated with media payload. Currently only supports images.\nEach attachment should contain:"
+        },
+        "get_confirmation": {
+          "type": "boolean",
+          "description": "Whether to get confirmation before sending. \nDefaults to True and should always be True per OpenAPI spec."
+        },
+        "recipient_name": {
+          "type": "string",
+          "description": "The recipient's name (legacy parameter)."
+        },
+        "recipient_phone_number": {
+          "type": "string",
+          "description": "The phone number of the recipient \n(legacy parameter)."
+        },
+        "recipient_photo_url": {
+          "type": "string",
+          "description": "URL to the profile photo of the recipient \n(legacy parameter)."
+        }
+      },
+      "required": [
+        "message_body",
+        "recipient"
+      ]
+    }
+  },
+  {
+    "name": "show_message_recipient_choices",
+    "description": "Display potential recipients in a card for user selection.\n\nThis method displays a list of one or more recipients that the user can choose \nto send a message to. It is used when there are multiple recipients or when \na single recipient has multiple endpoints, requiring user clarification.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "recipients": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "contact_id": {
+                "type": "string",
+                "description": "Unique identifier for the contact"
+              },
+              "contact_name": {
+                "type": "string",
+                "description": "The name of the contact (required)"
+              },
+              "contact_endpoints": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                },
+                "description": "List of endpoints for the contact"
+              },
+              "contact_photo_url": {
+                "type": "string",
+                "description": "URL to the contact's photo"
+              }
+            },
+            "required": [
+              "contact_endpoints",
+              "contact_name"
+            ]
+          },
+          "description": "List of possible \nrecipients to send the message to. Each recipient should contain:"
+        },
+        "message_body": {
+          "type": "string",
+          "description": "The text message content to send to the \nrecipient. This may be left empty if the user has not specified \nthis already."
+        }
+      },
+      "required": [
+        "recipients"
+      ]
+    }
+  },
+  {
+    "name": "show_message_recipient_not_found_or_specified",
+    "description": "Inform the user that the message recipient is not found or not specified.\n\nThis method is used to inform the user that the message recipient is not found \nor not specified. It is invoked when there are no contacts returned from contact \nsearch or when the user has not specified a contact name in the query.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "contact_name": {
+          "type": "string",
+          "description": "The recipient name that was searched for.\nMay be None if no name was provided in the search."
+        },
+        "message_body": {
+          "type": "string",
+          "description": "The text message content to send to the \nrecipient. This may be left empty if the user has not specified \nthis already."
+        }
+      }
+    }
+  }
+]
