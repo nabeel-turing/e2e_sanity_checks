@@ -3,6 +3,7 @@ import re
 import sys
 import shutil
 import json
+import copy
 from tqdm import tqdm
 from pathlib import Path
 
@@ -198,7 +199,7 @@ def get_modified_colab(nb_data):
     ignore_state_instruction = "ignore_state_preservation"
     merged_notebook = nbformat.v4.new_notebook()
     merged_notebook.cells = []  # Initialize empty cell list
-    nb_dict = nb_data
+    nb_dict = copy.deepcopy(nb_data)
     # nb_dict = prune_steps(nb_dict, remove_action=remove_action)
 
     cells = nb_dict.get('cells', [])
@@ -289,18 +290,17 @@ def get_modified_colab(nb_data):
     return merged_notebook
 
 def check_execution_errors(nb_json, remove_action=False):
-    # print_time("starting sanitizing workspace")
-    # sanitize_workspace()
-    # print_time("finished sanitizing workspace")
 
     print_time("starting pruning colab")
     pruned_colab = prune_steps(nb_json, remove_action)
-    modified_colab = get_modified_colab(pruned_colab)
     print_time("finished pruning colab")
+
+    print_time("started injecting code in colab")
+    modified_colab = get_modified_colab(pruned_colab)
+    print_time("finished injecting code in colab")
 
     print_time("starting colab execution")
     notebook_to_execute = nbformat.reads(json.dumps(modified_colab), as_version=4)
-
     error_cells = execute_notebook(notebook_to_execute)
     print_time("finished colab execution")
 
@@ -309,7 +309,7 @@ def check_execution_errors(nb_json, remove_action=False):
 def download_notebook(file_id):
     """Downloads a Colab notebook (.ipynb) from Google Drive."""
     drive_service = authenticate_with_service_account()
-    request = drive_service.files().get_media(fileId=file_id)
+    request = drive_service.files().get_media(fileId=file_id, supportsAllDrives=True)
     file_stream = io.BytesIO()
     downloader = MediaIoBaseDownload(file_stream, request)
     done = False
@@ -319,10 +319,33 @@ def download_notebook(file_id):
     return file_stream.read()
 
 def contains_golden_answer(notebook_json):
-    golden_answer_header = [cell for cell in notebook_json['cells'] if cell['cell_type']=='markdown' and ''.join(cell['source']).strip().startswith('# Golden Answer')]
-    if golden_answer_header:
-        return True
+    pattern = r"^##?\s*Golden\s*Answer"
+    regex = re.compile(pattern, re.IGNORECASE)
+    
+    markdown_cells = [cell for cell in notebook_json['cells'] if cell['cell_type'] == 'markdown']
+    for cell in markdown_cells:
+        if any([regex.match(line) for line in cell['source']]):
+            return True
     return False
+
+def contains_final_assert(notebook_json):
+    fa_block_found = False
+    for cell in notebook_json['cells']:
+        pattern = r"^##?\s*Final\s*Assertion"
+        regex_fa = re.compile(pattern, re.IGNORECASE)
+        
+        pattern = r"^\s*assert\s+.+"
+        regex_assert = re.compile(pattern)
+
+        if cell['cell_type'] == 'markdown' and not fa_block_found:
+            if any([regex_fa.match(line) for line in cell['source']]):
+                fa_block_found = True
+            continue
+        if fa_block_found and cell['cell_type'] == 'code':
+            if any([regex_assert.match(line) for line in cell['source']]) or any(['raise AssertionError' in line for line in cell['source']]):
+                return True
+    return False
+
 
 def format_execution_result(result_object):
     
@@ -347,14 +370,14 @@ def format_execution_result(result_object):
         'no_action_response': no_action_fmt_response,
         'with_action_script_success': with_action_script_success,
         'with_action_response': with_action_fmt_response,
-        'golden_answer_sample': result_object['golden_answer_sample']
+        'contains_golden_answer': result_object['contains_golden_answer'],
+        'contains_final_assert': result_object['contains_final_assert']
     }
     
 if __name__ == "__main__":
 
     run_id = str(sys.argv[1])
     setup_logging(str(run_id))
-
 
     print_time(f"Starting Run for ID: {run_id}")
 
@@ -393,12 +416,14 @@ if __name__ == "__main__":
 
             print_time("Started: checking if contains Golden Answer")
             golden_answer_sample = contains_golden_answer(notebook_json)
+            final_assert_sample = contains_final_assert(notebook_json)
             print_time("Finished: checking if contains Golden Answer")
             execution_result = {
                 'notebook': notebook_url_id,
                 'with_action_error': error_cells_action,
                 'no_action_error': error_cells_no_action,
-                'golden_answer_sample': golden_answer_sample,
+                'contains_golden_answer': golden_answer_sample,
+                'contains_final_assert': final_assert_sample,
             }
 
         except Exception as e:
@@ -414,7 +439,8 @@ if __name__ == "__main__":
                 'notebook': notebook_url_id,
                 'with_action_error': error_template,
                 'no_action_error': error_template,
-                'golden_answer_sample': "",
+                'contains_golden_answer': golden_answer_sample,
+                'contains_final_assert': final_assert_sample,
             }
         finally:
             execution_result_frmt = format_execution_result(execution_result)

@@ -1,12 +1,12 @@
-.idea/
-.ipynb_checkpoints/
-.venv/
+/.idea/
+/.ipynb_checkpoints/
+/.venv/
 
 
-results/
-execution_logs/
-# clean_workspace/
+/results/
+/execution_logs/
+/notebooks
 
-execution_configs.csv
-# *.json
-turing-delivery-g-ga-e36eb2300714.json
+/execution_configs.csv
+/turing-delivery-g-ga-e36eb2300714.json
+.DS_Store
