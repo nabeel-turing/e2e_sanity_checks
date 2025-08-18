@@ -100,6 +100,10 @@ class RemindersModel(BaseModel):
     class Config:
         extra = "allow" # Allow other fields as base type is Dict[str, Any]
 
+class AttachmentModel(BaseModel):
+    """Pydantic model for an event attachment."""
+    fileUrl: str
+
 class ExtendedPropertiesModel(BaseModel):
     """Pydantic model for extended properties."""
     private: Optional[Dict[str, Any]] = None
@@ -121,6 +125,7 @@ class EventResourceInputModel(BaseModel):
     attendees: Optional[List[AttendeeModel]] = None
     reminders: Optional[RemindersModel] = None
     location: Optional[str] = None
+    attachments: Optional[List[AttachmentModel]] = None
     extendedProperties: Optional[ExtendedPropertiesModel] = None
 
     @field_validator('recurrence')
@@ -158,6 +163,7 @@ class EventPatchResourceModel(BaseModel):
     location: Optional[str] = None
     recurrence: Optional[List[str]] = None
     reminders: Optional[RemindersModel] = None
+    attachments: Optional[List[AttachmentModel]] = None
 
     @field_validator('recurrence')
     @classmethod

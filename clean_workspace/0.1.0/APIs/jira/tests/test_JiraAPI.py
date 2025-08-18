@@ -33,20 +33,24 @@ from .. import (
     find_users,
     add_attachment
 )
+from ..DashboardApi import get_dashboard
 
-from ..SimulationEngine.custom_errors import EmptyFieldError
-from ..SimulationEngine.custom_errors import GroupAlreadyExistsError
-from ..SimulationEngine.custom_errors import ProjectInputError
-from ..SimulationEngine.custom_errors import ProjectAlreadyExistsError
-from ..SimulationEngine.custom_errors import MissingUserIdentifierError
-from ..SimulationEngine.custom_errors import ProjectNotFoundError
-from ..SimulationEngine.custom_errors import MissingUpdateDataError
-from ..SimulationEngine.custom_errors import EmptyInputError
-from ..SimulationEngine.custom_errors import ProjectNotFoundError
-from ..SimulationEngine.custom_errors import ComponentNotFoundError
-from ..SimulationEngine.custom_errors import IssueTypeNotFoundError
-from ..SimulationEngine.custom_errors import ResolutionNotFoundError
-from ..SimulationEngine.custom_errors import PriorityNotFoundError
+from ..DashboardApi import get_dashboards
+
+from ..SimulationEngine.custom_errors import (
+    EmptyFieldError,
+    GroupAlreadyExistsError,
+    ProjectInputError,
+    ProjectAlreadyExistsError,
+    MissingUserIdentifierError,
+    ProjectNotFoundError,
+    MissingUpdateDataError,
+    EmptyInputError,
+    ComponentNotFoundError,
+    IssueTypeNotFoundError,
+    ResolutionNotFoundError,
+    PriorityNotFoundError
+)
 
 class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
     def setUp(self):
@@ -282,7 +286,7 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
             "assignee": {"name": "testuser"},
             "parent": {"id": parent_id}
         }
-        
+
         # Create a subtask
         subtask = JiraAPI.IssueApi.create_issue(fields=subtask_fields)
         # Change the logic when creating subtasks is added to create_issue
@@ -298,6 +302,46 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
 
         with self.assertRaisesRegex(ValueError, f"Issue '{parent_id}' not found."):
             JiraAPI.IssueApi.get_issue(parent_id)
+
+    def test_bulk_delete_issues(self):
+        """Test bulk deletion of issues."""
+        issue_ids = ["ISSUE-1", "ISSUE-2"]
+        expected_deleted = [f"Issue '{issue_id}' has been deleted." for issue_id in issue_ids]
+        deleted = JiraAPI.IssueApi.bulk_delete_issues(issue_ids=issue_ids)
+        self.assertEqual(deleted["deleted"], expected_deleted)
+        
+    def test_bulk_delete_issues_invalid_input_type(self):
+        """Test bulk deletion of issues with invalid input type."""
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.IssueApi.bulk_delete_issues,
+            expected_exception_type=TypeError,
+            expected_message="issue_ids must be a list",
+            issue_ids=123)
+
+    def test_bulk_delete_issues_invalid_input_value(self):
+        """Test bulk deletion of issues with invalid input value."""
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.IssueApi.bulk_delete_issues,
+            expected_exception_type=ValueError,
+            expected_message="Issue 'invalid_id' does not exist.",
+            issue_ids=["invalid_id"])
+
+    def test_bulk_delete_issues_missing_required_field(self):
+        """Test bulk deletion of issues with missing required field."""
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.IssueApi.bulk_delete_issues,
+            expected_exception_type=MissingRequiredFieldError,
+            expected_message="Missing required field 'issue_ids'.",
+            issue_ids=None)
+
+    def test_bulk_delete_issues_invalid_input_value_type(self):
+        """Test bulk deletion of issues with invalid input value type."""
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.IssueApi.bulk_delete_issues,
+            expected_exception_type=TypeError,
+            expected_message="issue_ids must be a list of strings",
+            issue_ids=["ISSUE-1", 123])
+    
 
     def test_persistence(self):
         """Test saving and loading application state."""
@@ -493,7 +537,7 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
             JiraAPI.ComponentApi.create_component(project="PROJ", name="Backend", description="a" * 1001)
         self.assertEqual(str(context.exception), "description cannot be longer than 1000 characters")
 
-    
+
     def test_reindex_lifecycle(self):
         """Check that reindex can be started and then we can query its status."""
         # Initially should not be running
@@ -611,21 +655,20 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
 
     def test_application_properties_update_invalid_id(self):
         """Test updating application properties with an invalid id."""
-        JiraAPI.ApplicationPropertiesApi.update_application_property(
-            id="nonexistent", value="testValue"
-        )
-        JiraAPI.ApplicationPropertiesApi.update_application_property(
-            id="testProp", value=""
-        )
+        # Test with empty value - should raise ValueError
+        with self.assertRaises(ValueError) as context:
+            JiraAPI.ApplicationPropertiesApi.update_application_property(
+                id="testProp", value=""
+            )
+        self.assertIn("Validation error: value", str(context.exception))
 
     def test_application_properties_get_invalid_key(self):
         """Test getting application properties with an invalid key."""
-        self.assertIn(
-            "error",
+        with self.assertRaises(ValueError) as context:
             JiraAPI.ApplicationPropertiesApi.get_application_properties(
                 key="nonexistent"
-            ),
-        )
+            )
+        self.assertIn("Property 'nonexistent' not found", str(context.exception))
 
     def test_application_roles(self):
         """Test application role retrieval."""
@@ -642,10 +685,21 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
         self.assertEqual(single_role["name"], "System Admins")
 
         # Test non-existent role
-        self.assertIn(
-            "error",
-            JiraAPI.ApplicationRoleApi.get_application_role_by_key("nonexistent"),
-        )
+        with self.assertRaises(ValueError) as context:
+            JiraAPI.ApplicationRoleApi.get_application_role_by_key("nonexistent")
+        self.assertIn("Role 'nonexistent' not found", str(context.exception))
+
+    def test_application_role_by_key_type_error(self):
+        """Test that TypeError is raised if key is not a string."""
+        with self.assertRaises(TypeError) as context:
+            JiraAPI.ApplicationRoleApi.get_application_role_by_key(123)
+        self.assertIn("key parameter must be a string", str(context.exception))
+
+    def test_application_role_by_key_empty_value_error(self):
+        """Test that ValueError is raised if key is empty."""
+        with self.assertRaises(ValueError) as context:
+            JiraAPI.ApplicationRoleApi.get_application_role_by_key("")
+        self.assertIn("key parameter cannot be empty", str(context.exception))
 
     def test_avatar_api(self):
         """Test avatar uploads and cropping."""
@@ -711,9 +765,228 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
             comp_id="nonexistentialcomp",
             description="Updated Description"
         )
-        self.assertIn(
-            "error", JiraAPI.ComponentApi.delete_component(comp_id="nonexistent")
+        # Test delete non-existent component raises ComponentNotFoundError
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ComponentApi.delete_component,
+            expected_exception_type=ComponentNotFoundError,
+            expected_message="Component 'nonexistent' does not exist.",
+            comp_id="nonexistent"
         )
+
+    def test_delete_component_100_percent_coverage(self):
+        """Comprehensive test for delete_component function to achieve 100% coverage."""
+        # Setup test data - Create test components and issues
+        test_project = "DELETE_TEST_PROJECT"
+        DB["projects"][test_project] = {"key": test_project, "name": "Delete Test Project"}
+        
+        # Create components for testing
+        comp1 = JiraAPI.ComponentApi.create_component(
+            project=test_project, name="Component 1", description="First component"
+        )
+        comp2 = JiraAPI.ComponentApi.create_component(
+            project=test_project, name="Component 2", description="Second component"
+        )
+        
+        # Create test issues assigned to comp1
+        if "issues" not in DB:
+            DB["issues"] = {}
+        DB["issues"]["ISSUE-1"] = {"component": comp1["id"], "summary": "Issue 1"}
+        DB["issues"]["ISSUE-2"] = {"component": comp1["id"], "summary": "Issue 2"}
+        DB["issues"]["ISSUE-3"] = {"component": "other-comp", "summary": "Issue 3"}
+        
+        # Test 1: Successful deletion without moveIssuesTo
+        comp3 = JiraAPI.ComponentApi.create_component(
+            project=test_project, name="Component 3", description="Third component"
+        )
+        result = JiraAPI.ComponentApi.delete_component(comp3["id"])
+        self.assertEqual(result["deleted"], comp3["id"])
+        self.assertIsNone(result["moveIssuesTo"])
+        self.assertNotIn(comp3["id"], DB["components"])
+        
+        # Test 2: Successful deletion with moveIssuesTo (issues should be moved)
+        result = JiraAPI.ComponentApi.delete_component(comp1["id"], moveIssuesTo=comp2["id"])
+        self.assertEqual(result["deleted"], comp1["id"])
+        self.assertEqual(result["moveIssuesTo"], comp2["id"])
+        self.assertNotIn(comp1["id"], DB["components"])
+        
+        # Verify issues were moved
+        self.assertEqual(DB["issues"]["ISSUE-1"]["component"], comp2["id"])
+        self.assertEqual(DB["issues"]["ISSUE-2"]["component"], comp2["id"])
+        self.assertEqual(DB["issues"]["ISSUE-3"]["component"], "other-comp")  # Unchanged
+
+    def test_delete_component_type_validation_errors(self):
+        """Test type validation errors for delete_component function."""
+        # Test 3: Invalid comp_id type - integer
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ComponentApi.delete_component,
+            expected_exception_type=TypeError,
+            expected_message="comp_id must be a string.",
+            comp_id=123
+        )
+        
+        # Test 4: Invalid comp_id type - None
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ComponentApi.delete_component,
+            expected_exception_type=TypeError,
+            expected_message="comp_id must be a string.",
+            comp_id=None
+        )
+        
+        # Test 5: Invalid comp_id type - list
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ComponentApi.delete_component,
+            expected_exception_type=TypeError,
+            expected_message="comp_id must be a string.",
+            comp_id=["component1"]
+        )
+        
+        # Test 6: Invalid moveIssuesTo type - integer
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ComponentApi.delete_component,
+            expected_exception_type=TypeError,
+            expected_message="moveIssuesTo must be a string if provided.",
+            comp_id="COMP-1",
+            moveIssuesTo=123
+        )
+        
+        # Test 7: Invalid moveIssuesTo type - boolean
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ComponentApi.delete_component,
+            expected_exception_type=TypeError,
+            expected_message="moveIssuesTo must be a string if provided.",
+            comp_id="COMP-1",
+            moveIssuesTo=True
+        )
+
+    def test_delete_component_empty_string_validation_errors(self):
+        """Test empty string validation errors for delete_component function."""
+        # Test 8: Empty comp_id
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ComponentApi.delete_component,
+            expected_exception_type=ValueError,
+            expected_message="comp_id cannot be empty.",
+            comp_id=""
+        )
+        
+        # Test 9: Whitespace-only comp_id
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ComponentApi.delete_component,
+            expected_exception_type=ValueError,
+            expected_message="comp_id cannot be empty.",
+            comp_id="   "
+        )
+        
+        # Test 10: Empty moveIssuesTo
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ComponentApi.delete_component,
+            expected_exception_type=ValueError,
+            expected_message="moveIssuesTo cannot be empty if provided.",
+            comp_id="COMP-1",
+            moveIssuesTo=""
+        )
+        
+        # Test 11: Whitespace-only moveIssuesTo
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ComponentApi.delete_component,
+            expected_exception_type=ValueError,
+            expected_message="moveIssuesTo cannot be empty if provided.",
+            comp_id="COMP-1",
+            moveIssuesTo="   "
+        )
+
+    def test_delete_component_not_found_errors(self):
+        """Test component not found errors for delete_component function."""
+        # Setup - Create a component for the target component test
+        test_project = "NOT_FOUND_TEST"
+        DB["projects"][test_project] = {"key": test_project, "name": "Not Found Test"}
+        existing_comp = JiraAPI.ComponentApi.create_component(
+            project=test_project, name="Existing Component"
+        )
+        
+        # Test 12: Non-existent comp_id
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ComponentApi.delete_component,
+            expected_exception_type=ComponentNotFoundError,
+            expected_message="Component 'NONEXISTENT-123' does not exist.",
+            comp_id="NONEXISTENT-123"
+        )
+        
+        # Test 13: Non-existent moveIssuesTo component
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ComponentApi.delete_component,
+            expected_exception_type=ComponentNotFoundError,
+            expected_message="Component 'NONEXISTENT-TARGET' does not exist.",
+            comp_id=existing_comp["id"],
+            moveIssuesTo="NONEXISTENT-TARGET"
+        )
+
+    def test_delete_component_edge_cases(self):
+        """Test edge cases for delete_component function."""
+        # Setup
+        test_project = "EDGE_TEST"
+        DB["projects"][test_project] = {"key": test_project, "name": "Edge Test"}
+        
+        # Test 14: Component with special characters in ID
+        comp_special = JiraAPI.ComponentApi.create_component(
+            project=test_project, name="Special_Component-123"
+        )
+        result = JiraAPI.ComponentApi.delete_component(comp_special["id"])
+        self.assertEqual(result["deleted"], comp_special["id"])
+        self.assertIsNone(result["moveIssuesTo"])
+        
+        # Test 15: moveIssuesTo=None explicitly (should work same as default)
+        comp_none = JiraAPI.ComponentApi.create_component(
+            project=test_project, name="None Test Component"
+        )
+        result = JiraAPI.ComponentApi.delete_component(comp_none["id"], moveIssuesTo=None)
+        self.assertEqual(result["deleted"], comp_none["id"])
+        self.assertIsNone(result["moveIssuesTo"])
+        
+        # Test 16: No issues in DB (should not crash)
+        if "issues" in DB:
+            del DB["issues"]
+        comp_no_issues = JiraAPI.ComponentApi.create_component(
+            project=test_project, name="No Issues Component"
+        )
+        target_comp = JiraAPI.ComponentApi.create_component(
+            project=test_project, name="Target Component"
+        )
+        result = JiraAPI.ComponentApi.delete_component(comp_no_issues["id"], moveIssuesTo=target_comp["id"])
+        self.assertEqual(result["deleted"], comp_no_issues["id"])
+        self.assertEqual(result["moveIssuesTo"], target_comp["id"])
+        
+        # Test 17: Case sensitivity
+        comp_case = JiraAPI.ComponentApi.create_component(
+            project=test_project, name="CaseSensitive"
+        )
+        # Should work with exact case
+        result = JiraAPI.ComponentApi.delete_component(comp_case["id"])
+        self.assertEqual(result["deleted"], comp_case["id"])
+
+    def test_delete_component_db_consistency(self):
+        """Test database consistency after delete_component operations."""
+        # Setup
+        test_project = "DB_CONSISTENCY_TEST"
+        DB["projects"][test_project] = {"key": test_project, "name": "DB Test"}
+        
+        # Create components
+        comp1 = JiraAPI.ComponentApi.create_component(project=test_project, name="DB Test 1")
+        comp2 = JiraAPI.ComponentApi.create_component(project=test_project, name="DB Test 2")
+        
+        # Verify components exist before deletion
+        self.assertIn(comp1["id"], DB["components"])
+        self.assertIn(comp2["id"], DB["components"])
+        
+        # Delete comp1
+        JiraAPI.ComponentApi.delete_component(comp1["id"])
+        
+        # Verify only comp1 was removed
+        self.assertNotIn(comp1["id"], DB["components"])
+        self.assertIn(comp2["id"], DB["components"])
+        
+        # Verify remaining component is intact
+        fetched_comp2 = JiraAPI.ComponentApi.get_component(comp2["id"])
+        self.assertEqual(fetched_comp2["name"], "DB Test 2")
 
     def test_dashboard_api(self):
         """Test getting dashboards."""
@@ -726,12 +999,475 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
         self.assertEqual(len(all_dash["dashboards"]), 1)
         self.assertEqual(all_dash["dashboards"][0]["name"], "Main Dashboard")
 
-        # Get one dashboard
+        # Get one dashboard - successful case
         one_dash = JiraAPI.DashboardApi.get_dashboard("D1")
         self.assertEqual(one_dash["name"], "Main Dashboard")
+        self.assertEqual(one_dash["id"], "D1")
 
-        # Test non-existent dashboard
-        self.assertIn("error", JiraAPI.DashboardApi.get_dashboard("D2"))
+    def test_get_dashboard_100_percent_coverage(self):
+        """Comprehensive test for get_dashboard function to achieve 100% coverage."""
+        # Setup test data
+        DB["dashboards"]["DASH-1"] = {
+            "id": "DASH-1", 
+            "name": "Test Dashboard",
+            "self": "http://jira.example.com/dashboard/DASH-1",
+            "view": "http://jira.example.com/dashboard/view/DASH-1"
+        }
+
+        # Test 1: Successful retrieval
+        result = get_dashboard("DASH-1")
+        self.assertEqual(result["id"], "DASH-1")
+        self.assertEqual(result["name"], "Test Dashboard")
+        self.assertEqual(result["self"], "http://jira.example.com/dashboard/DASH-1")
+        self.assertEqual(result["view"], "http://jira.example.com/dashboard/view/DASH-1")
+
+    def test_get_dashboard_type_validation_errors(self):
+        """Test TypeError cases for get_dashboard function."""
+        # Test 2: Invalid type - integer
+        self.assert_error_behavior(
+            func_to_call=get_dashboard,
+            expected_exception_type=ValueError,
+            expected_message="dash_id must be a string",
+            dash_id=123
+        )
+
+        # Test 3: Invalid type - None
+        self.assert_error_behavior(
+            func_to_call=get_dashboard,
+            expected_exception_type=ValueError,
+            expected_message="dash_id must be a string",
+            dash_id=None
+        )
+
+        # Test 4: Invalid type - list
+        self.assert_error_behavior(
+            func_to_call=get_dashboard,
+            expected_exception_type=ValueError,
+            expected_message="dash_id must be a string",
+            dash_id=["DASH-1"]
+        )
+
+        # Test 5: Invalid type - dict
+        self.assert_error_behavior(
+            func_to_call=get_dashboard,
+            expected_exception_type=ValueError,
+            expected_message="dash_id must be a string",
+            dash_id={"id": "DASH-1"}
+        )
+
+    def test_get_dashboard_empty_string_validation_errors(self):
+        """Test ValueError cases for empty strings in get_dashboard function."""
+        # Test 6: Empty string
+        self.assert_error_behavior(
+            func_to_call=get_dashboard,
+            expected_exception_type=ValueError,
+            expected_message="dash_id cannot be empty",
+            dash_id=""
+        )
+
+        # Test 7: Whitespace-only string
+        self.assert_error_behavior(
+            func_to_call=get_dashboard,
+            expected_exception_type=ValueError,
+            expected_message="dash_id cannot be empty",
+            dash_id="   "
+        )
+
+        # Test 8: Tab and newline whitespace
+        self.assert_error_behavior(
+            func_to_call=get_dashboard,
+            expected_exception_type=ValueError,
+            expected_message="dash_id cannot be empty",
+            dash_id="\t\n  "
+        )
+
+    def test_get_dashboard_not_found_error(self):
+        """Test ValueError case for non-existent dashboard."""
+        # Test 9: Non-existent dashboard
+        self.assert_error_behavior(
+            func_to_call=get_dashboard,
+            expected_exception_type=ValueError,
+            expected_message="Dashboard 'NONEXISTENT' not found.",
+            dash_id="NONEXISTENT"
+        )
+
+        # Test 10: Valid format but non-existent
+        self.assert_error_behavior(
+            func_to_call=get_dashboard,
+            expected_exception_type=ValueError,
+            expected_message="Dashboard 'DASH-999' not found.",
+            dash_id="DASH-999"
+        )
+
+    def test_get_dashboard_edge_cases(self):
+        """Test edge cases for get_dashboard function."""
+        # Setup test data with edge case IDs
+        DB["dashboards"]["1"] = {"id": "1", "name": "Numeric ID Dashboard"}
+        DB["dashboards"]["special-chars_123"] = {"id": "special-chars_123", "name": "Special Chars Dashboard"}
+        DB["dashboards"]["VERY-LONG-DASHBOARD-ID-WITH-MANY-CHARACTERS"] = {
+            "id": "VERY-LONG-DASHBOARD-ID-WITH-MANY-CHARACTERS", 
+            "name": "Long ID Dashboard"
+        }
+
+        # Test 11: Numeric string ID
+        result = get_dashboard("1")
+        self.assertEqual(result["id"], "1")
+        self.assertEqual(result["name"], "Numeric ID Dashboard")
+
+        # Test 12: Special characters in ID
+        result = get_dashboard("special-chars_123")
+        self.assertEqual(result["id"], "special-chars_123")
+        self.assertEqual(result["name"], "Special Chars Dashboard")
+
+        # Test 13: Very long ID
+        result = get_dashboard("VERY-LONG-DASHBOARD-ID-WITH-MANY-CHARACTERS")
+        self.assertEqual(result["id"], "VERY-LONG-DASHBOARD-ID-WITH-MANY-CHARACTERS")
+        self.assertEqual(result["name"], "Long ID Dashboard")
+
+        # Test 14: ID with leading/trailing spaces that are valid after strip
+        DB["dashboards"]["TRIMMED"] = {"id": "TRIMMED", "name": "Trimmed Dashboard"}
+        # Note: This tests a potential edge case - the function uses .strip() to check emptiness
+        # but doesn't strip the actual ID used for lookup, so "  TRIMMED  " would fail
+        self.assert_error_behavior(
+            func_to_call=get_dashboard,
+            expected_exception_type=ValueError,
+            expected_message="Dashboard '  TRIMMED  ' not found.",
+            dash_id="  TRIMMED  "
+        )
+
+    def test_get_dashboards_100_percent_coverage(self):
+        """Comprehensive test for get_dashboards function to achieve 100% coverage."""
+        # Test 1: Basic successful retrieval with empty database
+        result = get_dashboards()
+        self.assertIn("dashboards", result)
+        self.assertEqual(len(result["dashboards"]), 0)
+
+        # Test 2: Basic successful retrieval with data
+        DB["dashboards"]["D1"] = {"id": "D1", "name": "Dashboard 1"}
+        DB["dashboards"]["D2"] = {"id": "D2", "name": "Dashboard 2"}
+        DB["dashboards"]["D3"] = {"id": "D3", "name": "Dashboard 3"}
+        
+        result = get_dashboards()
+        self.assertIn("dashboards", result)
+        self.assertEqual(len(result["dashboards"]), 3)
+        self.assertEqual(result["dashboards"][0]["name"], "Dashboard 1")
+        self.assertEqual(result["dashboards"][1]["name"], "Dashboard 2")
+        self.assertEqual(result["dashboards"][2]["name"], "Dashboard 3")
+
+        # Test 3: Test with startAt parameter
+        result = get_dashboards(startAt=1)
+        self.assertIn("dashboards", result)
+        self.assertEqual(len(result["dashboards"]), 2)
+        self.assertEqual(result["dashboards"][0]["name"], "Dashboard 2")
+        self.assertEqual(result["dashboards"][1]["name"], "Dashboard 3")
+
+        # Test 4: Test with maxResults parameter
+        result = get_dashboards(maxResults=2)
+        self.assertIn("dashboards", result)
+        self.assertEqual(len(result["dashboards"]), 2)
+        self.assertEqual(result["dashboards"][0]["name"], "Dashboard 1")
+        self.assertEqual(result["dashboards"][1]["name"], "Dashboard 2")
+
+        # Test 5: Test with both startAt and maxResults
+        result = get_dashboards(startAt=1, maxResults=1)
+        self.assertIn("dashboards", result)
+        self.assertEqual(len(result["dashboards"]), 1)
+        self.assertEqual(result["dashboards"][0]["name"], "Dashboard 2")
+
+        # Test 6: Test with startAt = 0 (valid edge case)
+        result = get_dashboards(startAt=0)
+        self.assertIn("dashboards", result)
+        self.assertEqual(len(result["dashboards"]), 3)
+
+        # Test 7: Test with startAt equals total dashboards (results in empty list)
+        result = get_dashboards(startAt=3)
+        self.assertIn("dashboards", result)
+        self.assertEqual(len(result["dashboards"]), 0)
+
+        # Test 8: Test maxResults equals total dashboards
+        result = get_dashboards(maxResults=3)
+        self.assertIn("dashboards", result)
+        self.assertEqual(len(result["dashboards"]), 3)
+
+    # ================ Input Validation Tests ================
+    
+    def test_get_dashboards_startAt_type_validation(self):
+        """Test TypeError when startAt is not an integer."""
+        # Test various non-integer types (excluding boolean since isinstance(True, int) == True in Python)
+        invalid_types = [
+            ("string", "test"),
+            ("float", 1.5),
+            ("None", None),
+            ("list", [1, 2]),
+            ("dict", {"key": "value"})
+        ]
+        
+        for type_name, invalid_value in invalid_types:
+            with self.subTest(type_name=type_name, value=invalid_value):
+                self.assert_error_behavior(
+                    func_to_call=get_dashboards,
+                    expected_exception_type=TypeError,
+                    expected_message="startAt must be a valid integer",
+                    startAt=invalid_value
+                )
+
+    def test_get_dashboards_startAt_boolean_accepted(self):
+        """Test that boolean values are accepted as integers (Python behavior)."""
+        DB["dashboards"].clear()
+        DB["dashboards"]["D1"] = {"id": "D1", "name": "Dashboard 1"}
+        
+        # True is treated as 1 in Python
+        result = get_dashboards(startAt=True)
+        self.assertIn("dashboards", result)
+        self.assertEqual(len(result["dashboards"]), 0)  # startAt=1 skips the first item
+        
+        # False is treated as 0 in Python
+        result = get_dashboards(startAt=False)
+        self.assertIn("dashboards", result)
+        self.assertEqual(len(result["dashboards"]), 1)  # startAt=0 returns all items
+
+    def test_get_dashboards_startAt_negative_error(self):
+        """Test ValueError when startAt is negative."""
+        self.assert_error_behavior(
+            func_to_call=get_dashboards,
+            expected_exception_type=ValueError,
+            expected_message="startAt must not be negative",
+            startAt=-1
+        )
+        
+        self.assert_error_behavior(
+            func_to_call=get_dashboards,
+            expected_exception_type=ValueError,
+            expected_message="startAt must not be negative",
+            startAt=-10
+        )
+
+    def test_get_dashboards_maxResults_type_validation(self):
+        """Test TypeError when maxResults is not an integer (but is truthy)."""
+        # Test various non-integer truthy types (excluding boolean since isinstance(True, int) == True in Python)
+        invalid_types = [
+            ("string", "test"),
+            ("float", 1.5),
+            ("list", [1, 2]),
+            ("dict", {"key": "value"})
+        ]
+        
+        for type_name, invalid_value in invalid_types:
+            with self.subTest(type_name=type_name, value=invalid_value):
+                self.assert_error_behavior(
+                    func_to_call=get_dashboards,
+                    expected_exception_type=TypeError,
+                    expected_message="maxResults must be a valid integer",
+                    maxResults=invalid_value
+                )
+
+    def test_get_dashboards_maxResults_boolean_accepted(self):
+        """Test that boolean values are accepted as integers for maxResults (Python behavior)."""
+        DB["dashboards"].clear()
+        for i in range(3):
+            DB["dashboards"][f"D{i}"] = {"id": f"D{i}", "name": f"Dashboard {i}"}
+        
+        # True is treated as 1 in Python
+        result = get_dashboards(maxResults=True)
+        self.assertIn("dashboards", result)
+        self.assertEqual(len(result["dashboards"]), 1)  # maxResults=1 returns first item
+        
+        # False is treated as 0 in Python (falsy, so bypasses validation and returns all)
+        result = get_dashboards(maxResults=False)
+        self.assertIn("dashboards", result)
+        self.assertEqual(len(result["dashboards"]), 3)  # maxResults=0 is falsy, returns all
+
+    def test_get_dashboards_maxResults_negative_error(self):
+        """Test ValueError when maxResults is negative."""
+        self.assert_error_behavior(
+            func_to_call=get_dashboards,
+            expected_exception_type=ValueError,
+            expected_message="maxResults must not be negative",
+            maxResults=-1
+        )
+        
+        self.assert_error_behavior(
+            func_to_call=get_dashboards,
+            expected_exception_type=ValueError,
+            expected_message="maxResults must not be negative",
+            maxResults=-5
+        )
+
+    def test_get_dashboards_maxResults_falsy_values_allowed(self):
+        """Test that falsy maxResults values (0, None) are allowed and don't trigger validation."""
+        DB["dashboards"]["D1"] = {"id": "D1", "name": "Dashboard 1"}
+        DB["dashboards"]["D2"] = {"id": "D2", "name": "Dashboard 2"}
+        
+        # maxResults=0 is falsy, so it bypasses validation and returns all results
+        result = get_dashboards(maxResults=0)
+        self.assertIn("dashboards", result)
+        self.assertEqual(len(result["dashboards"]), 2)
+        
+        # maxResults=None is falsy, so it bypasses validation and returns all results
+        result = get_dashboards(maxResults=None)
+        self.assertIn("dashboards", result)
+        self.assertEqual(len(result["dashboards"]), 2)
+
+    # ================ Core Functionality Tests ================
+
+    def test_get_dashboards_empty_database(self):
+        """Test get_dashboards with empty database."""
+        DB["dashboards"].clear()
+        
+        result = get_dashboards()
+        self.assertIn("dashboards", result)
+        self.assertEqual(len(result["dashboards"]), 0)
+        
+        result = get_dashboards(startAt=0, maxResults=10)
+        self.assertIn("dashboards", result)
+        self.assertEqual(len(result["dashboards"]), 0)
+
+    def test_get_dashboards_basic_functionality(self):
+        """Test basic functionality with various parameter combinations."""
+        # Setup test data
+        DB["dashboards"].clear()
+        for i in range(5):
+            DB["dashboards"][f"D{i}"] = {"id": f"D{i}", "name": f"Dashboard {i}"}
+        
+        # Test default parameters
+        result = get_dashboards()
+        self.assertIn("dashboards", result)
+        self.assertEqual(len(result["dashboards"]), 5)
+        
+        # Test with explicit defaults
+        result = get_dashboards(startAt=0, maxResults=None)
+        self.assertIn("dashboards", result)
+        self.assertEqual(len(result["dashboards"]), 5)
+
+    def test_get_dashboards_startAt_functionality(self):
+        """Test startAt parameter functionality."""
+        # Setup test data
+        DB["dashboards"].clear()
+        for i in range(5):
+            DB["dashboards"][f"D{i}"] = {"id": f"D{i}", "name": f"Dashboard {i}"}
+        
+        # Test startAt=0 (should return all)
+        result = get_dashboards(startAt=0)
+        self.assertEqual(len(result["dashboards"]), 5)
+        
+        # Test startAt=1 (should skip first)
+        result = get_dashboards(startAt=1)
+        self.assertEqual(len(result["dashboards"]), 4)
+        
+        # Test startAt=3 (should skip first 3)
+        result = get_dashboards(startAt=3)
+        self.assertEqual(len(result["dashboards"]), 2)
+        
+        # Test startAt at exact boundary (should return empty)
+        result = get_dashboards(startAt=5)
+        self.assertEqual(len(result["dashboards"]), 0)
+        
+        # Test startAt beyond database size
+        result = get_dashboards(startAt=10)
+        self.assertEqual(len(result["dashboards"]), 0)
+
+    def test_get_dashboards_maxResults_functionality(self):
+        """Test maxResults parameter functionality."""
+        # Setup test data
+        DB["dashboards"].clear()
+        for i in range(5):
+            DB["dashboards"][f"D{i}"] = {"id": f"D{i}", "name": f"Dashboard {i}"}
+        
+        # Test maxResults=1
+        result = get_dashboards(maxResults=1)
+        self.assertEqual(len(result["dashboards"]), 1)
+        
+        # Test maxResults=3
+        result = get_dashboards(maxResults=3)
+        self.assertEqual(len(result["dashboards"]), 3)
+        
+        # Test maxResults equal to database size
+        result = get_dashboards(maxResults=5)
+        self.assertEqual(len(result["dashboards"]), 5)
+        
+        # Test maxResults larger than database size
+        result = get_dashboards(maxResults=10)
+        self.assertEqual(len(result["dashboards"]), 5)
+
+    def test_get_dashboards_combined_parameters(self):
+        """Test combinations of startAt and maxResults."""
+        # Setup test data
+        DB["dashboards"].clear()
+        for i in range(10):
+            DB["dashboards"][f"D{i}"] = {"id": f"D{i}", "name": f"Dashboard {i}"}
+        
+        # Test startAt=2, maxResults=3 (should get items 2, 3, 4)
+        result = get_dashboards(startAt=2, maxResults=3)
+        self.assertEqual(len(result["dashboards"]), 3)
+        
+        # Test startAt=8, maxResults=5 (should get only last 2 items)
+        result = get_dashboards(startAt=8, maxResults=5)
+        self.assertEqual(len(result["dashboards"]), 2)
+        
+        # Test startAt=5, maxResults=2
+        result = get_dashboards(startAt=5, maxResults=2)
+        self.assertEqual(len(result["dashboards"]), 2)
+        
+        # Test startAt beyond range with maxResults
+        result = get_dashboards(startAt=15, maxResults=5)
+        self.assertEqual(len(result["dashboards"]), 0)
+
+    def test_get_dashboards_edge_cases(self):
+        """Test edge cases for get_dashboards function."""
+        # Test with single dashboard
+        DB["dashboards"].clear()
+        DB["dashboards"]["D1"] = {"id": "D1", "name": "Only Dashboard"}
+        
+        # Test various combinations with single item
+        result = get_dashboards(startAt=0, maxResults=1)
+        self.assertEqual(len(result["dashboards"]), 1)
+        self.assertEqual(result["dashboards"][0]["name"], "Only Dashboard")
+        
+        result = get_dashboards(maxResults=1)
+        self.assertEqual(len(result["dashboards"]), 1)
+        
+        result = get_dashboards(startAt=1)
+        self.assertEqual(len(result["dashboards"]), 0)
+        
+        result = get_dashboards(maxResults=5)
+        self.assertEqual(len(result["dashboards"]), 1)
+
+    def test_get_dashboards_data_integrity(self):
+        """Test that returned data maintains integrity."""
+        # Setup test data with specific structure
+        DB["dashboards"].clear()
+        test_dashboards = {
+            "DASH-1": {"id": "DASH-1", "name": "Test Dashboard 1", "description": "First test dashboard"},
+            "DASH-2": {"id": "DASH-2", "name": "Test Dashboard 2", "description": "Second test dashboard"}
+        }
+        DB["dashboards"].update(test_dashboards)
+        
+        result = get_dashboards()
+        self.assertIn("dashboards", result)
+        self.assertEqual(len(result["dashboards"]), 2)
+        
+        # Verify data structure is preserved
+        for dashboard in result["dashboards"]:
+            self.assertIn("id", dashboard)
+            self.assertIn("name", dashboard)
+            self.assertIn("description", dashboard)
+            original_id = dashboard["id"]
+            self.assertEqual(dashboard, test_dashboards[original_id])
+
+    def test_get_dashboards_default_parameters(self):
+        """Test get_dashboards with default parameters."""
+        DB["dashboards"]["D1"] = {"id": "D1", "name": "Dashboard 1"}
+        DB["dashboards"]["D2"] = {"id": "D2", "name": "Dashboard 2"}
+        
+        # Test with explicit default values
+        result = get_dashboards(startAt=0, maxResults=None)
+        self.assertIn("dashboards", result)
+        self.assertEqual(len(result["dashboards"]), 2)
+        
+        # Test with no parameters (defaults applied)
+        result = get_dashboards()
+        self.assertIn("dashboards", result)
+        self.assertEqual(len(result["dashboards"]), 2)
 
     def test_filter_api(self):
         """Test filter retrieval and update."""
@@ -763,18 +1499,21 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
         self.assertEqual(fetched["name"], "Updated Filter")
 
         # Test non-existent filter
-        not_found = JiraAPI.FilterApi.get_filter("ghost")
-        self.assertIn("error", not_found)
+        with self.assertRaises(ValueError) as context:
+            JiraAPI.FilterApi.get_filter("ghost")
+        self.assertIn("Filter 'ghost' not found", str(context.exception))
 
-        upd_filter = JiraAPI.FilterApi.update_filter(
-            "F1",
-            name="Updated Filter",
-            jql="",
-            description="Updated Description",
-            favorite=True,
-            editable=True,
-        )
-        self.assertTrue(upd_filter["updated"])
+    def test_filter_type_error(self):
+        """Test that TypeError is raised if filter_id is not a string."""
+        with self.assertRaises(TypeError) as context:
+            JiraAPI.FilterApi.get_filter(123)
+        self.assertIn("filter_id parameter must be a string", str(context.exception))
+
+    def test_filter_empty_value_error(self):
+        """Test that ValueError is raised if filter_id is empty."""
+        with self.assertRaises(ValueError) as context:
+            JiraAPI.FilterApi.get_filter("")
+        self.assertIn("filter_id parameter cannot be empty", str(context.exception))
 
     def test_filter_api_update_invalid_id(self):
         """Test updating a filter with an invalid id."""
@@ -798,11 +1537,11 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
         self.assertIn("admins", update_resp)
 
         # Test group update with invalid groupname
-        self.assertIn(
-            "error",
-            JiraAPI.GroupApi.update_group(
-                groupname="nonexistent", users=["alice", "bob"]
-            ),
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.GroupApi.update_group,
+            expected_exception_type=ValueError,
+            expected_message="Group 'nonexistent' does not exist.",
+            groupname="nonexistent", users=["alice", "bob"]
         )
 
         # Get group info
@@ -858,6 +1597,98 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
             groupname="   "
         )
 
+    # Tests for update_group method validation
+    def test_update_group_invalid_groupname_type(self):
+        """Test update_group with invalid groupname type raises TypeError."""
+        # Create a group first
+        create_resp = JiraAPI.GroupApi.create_group(name="testgroup")
+        self.assertTrue(create_resp["created"])
+        
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.GroupApi.update_group,
+            expected_exception_type=TypeError,
+            expected_message="Expected groupname to be a string, but got int.",
+            groupname=123, users=["alice", "bob"]
+        )
+
+    def test_update_group_empty_groupname(self):
+        """Test update_group with empty groupname raises ValueError."""
+        # Create a group first
+        create_resp = JiraAPI.GroupApi.create_group(name="testgroup")
+        self.assertTrue(create_resp["created"])
+        
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.GroupApi.update_group,
+            expected_exception_type=ValueError,
+            expected_message="groupname cannot be empty or consist only of whitespace.",
+            groupname="", users=["alice", "bob"]
+        )
+
+    def test_update_group_whitespace_groupname(self):
+        """Test update_group with whitespace-only groupname raises ValueError."""
+        # Create a group first
+        create_resp = JiraAPI.GroupApi.create_group(name="testgroup")
+        self.assertTrue(create_resp["created"])
+        
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.GroupApi.update_group,
+            expected_exception_type=ValueError,
+            expected_message="groupname cannot be empty or consist only of whitespace.",
+            groupname="   ", users=["alice", "bob"]
+        )
+
+    def test_update_group_invalid_users_type(self):
+        """Test update_group with invalid users type raises TypeError."""
+        # Create a group first
+        create_resp = JiraAPI.GroupApi.create_group(name="testgroup")
+        self.assertTrue(create_resp["created"])
+        
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.GroupApi.update_group,
+            expected_exception_type=TypeError,
+            expected_message="Expected users to be a List, but got str.",
+            groupname="testgroup", users="not_a_list"
+        )
+
+    def test_update_group_users_with_invalid_user_type(self):
+        """Test update_group with non-string user in users list raises TypeError."""
+        # Create a group first
+        create_resp = JiraAPI.GroupApi.create_group(name="testgroup")
+        self.assertTrue(create_resp["created"])
+        
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.GroupApi.update_group,
+            expected_exception_type=TypeError,
+            expected_message="Expected all users to be strings, but user at index 1 is int.",
+            groupname="testgroup", users=["alice", 123, "bob"]
+        )
+
+    def test_update_group_users_with_empty_user(self):
+        """Test update_group with empty user string raises ValueError."""
+        # Create a group first
+        create_resp = JiraAPI.GroupApi.create_group(name="testgroup")
+        self.assertTrue(create_resp["created"])
+        
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.GroupApi.update_group,
+            expected_exception_type=ValueError,
+            expected_message="User at index 1 cannot be empty or consist only of whitespace.",
+            groupname="testgroup", users=["alice", "", "bob"]
+        )
+
+    def test_update_group_users_with_whitespace_user(self):
+        """Test update_group with whitespace-only user string raises ValueError."""
+        # Create a group first
+        create_resp = JiraAPI.GroupApi.create_group(name="testgroup")
+        self.assertTrue(create_resp["created"])
+        
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.GroupApi.update_group,
+            expected_exception_type=ValueError,
+            expected_message="User at index 1 cannot be empty or consist only of whitespace.",
+            groupname="testgroup", users=["alice", "   ", "bob"]
+        )
+
     def test_groups_picker_api(self):
         """Test group picker."""
         # Add groups data to DB
@@ -868,7 +1699,6 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
         found = JiraAPI.GroupsPickerApi.find_groups(query="dev")
         self.assertIn("groups", found)
         self.assertEqual(found["groups"], ["devTeam"])
-
         # Test with integer query
         with self.assertRaises(TypeError) as cm:
             JiraAPI.GroupsPickerApi.find_groups(query=123)
@@ -898,7 +1728,7 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
         
         # Run bulk update
         bulk_result = JiraAPI.IssueApi.bulk_issue_operation(
-            issueUpdates=[{"id": i1["id"], "fields": {"summary": "Alpha+"}}]
+            issueUpdates=[{"issueId": i1["id"], "fields": {"summary": "Alpha+"}}]
         )
         self.assertTrue(bulk_result["bulkProcessed"])
 
@@ -1147,7 +1977,7 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
                 type=123,
                 inwardIssue={"key": i1["id"]},
                 outwardIssue={"key": i2["id"]}
-            )
+        )
 
         # Test empty type parameter
         with self.assertRaises(ValidationError):
@@ -1155,7 +1985,7 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
                 type="",
                 inwardIssue={"key": i1["id"]},
                 outwardIssue={"key": i2["id"]}
-            )
+        )
 
         # Test invalid inwardIssue parameter (not a dict)
         with self.assertRaises(ValidationError):
@@ -1212,12 +2042,42 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
 
         # Get one issue link type
         one_type = JiraAPI.IssueLinkTypeApi.get_issue_link_type("Relates")
-        self.assertEqual(one_type["name"], "Relates")
+        self.assertIn("issueLinkType", one_type)
+        self.assertEqual(one_type["issueLinkType"]["name"], "Relates")
+        self.assertEqual(one_type["issueLinkType"]["id"], "Relates")
 
-        # Test non-existent issue link type
-        self.assertIn("error", JiraAPI.IssueLinkTypeApi.get_issue_link_type("Blocks"))
 
-        self.assertIn("error", JiraAPI.IssueLinkTypeApi.get_issue_link_type(""))
+    def test_issue_link_type_api_invalid_id(self):
+        """Test issue link type retrieval with an invalid id."""
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.IssueLinkTypeApi.get_issue_link_type,
+            expected_exception_type=ValueError,
+            expected_message="Link type 'nonexistent' not found.",
+            link_type_id="nonexistent")
+
+    def test_issue_link_type_api_invalid_type(self):
+        """Test issue link type retrieval with an invalid type."""
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.IssueLinkTypeApi.get_issue_link_type,
+            expected_exception_type=TypeError,
+            expected_message="link_type_id must be a string",
+            link_type_id=123)
+
+    def test_issue_link_type_api_missing_id(self):
+        """Test issue link type retrieval with a missing id."""
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.IssueLinkTypeApi.get_issue_link_type,
+            expected_exception_type=MissingRequiredFieldError,
+            expected_message="Missing required field 'link_type_id is required'.",
+            link_type_id=None)
+
+    def test_issue_link_type_api_empty_id(self):
+        """Test issue link type retrieval with an empty id."""
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.IssueLinkTypeApi.get_issue_link_type,
+            expected_exception_type=MissingRequiredFieldError,
+            expected_message="Missing required field 'link_type_id is required'.",
+            link_type_id="")
 
     def test_issue_type_api(self):
         """Test issue type retrieval and creation."""
@@ -1333,7 +2193,127 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
         fetched = JiraAPI.MyPreferencesApi.get_my_preferences()
         self.assertEqual(fetched, {"theme": "dark"})
         # Missing field
-        self.assertIn("error", JiraAPI.MyPreferencesApi.update_my_preferences({}))
+        with self.assertRaises(ValueError) as context:
+            JiraAPI.MyPreferencesApi.update_my_preferences({})
+        self.assertIn("value", str(context.exception))
+
+    def test_update_my_preferences_validation(self):
+        """Test comprehensive input validation for update_my_preferences function."""
+        # Reset preferences to empty state
+        DB["my_preferences"] = {}
+        
+        # Test successful update with theme only
+        result = JiraAPI.MyPreferencesApi.update_my_preferences(value={"theme": "dark"})
+        self.assertTrue(result["updated"])
+        self.assertEqual(result["preferences"]["theme"], "dark")
+        
+        # Test successful update with notifications only  
+        result = JiraAPI.MyPreferencesApi.update_my_preferences(value={"notifications": "disabled"})
+        self.assertTrue(result["updated"])
+        self.assertEqual(result["preferences"]["notifications"], "disabled")
+        
+        # Test successful update with both fields
+        result = JiraAPI.MyPreferencesApi.update_my_preferences(value={"theme": "light", "notifications": "enabled"})
+        self.assertTrue(result["updated"])
+        self.assertEqual(result["preferences"]["theme"], "light")
+        self.assertEqual(result["preferences"]["notifications"], "enabled")
+        
+        # Test successful partial update (only theme, notifications should remain)
+        result = JiraAPI.MyPreferencesApi.update_my_preferences(value={"theme": "dark"})
+        self.assertTrue(result["updated"])
+        self.assertEqual(result["preferences"]["theme"], "dark")
+        self.assertEqual(result["preferences"]["notifications"], "enabled")  # Should remain
+        
+        # Test invalid value type (not a dictionary) - TypeError
+        with self.assertRaises(TypeError) as context:
+            JiraAPI.MyPreferencesApi.update_my_preferences("not_a_dict")
+        self.assertEqual(str(context.exception), "value must be a dictionary")
+        
+        # Test invalid value type (integer) - TypeError
+        with self.assertRaises(TypeError) as context:
+            JiraAPI.MyPreferencesApi.update_my_preferences(123)
+        self.assertEqual(str(context.exception), "value must be a dictionary")
+        
+        # Test invalid value type (None) - TypeError
+        with self.assertRaises(TypeError) as context:
+            JiraAPI.MyPreferencesApi.update_my_preferences(None)
+        self.assertEqual(str(context.exception), "value must be a dictionary")
+        
+        # Test invalid value type (list) - TypeError
+        with self.assertRaises(TypeError) as context:
+            JiraAPI.MyPreferencesApi.update_my_preferences(["theme", "dark"])
+        self.assertEqual(str(context.exception), "value must be a dictionary")
+        
+        # Test empty dictionary - ValueError
+        with self.assertRaises(ValueError) as context:
+            JiraAPI.MyPreferencesApi.update_my_preferences({})
+        self.assertIn("value", str(context.exception))
+        
+        # Test Pydantic validation error - invalid theme value type
+        with self.assertRaises(ValidationError):
+            JiraAPI.MyPreferencesApi.update_my_preferences(value={"theme": 123})
+        
+        # Test Pydantic validation error - invalid notifications value type
+        with self.assertRaises(ValidationError):
+            JiraAPI.MyPreferencesApi.update_my_preferences(value={"notifications": True})
+        
+        # Test Pydantic validation error - invalid field name
+        with self.assertRaises(ValidationError):
+            JiraAPI.MyPreferencesApi.update_my_preferences(value={"invalid_field": "value"})
+        
+        # Test Pydantic validation error - both fields invalid
+        with self.assertRaises(ValidationError):
+            JiraAPI.MyPreferencesApi.update_my_preferences(value={"theme": 123, "notifications": True})
+        
+        # Test that empty strings and whitespace are actually accepted by the model
+        # (The Pydantic model doesn't validate against empty strings)
+        result = JiraAPI.MyPreferencesApi.update_my_preferences(value={"theme": ""})
+        self.assertTrue(result["updated"])
+        self.assertEqual(result["preferences"]["theme"], "")
+        
+        result = JiraAPI.MyPreferencesApi.update_my_preferences(value={"notifications": ""})
+        self.assertTrue(result["updated"])
+        self.assertEqual(result["preferences"]["notifications"], "")
+        
+        result = JiraAPI.MyPreferencesApi.update_my_preferences(value={"theme": "   "})
+        self.assertTrue(result["updated"])
+        self.assertEqual(result["preferences"]["theme"], "   ")
+        
+        result = JiraAPI.MyPreferencesApi.update_my_preferences(value={"notifications": "   "})
+        self.assertTrue(result["updated"])
+        self.assertEqual(result["preferences"]["notifications"], "   ")
+        
+        # Test that valid values are properly validated and accepted
+        valid_theme_values = ["light", "dark", "auto", "custom"]
+        for theme in valid_theme_values:
+            result = JiraAPI.MyPreferencesApi.update_my_preferences(value={"theme": theme})
+            self.assertTrue(result["updated"])
+            self.assertEqual(result["preferences"]["theme"], theme)
+        
+        valid_notification_values = ["enabled", "disabled", "email_only", "push_only"]
+        for notification in valid_notification_values:
+            result = JiraAPI.MyPreferencesApi.update_my_preferences(value={"notifications": notification})
+            self.assertTrue(result["updated"])
+            self.assertEqual(result["preferences"]["notifications"], notification)
+        
+        # Test that database state is properly maintained across updates
+        result = JiraAPI.MyPreferencesApi.update_my_preferences(value={"theme": "dark"})
+        self.assertTrue(result["updated"])
+        
+        # Add another field
+        result = JiraAPI.MyPreferencesApi.update_my_preferences(value={"notifications": "enabled"})
+        self.assertTrue(result["updated"])
+        
+        # Verify both fields are present
+        final_prefs = JiraAPI.MyPreferencesApi.get_my_preferences()
+        self.assertEqual(final_prefs["theme"], "dark")
+        self.assertEqual(final_prefs["notifications"], "enabled")
+        
+        # Test overwriting existing values
+        result = JiraAPI.MyPreferencesApi.update_my_preferences(value={"theme": "light"})
+        self.assertTrue(result["updated"])
+        self.assertEqual(result["preferences"]["theme"], "light")
+        self.assertEqual(result["preferences"]["notifications"], "enabled")  # Should remain unchanged
 
     def test_permissions_api(self):
         """Test getting permissions."""
@@ -1367,7 +2347,44 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
         self.assertEqual(one_scheme["name"], "Default scheme")
 
         # Test non-existent permission scheme
-        self.assertIn("error", JiraAPI.PermissionSchemeApi.get_permission_scheme("PS2"))
+        with self.assertRaises(ValueError) as context:
+            JiraAPI.PermissionSchemeApi.get_permission_scheme("PS2")
+        self.assertIn("Permission scheme 'PS2' not found", str(context.exception))
+
+    def test_get_permission_scheme_validation(self):
+        """Test input validation for get_permission_scheme function."""
+        # Add test permission scheme data to DB
+        DB["permission_schemes"]["PS1"] = {"id": "PS1", "name": "Default scheme"}
+        
+        # Test successful retrieval
+        result = JiraAPI.PermissionSchemeApi.get_permission_scheme("PS1")
+        self.assertEqual(result["name"], "Default scheme")
+        self.assertEqual(result["id"], "PS1")
+        
+        # Test invalid scheme_id type (integer)
+        with self.assertRaises(TypeError) as context:
+            JiraAPI.PermissionSchemeApi.get_permission_scheme(123)
+        self.assertEqual(str(context.exception), "scheme_id must be a string")
+        
+        # Test invalid scheme_id type (None)
+        with self.assertRaises(TypeError) as context:
+            JiraAPI.PermissionSchemeApi.get_permission_scheme(None)
+        self.assertEqual(str(context.exception), "scheme_id must be a string")
+        
+        # Test empty scheme_id
+        with self.assertRaises(ValueError) as context:
+            JiraAPI.PermissionSchemeApi.get_permission_scheme("")
+        self.assertEqual(str(context.exception), "scheme_id cannot be empty")
+        
+        # Test whitespace-only scheme_id
+        with self.assertRaises(ValueError) as context:
+            JiraAPI.PermissionSchemeApi.get_permission_scheme("   ")
+        self.assertEqual(str(context.exception), "scheme_id cannot be empty")
+        
+        # Test non-existent scheme_id
+        with self.assertRaises(ValueError) as context:
+            JiraAPI.PermissionSchemeApi.get_permission_scheme("NONEXISTENT")
+        self.assertEqual(str(context.exception), "Permission scheme 'NONEXISTENT' not found.")
 
     def test_priority_api(self):
         """Test getting priorities."""
@@ -1574,7 +2591,53 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
         self.assertEqual(del_resp["deleted"], "TEST")
 
         # Test non-existent project
-        self.assertIn("error", JiraAPI.ProjectApi.delete_project("NONE"))
+        with self.assertRaises(ValueError) as context:
+            JiraAPI.ProjectApi.delete_project("NONE")
+        self.assertIn("Project with key 'NONE' not found", str(context.exception))
+
+    def test_delete_project_validation(self):
+        """Test comprehensive input validation for delete_project function."""
+        # Add test project and component data
+        DB["projects"]["TEST"] = {"key": "TEST", "name": "Test Project"}
+        DB["components"]["CMP1"] = {"id": "CMP1", "project": "TEST", "name": "Component 1"}
+        
+        # Test successful deletion
+        result = JiraAPI.ProjectApi.delete_project("TEST")
+        self.assertEqual(result["deleted"], "TEST")
+        
+        # Verify project and components are removed
+        self.assertNotIn("TEST", DB["projects"])
+        self.assertNotIn("CMP1", DB["components"])
+        
+        # Test invalid project_key type (integer) - TypeError
+        with self.assertRaises(TypeError) as context:
+            JiraAPI.ProjectApi.delete_project(123)
+        self.assertEqual(str(context.exception), "project_key must be a string.")
+        
+        # Test invalid project_key type (None) - TypeError
+        with self.assertRaises(TypeError) as context:
+            JiraAPI.ProjectApi.delete_project(None)
+        self.assertEqual(str(context.exception), "project_key must be a string.")
+        
+        # Test invalid project_key type (list) - TypeError
+        with self.assertRaises(TypeError) as context:
+            JiraAPI.ProjectApi.delete_project(["TEST"])
+        self.assertEqual(str(context.exception), "project_key must be a string.")
+        
+        # Test empty project_key - ProjectInputError
+        with self.assertRaises(ProjectInputError) as context:
+            JiraAPI.ProjectApi.delete_project("")
+        self.assertEqual(str(context.exception), "project_key cannot be empty.")
+        
+        # Test whitespace-only project_key - ProjectInputError
+        with self.assertRaises(ProjectInputError) as context:
+            JiraAPI.ProjectApi.delete_project("   ")
+        self.assertEqual(str(context.exception), "project_key cannot be empty.")
+        
+        # Test non-existent project_key - ValueError
+        with self.assertRaises(ValueError) as context:
+            JiraAPI.ProjectApi.delete_project("NONEXISTENT")
+        self.assertEqual(str(context.exception), "Project with key 'NONEXISTENT' not found.")
 
     def test_project_category_api(self):
         """Test project categories."""
@@ -1587,12 +2650,169 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
         self.assertEqual(len(cats["categories"]), 1)
         self.assertEqual(cats["categories"][0]["name"], "Category One")
 
-        # Get one project category
+        # Get one project category - successful case
         one_cat = JiraAPI.ProjectCategoryApi.get_project_category("CAT1")
         self.assertEqual(one_cat["name"], "Category One")
+        self.assertEqual(one_cat["id"], "CAT1")
 
-        # Test non-existent project category
-        self.assertIn("error", JiraAPI.ProjectCategoryApi.get_project_category("CAT2"))
+    def test_get_project_category_100_percent_coverage(self):
+        """Comprehensive test for get_project_category function to achieve 100% coverage."""
+        # Setup test data
+        DB["project_categories"]["CAT-TEST"] = {
+            "id": "CAT-TEST", 
+            "name": "Test Category",
+            "description": "A test project category"
+        }
+
+        # Test 1: Successful retrieval
+        result = JiraAPI.ProjectCategoryApi.get_project_category("CAT-TEST")
+        self.assertEqual(result["id"], "CAT-TEST")
+        self.assertEqual(result["name"], "Test Category")
+        self.assertEqual(result["description"], "A test project category")
+
+    def test_get_project_category_type_validation_errors(self):
+        """Test type validation errors for get_project_category function."""
+        # Test 2: Invalid type - integer
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ProjectCategoryApi.get_project_category,
+            expected_exception_type=TypeError,
+            expected_message="cat_id must be a string",
+            cat_id=123
+        )
+
+        # Test 3: Invalid type - None
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ProjectCategoryApi.get_project_category,
+            expected_exception_type=TypeError,
+            expected_message="cat_id must be a string",
+            cat_id=None
+        )
+
+        # Test 4: Invalid type - list
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ProjectCategoryApi.get_project_category,
+            expected_exception_type=TypeError,
+            expected_message="cat_id must be a string",
+            cat_id=["CAT1"]
+        )
+
+        # Test 5: Invalid type - dict
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ProjectCategoryApi.get_project_category,
+            expected_exception_type=TypeError,
+            expected_message="cat_id must be a string",
+            cat_id={"id": "CAT1"}
+        )
+
+        # Test 6: Invalid type - boolean
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ProjectCategoryApi.get_project_category,
+            expected_exception_type=TypeError,
+            expected_message="cat_id must be a string",
+            cat_id=True
+        )
+
+    def test_get_project_category_empty_string_validation_errors(self):
+        """Test empty string validation errors for get_project_category function."""
+        # Test 7: Empty string
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ProjectCategoryApi.get_project_category,
+            expected_exception_type=ValueError,
+            expected_message="cat_id cannot be empty",
+            cat_id=""
+        )
+
+        # Test 8: Whitespace-only string
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ProjectCategoryApi.get_project_category,
+            expected_exception_type=ValueError,
+            expected_message="cat_id cannot be empty",
+            cat_id="   "
+        )
+
+        # Test 9: Tab and newline whitespace
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ProjectCategoryApi.get_project_category,
+            expected_exception_type=ValueError,
+            expected_message="cat_id cannot be empty",
+            cat_id="\t\n  "
+        )
+
+        # Test 10: Mixed whitespace characters
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ProjectCategoryApi.get_project_category,
+            expected_exception_type=ValueError,
+            expected_message="cat_id cannot be empty",
+            cat_id=" \t \n \r "
+        )
+
+    def test_get_project_category_not_found_error(self):
+        """Test not found error for get_project_category function."""
+        # Test 11: Non-existent project category
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ProjectCategoryApi.get_project_category,
+            expected_exception_type=ValueError,
+            expected_message="Project category 'NONEXISTENT' not found.",
+            cat_id="NONEXISTENT"
+        )
+
+        # Test 12: Valid format but non-existent
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ProjectCategoryApi.get_project_category,
+            expected_exception_type=ValueError,
+            expected_message="Project category 'CAT-999' not found.",
+            cat_id="CAT-999"
+        )
+
+        # Test 13: Case-sensitive lookup failure
+        DB["project_categories"]["lowercase"] = {"id": "lowercase", "name": "Lowercase Category"}
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ProjectCategoryApi.get_project_category,
+            expected_exception_type=ValueError,
+            expected_message="Project category 'LOWERCASE' not found.",
+            cat_id="LOWERCASE"
+        )
+
+    def test_get_project_category_edge_cases(self):
+        """Test edge cases for get_project_category function."""
+        # Setup test data with various edge case IDs
+        DB["project_categories"]["1"] = {"id": "1", "name": "Numeric ID Category"}
+        DB["project_categories"]["special-chars_123"] = {"id": "special-chars_123", "name": "Special Chars Category"}
+        DB["project_categories"]["VERY-LONG-PROJECT-CATEGORY-ID-WITH-MANY-CHARACTERS"] = {
+            "id": "VERY-LONG-PROJECT-CATEGORY-ID-WITH-MANY-CHARACTERS", 
+            "name": "Long ID Category"
+        }
+        DB["project_categories"]["Unicode_Ñámé_测试"] = {"id": "Unicode_Ñámé_测试", "name": "Unicode Category"}
+
+        # Test 14: Numeric string ID
+        result = JiraAPI.ProjectCategoryApi.get_project_category("1")
+        self.assertEqual(result["id"], "1")
+        self.assertEqual(result["name"], "Numeric ID Category")
+
+        # Test 15: Special characters in ID
+        result = JiraAPI.ProjectCategoryApi.get_project_category("special-chars_123")
+        self.assertEqual(result["id"], "special-chars_123")
+        self.assertEqual(result["name"], "Special Chars Category")
+
+        # Test 16: Very long ID
+        result = JiraAPI.ProjectCategoryApi.get_project_category("VERY-LONG-PROJECT-CATEGORY-ID-WITH-MANY-CHARACTERS")
+        self.assertEqual(result["id"], "VERY-LONG-PROJECT-CATEGORY-ID-WITH-MANY-CHARACTERS")
+        self.assertEqual(result["name"], "Long ID Category")
+
+        # Test 17: Unicode characters in ID
+        result = JiraAPI.ProjectCategoryApi.get_project_category("Unicode_Ñámé_测试")
+        self.assertEqual(result["id"], "Unicode_Ñámé_测试")
+        self.assertEqual(result["name"], "Unicode Category")
+
+        # Test 18: ID with leading/trailing spaces that are valid after strip
+        DB["project_categories"]["TRIMMED"] = {"id": "TRIMMED", "name": "Trimmed Category"}
+        # Note: The function uses .strip() to check emptiness but doesn't strip the actual ID for lookup
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.ProjectCategoryApi.get_project_category,
+            expected_exception_type=ValueError,
+            expected_message="Project category '  TRIMMED  ' not found.",
+            cat_id="  TRIMMED  "
+        )
 
     def test_resolution_api(self):
         """Test resolution API."""
@@ -1661,7 +2881,19 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
         self.assertEqual(one_role["name"], "Developer")
 
         # Test non-existent role
-        self.assertIn("error", JiraAPI.RoleApi.get_role("R2"))
+        with self.assertRaises(ValueError) as context:
+            JiraAPI.RoleApi.get_role("R2")
+        self.assertEqual(str(context.exception), "Role 'R2' not found")
+
+        # Test invalid input type
+        with self.assertRaises(TypeError) as context:
+            JiraAPI.RoleApi.get_role(123)
+        self.assertEqual(str(context.exception), "role_id must be a string, got int")
+
+        # Test empty string input
+        with self.assertRaises(ValueError) as context:
+            JiraAPI.RoleApi.get_role("")
+        self.assertEqual(str(context.exception), "role_id cannot be empty or consist only of whitespace")
 
     def test_server_info_api(self):
         """Test server info."""
@@ -1672,9 +2904,56 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
 
     def test_settings_api(self):
         """Test settings retrieval."""
+        DB["users"]["tester"] = {
+            "settings": {
+                "theme": "ocean"
+            }
+        }
         sets = JiraAPI.SettingsApi.get_settings()
         self.assertIn("settings", sets)
-        self.assertIn("exampleSetting", sets["settings"])
+        self.assertIn({"theme": "ocean"}, sets["settings"])
+        self.assertEqual(len(sets["settings"]), 1)
+
+    def test_settings_api_multiple_users(self):
+        """Test settings retrieval for multiple users."""
+        DB["users"]["tester"] = {
+            "settings": {
+                "theme": "ocean"
+            }
+        }
+        DB["users"]["tester2"] = {
+            "settings": {
+                "theme": "forest"
+            }
+        }
+        sets = JiraAPI.SettingsApi.get_settings()
+        self.assertIn("settings", sets)
+        self.assertIn({"theme": "ocean"}, sets["settings"])
+        self.assertIn({"theme": "forest"}, sets["settings"])
+        self.assertEqual(len(sets["settings"]), 2)
+
+    def test_settings_api_multiple_users_with_same_setting(self):
+        """Test settings retrieval for multiple users with the same setting."""
+        DB["users"]["tester"] = {
+            "settings": {
+                "theme": "ocean"
+            }
+        }   
+        DB["users"]["tester2"] = {
+            "settings": {
+                "theme": "ocean"
+            }
+        }
+        sets = JiraAPI.SettingsApi.get_settings()
+        self.assertIn("settings", sets)
+        self.assertIn({"theme": "ocean"}, sets["settings"])
+        self.assertEqual(len(sets["settings"]), 1)
+
+    def test_no_settings(self):
+        """Test settings retrieval for no settings."""
+        sets = JiraAPI.SettingsApi.get_settings()
+        self.assertIn("settings", sets)
+        self.assertEqual(len(sets["settings"]), 0)
 
     def test_status_api(self):
         """Test status API."""
@@ -1783,7 +3062,7 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
             expected_message="User not found.",
             username="invalid"
         )
-        
+
         # Finding users
         users = JiraAPI.UserApi.find_users(search_string="test@example.com")
         self.assertEqual(len(users), 1)
@@ -1822,13 +3101,214 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
         )
         self.assertEqual(len(inactive_users), 0)
 
-        # Delete
+        # Delete - successful case
         del_resp = JiraAPI.UserApi.delete_user(username="tester")
         self.assertIn("deleted", del_resp)
+        self.assertEqual(del_resp["deleted"], got_user["key"])  # Should return the user's key
 
-        self.assertIn("error", JiraAPI.UserApi.delete_user(username="tester"))
-        # Missing username
-        self.assertIn("error", JiraAPI.UserApi.delete_user(""))
+    def test_delete_user_100_percent_coverage(self):
+        """Comprehensive test for delete_user function to achieve 100% coverage."""
+        # Setup - Create test users
+        user1_payload = {
+            "name": "delete_test_user1",
+            "emailAddress": "delete1@example.com",
+            "displayName": "Delete Test User 1"
+        }
+        user1 = JiraAPI.UserApi.create_user(user1_payload)
+        user1_key = user1["user"]["key"]
+
+        user2_payload = {
+            "name": "delete_test_user2",
+            "emailAddress": "delete2@example.com", 
+            "displayName": "Delete Test User 2"
+        }
+        user2 = JiraAPI.UserApi.create_user(user2_payload)
+        user2_key = user2["user"]["key"]
+
+        # Test 1: Successful deletion by username
+        result = JiraAPI.UserApi.delete_user(username="delete_test_user1")
+        self.assertIn("deleted", result)
+        self.assertEqual(result["deleted"], user1_key)
+        self.assertNotIn(user1_key, DB["users"])
+
+        # Test 2: Successful deletion by key
+        result = JiraAPI.UserApi.delete_user(key=user2_key)
+        self.assertIn("deleted", result)
+        self.assertEqual(result["deleted"], user2_key)
+        self.assertNotIn(user2_key, DB["users"])
+
+    def test_delete_user_type_validation_errors(self):
+        """Test type validation errors for delete_user function."""
+        # Test 3: Invalid username type - integer
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.UserApi.delete_user,
+            expected_exception_type=TypeError,
+            expected_message="username must be a string if provided.",
+            username=123
+        )
+
+        # Test 4: Invalid username type - list
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.UserApi.delete_user,
+            expected_exception_type=TypeError,
+            expected_message="username must be a string if provided.",
+            username=["user"]
+        )
+
+        # Test 5: Invalid username type - dict
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.UserApi.delete_user,
+            expected_exception_type=TypeError,
+            expected_message="username must be a string if provided.",
+            username={"name": "user"}
+        )
+
+        # Test 6: Invalid key type - integer
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.UserApi.delete_user,
+            expected_exception_type=TypeError,
+            expected_message="key must be a string if provided.",
+            key=123
+        )
+
+        # Test 7: Invalid key type - list
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.UserApi.delete_user,
+            expected_exception_type=TypeError,
+            expected_message="key must be a string if provided.",
+            key=["key123"]
+        )
+
+        # Test 8: Invalid key type - boolean
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.UserApi.delete_user,
+            expected_exception_type=TypeError,
+            expected_message="key must be a string if provided.",
+            key=True
+        )
+
+    def test_delete_user_missing_identifiers_error(self):
+        """Test behavior when no identifiers are provided."""
+        # Test 9: No username or key provided - returns None as deleted key
+        result = JiraAPI.UserApi.delete_user()
+        self.assertEqual(result, {"deleted": None})
+
+        # Test 10: Both parameters explicitly None - returns None as deleted key
+        result = JiraAPI.UserApi.delete_user(username=None, key=None)
+        self.assertEqual(result, {"deleted": None})
+
+    def test_delete_user_not_found_errors(self):
+        """Test user not found errors for delete_user function."""
+        # Test 11: Non-existent username
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.UserApi.delete_user,
+            expected_exception_type=ValueError,
+            expected_message="User not found.",
+            username="nonexistent_user"
+        )
+
+        # Test 12: Empty username string (treated as no identifier provided)
+        result = JiraAPI.UserApi.delete_user(username="")
+        self.assertEqual(result, {"deleted": None})
+
+        # Test 13: Non-existent key
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.UserApi.delete_user,
+            expected_exception_type=UserNotFoundError,
+            expected_message="User not found.",
+            key="nonexistent-key-12345"
+        )
+
+        # Test 14: Empty key string (treated as no identifier provided)
+        result = JiraAPI.UserApi.delete_user(key="")
+        self.assertEqual(result, {"deleted": ""})
+
+    def test_delete_user_edge_cases(self):
+        """Test edge cases for delete_user function."""
+        # Setup - Create test users with edge case names
+        edge_user1_payload = {
+            "name": "user_with_special-chars_123",
+            "emailAddress": "edge1@example.com",
+            "displayName": "Edge Case User 1"
+        }
+        edge_user1 = JiraAPI.UserApi.create_user(edge_user1_payload)
+        edge_user1_key = edge_user1["user"]["key"]
+
+        edge_user2_payload = {
+            "name": "UserWithCamelCase",
+            "emailAddress": "edge2@example.com",
+            "displayName": "Edge Case User 2"
+        }
+        edge_user2 = JiraAPI.UserApi.create_user(edge_user2_payload)
+        edge_user2_key = edge_user2["user"]["key"]
+
+        # Test 15: Username with special characters
+        result = JiraAPI.UserApi.delete_user(username="user_with_special-chars_123")
+        self.assertEqual(result["deleted"], edge_user1_key)
+
+        # Test 16: Username with mixed case
+        result = JiraAPI.UserApi.delete_user(username="UserWithCamelCase")
+        self.assertEqual(result["deleted"], edge_user2_key)
+
+        # Test 17: Username lookup fails but key is provided (tests the username search logic)
+        # Create a user first
+        test_user_payload = {
+            "name": "fallback_test_user",
+            "emailAddress": "fallback@example.com",
+            "displayName": "Fallback Test User"
+        }
+        test_user = JiraAPI.UserApi.create_user(test_user_payload)
+        test_user_key = test_user["user"]["key"]
+        
+        # Delete by key directly (this tests the direct key deletion path)
+        result = JiraAPI.UserApi.delete_user(key=test_user_key)
+        self.assertEqual(result["deleted"], test_user_key)
+
+        # Test 18: Case sensitivity of username lookup
+        case_user_payload = {
+            "name": "CaseSensitiveUser",
+            "emailAddress": "case@example.com",
+            "displayName": "Case Sensitive User"
+        }
+        case_user = JiraAPI.UserApi.create_user(case_user_payload)
+        case_user_key = case_user["user"]["key"]
+
+        # Should not find user with different case
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.UserApi.delete_user,
+            expected_exception_type=ValueError,
+            expected_message="User not found.",
+            username="casesensitiveuser"  # lowercase version
+        )
+
+        # But should find with exact case
+        result = JiraAPI.UserApi.delete_user(username="CaseSensitiveUser")
+        self.assertEqual(result["deleted"], case_user_key)
+
+    def test_delete_user_both_identifiers_provided(self):
+        """Test behavior when both username and key are provided."""
+        # Create test user
+        both_user_payload = {
+            "name": "both_identifiers_user",
+            "emailAddress": "both@example.com",
+            "displayName": "Both Identifiers User"
+        }
+        both_user = JiraAPI.UserApi.create_user(both_user_payload)
+        both_user_key = both_user["user"]["key"]
+
+        # Test 19: Both username and key provided (username should be used for lookup, then key is found)
+        result = JiraAPI.UserApi.delete_user(username="both_identifiers_user", key=both_user_key)
+        self.assertEqual(result["deleted"], both_user_key)
+        self.assertNotIn(both_user_key, DB["users"])
+
+        # Test 20: Username provided but user doesn't exist, key also provided but doesn't exist
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.UserApi.delete_user,
+            expected_exception_type=ValueError,
+            expected_message="User not found.",
+            username="nonexistent",
+            key="also-nonexistent"
+        )
 
 
     def test_user_duplicate_key(self):
@@ -1876,7 +3356,13 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
         del DB["versions"]
         self.assertNotIn("versions", DB)
         DB["versions"] = {}
-        self.assertIn("error", JiraAPI.VersionApi.get_version("V1"))
+        # Test non-existent version raises ValueError 
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.VersionApi.get_version,
+            expected_exception_type=ValueError,
+            expected_message="Version 'V1' not found.",
+            ver_id="V1"
+        )
 
         del DB["versions"]
         self.assertNotIn("versions", DB)
@@ -1914,12 +3400,250 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
                 release_date="2010-07-06",
             ),
         )
-        # Get version
+        # Get version - successful case
         v1 = JiraAPI.VersionApi.get_version(version["id"])
         self.assertEqual(v1["name"], "Version 1")
 
-        # Test non-existent version
-        self.assertIn("error", JiraAPI.VersionApi.get_version("V2"))
+    def test_get_version_100_percent_coverage(self):
+        """Comprehensive test for get_version function to achieve 100% coverage."""
+        # Setup - Create test version
+        test_version = {
+            "id": "VER-TEST-001",
+            "name": "Test Version",
+            "description": "A test version for comprehensive testing",
+            "archived": False,
+            "released": True,
+            "releaseDate": "2023-01-01",
+            "userReleaseDate": "1/Jan/2023",
+            "project": "TEST",
+            "projectId": 12345
+        }
+        
+        # Ensure DB is initialized and add test version
+        DB["versions"] = {"VER-TEST-001": test_version}
+        
+        # Test 1: Successful version retrieval
+        result = JiraAPI.VersionApi.get_version("VER-TEST-001")
+        self.assertEqual(result["id"], "VER-TEST-001")
+        self.assertEqual(result["name"], "Test Version")
+        self.assertEqual(result["description"], "A test version for comprehensive testing")
+        self.assertEqual(result["archived"], False)
+        self.assertEqual(result["released"], True)
+        self.assertEqual(result["releaseDate"], "2023-01-01")
+        self.assertEqual(result["userReleaseDate"], "1/Jan/2023")
+        self.assertEqual(result["project"], "TEST")
+        self.assertEqual(result["projectId"], 12345)
+
+    def test_get_version_type_validation_errors(self):
+        """Test type validation errors for get_version function."""
+        # Test 2: Invalid type - integer
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.VersionApi.get_version,
+            expected_exception_type=TypeError,
+            expected_message="ver_id must be a string",
+            ver_id=123
+        )
+
+        # Test 3: Invalid type - None
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.VersionApi.get_version,
+            expected_exception_type=TypeError,
+            expected_message="ver_id must be a string",
+            ver_id=None
+        )
+
+        # Test 4: Invalid type - list
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.VersionApi.get_version,
+            expected_exception_type=TypeError,
+            expected_message="ver_id must be a string",
+            ver_id=["VER-001"]
+        )
+
+        # Test 5: Invalid type - dict
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.VersionApi.get_version,
+            expected_exception_type=TypeError,
+            expected_message="ver_id must be a string",
+            ver_id={"id": "VER-001"}
+        )
+
+        # Test 6: Invalid type - boolean
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.VersionApi.get_version,
+            expected_exception_type=TypeError,
+            expected_message="ver_id must be a string",
+            ver_id=True
+        )
+
+    def test_get_version_empty_string_validation_errors(self):
+        """Test empty string validation errors for get_version function."""
+        # Test 7: Empty string
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.VersionApi.get_version,
+            expected_exception_type=ValueError,
+            expected_message="ver_id cannot be empty",
+            ver_id=""
+        )
+
+        # Test 8: Whitespace-only string
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.VersionApi.get_version,
+            expected_exception_type=ValueError,
+            expected_message="ver_id cannot be empty",
+            ver_id="   "
+        )
+
+        # Test 9: Tab and newline whitespace
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.VersionApi.get_version,
+            expected_exception_type=ValueError,
+            expected_message="ver_id cannot be empty",
+            ver_id="\t\n  "
+        )
+
+        # Test 10: Mixed whitespace characters
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.VersionApi.get_version,
+            expected_exception_type=ValueError,
+            expected_message="ver_id cannot be empty",
+            ver_id=" \t \n \r "
+        )
+
+    def test_get_version_not_found_errors(self):
+        """Test version not found errors for get_version function."""
+        # Test 11: Non-existent version
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.VersionApi.get_version,
+            expected_exception_type=ValueError,
+            expected_message="Version 'NONEXISTENT' not found.",
+            ver_id="NONEXISTENT"
+        )
+
+        # Test 12: Valid format but non-existent
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.VersionApi.get_version,
+            expected_exception_type=ValueError,
+            expected_message="Version 'VER-999' not found.",
+            ver_id="VER-999"
+        )
+
+    def test_get_version_db_initialization(self):
+        """Test DB initialization path for get_version function."""
+        # Test 13: DB versions key doesn't exist (should be initialized)
+        # Clear the versions key from DB
+        if "versions" in DB:
+            del DB["versions"]
+        
+        # This should initialize DB["versions"] = {} and then throw version not found
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.VersionApi.get_version,
+            expected_exception_type=ValueError,
+            expected_message="Version 'VER-INIT-TEST' not found.",
+            ver_id="VER-INIT-TEST"
+        )
+        
+        # Verify DB was initialized
+        self.assertIn("versions", DB)
+        self.assertEqual(DB["versions"], {})
+
+    def test_get_version_edge_cases(self):
+        """Test edge cases for get_version function."""
+        # Test 14: Version exists but is None (falsy value)
+        DB["versions"] = {"VER-NULL": None}
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.VersionApi.get_version,
+            expected_exception_type=ValueError,
+            expected_message="Version 'VER-NULL' not found.",
+            ver_id="VER-NULL"
+        )
+
+        # Test 15: Version exists but is empty dict (falsy value)
+        DB["versions"]["VER-EMPTY"] = {}
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.VersionApi.get_version,
+            expected_exception_type=ValueError,
+            expected_message="Version 'VER-EMPTY' not found.",
+            ver_id="VER-EMPTY"
+        )
+
+        # Test 16: Version exists but is empty string (falsy value)
+        DB["versions"]["VER-EMPTY-STR"] = ""
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.VersionApi.get_version,
+            expected_exception_type=ValueError,
+            expected_message="Version 'VER-EMPTY-STR' not found.",
+            ver_id="VER-EMPTY-STR"
+        )
+
+        # Test 17: Version exists but is 0 (falsy value)
+        DB["versions"]["VER-ZERO"] = 0
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.VersionApi.get_version,
+            expected_exception_type=ValueError,
+            expected_message="Version 'VER-ZERO' not found.",
+            ver_id="VER-ZERO"
+        )
+
+        # Test 18: Version exists and is valid (truthy value)
+        valid_version = {"id": "VER-VALID", "name": "Valid Version"}
+        DB["versions"]["VER-VALID"] = valid_version
+        result = JiraAPI.VersionApi.get_version("VER-VALID")
+        self.assertEqual(result, valid_version)
+
+    def test_get_version_case_sensitivity(self):
+        """Test case sensitivity of version lookup."""
+        # Test 19: Case-sensitive lookup
+        DB["versions"] = {"VER-CaseSensitive": {"id": "VER-CaseSensitive", "name": "Case Sensitive Version"}}
+        
+        # Should find exact match
+        result = JiraAPI.VersionApi.get_version("VER-CaseSensitive")
+        self.assertEqual(result["name"], "Case Sensitive Version")
+        
+        # Should not find different case
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.VersionApi.get_version,
+            expected_exception_type=ValueError,
+            expected_message="Version 'ver-casesensitive' not found.",
+            ver_id="ver-casesensitive"
+        )
+
+    def test_get_version_special_characters(self):
+        """Test version IDs with special characters."""
+        # Test 20: Version ID with special characters
+        special_version = {"id": "VER-Special_Chars-123", "name": "Special Characters Version"}
+        DB["versions"] = {"VER-Special_Chars-123": special_version}
+        
+        result = JiraAPI.VersionApi.get_version("VER-Special_Chars-123")
+        self.assertEqual(result["name"], "Special Characters Version")
+
+        # Test 21: Version ID with Unicode characters
+        unicode_version = {"id": "VER-Ñámé_测试", "name": "Unicode Version"}
+        DB["versions"]["VER-Ñámé_测试"] = unicode_version
+        
+        result = JiraAPI.VersionApi.get_version("VER-Ñámé_测试")
+        self.assertEqual(result["name"], "Unicode Version")
+
+        # Test non-existent version (fixed from original test)
+        self.assert_error_behavior(
+            func_to_call=JiraAPI.VersionApi.get_version,
+            expected_exception_type=ValueError,
+            expected_message="Version 'V2' not found.",
+            ver_id="V2"
+        )
+        
+        # Create a version for related tests
+        created = JiraAPI.VersionApi.create_version(
+            name="Version 1",
+            description="An excellent version",
+            archived=False,
+            released=True,
+            release_date="2010-07-06",
+            user_release_date="6/Jul/2010",
+            project="PXA",
+            project_id=10000,
+        )
+        version = created["version"]
 
         # Test related issue counts
         counts = JiraAPI.VersionApi.get_version_related_issue_counts(version["id"])
@@ -1933,6 +3657,7 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
         del DB["versions"]
         self.assertNotIn("versions", DB)
 
+        # Test delete non-existent version returns error dict
         self.assertIn("error", JiraAPI.VersionApi.delete_version(version["id"]))
 
     def test_workflow_api(self):
@@ -1962,7 +3687,19 @@ class TestMockJiraPyApi(BaseTestCaseWithErrorHandler):
         self.assertEqual(one_lvl["name"], "Top Secret")
 
         # Test non-existent security level
-        self.assertIn("error", JiraAPI.SecurityLevelApi.get_security_level("SEC2"))
+        with self.assertRaises(ValueError) as context:
+            JiraAPI.SecurityLevelApi.get_security_level("SEC2")
+        self.assertEqual(str(context.exception), "Security level 'SEC2' not found")
+
+        # Test invalid input type
+        with self.assertRaises(TypeError) as context:
+            JiraAPI.SecurityLevelApi.get_security_level(123)
+        self.assertEqual(str(context.exception), "sec_id must be a string, got int")
+
+        # Test empty string input
+        with self.assertRaises(ValueError) as context:
+            JiraAPI.SecurityLevelApi.get_security_level("")
+        self.assertEqual(str(context.exception), "sec_id cannot be empty or consist only of whitespace")
 
     def test_valid_user_creation(self):
         """Test successful user creation with a valid payload."""

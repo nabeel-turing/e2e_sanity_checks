@@ -1,6 +1,6 @@
 [
   {
-    "name": "search",
+    "name": "search_queries",
     "description": "Search Google for information from the internet.\n\nThis function performs web searches using Google Search.",
     "parameters": {
       "type": "object",

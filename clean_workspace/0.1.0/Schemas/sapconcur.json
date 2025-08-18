@@ -54,26 +54,6 @@
                     "type": "string",
                     "description": "Last name of passenger. (Required)"
                   },
-                  "NameMiddle": {
-                    "type": "string",
-                    "description": "Middle name of passenger."
-                  },
-                  "NamePrefix": {
-                    "type": "string",
-                    "description": "Name prefix (e.g., Mr., Ms.)."
-                  },
-                  "NameRemark": {
-                    "type": "string",
-                    "description": "Additional name details."
-                  },
-                  "NameSuffix": {
-                    "type": "string",
-                    "description": "Name suffix (e.g., Jr., Sr.)."
-                  },
-                  "NameTitle": {
-                    "type": "string",
-                    "description": "Professional title."
-                  },
                   "TextName": {
                     "type": "string",
                     "description": "Full name as entered in booking tool."

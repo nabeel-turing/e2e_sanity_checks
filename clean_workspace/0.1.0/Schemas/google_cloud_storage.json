@@ -585,7 +585,7 @@
       "properties": {
         "bucket": {
           "type": "string",
-          "description": "Name of the bucket to delete."
+          "description": "Name of the bucket to delete. Must be a valid, non-empty bucket name."
         },
         "if_metageneration_match": {
           "type": "string",
@@ -639,21 +639,21 @@
   },
   {
     "name": "get_bucket_iam_policy",
-    "description": "Returns an IAM policy for the specified bucket.",
+    "description": "Returns an IAM policy for the specified bucket.\n\nThis function retrieves the IAM policy for a Google Cloud Storage bucket, with support\nfor different policy format versions and proper error handling for various edge cases.",
     "parameters": {
       "type": "object",
       "properties": {
         "bucket": {
           "type": "string",
-          "description": "Name of the bucket whose IAM policy is being requested."
+          "description": "Name of the bucket whose IAM policy is being requested. Must be a valid,\nnon-empty bucket name that follows Google Cloud Storage naming conventions."
         },
         "options_requested_policy_version": {
           "type": "integer",
-          "description": "The desired IAM policy format version\nto be returned. Must be >= 1 if specified."
+          "description": "The desired IAM policy format version\nto be returned. Must be >= 1 if specified. Defaults to None (latest version).\nDifferent versions may have different field structures and capabilities."
         },
         "user_project": {
           "type": "string",
-          "description": "The project to be billed for this request. Required for\nRequester Pays buckets."
+          "description": "The project to be billed for this request. Required for\nRequester Pays buckets. Must be a valid project identifier if specified."
         }
       },
       "required": [
@@ -663,17 +663,17 @@
   },
   {
     "name": "get_bucket_storage_layout",
-    "description": "Returns the storage layout configuration for the specified bucket.\n\nThis operation requires the `storage.objects.list` permission. If a `prefix` is specified,\nit can be used to restrict access validation under that specific prefix.",
+    "description": "Returns the storage layout configuration for the specified bucket.\n\nThis function retrieves the storage layout information for a Google Cloud Storage bucket,\nwith optional prefix-based access validation. The operation simulates the requirement\nfor `storage.objects.list` permission and validates access based on the specified prefix.",
     "parameters": {
       "type": "object",
       "properties": {
         "bucket": {
           "type": "string",
-          "description": "Name of the bucket whose storage layout is to be retrieved."
+          "description": "Name of the bucket whose storage layout is to be retrieved. Must be a valid,\nnon-empty bucket name that follows Google Cloud Storage naming conventions."
         },
         "prefix": {
           "type": "string",
-          "description": "Optional prefix used for permission checks. Useful when the caller\nonly has permission under a specific path within the bucket."
+          "description": "Optional prefix used for permission checks and access validation.\nWhen specified, the function validates that the caller would have permission to access\nobjects under this prefix path within the bucket. Must follow valid object naming\nconventions if provided. Defaults to None (no prefix restriction)."
         }
       },
       "required": [
@@ -683,37 +683,37 @@
   },
   {
     "name": "list_buckets",
-    "description": "Retrieves a list of buckets for a given project.",
+    "description": "Retrieve buckets within a project with optional filtering and pagination.",
     "parameters": {
       "type": "object",
       "properties": {
         "project": {
           "type": "string",
-          "description": "A valid API project identifier."
+          "description": "Identifier of the owning project. Cannot be empty."
         },
         "max_results": {
           "type": "integer",
-          "description": "Maximum number of buckets to return. Defaults to 1000."
+          "description": "Maximum number of buckets to return. Must be a positive integer. Defaults to 1000."
         },
         "page_token": {
           "type": "string",
-          "description": "Token indicating the starting point for the next page of results."
+          "description": "String token representing the starting offset of the next page. If None or invalid, the listing starts at the first record."
         },
         "prefix": {
           "type": "string",
-          "description": "Filter to include only buckets whose names begin with this prefix."
+          "description": "If provided, only buckets whose names start with this prefix are returned."
         },
         "soft_deleted": {
           "type": "boolean",
-          "description": "If True, only returns soft-deleted buckets."
+          "description": "When True, only buckets whose softDeleted flag is True are returned. When False, soft-deleted buckets are excluded."
         },
         "projection": {
           "type": "string",
-          "description": "Properties to return for each bucket. Allowed values:\n- \"full\": Include all properties.\n- \"noAcl\": Exclude ACL-related properties. Default is \"noAcl\"."
+          "description": "Amount of metadata to include for each bucket. Allowed values: \"full\" or \"noAcl\". Default is \"noAcl\"."
         },
         "user_project": {
           "type": "string",
-          "description": "The project to be billed for the request."
+          "description": "Billing project identifier for Requester Pays buckets."
         }
       },
       "required": [
@@ -723,21 +723,21 @@
   },
   {
     "name": "lock_bucket_retention_policy",
-    "description": "Locks retention policy on a bucket.\n\nThis operation sets the `retentionPolicyLocked` flag to True, preventing future changes\nto the retention policy. The action is conditional on the bucket's current metageneration\nmatching the specified value.",
+    "description": "Locks retention policy on a bucket.\n\nThis function permanently locks the retention policy on a Google Cloud Storage bucket,\npreventing any future changes to the retention period. Once locked, the retention policy\ncannot be unlocked or modified. The operation is conditional on the bucket's current\nmetageneration matching the specified value for optimistic concurrency control.",
     "parameters": {
       "type": "object",
       "properties": {
         "bucket": {
           "type": "string",
-          "description": "Name of the bucket on which to lock the retention policy."
+          "description": "Name of the bucket on which to lock the retention policy. Must be a valid,\nnon-empty bucket name that follows Google Cloud Storage naming conventions."
         },
         "if_metageneration_match": {
           "type": "string",
-          "description": "Locks only if the bucket's metageneration matches this value."
+          "description": "Locks only if the bucket's current metageneration matches\nthis value exactly. This ensures the bucket hasn't been modified since the client\nlast retrieved it. Must be a non-empty string representing a valid metageneration value."
         },
         "user_project": {
           "type": "string",
-          "description": "The project to be billed for the request. Required for\nRequester Pays buckets."
+          "description": "The project to be billed for this request. Required for\nRequester Pays buckets. Must be a valid project identifier if specified."
         }
       },
       "required": [
@@ -1330,41 +1330,75 @@
   },
   {
     "name": "relocate_bucket",
-    "description": "Initiates a long-running Relocate Bucket operation on the specified bucket.",
+    "description": "Initiates a long-running Relocate Bucket operation on the specified bucket.\n\nThis function validates the relocation request and initiates a bucket relocation operation.\nThe operation moves a bucket from its current location to a specified destination location.",
     "parameters": {
       "type": "object",
       "properties": {
         "bucket": {
           "type": "string",
-          "description": "Name of the bucket to be relocated."
+          "description": "Name of the bucket to be relocated. Must be a valid, non-empty bucket name\nthat follows Google Cloud Storage naming conventions."
+        },
+        "request_body": {
+          "type": "object",
+          "properties": {
+            "destinationLocation": {
+              "type": "string",
+              "description": "The new location to which the bucket will be moved.\n  Must be a valid Google Cloud region (e.g., 'us-central1', 'europe-west1')."
+            },
+            "destinationCustomPlacementConfig": {
+              "type": "object",
+              "properties": {
+                "dataLocations": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "The list of regional locations that will be used\n      to store the bucket's data. Must contain exactly 2 locations for dual-region."
+                }
+              },
+              "description": "Configuration for\n  Custom Dual Region. Optional. Contains:",
+              "required": [
+                "dataLocations"
+              ]
+            },
+            "validateOnly": {
+              "type": "boolean",
+              "description": "If True, only validate the relocation request\n  without executing. Defaults to False."
+            }
+          },
+          "description": "A dictionary containing the relocation configuration with\nthe following keys:",
+          "required": [
+            "destinationLocation"
+          ]
         }
       },
       "required": [
-        "bucket"
+        "bucket",
+        "request_body"
       ]
     }
   },
   {
     "name": "restore_bucket",
-    "description": "Restores a soft-deleted bucket.\n\nThis function restores a bucket only if it exists, is soft-deleted, and its generation\nmatches the provided generation value.",
+    "description": "Restores a soft-deleted bucket.\n\nThis function restores a bucket only if it exists, is soft-deleted, and its generation\nmatches the provided generation value. The bucket's softDeleted flag is set to False\nupon successful restoration.",
     "parameters": {
       "type": "object",
       "properties": {
         "bucket": {
           "type": "string",
-          "description": "Name of the bucket to restore."
+          "description": "Name of the bucket to restore. Must be a valid, non-empty bucket name."
         },
         "generation": {
           "type": "string",
-          "description": "The generation of the bucket for verification."
+          "description": "The generation of the bucket for verification. Must match the\nbucket's current generation exactly."
         },
         "projection": {
           "type": "string",
-          "description": "Set of properties to return\nOne of:\n-\"full\" (default)\n-\"noAcl\""
+          "description": "Set of properties to return. Defaults to \"full\".\nAllowed values:\n- \"full\": Includes all properties including acl and defaultObjectAcl.\n- \"noAcl\": Excludes acl and defaultObjectAcl properties."
         },
         "user_project": {
           "type": "string",
-          "description": "The project to be billed for the request; required for Requester Pays buckets."
+          "description": "The project to be billed for the request. Required for\nRequester Pays buckets. Defaults to None."
         }
       },
       "required": [
@@ -1375,21 +1409,97 @@
   },
   {
     "name": "set_bucket_iam_policy",
-    "description": "Updates an IAM policy for the specified bucket.",
+    "description": "Updates an IAM policy for the specified bucket.\n\nThis function replaces the existing IAM policy for a bucket with the provided policy.\nThe policy must contain valid role bindings with properly formatted members and roles.",
     "parameters": {
       "type": "object",
       "properties": {
         "bucket": {
           "type": "string",
-          "description": "Name of the bucket whose IAM policy is being updated."
+          "description": "Name of the bucket whose IAM policy is being updated. Must be a valid,\nnon-empty bucket name that follows Google Cloud Storage naming conventions."
+        },
+        "policy": {
+          "type": "object",
+          "properties": {
+            "bindings": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "role": {
+                    "type": "string",
+                    "description": "IAM role string. Valid roles:\n        - \"roles/storage.admin\": Full control of Google Cloud Storage resources.\n        - \"roles/storage.objectViewer\": Read-only access to objects.\n        - \"roles/storage.objectCreator\": Access to create objects.\n        - \"roles/storage.objectAdmin\": Full control of objects.\n        - \"roles/storage.legacyObjectReader\": Read-only access to objects without listing.\n        - \"roles/storage.legacyObjectOwner\": Read/write access to existing objects without listing.\n        - \"roles/storage.legacyBucketReader\": Read access to buckets with object listing.\n        - \"roles/storage.legacyBucketWriter\": Read access with object creation/deletion.\n        - \"roles/storage.legacyBucketOwner\": Read and write access to buckets."
+                  },
+                  "members": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "List of member identifiers. Valid formats:\n        - \"allUsers\": Anyone on the internet.\n        - \"allAuthenticatedUsers\": Anyone with a Google account.\n        - \"user:<email>\": Specific user email (e.g., \"user:alice@gmail.com\").\n        - \"serviceAccount:<email>\": Service account email.\n        - \"group:<email>\": Google group email.\n        - \"domain:<domain>\": Google Apps domain (e.g., \"domain:example.com\").\n        - \"projectOwner:<projectid>\": Project owners.\n        - \"projectEditor:<projectid>\": Project editors.\n        - \"projectViewer:<projectid>\": Project viewers."
+                  },
+                  "condition": {
+                    "type": "object",
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "description": "Short description of the condition."
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "Detailed explanation."
+                      },
+                      "expression": {
+                        "type": "string",
+                        "description": "Common Expression Language (CEL) syntax string."
+                      },
+                      "location": {
+                        "type": "string",
+                        "description": "Optional location for debugging."
+                      }
+                    },
+                    "description": "Optional condition expression with:",
+                    "required": [
+                      "expression",
+                      "title"
+                    ]
+                  }
+                },
+                "required": [
+                  "members",
+                  "role"
+                ]
+              },
+              "description": "List of role-member associations. Each binding contains:"
+            },
+            "etag": {
+              "type": "string",
+              "description": "HTTP 1.1 entity tag for the policy. If provided, used for optimistic concurrency control."
+            },
+            "kind": {
+              "type": "string",
+              "description": "Resource kind, should be \"storage#policy\" if provided."
+            },
+            "resourceId": {
+              "type": "string",
+              "description": "Resource ID the policy applies to. Ignored on input."
+            },
+            "version": {
+              "type": "integer",
+              "description": "IAM policy format version. Defaults to 1 if not specified."
+            }
+          },
+          "description": "The IAM policy to set on the bucket. Must contain:",
+          "required": [
+            "bindings"
+          ]
         },
         "user_project": {
           "type": "string",
-          "description": "The project to be billed for this request. Required for\nRequester Pays buckets."
+          "description": "The project to be billed for this request. Required for\nRequester Pays buckets. Defaults to None."
         }
       },
       "required": [
-        "bucket"
+        "bucket",
+        "policy"
       ]
     }
   },

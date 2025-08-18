@@ -64,6 +64,7 @@ class Contact(BaseModel):
     phoneNumbers: Optional[List[PhoneNumber]] = None
     organizations: Optional[List[Organization]] = None
     isWorkspaceUser: Optional[bool] = None
+    notes: Optional[str] = None
     whatsapp: Optional[WhatsAppContact] = None
     phone: Optional[PhoneContact] = None
 

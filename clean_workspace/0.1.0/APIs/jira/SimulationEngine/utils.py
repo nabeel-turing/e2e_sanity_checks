@@ -18,8 +18,43 @@ def _check_empty_field(field: str, var: Any) -> Optional[str]:
     return ""
 
 
-def _generate_id(prefix: str, existing: Dict[str, Any]) -> str:
-    """Generate a simple ID like prefix-<num> for the resource."""
+def _generate_id(prefix: str, existing: Any) -> str:
+    """Generate a simple ID like prefix-<num> for the resource.
+    
+    Creates a unique identifier by combining a prefix with an incremented number
+    based on the count of existing items. This ensures each generated ID is unique
+    within the context of the existing collection.
+    
+    Args:
+        prefix (str): The prefix string to use for the ID (e.g., 'ISSUE', 'ISSUETYPE').
+                     Must not be None or empty.
+        existing (Any): Collection containing existing items (list, dict, tuple, etc.).
+                       The length of this collection determines the next ID number.
+                       Must support len() function and not be None.
+    
+    Returns:
+        str: A formatted ID string in the format '{prefix}-{count+1}' 
+             (e.g., 'ISSUE-1', 'ISSUETYPE-5').
+    
+    Raises:
+        ValueError: If prefix is None, empty, or if existing is None.
+        TypeError: If prefix is not a string or existing doesn't support len().
+    """
+    # Input validation
+    if not isinstance(prefix, str):
+        raise TypeError("prefix must be a string")
+    if not prefix or prefix.strip() == "":
+        raise ValueError("prefix cannot be None or empty")
+    
+    if existing is None:
+        raise ValueError("existing cannot be None")
+    
+    # Check if existing supports len() function
+    try:
+        len(existing)
+    except TypeError:
+        raise TypeError("existing must support len() function (e.g., list, dict, tuple)")
+    
     return f"{prefix}-{len(existing) + 1}"
 
 

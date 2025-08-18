@@ -151,7 +151,6 @@ class IssueFieldsUpdateModel(BaseModel):
         extra = 'forbid' # Forbid any extra fields not defined in the model
         strict = True
 
-
 class IssueReference(BaseModel):
     """Represents a reference to an issue in a link."""
     key: str = Field(..., min_length=1, description="The key of the issue")
@@ -171,3 +170,42 @@ class IssueLinkCreationInput(BaseModel):
     class Config:
         strict = True
 
+class BulkIssueUpdateModel(BaseModel):
+    """
+    Pydantic model for validating individual issue updates in bulk operations.
+    """
+    issueId: str = Field(..., description="The ID of the issue to update")
+    fields: Optional[IssueFieldsUpdateModel] = Field(None, description="The fields to update")
+    assignee: Optional[JiraAssignee] = Field(None, description="The assignee to set")
+    status: Optional[str] = Field(None, description="The status to set")
+    priority: Optional[str] = Field(None, description="The priority to set")
+    summary: Optional[str] = Field(None, description="The summary to set")
+    description: Optional[str] = Field(None, description="The description to set")
+    delete: Optional[bool] = Field(False, description="Whether to delete this issue")
+    deleteSubtasks: Optional[bool] = Field(False, description="Whether to delete subtasks when deleting the issue")
+
+    class Config:
+        extra = 'forbid'
+        strict = True
+
+
+class BulkIssueOperationRequestModel(BaseModel):
+    """
+    Pydantic model for validating the bulk issue operation request.
+    """
+    issueUpdates: List[BulkIssueUpdateModel] = Field(..., description="List of issue updates to perform")
+
+    class Config:
+        extra = 'forbid'
+        strict = True
+
+class UserPreferencesUpdate(BaseModel):
+    """
+    Pydantic model for validating user preferences update input.
+    """
+    theme: Optional[str] = Field(None, description="The theme preference for the user")
+    notifications: Optional[str] = Field(None, description="The notification preference for the user")
+
+    class Config:
+        extra = 'forbid'  # Forbid any extra fields not defined in the model
+        strict = True

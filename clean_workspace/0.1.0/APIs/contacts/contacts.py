@@ -32,6 +32,7 @@ def list_contacts(name_filter: Optional[str] = None, max_results: Optional[int] 
                 - organizations (List[Dict[str, str]]): A list of organization
                   objects, where each object may contain the company 'name' and
                   job 'title'.
+                - notes (str, optional): An alias field about the contact.
 
     Raises:
         ValidationError: If input arguments fail validation.
@@ -456,12 +457,12 @@ def delete_contact(resource_name: str) -> Dict[str, Any]:
     }
 
 def search_contacts(query: str, max_results: Optional[int] = 10) -> Dict[str, List[Dict[str, Any]]]:
-    """Search contacts by name, email, or phone number.
+    """Search contacts by name, email, phone number, notes, or organization.
 
     This function searches for contacts using a provided search term. The number of results returned can be limited.
 
     Args:
-        query (str): Search term to find in contacts; matches against names, emails, and phone numbers.
+        query (str): Search term to find in contacts; matches against names, emails, phone numbers, notes, and organizations.
         max_results (Optional[int]): Maximum number of results to return (default: 10). Must be a positive integer.
 
     Returns:

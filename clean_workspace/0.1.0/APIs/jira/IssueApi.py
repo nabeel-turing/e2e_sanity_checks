@@ -3,13 +3,18 @@
 from typing import Any, Dict, List, Optional
 from pydantic import ValidationError
 from .SimulationEngine.db import DB
-from .SimulationEngine.models import IssueFieldsUpdateModel, JiraIssueCreationFields
 from .SimulationEngine.utils import (
     _check_empty_field,
     _check_required_fields,
     _generate_id,
 )
-from .SimulationEngine.models import JiraAssignee, JiraIssueResponse
+
+from .SimulationEngine.models import (
+    JiraIssueCreationFields,
+    JiraIssueFields,
+    BulkIssueOperationRequestModel,
+)
+
 from .SimulationEngine.custom_errors import EmptyFieldError, MissingRequiredFieldError
 from .SimulationEngine.db import DB
 from .SimulationEngine.models import IssueFieldsUpdateModel, JiraAssignee, JiraIssueResponse
@@ -291,7 +296,7 @@ def delete_issue(issue_id: str, delete_subtasks: bool = False) -> Dict[str, Any]
     return {"deleted": issue_id, "deleteSubtasks": delete_subtasks}
 
 
-def bulk_delete_issues_bulk(issue_ids: List[str]) -> Dict[str, Any]:
+def bulk_delete_issues(issue_ids: List[str]) -> Dict[str, List[str]]:
     """
     Delete multiple issues in bulk.
 
@@ -302,24 +307,33 @@ def bulk_delete_issues_bulk(issue_ids: List[str]) -> Dict[str, Any]:
         issue_ids (List[str]): A list of issue IDs to delete
 
     Returns:
-        Dict[str, Any]: A dictionary containing:
+        Dict[str, List[str]]: A dictionary containing:
             - deleted (List[str]): List of successfully deleted issue messages
-            - errors (List[str]): List of error messages for failed deletions
+
+    Raises:
+        MissingRequiredFieldError: If issue_ids is not provided.
+        TypeError: If issue_ids is not a list or if an issue_id is not a string.
+        ValueError: If an issue_id does not exist.
 
     """
-    # Initialize a dictionary to store deleted issues and errors
-    results = {"deleted": [], "errors": []}
+    results = {"deleted": []}
 
-    # Iterate over each issue ID provided in the list
+    if not issue_ids:
+        raise MissingRequiredFieldError(field_name="issue_ids")
+
+    if not isinstance(issue_ids, list):
+        raise TypeError(f"issue_ids must be a list")
+
     for issue_id in issue_ids:
+        if not isinstance(issue_id, str):
+            raise TypeError(f"issue_ids must be a list of strings")
+
         if issue_id not in DB["issues"]:
-            # If the issue does not exist, add an error message to the results
-            results["errors"].append(f"Issue '{issue_id}' does not exist.")
-        else:
-            # If the issue exists, remove it from the database
-            DB["issues"].pop(issue_id)
-            # Add a success message to the results
-            results["deleted"].append(f"Issue '{issue_id}' has been deleted.")
+            raise ValueError(f"Issue '{issue_id}' does not exist.")
+
+    for issue_id in issue_ids:
+        DB["issues"].pop(issue_id)
+        results["deleted"].append(f"Issue '{issue_id}' has been deleted.")
 
     # Return the results containing deleted issues and any errors encountered
     return results
@@ -376,29 +390,123 @@ def assign_issue(issue_id: str, assignee: Dict) -> Dict[str, Any]:
 
 def bulk_issue_operation(issueUpdates: List[Dict[str, Any]]) -> Dict[str, Any]:
     """
-    Perform bulk operations on multiple issues.
-
-    This method allows performing operations on multiple issues in a single
-    request. The operations are processed in the order they are provided.
-
+    Performs bulk operations on multiple Jira issues.
+    
+    This function allows updating multiple issues in a single operation.
+    Each update can modify fields, assignee, status, priority, summary, or description.
+    Additionally, issues can be deleted with optional subtask deletion.
+    
     Args:
-        issueUpdates (List[Dict[str, Any]]): A dictionary containing the bulk operations to perform.
-
-
+        issueUpdates (List[Dict[str, Any]]): A list of issue updates to perform.
+            Each update should contain:
+            - issueId (str): The ID of the issue to update
+            - fields (Dict[str, Any], optional): Fields to update
+            - assignee (Dict[str, str], optional): Assignee information
+            - status (str, optional): New status
+            - priority (str, optional): New priority
+            - summary (str, optional): New summary
+            - description (str, optional): New description
+            - delete (bool, optional): Whether to delete this issue (default: False)
+            - deleteSubtasks (bool, optional): Whether to delete subtasks when deleting (default: False)
+    
     Returns:
         Dict[str, Any]: A dictionary containing:
-            - bulkProcessed (bool): True if the bulk operation was processed
-            - updatesCount (int): The number of updates processed
-
+            - bulkProcessed (bool): Whether all operations were processed successfully
+            - updatesCount (int): The number of operations processed
+            - successfulUpdates (List[str]): List of successfully updated issue IDs
+            - deletedIssues (List[str]): List of successfully deleted issue IDs
+    
     Raises:
-        ValueError: If the issueUpdates dictionary is empty
+        TypeError: If 'issueUpdates' is not a list.
+        ValueError: If 'issueUpdates' is empty.
+        pydantic.ValidationError: If validation fails when the issue update is not in the required format.
     """
-    err = _check_empty_field("issueUpdates", issueUpdates)
-    if err:
-        return {"error": err}
-
-    # Just simulate success
-    return {"bulkProcessed": True, "updatesCount": len(issueUpdates)}
+    # --- Input Validation ---
+    if not isinstance(issueUpdates, list):
+        raise TypeError("issueUpdates must be a list")
+    
+    if not issueUpdates:
+        raise ValueError("issueUpdates cannot be empty")
+    
+ 
+    validated_request = BulkIssueOperationRequestModel(issueUpdates=issueUpdates)
+    
+    
+    successful_updates = []
+    deleted_issues = []
+    
+    for update in validated_request.issueUpdates:
+        
+        # Check if issue exists in DB
+        if update.issueId not in DB.get("issues", {}):
+            raise ValueError(f"Issue with id '{update.issueId}' does not exist.")
+        
+        # Handle delete operation
+        if update.delete:
+            issue_data = DB["issues"][update.issueId]
+            
+            # Check for subtasks if deleteSubtasks is False
+            if not update.deleteSubtasks and "sub-tasks" in issue_data.get("fields", {}):
+                sub_tasks = issue_data["fields"]["sub-tasks"]
+                if sub_tasks:
+                    raise ValueError(
+                        f"Subtasks exist for issue '{update.issueId}', cannot delete. Set deleteSubtasks=True to delete them."
+                    )
+            
+            # Delete subtasks if requested
+            if update.deleteSubtasks and "sub-tasks" in issue_data.get("fields", {}):
+                sub_tasks = issue_data["fields"]["sub-tasks"]
+                for subtask in sub_tasks:
+                    if isinstance(subtask, dict) and "id" in subtask:
+                        DB["issues"].pop(subtask["id"], None)
+            
+            # Delete the issue
+            DB["issues"].pop(update.issueId, None)
+            deleted_issues.append(update.issueId)
+            
+        else:
+            # Handle update operation
+            issue_data = DB["issues"][update.issueId]
+            
+            # Update fields if provided
+            if update.fields:
+                if update.fields.summary is not None:
+                    issue_data["fields"]["summary"] = update.fields.summary
+                if update.fields.description is not None:
+                    issue_data["fields"]["description"] = update.fields.description
+                if update.fields.priority is not None:
+                    issue_data["fields"]["priority"] = update.fields.priority
+                if update.fields.status is not None:
+                    issue_data["fields"]["status"] = update.fields.status
+                if update.fields.assignee is not None:
+                    issue_data["fields"]["assignee"] = update.fields.assignee.model_dump()
+                if update.fields.issuetype is not None:
+                    issue_data["fields"]["issuetype"] = update.fields.issuetype
+                if update.fields.project is not None:
+                    issue_data["fields"]["project"] = update.fields.project
+            
+            # Update individual fields if provided (these take precedence over fields object)
+            if update.assignee is not None:
+                issue_data["fields"]["assignee"] = update.assignee.model_dump()
+            if update.status is not None:
+                issue_data["fields"]["status"] = update.status
+            if update.priority is not None:
+                issue_data["fields"]["priority"] = update.priority
+            if update.summary is not None:
+                issue_data["fields"]["summary"] = update.summary
+            if update.description is not None:
+                issue_data["fields"]["description"] = update.description
+            
+            successful_updates.append(update.issueId)
+    
+    # Create response
+    response_data = {
+        "bulkProcessed": len(successful_updates) + len(deleted_issues) == len(issueUpdates),  # True only if all operations succeeded
+        "updatesCount": len(issueUpdates),
+        "successfulUpdates": successful_updates,
+        "deletedIssues": deleted_issues
+    }
+    return response_data
 
 
 def issue_picker(query: Optional[str] = None, currentJQL: Optional[str] = None) -> Dict[str, Any]:

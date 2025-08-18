@@ -3160,6 +3160,29 @@ class TestUntrashMessage(BaseTestCaseWithErrorHandler):
 
         finally:
             GmailMessagesModule.parse_mime_message = original_parser
+    
+    def test_insert_message_correct_subject(self):
+        """Test that the subject is correctly set in the message."""
+        user_id = "me"
+        sender_email = "design_team@antrix.com"
+        recipient_email = "user@antrix.com"
+        email_subject = "Design Review Confirmation – July 30"
+        email_subject = "XXXXX – July 30"
+        email_body = "Hi, This is a confirmation for the design review meeting scheduled for July 30th. Best, Design Team"
+        email_date = "2025-07-22T10:00:00Z"
+        email_message = {
+            "sender": sender_email,
+            "recipient": recipient_email,
+            "subject": email_subject,
+            "body": email_body,
+            "date": email_date,
+            "isRead": False,
+            "labelIds": ["INBOX", "UNREAD"]
+        }
+        
+        result = insert_message(userId=user_id, msg=email_message)
+        self.assertEqual(result["subject"], email_subject)
+        self.assertEqual(result["payload"]["headers"][2]["value"], email_subject)
 
 if __name__ == "__main__":
     unittest.main()

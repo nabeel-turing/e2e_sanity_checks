@@ -114,11 +114,6 @@ class TestCreateOrUpdateBooking(BaseTestCaseWithErrorHandler):
             'Passengers': [{
                 'NameFirst': 'Jane',
                 'NameLast': 'Smith',
-                'NameMiddle': 'Anne',
-                'NamePrefix': 'Ms.',
-                'NameRemark': 'VIP',
-                'NameSuffix': 'PhD',
-                'NameTitle': 'Dr.',
                 'TextName': 'Ms. Jane Anne Smith PhD'
             }],
             'DateBookedLocal': '2024-01-15T10:00:00',

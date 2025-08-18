@@ -23,7 +23,19 @@ class TestMessageUtils(unittest.TestCase):
         }
         SIM_DB['recipients'] = {
             "contact_1": {"contact_id": "contact_1", "contact_name": "John Doe"},
-            "contact_2": {"contact_id": "contact_2", "contact_name": "Jane Smith"}
+            "contact_2": {"contact_id": "contact_2", "contact_name": "Jane Smith"},
+            # Add Contacts-shaped recipient for Penny Robinson
+            "people/penny": {
+                "resourceName": "people/penny",
+                "names": [{"givenName": "Penny", "familyName": "Robinson"}],
+                "phone": {
+                    "contact_id": "contact_penny",
+                    "contact_name": "Penny Robinson",
+                    "contact_endpoints": [
+                        {"endpoint_type": "PHONE_NUMBER", "endpoint_value": "+10123456789", "endpoint_label": "mobile"}
+                    ]
+                }
+            }
         }
         SIM_DB['message_history'] = [
             {"id": "msg_1", "action": "sent"},
@@ -48,6 +60,17 @@ class TestMessageUtils(unittest.TestCase):
         messages = _list_messages(recipient_name="Jane")
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0]["id"], "msg_2")
+
+    def test_list_messages_by_full_recipient_name(self):
+        messages = _list_messages(recipient_name="Jane Smith")
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(messages[0]["id"], "msg_2")
+
+    def test_list_messages_recipient_name_nested_contacts_shape_no_messages(self):
+        # With a recipient existing in recipients DB but no messages for Penny, should not raise and return []
+        messages = _list_messages(recipient_name="Penny Robinson")
+        self.assertIsInstance(messages, list)
+        self.assertEqual(len(messages), 0)
 
     def test_list_messages_by_status(self):
         SIM_DB["messages"]["msg_1"]["status"] = "sent"

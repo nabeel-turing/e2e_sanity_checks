@@ -28,3 +28,11 @@ class GenerationMismatchError(BucketError):
 class BucketNotEmptyError(BucketError):
     """Raised when attempting to delete a non-empty bucket."""
     pass
+
+class InvalidPredefinedAclValueError(BucketError):
+    """Raised when the 'predefinedAcl' parameter contains a value outside the allowed set (e.g., 'private', 'publicRead')."""
+    pass
+
+class InvalidPredefinedDefaultObjectAclValueError(BucketError):
+    """Raised when the 'predefined_default_object_acl' parameter contains a value outside the allowed set (e.g., 'bucketOwnerRead', 'authenticatedRead')."""
+    pass

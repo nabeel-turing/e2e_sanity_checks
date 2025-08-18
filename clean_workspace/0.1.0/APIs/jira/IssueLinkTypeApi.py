@@ -1,6 +1,8 @@
 #APIs/JiraAPISimulation/IssueLinkTypeApi.py
 from .SimulationEngine.db import DB
-from typing import Dict, Any, List
+from .SimulationEngine.custom_errors import MissingRequiredFieldError
+from typing import Dict, List
+
 
 def get_issue_link_types() -> Dict[str, List[Dict[str, str]]]:
     """
@@ -19,7 +21,7 @@ def get_issue_link_types() -> Dict[str, List[Dict[str, str]]]:
     return {"issueLinkTypes": list(DB.get("issue_link_types", {}).values())}
 
 
-def get_issue_link_type(link_type_id: str) -> Dict[str, Any]:
+def get_issue_link_type(link_type_id: str) -> Dict[str, Dict[str, str]]:
     """
     Retrieve a specific issue link type by its ID.
 
@@ -30,15 +32,23 @@ def get_issue_link_type(link_type_id: str) -> Dict[str, Any]:
         link_type_id (str): The unique identifier of the issue link type to retrieve
 
     Returns:
-        Dict[str, Any]: A dictionary containing:
-            - issueLinkType (Dict[str, Any]): The issue link type object
+        Dict[str, Dict[str, str]]: A dictionary containing:
+            - issueLinkType (Dict[str, str]): The issue link type object
                 - id (str): The unique identifier for the issue link type
                 - name (str): The display name of the issue link type
     
     Raises:
-        ValueError: If the link_type_id is empty or not found
+        MissingRequiredFieldError: If the link_type_id is empty
+        TypeError: If the link_type_id is not a string
+        ValueError: If the link_type_id is not found in the database
     """
+    if not link_type_id:
+        raise MissingRequiredFieldError("link_type_id is required")
+    if not isinstance(link_type_id, str):
+        raise TypeError(f"link_type_id must be a string")
+
+    if link_type_id not in DB["issue_link_types"]:
+        raise ValueError(f"Link type '{link_type_id}' not found.")
+
     lt = DB["issue_link_types"].get(link_type_id)
-    if not lt:
-        return {"error": f"Link type '{link_type_id}' not found."}
-    return lt
+    return {"issueLinkType": lt}

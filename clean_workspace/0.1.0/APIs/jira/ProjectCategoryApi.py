@@ -1,6 +1,9 @@
 # APIs/jira/ProjectCategoryApi.py
+from typing import Dict, Any
 from .SimulationEngine.db import DB
 from typing import Dict, Any
+from typing import Dict, Any
+
 
 def get_project_categories() -> Dict[str, Any]:
     """
@@ -33,9 +36,18 @@ def get_project_category(cat_id: str) -> Dict[str, Any]:
                 - name (str): The name of the project category
 
     Raises:
-        ValueError: If the project category is not found
+        TypeError: If the cat_id is not a string
+        ValueError: If the cat_id is empty or not found in the database
     """
+    # input validation
+    if not isinstance(cat_id, str):
+        raise TypeError("cat_id must be a string")
+    
+    if cat_id.strip() == "":
+        raise ValueError("cat_id cannot be empty")
+    
+    # get project category from the database by cat_id
     c = DB["project_categories"].get(cat_id)
     if not c:
-        return {"error": f"Project category '{cat_id}' not found."}
+        raise ValueError(f"Project category '{cat_id}' not found.")
     return c

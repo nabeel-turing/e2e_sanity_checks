@@ -62,7 +62,8 @@ from ..SimulationEngine.custom_errors import (
     NotAllowedError,
     MissingRequiredArgumentsError,
     ReactionNotFoundError,
-    UserHasNotReactedError
+    UserHasNotReactedError,
+    CurrentUserNotSetError
 )
 
 # Initialize global DB
@@ -1917,7 +1918,8 @@ class TestConversations(BaseTestCaseWithErrorHandler):
         channel = result["channel"]
         self.assertIn("id", channel)
         self.assertIn("name", channel)
-        self.assertEqual(channel["name"], "U789,U999")
+        # Channel name should include current user (U456) plus specified users, sorted alphabetically
+        self.assertEqual(channel["name"], "U456,U789,U999")
         self.assertIn("conversations", channel)
         self.assertIn("messages", channel)
 
@@ -1933,6 +1935,183 @@ class TestConversations(BaseTestCaseWithErrorHandler):
         self.assertNotIn("name", channel)
         self.assertNotIn("conversations", channel)
         self.assertNotIn("messages", channel)
+
+    def test_open_conversation_no_current_user_set(self):
+        # Test that CurrentUserNotSetError is raised when no current user is set
+        with patch('slack.Conversations.DB', {"channels": {}, "users": {"U123": {"id": "U123", "name": "test"}}}):
+            self.assert_error_behavior(
+                open_conversation,
+                CurrentUserNotSetError,
+                "No current user is set. Please set a current user first using set_current_user(user_id).",
+                None,  # additional_expected_dict_fields
+                users="U123"
+            )
+
+    def test_open_conversation_both_channel_and_users_provided(self):
+        # Test that ValueError is raised when both channel and users are provided
+        self.assert_error_behavior(
+            open_conversation,
+            ValueError,
+            "provide either channel or users, not both",
+            None,  # additional_expected_dict_fields
+            channel="C123",
+            users="U789"
+        )
+
+    def test_open_conversation_current_user_explicitly_included_with_others(self):
+        # Test when current user (U456) is explicitly included with other users
+        # Should not duplicate the current user
+        result = open_conversation(users="U456,U789,U123", return_im=True)
+        self.assertTrue(result["ok"])
+        
+        channel = result["channel"]
+        members = channel["conversations"]["members"]
+        
+        # Should have exactly 3 users (no duplication of current user U456)
+        self.assertEqual(len(members), 3)
+        self.assertIn("U456", members)  # current user
+        self.assertIn("U789", members)  # specified user
+        self.assertIn("U123", members)  # specified user
+        
+        # Should be MPIM since more than 2 users
+        self.assertFalse(channel["conversations"]["is_im"])
+        self.assertTrue(channel["conversations"]["is_mpim"])
+
+    def test_open_conversation_current_user_first_in_list(self):
+        # Test when current user is first in the users list
+        result = open_conversation(users="U456,U789", return_im=True)
+        self.assertTrue(result["ok"])
+        
+        channel = result["channel"]
+        members = channel["conversations"]["members"]
+        
+        # Should have exactly 2 users (no duplication)
+        self.assertEqual(len(members), 2)
+        self.assertIn("U456", members)  # current user
+        self.assertIn("U789", members)  # specified user
+        
+        # Should be IM since exactly 2 users
+        self.assertTrue(channel["conversations"]["is_im"])
+        self.assertFalse(channel["conversations"]["is_mpim"])
+
+    def test_open_conversation_current_user_middle_of_list(self):
+        # Test when current user is in the middle of the users list
+        result = open_conversation(users="U789,U456,U123", return_im=True)
+        self.assertTrue(result["ok"])
+        
+        channel = result["channel"]
+        members = channel["conversations"]["members"]
+        
+        # Should have exactly 3 users (no duplication)
+        self.assertEqual(len(members), 3)
+        self.assertIn("U456", members)  # current user
+        self.assertIn("U789", members)  # specified user
+        self.assertIn("U123", members)  # specified user
+        
+        # Verify sorted order in channel name (our implementation sorts user IDs)
+        expected_name = "U123,U456,U789"  # sorted order
+        self.assertEqual(channel["name"], expected_name)
+
+    def test_open_conversation_current_user_last_in_list(self):
+        # Test when current user is last in the users list
+        result = open_conversation(users="U123,U789,U456", return_im=True)
+        self.assertTrue(result["ok"])
+        
+        channel = result["channel"]
+        members = channel["conversations"]["members"]
+        
+        # Should have exactly 3 users (no duplication)
+        self.assertEqual(len(members), 3)
+        self.assertIn("U456", members)  # current user
+        self.assertIn("U789", members)  # specified user
+        self.assertIn("U123", members)  # specified user
+
+    def test_open_conversation_only_current_user_in_list(self):
+        # Test when only current user is provided (edge case)
+        result = open_conversation(users="U456", return_im=True)
+        self.assertTrue(result["ok"])
+        
+        channel = result["channel"]
+        members = channel["conversations"]["members"]
+        
+        # Should have only the current user (no duplication)
+        self.assertEqual(len(members), 1)
+        self.assertIn("U456", members)  # current user
+        
+        # Single user conversation - neither IM nor MPIM in traditional sense
+        # But our implementation should handle this gracefully
+
+    def test_open_conversation_current_user_auto_inclusion(self):
+        # Test that current user is automatically included when creating conversations
+        result = open_conversation(users="U789", return_im=True)
+        self.assertTrue(result["ok"])
+        
+        channel = result["channel"]
+        members = channel["conversations"]["members"]
+        
+        # Should include both current user (U456) and specified user (U789)
+        self.assertIn("U456", members)  # current user
+        self.assertIn("U789", members)  # specified user
+        self.assertEqual(len(members), 2)
+        self.assertTrue(channel["conversations"]["is_im"])
+        self.assertFalse(channel["conversations"]["is_mpim"])
+
+    def test_open_conversation_current_user_already_in_list(self):
+        # Test when current user is explicitly included in users parameter
+        result = open_conversation(users="U456,U789", return_im=True)
+        self.assertTrue(result["ok"])
+        
+        channel = result["channel"]
+        members = channel["conversations"]["members"]
+        
+        # Should not duplicate current user
+        self.assertEqual(members.count("U456"), 1)
+        self.assertIn("U789", members)
+        self.assertEqual(len(members), 2)
+        self.assertTrue(channel["conversations"]["is_im"])
+
+    def test_open_conversation_multi_user_auto_inclusion(self):
+        # Test current user auto-inclusion with multiple users (MPIM)
+        result = open_conversation(users="U789,U999", return_im=True)
+        self.assertTrue(result["ok"])
+        
+        channel = result["channel"]
+        members = channel["conversations"]["members"]
+        
+        # Should include current user plus the two specified users
+        self.assertIn("U456", members)  # current user
+        self.assertIn("U789", members)  # specified user 1
+        self.assertIn("U999", members)  # specified user 2
+        self.assertEqual(len(members), 3)
+        self.assertFalse(channel["conversations"]["is_im"])
+        self.assertTrue(channel["conversations"]["is_mpim"])
+
+    def test_open_conversation_current_user_in_middle_of_list(self):
+        # Test when current user is in the middle of the users list
+        result = open_conversation(users="U123,U456,U789", return_im=True)
+        self.assertTrue(result["ok"])
+        
+        channel = result["channel"]
+        members = channel["conversations"]["members"]
+        
+        # Should not duplicate current user, should have 3 total members
+        self.assertEqual(members.count("U456"), 1)
+        self.assertIn("U123", members)
+        self.assertIn("U789", members)
+        self.assertEqual(len(members), 3)
+        self.assertTrue(channel["conversations"]["is_mpim"])
+
+    def test_open_conversation_deterministic_id_with_current_user(self):
+        # Test that conversation IDs are deterministic when including current user
+        result1 = open_conversation(users="U789")
+        result2 = open_conversation(users="U789")
+        
+        # Should return the same conversation ID both times
+        self.assertEqual(result1["channel"]["id"], result2["channel"]["id"])
+        
+        # Test with different order (current user explicit vs implicit)
+        result3 = open_conversation(users="U456,U789") 
+        self.assertEqual(result1["channel"]["id"], result3["channel"]["id"])
 
     def test_list_success_default_params(self):
         result = list_channels()

@@ -22,12 +22,24 @@ def get_version(ver_id: str) -> Dict[str, Any]:
             - project (str): The project of the version.
             - projectId (int): The project ID of the version.
 
+    Raises:
+        ValueError: If the ver_id is empty or not found in the database
+        TypeError: If the ver_id is not a string
     """
+    # input validation
+    if not isinstance(ver_id, str):
+        raise TypeError("ver_id must be a string")
+    
+    if ver_id.strip() == "":
+        raise ValueError("ver_id cannot be empty")
+    
+    # get version from the database by ver_id
     if "versions" not in DB:
         DB["versions"] = {}
+        
     v = DB["versions"].get(ver_id)
     if not v:
-        return {"error": f"Version '{ver_id}' not found."}
+        raise ValueError(f"Version '{ver_id}' not found.")
     return v
 
 

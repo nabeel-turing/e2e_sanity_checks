@@ -22,7 +22,8 @@ class TestSearchContacts(BaseTestCaseWithErrorHandler):
                     "resourceName": "people/c1", "etag": "etag1",
                     "names": [{"givenName": "John", "familyName": "Doe"}],
                     "emailAddresses": [{"value": "john.doe@example.com", "type": "home"}],
-                    "phoneNumbers": [{"value": "+1-555-0101", "type": "mobile"}]
+                    "phoneNumbers": [{"value": "+1-555-0101", "type": "mobile"}],
+                    "notes": "My best friend"
                 },
                 "people/c2": {
                     "resourceName": "people/c2", "etag": "etag2",
@@ -183,6 +184,31 @@ class TestSearchContacts(BaseTestCaseWithErrorHandler):
             query="test",
             max_results=-1
         )
+
+    def test_search_by_notes_full_phrase(self):
+        """Test searching by the full phrase in the notes field."""
+        result = search_contacts(query="My best friend")
+        self.assertEqual(len(result["results"]), 1)
+        self.assertEqual(result["results"][0]["resourceName"], "people/c1")
+
+    def test_search_by_notes_partial_word(self):
+        """Test searching by a partial word in the notes field."""
+        result = search_contacts(query="best")
+        self.assertEqual(len(result["results"]), 1)
+        self.assertEqual(result["results"][0]["resourceName"], "people/c1")
+
+    def test_search_by_organization_name(self):
+        """Test searching by the organization name."""
+        result = search_contacts(query="YourCompany")
+        self.assertEqual(len(result["results"]), 1)
+        self.assertEqual(result["results"][0]["resourceName"], "people/d4")
+
+    def test_search_by_organization_title(self):
+        """Test searching by the organization title."""
+        result = search_contacts(query="Product Manager")
+        self.assertEqual(len(result["results"]), 1)
+        self.assertEqual(result["results"][0]["resourceName"], "people/d4")
+
 
 if __name__ == '__main__':
     unittest.main()

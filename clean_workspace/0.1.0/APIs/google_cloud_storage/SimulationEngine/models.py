@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from enum import Enum
 from typing import Optional, List, Dict, Any
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, validator
+from google_cloud_storage.SimulationEngine.utils import VALID_IAM_ROLES
 
 # --- Enums ---
 
@@ -328,3 +329,79 @@ class BucketRequest(BaseModel):
         extra = "forbid"  # Reject unknown fields
         use_enum_values = True
         validate_assignment = True
+
+
+class IamConditionModel(BaseModel):
+    """
+    Pydantic model for IAM policy condition.
+    Represents a conditional expression that restricts when a binding applies.
+    """
+    title: str = Field(..., description="Short description of the condition")
+    expression: str = Field(..., description="Common Expression Language (CEL) syntax string")
+    description: Optional[str] = Field(None, description="Detailed explanation of the expression's intent")
+    location: Optional[str] = Field(None, description="Optional location string for debugging")
+
+
+class IamBindingModel(BaseModel):
+    """
+    Pydantic model for IAM policy binding.
+    Represents a role-member association with optional conditions.
+    """
+    role: str = Field(..., description="IAM role string")
+    members: List[str] = Field(..., min_items=1, description="List of member identifiers")
+    condition: Optional[IamConditionModel] = Field(None, description="Optional condition expression")
+
+    @validator('role')
+    def validate_role(cls, v):
+        if v not in VALID_IAM_ROLES:
+            raise ValueError(f"Invalid role '{v}'. Valid roles: {sorted(VALID_IAM_ROLES)}")
+        return v
+
+    @validator('members')
+    def validate_members(cls, v):
+        if not v:
+            raise ValueError("Members list cannot be empty")
+        
+        valid_prefixes = [
+            "allUsers", "allAuthenticatedUsers", "user:", "serviceAccount:", 
+            "group:", "domain:", "projectOwner:", "projectEditor:", "projectViewer:"
+        ]
+        
+        for i, member in enumerate(v):
+            if not isinstance(member, str):
+                raise ValueError(f"Member at index {i} must be a string")
+            
+            if not any(member == prefix or member.startswith(prefix) for prefix in valid_prefixes):
+                raise ValueError(f"Invalid member format '{member}' at index {i}. Must start with one of: {valid_prefixes}")
+            
+            # Additional validation for email formats
+            if member.startswith(("user:", "serviceAccount:", "group:")):
+                email_part = member.split(":", 1)[1]
+                if not email_part or "@" not in email_part:
+                    raise ValueError(f"Invalid email format in member '{member}' at index {i}")
+        
+        return v
+
+
+class IamPolicyModel(BaseModel):
+    """
+    Pydantic model for IAM policy.
+    Represents a complete IAM policy with bindings and metadata.
+    """
+    bindings: List[IamBindingModel] = Field(..., description="List of role-member associations")
+    etag: Optional[str] = Field(None, description="HTTP 1.1 entity tag for the policy")
+    kind: Optional[str] = Field(None, description="Resource kind, should be 'storage#policy'")
+    resourceId: Optional[str] = Field(None, description="Resource ID the policy applies to")
+    version: Optional[int] = Field(1, ge=1, description="IAM policy format version")
+
+    @validator('kind')
+    def validate_kind(cls, v):
+        if v is not None and v != "storage#policy":
+            raise ValueError("Policy 'kind' must be 'storage#policy' if provided")
+        return v
+
+    @validator('version')
+    def validate_version(cls, v):
+        if v is not None and v < 1:
+            raise ValueError("Policy 'version' must be >= 1 if provided")
+        return v 

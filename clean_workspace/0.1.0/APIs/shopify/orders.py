@@ -2776,6 +2776,7 @@ def shopify_modify_pending_order_items(
             source_name="api",
             receipt=None,
             admin_graphql_api_id=f"gid://shopify/Transaction/{transaction_id}",
+            target_payment_method_id=payment_method_id,
         )
         if 'transactions' not in order or not isinstance(order['transactions'], list):
             order['transactions'] = []

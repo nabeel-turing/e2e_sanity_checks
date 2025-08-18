@@ -54,15 +54,35 @@ def update_group(groupname: str, users: List[str]) -> Dict[str, Any]:
                 - users (List[str]): List of usernames in the group
 
     Raises:
-        ValueError: If the group does not exist
+        TypeError: If groupname is not a string or users is not a list
+        ValueError: If groupname is empty, whitespace-only, or if the group does not exist
+        ValueError: If any user in the users list is not a string or is empty/whitespace-only
     """
+    # Input validation for groupname
+    if not isinstance(groupname, str):
+        raise TypeError(f"Expected groupname to be a string, but got {type(groupname).__name__}.")
+    if not groupname or groupname.isspace():
+        raise ValueError("groupname cannot be empty or consist only of whitespace.")
+    
+    # Input validation for users
+    if not isinstance(users, List):
+        raise TypeError(f"Expected users to be a List, but got {type(users).__name__}.")
+    
+    # Validate each user in the List
+    for i, user in enumerate(users):
+        if not isinstance(user, str):
+            raise TypeError(f"Expected all users to be strings, but user at index {i} is {type(user).__name__}.")
+        if not user or user.isspace():
+            raise ValueError(f"User at index {i} cannot be empty or consist only of whitespace.")
 
+    # Check if group exists
     if groupname not in DB["groups"]:
-        return {"error": f"Couldn't find groupname {groupname}"}
-    else:
-        updated_group = {"name": groupname, "users": users}
-        DB["groups"][groupname] = updated_group
-        return {groupname: updated_group}
+        raise ValueError(f"Group '{groupname}' does not exist.")
+    
+    # Update the group
+    updated_group = {"name": groupname, "users": users}
+    DB["groups"][groupname] = updated_group
+    return {groupname: updated_group}
 
 
 def create_group(name: str) -> Dict[str, Any]:

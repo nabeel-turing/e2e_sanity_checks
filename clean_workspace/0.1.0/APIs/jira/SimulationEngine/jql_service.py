@@ -40,7 +40,7 @@ class JQLService:
             has_data = bool(strategy.indexed_docs)
         
         if not has_data:
-            self.service_adapter.init_from_db(strategy_name)
+            self.service_adapter.init_from_db(strategy)
         
         # Group chunks by parent_doc_id (issue ID)
         issue_groups = {}

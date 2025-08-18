@@ -7,7 +7,10 @@ from pydantic import ValidationError
 from .SimulationEngine.models import EventResourceInputModel
 from .SimulationEngine.models import EventPatchResourceModel
 from .SimulationEngine.db import DB
-from .SimulationEngine.utils import parse_iso_datetime
+from .SimulationEngine.utils import (
+    parse_iso_datetime,
+    notify_attendees,
+)
 from typing import Dict, Any, Optional, List
 from .SimulationEngine.custom_errors import InvalidInputError, ResourceNotFoundError, ResourceAlreadyExistsError
 from .SimulationEngine.recurrence_expander import expand_recurring_events
@@ -52,7 +55,14 @@ def delete_event(
     key = (calendarId, eventId)
     if key not in DB["events"]:
         raise ValueError(f"Event '{eventId}' not found in calendar '{calendarId}'.")
+    # snapshot for notification
+    event_before_delete = DB["events"][key].copy()
     del DB["events"][key]
+
+    try:
+        notify_attendees(calendarId, event_before_delete, sendUpdates, subject_prefix="Cancelled")
+    except Exception:
+        pass
     return {
         "success": True,
         "message": f"Event '{eventId}' deleted from calendar '{calendarId}'.",
@@ -247,9 +257,6 @@ def create_event(calendarId: str = "primary", resource: Dict[str, Any] = None, s
     Args:
         calendarId (str, optional): The identifier of the calendar. Defaults to the user's primary calendar.
         resource (Dict[str, Any]): The event to create:
-        sendUpdates (str, optional): Whether to send updates about the creation.
-            Possible values: "all", "externalOnly", "none". Defaults to None.
-            Note: sendUpdates functionality is not implemented yet.
             - id (str, optional): The identifier of the event. If not provided,
                 a new UUID will be generated.
             - summary (str): The summary/title of the event.
@@ -299,7 +306,14 @@ def create_event(calendarId: str = "primary", resource: Dict[str, Any] = None, s
                 - overrides (Optional[List[Dict[str, Any]]]): The list of overrides.
                     - method (str): The method of the reminder.
                     - minutes (int): The minutes of the reminder.
+        
             - location (Optional[str]): The location of the event.
+
+            - attachments (Optional[List[Dict[str, Any]]]): The attachments list contains the dicts and each dict has the following key:
+                -fileUrl (str): The URL of the attachment
+
+        sendUpdates (str, optional): Whether to send updates about the creation.
+                                     Possible values: "all", "externalOnly", "none". Defaults to None.
 
     Returns:
         Dict[str, Any]: The created event.
@@ -314,6 +328,8 @@ def create_event(calendarId: str = "primary", resource: Dict[str, Any] = None, s
             - recurrence (Optional[List[str]]): The recurrence rules of the event. e.g. ["RRULE:FREQ=DAILY;COUNT=5"]
             - reminders (Optional[Dict[str, Any]]): The reminders of the event.
             - location (Optional[str]): The location of the event.
+            - attachments (Optional[List[Dict[str, Any]]]): The attachments list contains the dicts and each dict has the following key:
+                -fileUrl (str): The URL of the attachment
 
     Raises:
         TypeError: If 'calendarId' is not a string or 'sendUpdates' is not a string (if provided).
@@ -346,6 +362,16 @@ def create_event(calendarId: str = "primary", resource: Dict[str, Any] = None, s
             "start": {"dateTime": "2024-01-15T14:00:00Z"},
             "end": {"dateTime": "2024-01-15T15:00:00Z"},
             "recurrence": ["RRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR"]
+        })
+
+        # Create an event with an attachment
+        event = create_event("primary", {
+            "summary": "Meeting with attachment",
+            "start": {"dateTime": "2024-01-16T10:00:00Z"},
+            "end": {"dateTime": "2024-01-16T11:00:00Z"},
+            "attachments": [{
+                "fileUrl": "https://example.com/mydocument.pdf"
+            }]
         })
     """
     # --- Start of Validation Logic ---
@@ -387,6 +413,13 @@ def create_event(calendarId: str = "primary", resource: Dict[str, Any] = None, s
     event_dict = validated_resource.model_dump()
     event_dict["id"] = ev_id
     DB["events"][(calendarId, ev_id)] = event_dict
+
+    try:
+        notify_attendees(calendarId, event_dict, sendUpdates, subject_prefix="Invitation")
+    except Exception:
+        # Non-fatal in simulation
+        pass
+
     return event_dict
 
 
@@ -871,7 +904,6 @@ def move_event(
     calendarId: str,
     eventId: str,
     destination: str,
-    sendNotifications: Optional[bool] = False,
     sendUpdates: Optional[str] = None,
 ) -> Dict[str, Any]:
     """
@@ -882,8 +914,6 @@ def move_event(
         calendarId (str): The identifier of the source calendar.
         eventId (str): The identifier of the event to move.
         destination (str): The identifier of the destination calendar.
-        sendNotifications (Optional[bool]): Whether to send notifications about the move.
-            Defaults to False.
         sendUpdates (Optional[str]): Whether to send updates about the move.
             Possible values: "all", "externalOnly", "none". Defaults to None.
 
@@ -926,10 +956,6 @@ def move_event(
     if not destination.strip():
         raise InvalidInputError("destination cannot be empty or whitespace.")
 
-    # Validate sendNotifications
-    if not isinstance(sendNotifications, bool):
-        raise TypeError("sendNotifications must be a boolean.")
-
     # Validate sendUpdates
     if sendUpdates is not None:
         if not isinstance(sendUpdates, str):
@@ -950,6 +976,11 @@ def move_event(
             f"Event '{eventId}' already exists in destination calendar '{destination}'."
         )
     DB["events"][new_key] = ev_data
+
+    try:
+        notify_attendees(destination, ev_data, sendUpdates, subject_prefix="Moved")
+    except Exception:
+        pass
     return ev_data
 
 # Placeholder for DB if it's to be accessed globally and needs type hint / definition for linters
@@ -1078,12 +1109,16 @@ def patch_event(calendarId: str = "primary", eventId: Optional[str] = None, reso
     
     # Save the updated event back to the database
     DB["events"][key] = existing
+
+    try:
+        notify_attendees(calendarId, existing, sendUpdates, subject_prefix="Updated")
+    except Exception:
+        pass
     return existing
 
 
 def quick_add_event(
     calendarId: str,
-    sendNotifications: bool = False,
     sendUpdates: str = None,
     text: str = None,
 ) -> Dict[str, Any]:
@@ -1092,8 +1127,6 @@ def quick_add_event(
 
     Args:
         calendarId (str): The identifier of the calendar.
-        sendNotifications (bool, optional): Whether to send notifications about the creation.
-            Defaults to False.
         sendUpdates (str, optional): Whether to send updates about the creation.
             Possible values: "all", "externalOnly", "none". Defaults to None.
         text (str): The text to parse into an event. This should be a natural language
@@ -1112,7 +1145,6 @@ def quick_add_event(
     Raises:
         TypeError: If any argument has an invalid type:
             - calendarId is not str
-            - sendNotifications is not bool
             - sendUpdates is not str (if provided)
             - text is not str
         InvalidInputError: If any argument has an invalid value:
@@ -1123,8 +1155,6 @@ def quick_add_event(
     # Type validations
     if not isinstance(calendarId, str):
         raise TypeError("calendarId must be a string.")
-    if not isinstance(sendNotifications, bool):
-        raise TypeError("sendNotifications must be a boolean.")
     if sendUpdates is not None and not isinstance(sendUpdates, str):
         raise TypeError("sendUpdates must be a string if provided.")
     if text is not None and not isinstance(text, str):
@@ -1144,6 +1174,12 @@ def quick_add_event(
     ev_id = str(uuid.uuid4())
     resource = {"id": ev_id, "summary": text}
     DB["events"][(calendarId, ev_id)] = resource
+
+    try:
+        notify_attendees(calendarId, resource, sendUpdates, subject_prefix="Invitation")
+    except Exception:
+        # Non-fatal in simulation
+        pass
     return resource
 
 def update_event(eventId: str, calendarId: Optional[str] = None, resource: Optional[Dict[str, Any]] = None, sendUpdates: str = None) -> Dict[str, Any]:
@@ -1296,6 +1332,11 @@ def update_event(eventId: str, calendarId: Optional[str] = None, resource: Optio
     # Update with validated data
     validated_resource["id"] = eventId
     DB["events"][key] = validated_resource
+
+    try:
+        notify_attendees(effective_calendarId, validated_resource, sendUpdates, subject_prefix="Updated")
+    except Exception:
+        pass
     return validated_resource
 
 

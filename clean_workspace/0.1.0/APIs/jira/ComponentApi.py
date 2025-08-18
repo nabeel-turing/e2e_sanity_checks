@@ -197,9 +197,37 @@ def delete_component(comp_id: str, moveIssuesTo: Optional[str] = None) -> Dict[s
                     issues were moved to
 
     Raises:
-        ValueError: If the component does not exist
+        TypeError: If comp_id or moveIssuesTo is not a string.
+        ValueError: If comp_id or moveIssuesTo is empty.
+        ComponentNotFoundError: If the component does not exist
     """
+    
+    # --- Input Validation ---
+    if not isinstance(comp_id, str):
+        raise TypeError("comp_id must be a string.")
+    if not comp_id.strip():
+        raise ValueError("comp_id cannot be empty.")
+    
+    if moveIssuesTo is not None:
+        if not isinstance(moveIssuesTo, str):
+            raise TypeError("moveIssuesTo must be a string if provided.")
+        if not moveIssuesTo.strip():
+            raise ValueError("moveIssuesTo cannot be empty if provided.")
+    
+    
     if comp_id not in DB["components"]:
-        return {"error": f"Component '{comp_id}' does not exist."}
+        raise ComponentNotFoundError(f"Component '{comp_id}' does not exist.")
+    
+    if moveIssuesTo is not None:
+        if moveIssuesTo not in DB["components"]:
+            raise ComponentNotFoundError(f"Component '{moveIssuesTo}' does not exist.")
+        
+        # Only process issues if the issues collection exists
+        if "issues" in DB:
+            for issue in DB["issues"]:
+                # Only process issues that have a component field
+                if "component" in DB["issues"][issue] and DB["issues"][issue]["component"] == comp_id:
+                    DB["issues"][issue]["component"] = moveIssuesTo
+    
     DB["components"].pop(comp_id)
     return {"deleted": comp_id, "moveIssuesTo": moveIssuesTo}

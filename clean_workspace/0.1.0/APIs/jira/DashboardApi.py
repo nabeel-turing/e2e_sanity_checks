@@ -29,8 +29,29 @@ def get_dashboards(
                 - self (str): The URL of the dashboard
                 - view (str): The URL of the dashboard
 
+    Raises:
+        ValueError: If the startAt is less than 0, maxResults is less than 0.
+        TypeError: If the startAt or maxResults is not a valid integer
     """
+    # input validation
+    if not isinstance(startAt, int):
+        raise TypeError("startAt must be a valid integer")
+    if startAt < 0:
+        raise ValueError("startAt must not be negative")
+    if maxResults and not isinstance(maxResults, int):
+        raise TypeError("maxResults must be a valid integer")
+    if maxResults and maxResults < 0:
+        raise ValueError("maxResults must not be negative")
+    
+    # get all dashboards from the database
     all_dashboards = list(DB["dashboards"].values())
+    
+    # filter dashboards by startAt and maxResults
+    if startAt:
+        all_dashboards = all_dashboards[startAt:]
+    if maxResults:
+        all_dashboards = all_dashboards[:maxResults]
+    
     return {"dashboards": all_dashboards}
 
 
@@ -54,7 +75,15 @@ def get_dashboard(dash_id: str) -> Dict[str, Any]:
     Raises:
         ValueError: If the dashboard does not exist
     """
+    # input validation
+    if not isinstance(dash_id, str):
+        raise ValueError("dash_id must be a string")
+        
+    if dash_id.strip() == "":
+        raise ValueError("dash_id cannot be empty")
+    
+    # get dashboard from the database by dash_id
     dash = DB["dashboards"].get(dash_id)
     if not dash:
-        return {"error": f"Dashboard '{dash_id}' not found."}
+        raise ValueError(f"Dashboard '{dash_id}' not found.")
     return dash

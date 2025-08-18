@@ -263,11 +263,6 @@ def create_or_update_booking(booking: Dict[str, Any], trip_id: str) -> Dict[str,
             Passengers (List[Dict[str, Any]]): A list of passenger objects. (Required)
                 NameFirst (str): First name of passenger. (Required)
                 NameLast (str): Last name of passenger. (Required)
-                NameMiddle (Optional[str]): Middle name of passenger.
-                NamePrefix (Optional[str]): Name prefix (e.g., Mr., Ms.).
-                NameRemark (Optional[str]): Additional name details.
-                NameSuffix (Optional[str]): Name suffix (e.g., Jr., Sr.).
-                NameTitle (Optional[str]): Professional title.
                 TextName (Optional[str]): Full name as entered in booking tool.
             DateBookedLocal (Optional[str]): Booking creation date in local time (YYYY-MM-DDThh:mm:ss).
             FormOfPaymentName (Optional[str]): Name of the form of payment.

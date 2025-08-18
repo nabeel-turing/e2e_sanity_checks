@@ -221,17 +221,28 @@ def delete_user(username: Optional[str] = None, key: Optional[str] = None) -> Di
         Dict[str, Any]: A dictionary containing the user's information.
             - deleted (str): The key of the user that was deleted.
     Raises:
+        TypeError: If username or key is not a string.
         ValueError: If the user is not found or both username and key are not provided.
     """
-    if not username and not key:
-        return {"error": "Either 'username' or 'key' must be provided."}
+    # input validation
+    if username is not None and not isinstance(username, str):
+        raise TypeError("username must be a string if provided.")
+    if key is not None and not isinstance(key, str):
+        raise TypeError("key must be a string if provided.")
+    
+
     if username:
-        key = next(
-            (u["key"] for u in DB["users"].values() if u["name"] == username), None
-        )
-    if not key:
-        return {"error": "User not found."}
-    del DB["users"][key]
+        for u in DB["users"].values():
+            if u["name"] == username:
+                key = u["key"]
+                break
+        else:
+            raise ValueError("User not found.")
+        
+    if  key:
+        if key not in DB["users"]:
+            raise UserNotFoundError("User not found.")
+        del DB["users"][key]
     return {"deleted": key}
 
 

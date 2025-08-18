@@ -2,8 +2,67 @@ import datetime
 import re
 import random
 import string
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from .db import DB
+
+# -------------------------------------------------------------------
+# Current User Management
+# -------------------------------------------------------------------
+
+def get_current_user() -> Optional[dict]:
+    """Get the currently authenticated user.
+    
+    Returns:
+        dict: Current user information, or None if no user is set
+    """
+    current_user_info = DB.get("current_user")
+    if not current_user_info:
+        return None
+    
+    current_user_id = current_user_info.get("id")
+    if not current_user_id:
+        return None
+    
+    # Get full user data from users table
+    return DB.get("users", {}).get(current_user_id)
+
+
+def set_current_user(user_id: str) -> dict:
+    """Set the currently authenticated user.
+    
+    Args:
+        user_id: The ID of the user to set as current
+        
+    Returns:
+        dict: Updated current user information
+        
+    Raises:
+        ValueError: If user with the given ID is not found
+    """
+    users = DB.get("users", {})
+    if user_id not in users:
+        raise ValueError(f"User with ID {user_id} not found")
+    
+    user_data = users[user_id]
+    
+    # Update current_user in DB
+    DB["current_user"] = {
+        "id": user_id,
+        "is_admin": user_data.get("is_admin", False)
+    }
+    
+    return DB["current_user"]
+
+
+def get_current_user_id() -> Optional[str]:
+    """Get the ID of the currently authenticated user.
+    
+    Returns:
+        str: Current user ID, or None if no user is set
+    """
+    current_user_info = DB.get("current_user")
+    return current_user_info.get("id") if current_user_info else None
+
 
 # -------------------------------------------------------------------
 # Helper Functions

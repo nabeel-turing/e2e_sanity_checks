@@ -19,7 +19,7 @@ ERROR_MODE = get_package_error_mode()
 
 # Function map
 _function_map = {
-  "search": "google_search.search.get",
+  "search_queries": "google_search.search.get",
 }
 
 def __getattr__(name: str):

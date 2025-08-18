@@ -66,7 +66,7 @@ def search_collection(
     """
     Searches a collection for a query string or lists all items.
     
-    The query is matched against names, emails, and phone numbers.
+    The query is matched against names, emails, phone numbers, notes, and organizations.
 
     Args:
         collection_name: The key of the collection in the DB ('myContacts', etc.).
@@ -103,6 +103,15 @@ def search_collection(
         if "phoneNumbers" in contact:
             for phone_obj in contact.get("phoneNumbers", []):
                 search_haystack.append(phone_obj.get("value", ""))
+        
+        if "notes" in contact:
+            notes = contact.get("notes")
+            search_haystack.append(notes)
+
+        if "organizations" in contact:
+            for org_obj in contact.get("organizations", []):
+                search_haystack.append(org_obj.get("name", ""))
+                search_haystack.append(org_obj.get("title", ""))
 
         if lower_query in " ".join(search_haystack).lower():
             results.append(contact)

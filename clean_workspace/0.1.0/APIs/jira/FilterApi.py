@@ -1,7 +1,7 @@
 # APIs/jira/FilterApi.py
 
 from .SimulationEngine.db import DB
-from typing import Optional, Dict, Any
+from typing import Any, Dict, Optional
 
 
 def get_filters() -> Dict[str, Any]:
@@ -106,11 +106,19 @@ def get_filter(filter_id: str) -> Dict[str, Any]:
 
 
     Raises:
-        ValueError: If the filter does not exist
+        TypeError: If filter_id is not a string
+        ValueError: If filter_id is empty or the filter does not exist
     """
+    # Input validation
+    if not isinstance(filter_id, str):
+        raise TypeError("filter_id parameter must be a string")
+    
+    if not filter_id:
+        raise ValueError("filter_id parameter cannot be empty")
+    
     flt = DB["filters"].get(filter_id)
     if not flt:
-        return {"error": f"Filter '{filter_id}' not found."}
+        raise ValueError(f"Filter '{filter_id}' not found.")
     return flt
 
 

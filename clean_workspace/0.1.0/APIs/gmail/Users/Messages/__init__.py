@@ -494,14 +494,6 @@ def insert(
         processed_label_set.discard("INBOX") # Usually, deleted messages are removed from INBOX
         processed_label_set.discard("UNREAD") # DELETED messages are implicitly not UNREAD in some views
 
-    if "raw" not in msg_payload:
-        msg_payload["raw"] = create_mime_message_with_attachments(
-            to=msg_payload.get("recipient", ""),
-            subject=msg_payload.get("subject", ""),
-            body=msg_payload.get("body", ""),
-            from_email=msg_payload.get("sender", ""),
-        )
-
     # Parse MIME message if raw field is provided
     parsed_mime = None
     if "raw" in msg_payload and msg_payload["raw"]:
@@ -512,6 +504,14 @@ def insert(
             import traceback
             traceback.print_exc()
             # Still continue with message creation even if MIME parsing fails
+
+    if "raw" not in msg_payload:
+        msg_payload["raw"] = create_mime_message_with_attachments(
+            to=msg_payload.get("recipient", ""),
+            subject=msg_payload.get("subject", ""),
+            body=msg_payload.get("body", ""),
+            from_email=msg_payload.get("sender", ""),
+        )
 
     new_msg = {
         "id": message_id,

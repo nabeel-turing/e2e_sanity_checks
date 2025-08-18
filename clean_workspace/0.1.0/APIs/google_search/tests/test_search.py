@@ -302,6 +302,24 @@ class TestGoogleSearch(BaseTestCaseWithErrorHandler):
             unittest.mock.call({"query": "query2", "result": "Result 2"})
         ]
         mock_add_recent_search.assert_has_calls(expected_calls, any_order=False)
+    
+    @patch('google_search.SimulationEngine.utils.add_recent_search')
+    @patch('google_search.SimulationEngine.utils.get_gemini_response')
+    def test_using_function_alias_works(self, mock_gemini, mock_add_recent_search):
+        """Test that add_recent_search is called with correct data for multiple queries."""
+        mock_gemini.side_effect = [
+            "Result 1",
+            "Result 2"
+        ]
+        
+        import google_search
+        google_search.search_queries(queries=["query1", "query2"])
+
+        expected_calls = [
+            unittest.mock.call({"query": "query1", "result": "Result 1"}),
+            unittest.mock.call({"query": "query2", "result": "Result 2"})
+        ]
+        mock_add_recent_search.assert_has_calls(expected_calls, any_order=False)
 
 
 if __name__ == "__main__":

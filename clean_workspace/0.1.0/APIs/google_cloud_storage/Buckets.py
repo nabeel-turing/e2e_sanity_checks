@@ -3,6 +3,9 @@ import unittest
 import os
 import sys
 from datetime import datetime
+import builtins
+import hashlib
+import time
 
 from typing import Dict, Any, List, Tuple, Optional, Union
 
@@ -16,6 +19,17 @@ from google_cloud_storage.SimulationEngine.models import (
         PredefinedBucketAcl, 
         PredefinedDefaultObjectAcl
     )
+from google_cloud_storage.SimulationEngine.custom_errors import (
+    InvalidPredefinedAclValueError, 
+    InvalidPredefinedDefaultObjectAclValueError,
+    InvalidProjectionValueError
+)
+from google_cloud_storage.SimulationEngine.utils import (
+    ALLOWED_BUCKET_PREDEFINED_ACLS,
+    ALLOWED_OBJECT_PREDEFINED_DEFAULT_ACLS,
+    VALID_IAM_ROLES,
+)
+
 
 def delete(
     bucket: str,
@@ -29,7 +43,7 @@ def delete(
     checks for metageneration match conditions and ensures the bucket is empty before deletion.
 
     Args:
-        bucket (str): Name of the bucket to delete.
+        bucket (str): Name of the bucket to delete. Must be a valid, non-empty bucket name.
         if_metageneration_match (Optional[str]): If set, deletes only if the bucket's metageneration
             matches this value.
         if_metageneration_not_match (Optional[str]): If set, deletes only if the bucket's metageneration
@@ -37,12 +51,14 @@ def delete(
 
     Returns:
         Dict[str, Any]:
-        - A `message` key indicating success with the following value
-            - bucket deleted successfully
+        - A `message` key indicating success with the value:
+            - "Bucket '{bucket_name}' deleted successfully"
 
     Raises:
         TypeError: If 'bucket' is not a string, or if 'if_metageneration_match' or
                    'if_metageneration_not_match' are provided and are not strings.
+        ValueError: If 'bucket' is empty, or if parameters are empty
+                   , or if contain only whitespace when provided, or if violates Google Cloud Storage naming conventions
         BucketNotFoundError: If the specified bucket does not exist in the DB.
         MetagenerationMismatchError: If 'if_metageneration_match' or 'if_metageneration_not_match'
                                      conditions are not met.
@@ -55,6 +71,18 @@ def delete(
         raise TypeError(f"Argument 'if_metageneration_match' must be a string or None, got {type(if_metageneration_match).__name__}.")
     if if_metageneration_not_match is not None and not isinstance(if_metageneration_not_match, str):
         raise TypeError(f"Argument 'if_metageneration_not_match' must be a string or None, got {type(if_metageneration_not_match).__name__}.")
+
+    # Validate bucket name is not empty
+    if not bucket.strip():
+        raise ValueError("Argument 'bucket' cannot be empty or contain only whitespace.")
+    
+    # Validate bucket name follows basic Google Cloud Storage naming conventions
+    if len(bucket) < 3 or len(bucket) > 63:
+        raise ValueError("Bucket name must be between 3 and 63 characters long.")
+    
+    # Check for basic naming convention violations
+    if bucket.startswith('.') or bucket.endswith('.') or '..' in bucket:
+        raise ValueError("Bucket name cannot start or end with dots, or contain consecutive dots.")
 
     # --- Core Logic ---
     # Assume DB is accessible here
@@ -92,165 +120,348 @@ def restore(
     Restores a soft-deleted bucket.
 
     This function restores a bucket only if it exists, is soft-deleted, and its generation
-    matches the provided generation value.
+    matches the provided generation value. The bucket's softDeleted flag is set to False
+    upon successful restoration.
 
     Args:
-        bucket (str): Name of the bucket to restore.
-        generation (str): The generation of the bucket for verification.
-        projection (str): Set of properties to return
-            One of:
-            -"full" (default)
-            -"noAcl"
-        user_project (Optional[str]): The project to be billed for the request; required for Requester Pays buckets.
+        bucket (str): Name of the bucket to restore. Must be a valid, non-empty bucket name.
+        generation (str): The generation of the bucket for verification. Must match the
+            bucket's current generation exactly.
+        projection (str): Set of properties to return. Defaults to "full".
+            Allowed values:
+            - "full": Includes all properties including acl and defaultObjectAcl.
+            - "noAcl": Excludes acl and defaultObjectAcl properties.
+        user_project (Optional[str]): The project to be billed for the request. Required for
+            Requester Pays buckets. Defaults to None.
 
     Returns:
-        Dict[str, Any]:
-        - An `error` key indicating an error describing why the restore
-          did not occur with one of the following values:
-            - bucket not found
-            - bucket is not soft deleted
-            - generation mismatch
-        - On success, returns a dictionary with:
-            - message (str): bucket restored successfully
-            - bucket (Dict[str, Any]): Restored bucket metadata, including:
-                - acl (List[BucketAccessControl])
+        Dict[str, Any]: On success, returns a dictionary with:
+            - message (str): Success message indicating bucket restoration.
+            - bucket (Dict[str, Any]): Restored bucket metadata. If projection is "noAcl",
+              acl and defaultObjectAcl fields are omitted. Contains the following keys:
+                - acl (List[BucketAccessControl]): Access control list for the bucket.
                 - billing (Dict[str, bool]):
-                    - requesterPays (bool)
-                - cors (List[Dict[str, Any]]):
-                    - maxAgeSeconds (int)
-                    - method (List[str])
-                    - origin (List[str])
-                    - responseHeader (List[str])
-                - customPlacementConfig (Dict[str, List[str]]):
-                    - dataLocations (List[str])
-                - defaultEventBasedHold (bool)
-                - defaultObjectAcl (List[ObjectAccessControl])
-                - encryption (Dict[str, str]):
-                    - defaultKmsKeyName (str)
-                - etag (str)
-                - hierarchicalNamespace (Dict[str, bool]):
-                    - enabled (bool)
-                - iamConfiguration (Dict[str, Any]):
-                    - bucketPolicyOnly (Dict[str, Any]):
-                        - enabled (bool)
-                        - lockedTime (str)
-                    - uniformBucketLevelAccess (Dict[str, Any]):
-                        - enabled (bool)
-                        - lockedTime (str)
-                    - publicAccessPrevention (str)
-                - id (str)
-                - ipFilter (Dict[str, Any]):
-                    - mode (str)
-                    - publicNetworkSource (Dict[str, List[str]]):
-                        - allowedIpCidrRanges (List[str])
-                    - vpcNetworkSources (List[Dict[str, Any]]):
-                        - network (str)
-                        - allowedIpCidrRanges (List[str])
-                - kind (str)
-                - labels (Dict[str, str])
-                - lifecycle (Dict[str, List[Dict[str, Any]]]):
-                    - rule:
-                        - action (Dict[str, str]):
-                            - type (str)
-                            - storageClass (str)
-                        - condition (Dict[str, Any]):
-                            - age (int)
-                            - createdBefore (str)
-                            - customTimeBefore (str)
-                            - daysSinceCustomTime (int)
-                            - daysSinceNoncurrentTime (int)
-                            - isLive (bool)
-                            - matchesPattern (str)
-                            - matchesPrefix (List[str])
-                            - matchesSuffix (List[str])
-                            - matchesStorageClass (List[str])
-                            - noncurrentTimeBefore (str)
-                            - numNewerVersions (int)
-                - autoclass (Dict[str, Any]):
-                    - enabled (bool)
-                    - toggleTime (str)
-                    - terminalStorageClass (str)
-                    - terminalStorageClassUpdateTime (str)
-                - location (str)
-                - locationType (str)
-                - logging (Dict[str, str]):
-                    - logBucket (str)
-                    - logObjectPrefix (str)
-                - generation (str)
-                - metageneration (str)
-                - name (str)
-                - owner (Dict[str, str]):
-                    - entity (str)
-                    - entityId (str)
-                - projectNumber (str)
-                - retentionPolicy (Dict[str, Any]):
-                    - effectiveTime (str)
-                    - isLocked (bool)
-                    - retentionPeriod (str)
-                - objectRetention (Dict[str, str]):
-                    - mode (str)
-                - rpo (str)
-                - selfLink (str)
-                - softDeletePolicy (Dict[str, str]):
-                    - retentionDurationSeconds (str)
-                    - effectiveTime (str)
-                - storageClass (str)
-                - timeCreated (str)
-                - updated (str)
-                - softDeleteTime (str)
-                - hardDeleteTime (str)
-                - versioning (Dict[str, bool]):
-                    - enabled (bool)
-                - website (Dict[str, str]):
-                    - mainPageSuffix (str)
-                    - notFoundPage (str)
-                - satisfiesPZS (bool)
-                - satisfiesPZI (bool)
+                    - requesterPays (bool): Whether Requester Pays is enabled.
+                - cors (List[Dict[str, Any]]): CORS configuration rules.
+                    - maxAgeSeconds (int): Maximum age for preflight requests.
+                    - method (List[str]): Allowed HTTP methods.
+                    - origin (List[str]): Allowed origins.
+                    - responseHeader (List[str]): Allowed response headers.
+                - customPlacementConfig (Dict[str, List[str]]): Custom placement configuration.
+                    - dataLocations (List[str]): Regional locations for data placement.
+                - defaultEventBasedHold (bool): Whether event-based hold is enabled by default.
+                - defaultObjectAcl (List[ObjectAccessControl]): Default object access controls.
+                - encryption (Dict[str, str]): Encryption configuration.
+                    - defaultKmsKeyName (str): Default KMS key for encryption.
+                - etag (str): HTTP entity tag for the bucket.
+                - hierarchicalNamespace (Dict[str, bool]): Hierarchical namespace configuration.
+                    - enabled (bool): Whether hierarchical namespace is enabled.
+                - iamConfiguration (Dict[str, Any]): IAM configuration settings.
+                    - bucketPolicyOnly (Dict[str, Any]): Bucket policy only configuration.
+                        - enabled (bool): Whether bucket policy only is enabled.
+                        - lockedTime (str): When the policy was locked.
+                    - uniformBucketLevelAccess (Dict[str, Any]): Uniform bucket-level access.
+                        - enabled (bool): Whether uniform bucket-level access is enabled.
+                        - lockedTime (str): When the access was locked.
+                    - publicAccessPrevention (str): Public access prevention setting.
+                - id (str): Bucket ID.
+                - ipFilter (Dict[str, Any]): IP filter configuration.
+                    - mode (str): IP filter mode.
+                    - publicNetworkSource (Dict[str, List[str]]): Public network source config.
+                        - allowedIpCidrRanges (List[str]): Allowed IP CIDR ranges.
+                    - vpcNetworkSources (List[Dict[str, Any]]): VPC network sources.
+                        - network (str): VPC network identifier.
+                        - allowedIpCidrRanges (List[str]): Allowed IP CIDR ranges.
+                - kind (str): Resource kind, always "storage#bucket".
+                - labels (Dict[str, str]): User-defined labels.
+                - lifecycle (Dict[str, List[Dict[str, Any]]]): Lifecycle configuration.
+                    - rule (List[Dict[str, Any]]): Lifecycle rules.
+                        - action (Dict[str, str]): Action to take.
+                            - type (str): Action type.
+                            - storageClass (str): Target storage class.
+                        - condition (Dict[str, Any]): Condition for the rule.
+                            - age (int): Age in days.
+                            - createdBefore (str): Creation date threshold.
+                            - customTimeBefore (str): Custom time threshold.
+                            - daysSinceCustomTime (int): Days since custom time.
+                            - daysSinceNoncurrentTime (int): Days since noncurrent time.
+                            - isLive (bool): Whether object is live.
+                            - matchesPattern (str): Pattern to match.
+                            - matchesPrefix (List[str]): Prefixes to match.
+                            - matchesSuffix (List[str]): Suffixes to match.
+                            - matchesStorageClass (List[str]): Storage classes to match.
+                            - noncurrentTimeBefore (str): Noncurrent time threshold.
+                            - numNewerVersions (int): Number of newer versions.
+                - autoclass (Dict[str, Any]): Autoclass configuration.
+                    - enabled (bool): Whether autoclass is enabled.
+                    - toggleTime (str): When autoclass was toggled.
+                    - terminalStorageClass (str): Terminal storage class.
+                    - terminalStorageClassUpdateTime (str): When terminal storage class was updated.
+                - location (str): Bucket location.
+                - locationType (str): Type of location configuration.
+                - logging (Dict[str, str]): Logging configuration.
+                    - logBucket (str): Log bucket name.
+                    - logObjectPrefix (str): Log object prefix.
+                - generation (str): Bucket generation number.
+                - metageneration (str): Bucket metageneration number.
+                - name (str): Bucket name.
+                - owner (Dict[str, str]): Bucket owner information.
+                    - entity (str): Owner entity.
+                    - entityId (str): Owner entity ID.
+                - projectNumber (str): Project number.
+                - retentionPolicy (Dict[str, Any]): Retention policy configuration.
+                    - effectiveTime (str): When retention policy becomes effective.
+                    - isLocked (bool): Whether retention policy is locked.
+                    - retentionPeriod (str): Retention period in seconds.
+                - objectRetention (Dict[str, str]): Object retention configuration.
+                    - mode (str): Retention mode.
+                - rpo (str): Recovery Point Objective.
+                - selfLink (str): Self-referencing URL.
+                - softDeletePolicy (Dict[str, str]): Soft delete policy configuration.
+                    - retentionDurationSeconds (str): Soft delete retention duration.
+                    - effectiveTime (str): When soft delete policy becomes effective.
+                - storageClass (str): Default storage class.
+                - timeCreated (str): Creation timestamp.
+                - updated (str): Last update timestamp.
+                - softDeleteTime (str): Soft deletion timestamp.
+                - hardDeleteTime (str): Hard deletion timestamp.
+                - versioning (Dict[str, bool]): Versioning configuration.
+                    - enabled (bool): Whether versioning is enabled.
+                - website (Dict[str, str]): Website configuration.
+                    - mainPageSuffix (str): Main page suffix.
+                    - notFoundPage (str): 404 page.
+                - satisfiesPZS (bool): Whether bucket satisfies PZS.
+                - satisfiesPZI (bool): Whether bucket satisfies PZI.
+
+    Raises:
+        TypeError: If any argument is of an incorrect type.
+        ValueError: If bucket is empty or contains only whitespace, or if bucket name
+                   violates Google Cloud Storage naming conventions (length, dots).
+        InvalidProjectionValueError: If projection is not one of the allowed values
+                                   ("full" or "noAcl").
+        BucketNotFoundError: If the specified bucket does not exist.
+        NotSoftDeletedError: If the bucket is not soft-deleted.
+        GenerationMismatchError: If the provided generation does not match the bucket's generation.
     """
+    # --- Input Validation ---
+    if not isinstance(bucket, str):
+        raise TypeError(f"Argument 'bucket' must be a string, got {type(bucket).__name__}.")
+    if not isinstance(generation, str):
+        raise TypeError(f"Argument 'generation' must be a string, got {type(generation).__name__}.")
+    if not isinstance(projection, str):
+        raise TypeError(f"Argument 'projection' must be a string, got {type(projection).__name__}.")
+    if user_project is not None and not isinstance(user_project, str):
+        raise TypeError(f"Argument 'user_project' must be a string or None, got {type(user_project).__name__}.")
 
+    # Validate bucket name is not empty
+    if not bucket.strip():
+        raise ValueError("Argument 'bucket' cannot be empty or contain only whitespace.")
+    
+    # Validate bucket name follows basic Google Cloud Storage naming conventions
+    if len(bucket) < 3 or len(bucket) > 63:
+        raise ValueError("Bucket name must be between 3 and 63 characters long.")
+    
+    # Check for basic naming convention violations
+    if bucket.startswith('.') or bucket.endswith('.') or '..' in bucket:
+        raise ValueError("Bucket name cannot start or end with dots, or contain consecutive dots.")
+
+    # Validate projection value
+    if projection not in ("full", "noAcl"):
+        raise InvalidProjectionValueError(
+            f"Invalid value for 'projection': '{projection}'. Must be 'full' or 'noAcl'."
+        )
+
+    # --- Core Logic ---
     if bucket not in DB["buckets"]:
-        return {"error": "Bucket not found"}
+        raise BucketNotFoundError(f"Bucket '{bucket}' not found.")
+
     bucket_data = DB["buckets"][bucket]
+    
     if not bucket_data.get("softDeleted"):
-        return {"error": "Bucket is not soft deleted"}
+        raise NotSoftDeletedError(f"Bucket '{bucket}' is not soft deleted.")
+    
     if bucket_data.get("generation") != generation:
-        return {"error": "Generation mismatch"}
+        raise GenerationMismatchError(
+            f"Generation mismatch for bucket '{bucket}': Required '{generation}', found '{bucket_data.get('generation')}'."
+        )
 
+    # Restore the bucket
     bucket_data["softDeleted"] = False
-    return {
-        "message": f"Bucket '{bucket}' restored successfully",
-        "bucket": bucket_data,
-    }
+    
+    # Prepare response based on projection
+    if projection == "full":
+        return {
+            "message": f"Bucket '{bucket}' restored successfully",
+            "bucket": bucket_data,
+        }
+    else:
+        return {
+            "message": f"Bucket '{bucket}' restored successfully",
+            "bucket": {
+                k: v
+                for k, v in bucket_data.items()
+                if k not in ["acl", "defaultObjectAcl"]
+            },
+        }
 
 
-def relocate(bucket: str) -> Dict[str, Any]:
+def relocate(
+    bucket: str,
+    request_body: Dict[str, Any]
+) -> Dict[str, Any]:
     """
     Initiates a long-running Relocate Bucket operation on the specified bucket.
 
+    This function validates the relocation request and initiates a bucket relocation operation.
+    The operation moves a bucket from its current location to a specified destination location.
+
     Args:
-        bucket (str): Name of the bucket to be relocated.
+        bucket (str): Name of the bucket to be relocated. Must be a valid, non-empty bucket name
+            that follows Google Cloud Storage naming conventions.
+        request_body (Dict[str, Any]): A dictionary containing the relocation configuration with
+            the following keys:
+            - destinationLocation (str): The new location to which the bucket will be moved.
+              Must be a valid Google Cloud region (e.g., 'us-central1', 'europe-west1').
+            - destinationCustomPlacementConfig (Optional[Dict[str, Any]]): Configuration for 
+              Custom Dual Region. Optional. Contains:
+                - dataLocations (List[str]): The list of regional locations that will be used 
+                  to store the bucket's data. Must contain exactly 2 locations for dual-region.
+            - validateOnly (Optional[bool]): If True, only validate the relocation request 
+              without executing. Defaults to False.
 
     Returns:
-        Dict[str, Any]:
-        - On error:
-            - "error" (str): "Bucket not found"
-        - On success:
-            - dictionary with the following keys:
-                - done (bool): False — indicates the operation is in progress.
-                - error (dict): Present only if an error occurred. Matches GoogleRpcStatus schema:
-                    - code (int) : The status code, which should be an enum value of google.rpc.Code.
-                    - message (str) : A developer-facing error message, which should be in English.
-                    - details (list[dict]) : A list of messages that carry the error details. There is a common set of message types for APIs to use.
-                - metadata (dict): Optional metadata related to the operation.
-                - name (str): Unique operation name, e.g., operations/relocate-bucket-<bucket>.
-                - response (dict): Result returned when operation completes.
-                - selfLink (str): URI of the operation resource.
+        Dict[str, Any]: Dictionary representing a long-running operation:
+            - done (bool): False for regular operations, True for validation-only operations.
+            - error (Optional[Dict[str, Any]]): Present only if an error occurred during operation.
+              Matches GoogleRpcStatus schema:
+                - code (int): The status code, which should be an enum value of google.rpc.Code.
+                - message (str): A developer-facing error message, which should be in English.
+                - details (List[Dict[str, Any]]): A list of messages that carry the error details.
+                  Each detail dictionary contains:
+                    - "@type" (str): Type URL for the detail message.
+                    - Additional fields specific to the error type.
+            - metadata (Dict[str, Any]): Metadata related to the operation. Always contains:
+                - requestedLocation (str): The destination location for the relocation.
+                - validateOnly (bool): Whether this is a validation-only operation.
+              For validation-only operations, additionally contains:
+                - validationResult (str): Result of validation, always "Request is valid".
+              For regular operations, additionally contains:
+                - bucket (str): Name of the bucket being relocated.
+                - operationType (str): Type of operation, always "RELOCATE_BUCKET".
+                - customPlacementConfig (Optional[Dict[str, Any]]): Present only if custom 
+                  placement was specified in the request. Contains:
+                    - dataLocations (List[str]): The list of regional locations for data placement.
+            - name (str): Unique operation name. Format varies by operation type:
+              - Validation operations: "operations/relocate-bucket-{bucket}-validation"
+              - Regular operations: "operations/relocate-bucket-{bucket}-{timestamp}-{random}"
+            - response (Optional[Dict[str, Any]]): Result returned when operation completes.
+              Only present for completed operations. Structure depends on operation outcome.
+            - selfLink (str): URI of the operation resource. Format:
+              - "https://storage.googleapis.com/storage/v1/operations/relocate-bucket-{bucket}-validation"
+              - "https://storage.googleapis.com/storage/v1/operations/{operation_id}"
                 - kind (str): Always "storage#operation".
-    """
-    if bucket not in DB["buckets"]:
-        return {"error": "Bucket not found"}
 
-    return {"message": f"Relocation initiated for bucket '{bucket}'"}
+    Raises:
+        TypeError: If any argument is of an incorrect type.
+        ValueError: If bucket name violates Google Cloud Storage naming conventions,
+                   if request_body structure is invalid, or if required fields are missing/invalid.
+        BucketNotFoundError: If the specified bucket does not exist.
+    """
+    # --- Input Validation ---
+    
+    # Validate bucket parameter
+    if not isinstance(bucket, str):
+        raise TypeError(f"Argument 'bucket' must be a string, got {type(bucket).__name__}.")
+    
+    if not bucket.strip():
+        raise ValueError("Argument 'bucket' cannot be empty or contain only whitespace.")
+    
+    # Validate bucket name follows basic Google Cloud Storage naming conventions
+    if len(bucket) < 3 or len(bucket) > 63:
+        raise ValueError("Bucket name must be between 3 and 63 characters long.")
+    
+    if bucket.startswith('.') or bucket.endswith('.') or '..' in bucket:
+        raise ValueError("Bucket name cannot start or end with dots, or contain consecutive dots.")
+
+    # Validate request_body parameter
+    if not isinstance(request_body, dict):
+        raise TypeError(f"Argument 'request_body' must be a dictionary, got {type(request_body).__name__}.")
+
+    # --- Core Logic ---
+    
+    # Check if bucket exists
+    if bucket not in DB["buckets"]:
+        raise BucketNotFoundError(f"Bucket '{bucket}' not found.")
+    
+    # Validate required field: destinationLocation
+    if "destinationLocation" not in request_body:
+        raise ValueError("Missing required field: destinationLocation")
+    
+    destination_location = request_body["destinationLocation"]
+    if not isinstance(destination_location, str) or not destination_location.strip():
+        raise ValueError("Invalid destinationLocation: must be a non-empty string")
+    
+    # Validate optional destinationCustomPlacementConfig
+    custom_placement = request_body.get("destinationCustomPlacementConfig")
+    if custom_placement is not None:
+        if not isinstance(custom_placement, dict):
+            raise ValueError("destinationCustomPlacementConfig must be a dictionary")
+        
+        if "dataLocations" in custom_placement:
+            data_locations = custom_placement["dataLocations"]
+            if type(data_locations).__name__ != 'list':
+                raise ValueError("dataLocations must be a list")
+            
+            if len(data_locations) != 2:
+                raise ValueError("dataLocations must contain exactly 2 locations for dual-region")
+            
+            if not all(isinstance(loc, str) and loc.strip() for loc in data_locations):
+                raise ValueError("All dataLocations must be non-empty strings")
+    
+    # Validate optional validateOnly field
+    validate_only = request_body.get("validateOnly", False)
+    if not isinstance(validate_only, bool):
+        raise ValueError("validateOnly must be a boolean")
+    
+    # If validation-only mode, return success without actually initiating operation
+    if validate_only:
+        return {
+            "done": True,
+            "metadata": {
+                "requestedLocation": destination_location,
+                "validateOnly": True,
+                "validationResult": "Request is valid"
+            },
+            "name": f"operations/relocate-bucket-{bucket}-validation",
+            "selfLink": f"https://storage.googleapis.com/storage/v1/operations/relocate-bucket-{bucket}-validation",
+            "kind": "storage#operation"
+        }
+    
+    # Generate operation ID with timestamp-like suffix for uniqueness
+    import time
+    import random
+    operation_id = f"relocate-bucket-{bucket}-{int(time.time() * 1000)}-{random.randint(100, 999)}"
+    
+    # Simulate initiating the long-running operation
+    # In a real implementation, this would interact with the actual Google Cloud Storage API
+    operation_response = {
+        "done": False,
+        "metadata": {
+            "requestedLocation": destination_location,
+            "validateOnly": False,
+            "bucket": bucket,
+            "operationType": "RELOCATE_BUCKET"
+        },
+        "name": f"operations/{operation_id}",
+        "selfLink": f"https://storage.googleapis.com/storage/v1/operations/{operation_id}",
+        "kind": "storage#operation"
+    }
+    
+    # Add custom placement config to metadata if provided
+    if custom_placement is not None:
+        operation_response["metadata"]["customPlacementConfig"] = custom_placement
+    
+    return operation_response
 
 
 def get(
@@ -463,42 +674,136 @@ def getIamPolicy(
     """
     Returns an IAM policy for the specified bucket.
 
+    This function retrieves the IAM policy for a Google Cloud Storage bucket, with support
+    for different policy format versions and proper error handling for various edge cases.
+
     Args:
-        bucket (str): Name of the bucket whose IAM policy is being requested.
+        bucket (str): Name of the bucket whose IAM policy is being requested. Must be a valid,
+            non-empty bucket name that follows Google Cloud Storage naming conventions.
         options_requested_policy_version (Optional[int]): The desired IAM policy format version
-            to be returned. Must be >= 1 if specified.
+            to be returned. Must be >= 1 if specified. Defaults to None (latest version).
+            Different versions may have different field structures and capabilities.
         user_project (Optional[str]): The project to be billed for this request. Required for
-            Requester Pays buckets.
+            Requester Pays buckets. Must be a valid project identifier if specified.
 
     Returns:
-        Dict[str, Any]:
-        - On error:
-            - An "error" Keyword with one of the following values:
-                - bucket not found
-                - invalid policy version
-        - On success:
-            - iamPolicy (Dict[str, Any]): A policy object describing access control for the bucket.
-                - bindings (List[Dict[str, Any]]): List of role-member mappings with optional condition:
-                    - role (str): The IAM role string (e.g. roles/storage.admin).
-                    - members (List[str]): List of member identifiers (e.g. user:alice@example.com).
+        Dict[str, Any]: Dictionary with an "iamPolicy" key containing:
+            - iamPolicy (Dict[str, Any]): A complete policy object describing access control for the bucket.
+                - bindings (List[Dict[str, Any]]): List of role-member mappings with optional conditions.
+                  Each binding dictionary contains:
+                    - role (str): The IAM role string (e.g., "roles/storage.admin", "roles/storage.objectViewer").
+                    - members (List[str]): List of member identifiers. Each member can be:
+                        - "user:email@example.com"
+                        - "group:group@example.com"
+                        - "serviceAccount:service@project.iam.gserviceaccount.com"
+                        - "domain:example.com"
+                        - "allUsers"
+                        - "allAuthenticatedUsers"
                     - condition (Optional[Dict[str, Any]]): An optional condition that restricts when the binding is applied.
-                    Includes:
-                        - title (str): Short label for the expression.
-                        - description (str): Optional description of the expression's intent.
-                        - expression (str): Common Expression Language (CEL) syntax string.
-                        - location (str): Optional location string for debugging (e.g., file or position).
-                - etag (str): HTTP 1.1 entity tag for the policy.
+                      Contains:
+                        - title (str): Short label for the expression (max 100 characters).
+                        - description (Optional[str]): Optional description of the expression's intent (max 256 characters).
+                        - expression (str): Common Expression Language (CEL) syntax string that defines the condition.
+                        - location (Optional[str]): Optional location string for debugging (e.g., file or position).
+                - etag (str): HTTP 1.1 entity tag for the policy. Used for optimistic concurrency control.
                 - kind (str): Resource kind, always "storage#policy".
-                - resourceId (str): The resource ID the policy applies to.
-                - version (int): IAM policy format version.
+                - resourceId (str): The full resource ID the policy applies to (format: "projects/_/buckets/{bucket}").
+                - version (int): IAM policy format version. Determines which features are available:
+                    - Version 1: Basic role bindings
+                    - Version 3: Role bindings with conditions (conditional IAM)
+
+    Raises:
+        TypeError: If any argument is of an incorrect type.
+        ValueError: If bucket name violates Google Cloud Storage naming conventions,
+                   if user_project format is invalid, or if policy version is invalid.
+        BucketNotFoundError: If the specified bucket does not exist.
     """
+    # --- Input Validation ---
+    
+    # Validate bucket parameter
+    if not isinstance(bucket, str):
+        raise TypeError(f"Argument 'bucket' must be a string, got {type(bucket).__name__}.")
+    
+    if not bucket.strip():
+        raise ValueError("Argument 'bucket' cannot be empty or contain only whitespace.")
+    
+    # Validate bucket name follows basic Google Cloud Storage naming conventions
+    if len(bucket) < 3 or len(bucket) > 63:
+        raise ValueError("Bucket name must be between 3 and 63 characters long.")
+    
+    if bucket.startswith('.') or bucket.endswith('.') or '..' in bucket:
+        raise ValueError("Bucket name cannot start or end with dots, or contain consecutive dots.")
+    
+    # Validate options_requested_policy_version parameter
+    if options_requested_policy_version is not None:
+        if not isinstance(options_requested_policy_version, int):
+            raise TypeError(f"Argument 'options_requested_policy_version' must be an integer or None, got {type(options_requested_policy_version).__name__}.")
+        if options_requested_policy_version < 1:
+            raise ValueError("Argument 'options_requested_policy_version' must be >= 1 if specified.")
+    
+    # Validate user_project parameter
+    if user_project is not None:
+        if not isinstance(user_project, str):
+            raise TypeError(f"Argument 'user_project' must be a string or None, got {type(user_project).__name__}.")
+        if not user_project.strip():
+            raise ValueError("Argument 'user_project' cannot be empty or contain only whitespace if specified.")
+    
+    # --- Core Logic ---
+    
+    # Check if bucket exists
     if bucket not in DB["buckets"]:
-        return {"error": "Bucket not found"}
+        raise BucketNotFoundError(f"Bucket '{bucket}' not found.")
 
     bucket_data = DB["buckets"][bucket]
-    iam_policy = bucket_data.get("iamPolicy", {"bindings": []})
-    if options_requested_policy_version and options_requested_policy_version < 1:
-        return {"error": "invalid policy version"}
+    
+    # Get existing IAM policy or create default structure
+    existing_policy = bucket_data.get("iamPolicy", {})
+    
+    # Determine the policy version to use
+    if options_requested_policy_version is not None:
+        policy_version = options_requested_policy_version
+    else:
+        # Use existing version or default to version 1
+        policy_version = existing_policy.get("version", 1)
+    
+    # Ensure policy version is valid (1 or 3 are commonly supported)
+    if policy_version not in [1, 3]:
+        raise ValueError(f"Invalid policy version: {policy_version}. Supported versions are 1 and 3.")
+    
+    # Build the complete IAM policy structure
+    bindings = existing_policy.get("bindings", [])
+    
+    # Filter bindings based on policy version capabilities
+    if policy_version == 1:
+        # Version 1 doesn't support conditions, filter them out
+        filtered_bindings = []
+        for binding in bindings:
+            filtered_binding = {
+                "role": binding.get("role", ""),
+                "members": binding.get("members", [])
+            }
+            # Don't include condition for version 1
+            filtered_bindings.append(filtered_binding)
+        bindings = filtered_bindings
+    elif policy_version == 3:
+        # Version 3 supports conditions, include all binding data
+        bindings = bindings  # Use as-is, conditions are supported
+    
+    # Generate etag for the policy (simulated)
+    import hashlib
+    import json
+    policy_content = json.dumps({"bindings": bindings, "version": policy_version}, sort_keys=True)
+    etag = hashlib.md5(policy_content.encode()).hexdigest()
+    
+    # Construct the complete policy response
+    iam_policy = {
+        "bindings": bindings,
+        "etag": etag,
+        "kind": "storage#policy",
+        "resourceId": f"projects/_/buckets/{bucket}",
+        "version": policy_version
+    }
+    
     return {"iamPolicy": iam_policy}
 
 
@@ -506,34 +811,158 @@ def getStorageLayout(bucket: str, prefix: Optional[str] = None) -> Dict[str, Any
     """
     Returns the storage layout configuration for the specified bucket.
 
-    This operation requires the `storage.objects.list` permission. If a `prefix` is specified,
-    it can be used to restrict access validation under that specific prefix.
+    This function retrieves the storage layout information for a Google Cloud Storage bucket,
+    with optional prefix-based access validation. The operation simulates the requirement
+    for `storage.objects.list` permission and validates access based on the specified prefix.
 
     Args:
-        bucket (str): Name of the bucket whose storage layout is to be retrieved.
-        prefix (Optional[str]): Optional prefix used for permission checks. Useful when the caller
-            only has permission under a specific path within the bucket.
+        bucket (str): Name of the bucket whose storage layout is to be retrieved. Must be a valid,
+            non-empty bucket name that follows Google Cloud Storage naming conventions.
+        prefix (Optional[str]): Optional prefix used for permission checks and access validation.
+            When specified, the function validates that the caller would have permission to access
+            objects under this prefix path within the bucket. Must follow valid object naming
+            conventions if provided. Defaults to None (no prefix restriction).
 
     Returns:
-        Dict[str, Any]:
-        - On error:
-            - An "error" Keyword with the following value:
-                - "Bucket not found"
-        - On success:
-            - storageLayout (Dict[str, Any]) with the following keys:
-                - bucket (str): The name of the bucket.
-                - customPlacementConfig (Dict[str, List[str]]):
-                    - dataLocations (List[str]): Regional locations where data is placed.
-                - hierarchicalNamespace (Dict[str, bool]):
-                    - enabled (bool): True if hierarchical namespace is enabled.
-                - kind (str): Always "storage#storageLayout".
-                - location (str): The physical location of the bucket.
-                - locationType (str): Type of location configuration (e.g., multi-region, region).
+        Dict[str, Any]: Always returns a dictionary with a "storageLayout" key on success:
+            - storageLayout (Dict[str, Any]): Complete storage layout configuration containing:
+                - bucket (str): The name of the bucket that this layout applies to.
+                - customPlacementConfig (Dict[str, List[str]]): Custom placement configuration for the bucket.
+                    - dataLocations (List[str]): List of regional locations where bucket data is placed.
+                      For single-region buckets, contains one location. For dual-region buckets,
+                      contains exactly two locations. For multi-region buckets, contains multiple locations.
+                - hierarchicalNamespace (Dict[str, bool]): Hierarchical namespace configuration.
+                    - enabled (bool): True if hierarchical namespace is enabled for the bucket,
+                      allowing folder-like organization. False for standard flat namespace.
+                - kind (str): Resource type identifier, always "storage#storageLayout".
+                - location (str): The primary physical location or region of the bucket
+                  (e.g., "us-central1", "us", "eu").
+                - locationType (str): Type of location configuration describing the bucket's
+                  geographic distribution. Possible values:
+                    - "region": Single region bucket
+                    - "dual-region": Dual-region bucket spanning two specific regions
+                    - "multi-region": Multi-region bucket (e.g., US, EU, ASIA)
+
+    Raises:
+        TypeError: If any argument is of an incorrect type.
+        ValueError: If bucket name violates Google Cloud Storage naming conventions,
+                   if prefix format is invalid, or if access is denied for the specified prefix.
+        BucketNotFoundError: If the specified bucket does not exist.
     """
+    # --- Input Validation ---
+    
+    # Validate bucket parameter
+    if not isinstance(bucket, str):
+        raise TypeError(f"Argument 'bucket' must be a string, got {type(bucket).__name__}.")
+    
+    if not bucket.strip():
+        raise ValueError("Argument 'bucket' cannot be empty or contain only whitespace.")
+    
+    # Validate bucket name follows basic Google Cloud Storage naming conventions
+    if len(bucket) < 3 or len(bucket) > 63:
+        raise ValueError("Bucket name must be between 3 and 63 characters long.")
+    
+    if bucket.startswith('.') or bucket.endswith('.') or '..' in bucket:
+        raise ValueError("Bucket name cannot start or end with dots, or contain consecutive dots.")
+    
+    # Validate prefix parameter
+    if prefix is not None:
+        if not isinstance(prefix, str):
+            raise TypeError(f"Argument 'prefix' must be a string or None, got {type(prefix).__name__}.")
+        
+        # Basic prefix format validation
+        if prefix.strip() == "":
+            raise ValueError("Argument 'prefix' cannot be empty or contain only whitespace if specified.")
+        
+        # Check for invalid characters in prefix (basic validation)
+        invalid_chars = ['\r', '\n', '\0']
+        if any(char in prefix for char in invalid_chars):
+            raise ValueError("Argument 'prefix' contains invalid characters (carriage return, newline, or null).")
+    
+    # --- Core Logic ---
+    
+    # Check if bucket exists
     if bucket not in DB["buckets"]:
-        return {"error": "Bucket not found"}
+        raise BucketNotFoundError(f"Bucket '{bucket}' not found.")
+    
     bucket_data = DB["buckets"][bucket]
-    storage_layout = bucket_data.get("storageLayout", {})
+    
+    # Simulate prefix-based permission validation
+    if prefix is not None:
+        # Simulate access validation based on prefix
+        bucket_objects = bucket_data.get("objects", [])
+        
+        # Check if prefix starts with slash (invalid - no absolute paths)
+        if prefix.startswith('/'):
+            raise ValueError("Argument 'prefix' cannot start with '/' (absolute paths not allowed).")
+        
+        # Simulate permission check: if prefix is specified, check if any objects match
+        # or if the prefix represents a valid path pattern
+        has_matching_objects = any(
+            str(obj).startswith(prefix) for obj in bucket_objects
+        ) if bucket_objects else True  # Allow if no objects exist yet
+        
+        # Simulate access denied for certain restricted prefixes
+        restricted_prefixes = ["admin/", "system/", ".config/"]
+        if any(prefix.startswith(restricted) for restricted in restricted_prefixes):
+            raise ValueError(f"Access denied for prefix '{prefix}'. Restricted prefixes: {restricted_prefixes}")
+        
+        # Additional validation: prefix length check (simulating practical limits)
+        if len(prefix) > 1024:
+            raise ValueError("Argument 'prefix' cannot exceed 1024 characters.")
+    
+    # Get existing storage layout configuration or create default structure
+    existing_layout = bucket_data.get("storageLayout", {})
+    
+    # Determine bucket location and type from bucket data or defaults
+    bucket_location = bucket_data.get("location", "us-central1")
+    bucket_location_type = bucket_data.get("locationType", "region")
+    
+    # Determine custom placement config
+    custom_placement = existing_layout.get("customPlacementConfig", {})
+    if not custom_placement:
+        # Create default placement based on location type
+        if bucket_location_type == "dual-region":
+            custom_placement = {
+                "dataLocations": ["us-central1", "us-east1"]
+            }
+        elif bucket_location_type == "multi-region":
+            if bucket_location.startswith("us"):
+                custom_placement = {
+                    "dataLocations": ["us-central1", "us-east1", "us-west1"]
+                }
+            elif bucket_location.startswith("eu"):
+                custom_placement = {
+                    "dataLocations": ["europe-west1", "europe-west4", "europe-north1"]
+                }
+            else:
+                custom_placement = {
+                    "dataLocations": [bucket_location]
+                }
+        else:
+            # Single region
+            custom_placement = {
+                "dataLocations": [bucket_location]
+            }
+    
+    # Determine hierarchical namespace setting
+    hierarchical_ns = existing_layout.get("hierarchicalNamespace", {})
+    if not hierarchical_ns:
+        # Default to disabled for most buckets
+        hierarchical_ns = {
+            "enabled": bucket_data.get("enableHierarchicalNamespace", False)
+        }
+    
+    # Construct the complete storage layout response
+    storage_layout = {
+        "bucket": bucket,
+        "customPlacementConfig": custom_placement,
+        "hierarchicalNamespace": hierarchical_ns,
+        "kind": "storage#storageLayout",
+        "location": bucket_location,
+        "locationType": bucket_location_type
+    }
+    
     return {"storageLayout": storage_layout}
 
 
@@ -787,26 +1216,47 @@ def insert(
                 - enableObjectRetention (bool): Whether object retention is enabled
 
     Raises:
-        ValueError: If bucket_request validation fails, bucket name is missing, or bucket already exists.
-        TypeError: If bucket_request is not a dictionary.
+        TypeError: If any argument is of an incorrect type.
+        ValueError: If 'projection' is not one of "full" or "noAcl", if 'predefinedAcl' is not a valid value,
+                   if 'predefined_default_object_acl' is not a valid value, if bucket_request validation fails,
+                   if bucket name is missing, or if bucket already exists.
     """
-     # Input validation
+    # --- Input Type Validation ---
     if not isinstance(project, str):
         raise TypeError("Project must be a string")
     
-    # Provide default bucket_request if none provided (for backward compatibility)
-    if bucket_request is None:
-        bucket_name = f"bucket-{len(DB.get('buckets', {})) + 1}"
-        bucket_request = {
-            "name": bucket_name,
-            "location": "US",
-            "storageClass": "STANDARD"
-        }
-        
-    if not isinstance(bucket_request, dict):
+    if project.strip() == "":
+        raise ValueError("Argument 'project' cannot be empty.")
+    
+    if bucket_request is not None and not isinstance(bucket_request, dict):
         raise TypeError("Invalid bucket_request; must be a dictionary")
 
-    # Validate predefinedAcl using enum if available
+    if predefinedAcl is not None and not isinstance(predefinedAcl, str):
+        raise TypeError("Argument 'predefinedAcl' must be a string or None.")
+        
+    if predefined_default_object_acl is not None and not isinstance(predefined_default_object_acl, str):
+        raise TypeError("Argument 'predefined_default_object_acl' must be a string or None.")
+        
+    if not isinstance(projection, str):
+        raise TypeError("Argument 'projection' must be a string.")
+        
+    if user_project is not None and not isinstance(user_project, str):
+        raise TypeError("Argument 'user_project' must be a string or None.")
+        
+    if not isinstance(enableObjectRetention, bool):
+        raise TypeError("Argument 'enableObjectRetention' must be a boolean.")
+
+    # --- Value Validation ---
+    # Validate projection
+    if BucketProjection:
+        valid_projections = [proj.value for proj in BucketProjection]
+    else:
+        valid_projections = ["full", "noAcl"]
+        
+    if projection not in valid_projections:
+        raise ValueError(f"Invalid projection. Must be one of: {valid_projections}")
+
+    # Validate predefinedAcl
     if predefinedAcl is not None:
         if PredefinedBucketAcl:
             valid_acls = [acl.value for acl in PredefinedBucketAcl]
@@ -816,7 +1266,7 @@ def insert(
         if predefinedAcl not in valid_acls:
             raise ValueError(f"Invalid predefinedAcl. Must be one of: {valid_acls}")
 
-    # Validate predefined_default_object_acl using enum if available
+    # Validate predefined_default_object_acl
     if predefined_default_object_acl is not None:
         if PredefinedDefaultObjectAcl:
             valid_default_acls = [acl.value for acl in PredefinedDefaultObjectAcl]
@@ -827,15 +1277,15 @@ def insert(
         if predefined_default_object_acl not in valid_default_acls:
             raise ValueError(f"Invalid predefined_default_object_acl. Must be one of: {valid_default_acls}")
 
-    # Validate projection using enum if available
-    if projection is not None:
-        if BucketProjection:
-            valid_projections = [proj.value for proj in BucketProjection]
-        else:
-            valid_projections = ["full", "noAcl"]
-            
-        if projection not in valid_projections:
-            raise ValueError(f"Invalid projection. Must be one of: {valid_projections}")
+    # --- Bucket Request Processing ---
+    # Provide default bucket_request if none provided (for backward compatibility)
+    if bucket_request is None:
+        bucket_name = f"bucket-{len(DB.get('buckets', {})) + 1}"
+        bucket_request = {
+            "name": bucket_name,
+            "location": "US",
+            "storageClass": "STANDARD"
+        }
 
     try:
         # Validate the bucket request using Pydantic model
@@ -898,13 +1348,14 @@ def insert(
             if value is not None:  # Only update with non-None values
                 bucket_data[key] = value
 
-        # Apply predefined ACLs if specified (these override bucket_request values)
-        if predefinedAcl:
+        # Apply predefined ACLs if specified, otherwise initialize as empty lists
+        # ACL fields should always be present in the bucket data for proper projection behavior
+        if predefinedAcl is not None:
             bucket_data["acl"] = predefinedAcl
         else:
             bucket_data["acl"] = []
             
-        if predefined_default_object_acl:
+        if predefined_default_object_acl is not None:
             bucket_data["defaultObjectAcl"] = predefined_default_object_acl
         else:
             bucket_data["defaultObjectAcl"] = []
@@ -941,7 +1392,6 @@ def insert(
             raise
         raise ValueError(f"Validation error: {str(e)}")
 
-
 def list(
     project: str,
     max_results: int = 1000,
@@ -951,24 +1401,20 @@ def list(
     projection: str = "noAcl",
     user_project: Optional[str] = None,
 ) -> Dict[str, Any]:
-    """
-    Retrieves a list of buckets for a given project.
+    """Retrieve buckets within a project with optional filtering and pagination.
 
     Args:
-        project (str): A valid API project identifier.
-        max_results (int): Maximum number of buckets to return. Defaults to 1000.
-        page_token (Optional[str]): Token indicating the starting point for the next page of results.
-        prefix (Optional[str]): Filter to include only buckets whose names begin with this prefix.
-        soft_deleted (bool): If True, only returns soft-deleted buckets.
-        projection (str): Properties to return for each bucket. Allowed values:
-            - "full": Include all properties.
-            - "noAcl": Exclude ACL-related properties. Default is "noAcl".
-        user_project (Optional[str]): The project to be billed for the request.
+        project (str): Identifier of the owning project. Cannot be empty.
+        max_results (int): Maximum number of buckets to return. Must be a positive integer. Defaults to 1000.
+        page_token (Optional[str]): String token representing the starting offset of the next page. If None or invalid, the listing starts at the first record.
+        prefix (Optional[str]): If provided, only buckets whose names start with this prefix are returned.
+        soft_deleted (bool): When True, only buckets whose softDeleted flag is True are returned. When False, soft-deleted buckets are excluded.
+        projection (str): Amount of metadata to include for each bucket. Allowed values: "full" or "noAcl". Default is "noAcl".
+        user_project (Optional[str]): Billing project identifier for Requester Pays buckets.
 
     Returns:
-        Dict[str, Any]:
-        - items (List[Dict[str, Any]]): List of matching bucket metadata dictionaries.
-            - list of dictionaries with the following keys(if projection is not "full" the keys acl and defaultObjectAcl are omitted):
+        Dict[str, Any]: Dictionary with the following keys:
+            - items (List[Dict[str, Any]]): List of bucket resources that match the query. Each bucket dictionary contains:
                 - acl (List[BucketAccessControl])
                 - billing (Dict[str, bool]):
                     - requesterPays (bool)
@@ -1062,29 +1508,91 @@ def list(
                     - notFoundPage (str)
                 - satisfiesPZS (bool)
                 - satisfiesPZI (bool)
+            - nextPageToken (str): Present only when additional pages of results exist.
 
-        - nextPageToken (Optional[str]): Token for the next page of results, if available.
+    Raises:
+        TypeError: If any argument is of an unexpected type.
+        ValueError: If project is empty or max_results is not positive.
+        InvalidProjectionValueError: If projection is not one of the allowed values.
     """
-    matching_buckets = []
-    for bucket_name, bucket_data in DB["buckets"].items():
-        if bucket_data["project"] == project:
-            if prefix and not bucket_name.startswith(prefix):
-                continue
-            if soft_deleted and not bucket_data.get("softDeleted", False):
-                continue
-            if not soft_deleted and bucket_data.get("softDeleted", False):
-                continue
-            if projection == "full":
-                matching_buckets.append(bucket_data)
-            else:
-                matching_buckets.append(
-                    {
-                        k: v
-                        for k, v in bucket_data.items()
-                        if k not in ["acl", "defaultObjectAcl"]
-                    }
-                )
-    return {"items": matching_buckets[:max_results]}
+
+    # ----------------------------- Validation ----------------------------- #
+    if not isinstance(project, str):
+        raise TypeError("Argument 'project' must be a string.")
+    if project.strip() == "":
+        raise ValueError("Argument 'project' cannot be empty or whitespace only.")
+
+    if not isinstance(max_results, int):
+        raise TypeError("Argument 'max_results' must be an integer.")
+    if max_results <= 0:
+        raise ValueError("Argument 'max_results' must be greater than zero.")
+
+    if page_token is not None and not isinstance(page_token, str):
+        raise TypeError("Argument 'page_token' must be a string or None.")
+
+    if prefix is not None and not isinstance(prefix, str):
+        raise TypeError("Argument 'prefix' must be a string or None.")
+
+    if not isinstance(soft_deleted, bool):
+        raise TypeError("Argument 'soft_deleted' must be a boolean.")
+
+    if not isinstance(projection, str):
+        raise TypeError("Argument 'projection' must be a string.")
+    if projection not in ("full", "noAcl"):
+        raise InvalidProjectionValueError(
+            f"Invalid value for 'projection': '{projection}'. Must be 'full' or 'noAcl'."
+        )
+
+    if user_project is not None and not isinstance(user_project, str):
+        raise TypeError("Argument 'user_project' must be a string or None.")
+
+    # Convert page_token to starting offset; fallback to 0 on errors
+    try:
+        offset = int(page_token) if page_token is not None else 0
+        if offset < 0:
+            offset = 0
+    except (ValueError, TypeError):
+        offset = 0
+
+    # --------------------------- Filtering Logic -------------------------- #
+    filtered: List[Dict[str, Any]] = []
+
+    for bucket_name, bucket_data in DB.get("buckets", {}).items():
+        if bucket_data.get("project") != project:
+            continue
+
+        if prefix and not bucket_name.startswith(prefix):
+            continue
+
+        bucket_is_soft = bucket_data.get("softDeleted", False)
+        if soft_deleted and not bucket_is_soft:
+            continue
+        if not soft_deleted and bucket_is_soft:
+            continue
+
+        if projection == "full":
+            filtered.append(bucket_data)
+        else:
+            filtered.append(
+                {k: v for k, v in bucket_data.items() if k not in ["acl", "defaultObjectAcl"]}
+            )
+
+    # Ensure deterministic order (by name) for pagination predictability
+    filtered.sort(key=lambda b: b.get("name", ""))
+
+    # ----------------------------- Pagination ----------------------------- #
+    page_items = filtered[offset : offset + max_results]
+    next_token: Optional[str]
+    if offset + max_results < len(filtered):
+        next_token = str(offset + max_results)
+    else:
+        next_token = None
+
+    response: Dict[str, Any] = {"items": page_items}
+    if next_token is not None:
+        response["nextPageToken"] = next_token
+
+    return response
 
 
 def lockRetentionPolicy(
@@ -1095,126 +1603,183 @@ def lockRetentionPolicy(
     """
     Locks retention policy on a bucket.
 
-    This operation sets the `retentionPolicyLocked` flag to True, preventing future changes
-    to the retention policy. The action is conditional on the bucket's current metageneration
-    matching the specified value.
+    This function permanently locks the retention policy on a Google Cloud Storage bucket,
+    preventing any future changes to the retention period. Once locked, the retention policy
+    cannot be unlocked or modified. The operation is conditional on the bucket's current
+    metageneration matching the specified value for optimistic concurrency control.
 
     Args:
-        bucket (str): Name of the bucket on which to lock the retention policy.
-        if_metageneration_match (str): Locks only if the bucket's metageneration matches this value.
-        user_project (Optional[str]): The project to be billed for the request. Required for
-            Requester Pays buckets.
+        bucket (str): Name of the bucket on which to lock the retention policy. Must be a valid,
+            non-empty bucket name that follows Google Cloud Storage naming conventions.
+        if_metageneration_match (str): Locks only if the bucket's current metageneration matches
+            this value exactly. This ensures the bucket hasn't been modified since the client
+            last retrieved it. Must be a non-empty string representing a valid metageneration value.
+        user_project (Optional[str]): The project to be billed for this request. Required for
+            Requester Pays buckets. Must be a valid project identifier if specified.
 
     Returns:
-        Dict[str, Any]:
-        - On error:
-            - 'error' keyword with one of the following values:
-                - bucket not found
-                - metageneration mismatch
-        - On success:
-            - "bucket" keyword with the following value:
-                - dictionary with the following keys:
-                    - acl (List[BucketAccessControl])
-                    - billing (Dict[str, bool]):
-                        - requesterPays (bool)
-                    - cors (List[Dict[str, Any]]):
-                        - maxAgeSeconds (int)
-                        - method (List[str])
-                        - origin (List[str])
-                        - responseHeader (List[str])
-                    - customPlacementConfig (Dict[str, List[str]]):
-                        - dataLocations (List[str])
-                    - defaultEventBasedHold (bool)
-                    - defaultObjectAcl (List[ObjectAccessControl])
-                    - encryption (Dict[str, str]):
-                        - defaultKmsKeyName (str)
-                    - etag (str)
-                    - hierarchicalNamespace (Dict[str, bool]):
-                        - enabled (bool)
-                    - iamConfiguration (Dict[str, Any]):
-                        - bucketPolicyOnly (Dict[str, Any]):
-                            - enabled (bool)
-                            - lockedTime (str)
-                        - uniformBucketLevelAccess (Dict[str, Any]):
-                            - enabled (bool)
-                            - lockedTime (str)
-                        - publicAccessPrevention (str)
-                    - id (str)
-                    - ipFilter (Dict[str, Any]):
-                        - mode (str)
-                        - publicNetworkSource (Dict[str, List[str]]):
-                            - allowedIpCidrRanges (List[str])
-                        - vpcNetworkSources (List[Dict[str, Any]]):
-                            - network (str)
-                            - allowedIpCidrRanges (List[str])
-                    - kind (str)
-                    - labels (Dict[str, str])
-                    - lifecycle (Dict[str, List[Dict[str, Any]]]):
-                        - rule:
-                            - action (Dict[str, str]):
-                                - type (str)
-                                - storageClass (str)
-                            - condition (Dict[str, Any]):
-                                - age (int)
-                                - createdBefore (str)
-                                - customTimeBefore (str)
-                                - daysSinceCustomTime (int)
-                                - daysSinceNoncurrentTime (int)
-                                - isLive (bool)
-                                - matchesPattern (str)
-                                - matchesPrefix (List[str])
-                                - matchesSuffix (List[str])
-                                - matchesStorageClass (List[str])
-                                - noncurrentTimeBefore (str)
-                                - numNewerVersions (int)
-                    - autoclass (Dict[str, Any]):
-                        - enabled (bool)
-                        - toggleTime (str)
-                        - terminalStorageClass (str)
-                        - terminalStorageClassUpdateTime (str)
-                    - location (str)
-                    - locationType (str)
-                    - logging (Dict[str, str]):
-                        - logBucket (str)
-                        - logObjectPrefix (str)
-                    - generation (str)
-                    - metageneration (str)
-                    - name (str)
-                    - owner (Dict[str, str]):
-                        - entity (str)
-                        - entityId (str)
-                    - projectNumber (str)
-                    - retentionPolicy (Dict[str, Any]):
-                        - effectiveTime (str)
-                        - isLocked (bool)
-                        - retentionPeriod (str)
-                    - objectRetention (Dict[str, str]):
-                        - mode (str)
-                    - rpo (str)
-                    - selfLink (str)
-                    - softDeletePolicy (Dict[str, str]):
-                        - retentionDurationSeconds (str)
-                        - effectiveTime (str)
-                    - storageClass (str)
-                    - timeCreated (str)
-                    - updated (str)
-                    - softDeleteTime (str)
-                    - hardDeleteTime (str)
-                    - versioning (Dict[str, bool]):
-                        - enabled (bool)
-                    - website (Dict[str, str]):
-                        - mainPageSuffix (str)
-                        - notFoundPage (str)
-                    - satisfiesPZS (bool)
-                    - satisfiesPZI (bool)
+        Dict[str, Any]: Dictionary containing the updated bucket resource with key:
+            - bucket (Dict[str, Any]): The complete bucket resource with the locked retention policy.
+              Contains all bucket metadata including:
+                - acl (List[BucketAccessControl]): Access control list for the bucket.
+                - billing (Dict[str, bool]): Billing configuration.
+                    - requesterPays (bool): Whether requester pays for requests.
+                - cors (List[Dict[str, Any]]): Cross-origin resource sharing configuration.
+                    - maxAgeSeconds (int): Maximum age for preflight requests.
+                    - method (List[str]): Allowed HTTP methods.
+                    - origin (List[str]): Allowed origins.
+                    - responseHeader (List[str]): Headers exposed to the client.
+                - customPlacementConfig (Dict[str, List[str]]): Custom placement configuration.
+                    - dataLocations (List[str]): Regional locations for data placement.
+                - defaultEventBasedHold (bool): Default event-based hold setting.
+                - defaultObjectAcl (List[ObjectAccessControl]): Default object access control list.
+                - encryption (Dict[str, str]): Encryption configuration.
+                    - defaultKmsKeyName (str): Default KMS key for encryption.
+                - etag (str): HTTP ETag for the bucket resource.
+                - hierarchicalNamespace (Dict[str, bool]): Hierarchical namespace configuration.
+                    - enabled (bool): Whether hierarchical namespace is enabled.
+                - iamConfiguration (Dict[str, Any]): IAM configuration.
+                    - bucketPolicyOnly (Dict[str, Any]): Bucket policy only configuration.
+                        - enabled (bool): Whether bucket policy only is enabled.
+                        - lockedTime (str): Time when policy was locked.
+                    - uniformBucketLevelAccess (Dict[str, Any]): Uniform bucket-level access.
+                        - enabled (bool): Whether uniform access is enabled.
+                        - lockedTime (str): Time when uniform access was locked.
+                    - publicAccessPrevention (str): Public access prevention setting.
+                - id (str): Unique identifier for the bucket.
+                - ipFilter (Dict[str, Any]): IP filtering configuration.
+                    - mode (str): IP filtering mode.
+                    - publicNetworkSource (Dict[str, List[str]]): Public network source config.
+                        - allowedIpCidrRanges (List[str]): Allowed IP CIDR ranges.
+                    - vpcNetworkSources (List[Dict[str, Any]]): VPC network sources.
+                        - network (str): VPC network name.
+                        - allowedIpCidrRanges (List[str]): Allowed IP ranges for this VPC.
+                - kind (str): Resource type, always "storage#bucket".
+                - labels (Dict[str, str]): User-defined labels for the bucket.
+                - lifecycle (Dict[str, List[Dict[str, Any]]]): Lifecycle management configuration.
+                    - rule (List[Dict[str, Any]]): Lifecycle rules.
+                        - action (Dict[str, str]): Action to take.
+                            - type (str): Action type (e.g., "Delete", "SetStorageClass").
+                            - storageClass (str): Target storage class for SetStorageClass.
+                        - condition (Dict[str, Any]): Conditions for applying the rule.
+                            - age (int): Age in days.
+                            - createdBefore (str): Created before this date.
+                            - customTimeBefore (str): Custom time before this date.
+                            - daysSinceCustomTime (int): Days since custom time.
+                            - daysSinceNoncurrentTime (int): Days since becoming noncurrent.
+                            - isLive (bool): Whether object is live.
+                            - matchesPattern (str): Pattern to match object names.
+                            - matchesPrefix (List[str]): Prefixes to match.
+                            - matchesSuffix (List[str]): Suffixes to match.
+                            - matchesStorageClass (List[str]): Storage classes to match.
+                            - noncurrentTimeBefore (str): Noncurrent time before this date.
+                            - numNewerVersions (int): Number of newer versions.
+                - autoclass (Dict[str, Any]): Autoclass configuration.
+                    - enabled (bool): Whether autoclass is enabled.
+                    - toggleTime (str): Time when autoclass was toggled.
+                    - terminalStorageClass (str): Terminal storage class.
+                    - terminalStorageClassUpdateTime (str): Last update time for terminal class.
+                - location (str): Geographic location of the bucket.
+                - locationType (str): Type of location (region, dual-region, multi-region).
+                - logging (Dict[str, str]): Access logging configuration.
+                    - logBucket (str): Destination bucket for access logs.
+                    - logObjectPrefix (str): Prefix for log object names.
+                - generation (str): Generation number of the bucket metadata.
+                - metageneration (str): Metageneration number (incremented after update).
+                - name (str): Name of the bucket.
+                - owner (Dict[str, str]): Owner information.
+                    - entity (str): Owner entity identifier.
+                    - entityId (str): Owner entity ID.
+                - projectNumber (str): Project number that owns the bucket.
+                - retentionPolicy (Dict[str, Any]): Retention policy configuration.
+                    - effectiveTime (str): Time when retention policy became effective.
+                    - isLocked (bool): Whether retention policy is locked (will be True after this operation).
+                    - retentionPeriod (str): Retention period in seconds.
+                - objectRetention (Dict[str, str]): Object retention configuration.
+                    - mode (str): Object retention mode.
+                - rpo (str): Recovery point objective setting.
+                - selfLink (str): URI of this bucket resource.
+                - softDeletePolicy (Dict[str, str]): Soft delete policy configuration.
+                    - retentionDurationSeconds (str): Retention duration for soft-deleted objects.
+                    - effectiveTime (str): Time when soft delete policy became effective.
+                - storageClass (str): Default storage class for objects in the bucket.
+                - timeCreated (str): Time when the bucket was created.
+                - updated (str): Time when the bucket was last updated.
+                - softDeleteTime (str): Time when bucket was soft-deleted (if applicable).
+                - hardDeleteTime (str): Time when bucket will be hard-deleted (if applicable).
+                - versioning (Dict[str, bool]): Object versioning configuration.
+                    - enabled (bool): Whether object versioning is enabled.
+                - website (Dict[str, str]): Website configuration.
+                    - mainPageSuffix (str): Main page suffix for website.
+                    - notFoundPage (str): Not found page for website.
+                - satisfiesPZS (bool): Whether bucket satisfies Physical Zone Separation.
+                - satisfiesPZI (bool): Whether bucket satisfies Physical Zone Isolation.
+
+    Raises:
+        TypeError: If any argument is of an incorrect type.
+        ValueError: If bucket name violates Google Cloud Storage naming conventions,
+                   if metageneration format is invalid, or if user_project format is invalid.
+        BucketNotFoundError: If the specified bucket does not exist.
+        MetagenerationMismatchError: If the provided metageneration does not match
+                                   the bucket's current metageneration.
     """
+    # --- Input Validation ---
+    
+    # Validate bucket parameter
+    if not isinstance(bucket, str):
+        raise TypeError(f"Argument 'bucket' must be a string, got {type(bucket).__name__}.")
+    
+    if not bucket.strip():
+        raise ValueError("Argument 'bucket' cannot be empty or contain only whitespace.")
+    
+    # Validate bucket name follows basic Google Cloud Storage naming conventions
+    if len(bucket) < 3 or len(bucket) > 63:
+        raise ValueError("Bucket name must be between 3 and 63 characters long.")
+    
+    if bucket.startswith('.') or bucket.endswith('.') or '..' in bucket:
+        raise ValueError("Bucket name cannot start or end with dots, or contain consecutive dots.")
+    
+    # Validate if_metageneration_match parameter
+    if not isinstance(if_metageneration_match, str):
+        raise TypeError(f"Argument 'if_metageneration_match' must be a string, got {type(if_metageneration_match).__name__}.")
+    
+    if not if_metageneration_match.strip():
+        raise ValueError("Argument 'if_metageneration_match' cannot be empty or contain only whitespace.")
+    
+    # Validate metageneration format (should be numeric string)
+    if not if_metageneration_match.isdigit():
+        raise ValueError("Argument 'if_metageneration_match' must be a numeric string representing a valid metageneration.")
+    
+    # Validate user_project parameter
+    if user_project is not None:
+        if not isinstance(user_project, str):
+            raise TypeError(f"Argument 'user_project' must be a string or None, got {type(user_project).__name__}.")
+        if not user_project.strip():
+            raise ValueError("Argument 'user_project' cannot be empty or contain only whitespace if specified.")
+    
+    # --- Core Logic ---
+    
+    # Check if bucket exists
     if bucket not in DB["buckets"]:
-        return {"error": "Bucket not found"}
+        raise BucketNotFoundError(f"Bucket '{bucket}' not found.")
+    
     bucket_data = DB["buckets"][bucket]
-    if bucket_data.get("metageneration") != if_metageneration_match:
-        return {"error": "Metageneration mismatch"}
+    
+    # Check metageneration match for optimistic concurrency control
+    current_metageneration = str(bucket_data.get("metageneration", "0"))
+    if current_metageneration != if_metageneration_match:
+        raise MetagenerationMismatchError(
+            f"Metageneration mismatch for bucket '{bucket}': Required '{if_metageneration_match}', found '{current_metageneration}'."
+        )
+    
+    # Lock the retention policy
     bucket_data["retentionPolicyLocked"] = True
-    return {"message": f"Retention policy locked for bucket '{bucket}'"}
+    
+    # Update metageneration to reflect the change
+    bucket_data["metageneration"] = str(int(current_metageneration) + 1)
+    
+    # Return the complete bucket object as promised in docstring
+    return {"bucket": bucket_data}
 
 
 def patch(
@@ -1598,64 +2163,160 @@ def patch(
 
 def setIamPolicy(
     bucket: str,
+    policy: Dict[str, Any],
     user_project: Optional[str] = None,
-) -> Tuple[Dict[str, Any], int]:
+) -> Dict[str, Any]:
     """
     Updates an IAM policy for the specified bucket.
 
+    This function replaces the existing IAM policy for a bucket with the provided policy.
+    The policy must contain valid role bindings with properly formatted members and roles.
+
     Args:
-        bucket (str): Name of the bucket whose IAM policy is being updated.
+        bucket (str): Name of the bucket whose IAM policy is being updated. Must be a valid,
+            non-empty bucket name that follows Google Cloud Storage naming conventions.
+        policy (Dict[str, Any]): The IAM policy to set on the bucket. Must contain:
+            - bindings (List[Dict[str, Any]]): List of role-member associations. Each binding contains:
+                - role (str): IAM role string. Valid roles:
+                    - "roles/storage.admin": Full control of Google Cloud Storage resources.
+                    - "roles/storage.objectViewer": Read-only access to objects.
+                    - "roles/storage.objectCreator": Access to create objects.
+                    - "roles/storage.objectAdmin": Full control of objects.
+                    - "roles/storage.legacyObjectReader": Read-only access to objects without listing.
+                    - "roles/storage.legacyObjectOwner": Read/write access to existing objects without listing.
+                    - "roles/storage.legacyBucketReader": Read access to buckets with object listing.
+                    - "roles/storage.legacyBucketWriter": Read access with object creation/deletion.
+                    - "roles/storage.legacyBucketOwner": Read and write access to buckets.
+                - members (List[str]): List of member identifiers. Valid formats:
+                    - "allUsers": Anyone on the internet.
+                    - "allAuthenticatedUsers": Anyone with a Google account.
+                    - "user:<email>": Specific user email (e.g., "user:alice@gmail.com").
+                    - "serviceAccount:<email>": Service account email.
+                    - "group:<email>": Google group email.
+                    - "domain:<domain>": Google Apps domain (e.g., "domain:example.com").
+                    - "projectOwner:<projectid>": Project owners.
+                    - "projectEditor:<projectid>": Project editors.
+                    - "projectViewer:<projectid>": Project viewers.
+                - condition (Optional[Dict[str, Any]]): Optional condition expression with:
+                    - title (str): Short description of the condition.
+                    - description (Optional[str]): Detailed explanation.
+                    - expression (str): Common Expression Language (CEL) syntax string.
+                    - location (Optional[str]): Optional location for debugging.
+            - etag (Optional[str]): HTTP 1.1 entity tag for the policy. If provided, used for optimistic concurrency control.
+            - kind (Optional[str]): Resource kind, should be "storage#policy" if provided.
+            - resourceId (Optional[str]): Resource ID the policy applies to. Ignored on input.
+            - version (Optional[int]): IAM policy format version. Defaults to 1 if not specified.
         user_project (Optional[str]): The project to be billed for this request. Required for
-            Requester Pays buckets.
+            Requester Pays buckets. Defaults to None.
 
     Returns:
-        Tuple[Dict[str, Any], int]:
-        - On error:
-            - {"error": "Bucket <name> not found"}, 404
-        - On success:
-            - The updated IAM policy object (Dict)
-                - bindings (List[Dict[str, Any]]): Associations between roles and members. Each binding may contain:
-                    - role (str): Role string assigned to members.
-                      One of:
-                        - roles/storage.admin
-                        - roles/storage.objectViewer
-                        - roles/storage.objectCreator
-                        - roles/storage.objectAdmin
-                        - roles/storage.legacyObjectReader
-                        - roles/storage.legacyObjectOwner
-                        - roles/storage.legacyBucketReader
-                        - roles/storage.legacyBucketWriter
-                        - roles/storage.legacyBucketOwner
-                    - members (List[str]): Members granted the role.
-                      One of:
-                        - allUsers
-                        - allAuthenticatedUsers
-                        - user:<email>
-                        - group:<email>
-                        - domain:<domain>
-                        - serviceAccount:<email>
-                        - projectOwner:<projectId>
-                        - projectEditor:<projectId>
-                        - projectViewer:<projectId>
-                    - condition (Optional[Dict[str, Any]]): A condition expression that limits when
-                      the binding applies, following the `Expr` format:
+        Dict[str, Any]: The updated IAM policy object containing:
+            - bindings (List[Dict[str, Any]]): List of role-member associations that were set. Each binding contains:
+                - role (str): IAM role string assigned to members. One of:
+                    - "roles/storage.admin": Full control of Google Cloud Storage resources.
+                    - "roles/storage.objectViewer": Read-only access to objects.
+                    - "roles/storage.objectCreator": Access to create objects.
+                    - "roles/storage.objectAdmin": Full control of objects.
+                    - "roles/storage.legacyObjectReader": Read-only access to objects without listing.
+                    - "roles/storage.legacyObjectOwner": Read/write access to existing objects without listing.
+                    - "roles/storage.legacyBucketReader": Read access to buckets with object listing.
+                    - "roles/storage.legacyBucketWriter": Read access with object creation/deletion.
+                    - "roles/storage.legacyBucketOwner": Read and write access to buckets.
+                - members (List[str]): List of member identifiers granted the role. Each member can be:
+                    - "allUsers": Anyone on the internet.
+                    - "allAuthenticatedUsers": Anyone with a Google account.
+                    - "user:<email>": Specific user email (e.g., "user:alice@gmail.com").
+                    - "serviceAccount:<email>": Service account email.
+                    - "group:<email>": Google group email.
+                    - "domain:<domain>": Google Apps domain (e.g., "domain:example.com").
+                    - "projectOwner:<projectid>": Project owners.
+                    - "projectEditor:<projectid>": Project editors.
+                    - "projectViewer:<projectid>": Project viewers.
+                - condition (Optional[Dict[str, Any]]): Optional condition expression that restricts when the binding is applied. Contains:
                         - title (str): Short description of the condition.
-                        - description (str): Detailed explanation.
-                        - expression (str): CEL syntax expression.
-                        - location (str): Optional location for debugging reference.
-                - etag (str): HTTP 1.1 entity tag for the policy.
-                - kind (str): Always "storage#policy".
-                - resourceId (str): The full ID of the bucket this policy applies to.
-                - version (int): IAM policy format version.
-            - HTTP status code 200
+                    - description (Optional[str]): Detailed explanation of the expression's intent.
+                    - expression (str): Common Expression Language (CEL) syntax string that defines the condition.
+                    - location (Optional[str]): Optional location string for debugging (e.g., file or position).
+            - etag (str): HTTP 1.1 entity tag for the policy. Used for optimistic concurrency control.
+            - kind (str): Resource kind, always "storage#policy".
+            - resourceId (str): The resource ID the policy applies to (format: "projects/_/buckets/{bucket}").
+            - version (int): IAM policy format version. Determines which features are available:
+                - Version 1: Basic role bindings.
+                - Version 3: Role bindings with conditions (conditional IAM).
+
+    Raises:
+        TypeError: If any argument is of an incorrect type.
+        ValueError: If bucket name violates Google Cloud Storage naming conventions,
+                   if policy structure is invalid, if roles are invalid, if member formats are invalid,
+                   or if user_project format is invalid.
+        BucketNotFoundError: If the specified bucket does not exist.
     """
-    if bucket not in DB.get("buckets", {}):
-        return {"error": f"Bucket {bucket} not found"}, 404
-
-    # Simulate setting IAM policy
-    DB["buckets"][bucket]["iamPolicy"] = {"bindings": []}
-
-    return DB["buckets"][bucket]["iamPolicy"], 200
+    from google_cloud_storage.SimulationEngine.models import IamPolicyModel
+    from pydantic import ValidationError
+    
+    # --- Input Validation ---
+    
+    # Validate bucket parameter
+    if not isinstance(bucket, builtins.str):
+        raise TypeError(f"Argument 'bucket' must be a string, got {type(bucket).__name__}.")
+    
+    if not bucket.strip():
+        raise ValueError("Argument 'bucket' cannot be empty or contain only whitespace.")
+    
+    # Validate bucket name follows basic Google Cloud Storage naming conventions
+    if len(bucket) < 3 or len(bucket) > 63:
+        raise ValueError("Bucket name must be between 3 and 63 characters long.")
+    
+    if bucket.startswith('.') or bucket.endswith('.') or '..' in bucket:
+        raise ValueError("Bucket name cannot start or end with dots, or contain consecutive dots.")
+    
+    # Validate policy parameter type
+    if not isinstance(policy, builtins.dict):
+        raise TypeError(f"Argument 'policy' must be a dictionary, got {type(policy).__name__}.")
+    
+    if not policy:
+        raise ValueError("Argument 'policy' cannot be empty.")
+    
+    # Validate user_project parameter
+    if user_project is not None:
+        if not isinstance(user_project, builtins.str):
+            raise TypeError(f"Argument 'user_project' must be a string or None, got {type(user_project).__name__}.")
+        if not user_project.strip():
+            raise ValueError("Argument 'user_project' cannot be empty or contain only whitespace if specified.")
+    
+    # Check if bucket exists
+    if bucket not in DB["buckets"]:
+        raise BucketNotFoundError(f"Bucket '{bucket}' not found.")
+    
+    # Use Pydantic validation for policy structure
+    try:
+        validated_policy = IamPolicyModel(**policy)
+    except ValidationError as e:
+        # Convert Pydantic validation errors to ValueError with descriptive messages
+        for error in e.errors():
+            field_path = " -> ".join(str(loc) for loc in error["loc"])
+            error_msg = error["msg"]
+            raise ValueError(f"Policy validation error in '{field_path}': {error_msg}")
+    
+    # --- Core Logic ---
+    
+    # Generate etag for the policy
+    policy_content = json.dumps({"bindings": [binding.dict() for binding in validated_policy.bindings]}, sort_keys=True)
+    etag = hashlib.md5(f"{policy_content}_{time.time()}".encode()).hexdigest()
+    
+    # Build the complete policy structure
+    complete_policy = {
+        "bindings": [binding.dict() for binding in validated_policy.bindings],
+        "etag": etag,
+        "kind": "storage#policy",
+        "resourceId": f"projects/_/buckets/{bucket}",
+        "version": validated_policy.version
+    }
+    
+    # Store the policy in the database
+    DB["buckets"][bucket]["iamPolicy"] = complete_policy
+    
+    return complete_policy
 
 
 def testIamPermissions(

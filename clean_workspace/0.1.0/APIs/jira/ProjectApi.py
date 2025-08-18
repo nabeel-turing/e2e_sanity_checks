@@ -181,20 +181,29 @@ def delete_project(project_key: str) -> Dict[str, str]:
     """
     Delete a project.
 
-    This method deletes a project.
+    This method deletes a project and all its associated components.
 
     Args:
-        project_key (str): The key of the project
+        project_key (str): The key of the project. Cannot be empty.
 
     Returns:
         Dict[str, str]: A dictionary containing:
             - deleted (str): The key of the deleted project
 
     Raises:
-        ValueError: If the project_key is not found
+        TypeError: If project_key is not a string.
+        ProjectInputError: If project_key is an empty string.
+        ValueError: If the project_key is not found.
     """
+    # Input validation for project_key
+    if not isinstance(project_key, str):
+        raise TypeError("project_key must be a string.")
+    if not project_key.strip():  # Check for empty string and whitespace-only strings
+        raise ProjectInputError("project_key cannot be empty.")
+
+    # Check if project exists
     if project_key not in DB["projects"]:
-        return {"error": f"Project '{project_key}' does not exist."}
+        raise ValueError(f"Project with key '{project_key}' not found.")
 
     # Remove the project from DB
     DB["projects"].pop(project_key)

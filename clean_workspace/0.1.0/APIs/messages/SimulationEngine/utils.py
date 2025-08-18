@@ -127,10 +127,42 @@ def _list_messages(
         raise ValueError(f"Recipient with id '{recipient_id}' not found.")
 
     all_recipients = DB.get("recipients", {}).values()
-    if recipient_name and not any(
-        recipient_name.lower() in r.get("contact_name", "").lower() for r in all_recipients
-    ):
-        raise ValueError(f"Recipient with name containing '{recipient_name}' not found.")
+
+    # Build a list of known recipient names from the recipients DB
+    searchable_names: List[str] = []
+    if recipient_name:
+        for recipient_record in all_recipients:
+            if not isinstance(recipient_record, dict):
+                continue
+            # Top-level contact_name
+            top_level_name = recipient_record.get("contact_name")
+            if isinstance(top_level_name, str):
+                searchable_names.append(top_level_name)
+            # Nested phone.contact_name (Contacts-linked shape)
+            phone_obj = recipient_record.get("phone")
+            if isinstance(phone_obj, dict):
+                phone_name = phone_obj.get("contact_name")
+                if isinstance(phone_name, str):
+                    searchable_names.append(phone_name)
+            # Derive from names[0].givenName/familyName or displayName if present
+            names_list = recipient_record.get("names")
+            if isinstance(names_list, list) and names_list:
+                primary_name = names_list[0] if isinstance(names_list[0], dict) else None
+                if isinstance(primary_name, dict):
+                    display_name = primary_name.get("displayName") or ""
+                    given = primary_name.get("givenName") or ""
+                    family = primary_name.get("familyName") or ""
+                    combined = f"{given} {family}".strip()
+                    if display_name:
+                        searchable_names.append(display_name)   
+                    elif combined:
+                        searchable_names.append(combined)
+
+        # Raise only if we have any known names and none match
+        if searchable_names and not any(
+            recipient_name.lower() in name.lower() for name in searchable_names
+        ):
+            raise ValueError(f"Recipient with name containing '{recipient_name}' not found.")
 
     messages = list(DB.get("messages", {}).values())
     

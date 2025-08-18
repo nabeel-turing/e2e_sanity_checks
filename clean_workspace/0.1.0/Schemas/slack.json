@@ -1041,25 +1041,25 @@
   },
   {
     "name": "open_conversation",
-    "description": "Opens or resumes a conversation between users.\n\nThis function opens or resumes a conversation between users. When return_im=False (default), \nthe function returns minimal channel information containing only the channel ID. This is useful \nwhen you just need to reference the channel without needing its full metadata. The function can \neither resume an existing conversation by channel ID or create a new one with specified users.\nNote: Returns existing conversation if same user combination already exists.",
+    "description": "Opens or resumes a direct message or multi-person direct message.\n\nThis function opens or resumes a conversation between users. When return_im=False (default),\nthe function returns minimal channel information containing only the channel ID. When return_im=True,\nit returns the full channel object with all metadata. The function can either resume an existing\nconversation by channel ID or create a new one with specified users.\n\n\nNote: Returns existing conversation if same user combination already exists. When creating a new conversation \nwith the `users` parameter, the current user is automatically included in the conversation. You don't need to \nexplicitly include the current user in the users list.",
     "parameters": {
       "type": "object",
       "properties": {
         "channel": {
           "type": "string",
-          "description": "Resume a conversation by supplying a channel ID. \nDefaults to None."
+          "description": "Resume a conversation by supplying a channel ID.\nSupply either this OR users, not both. Defaults to None."
         },
         "prevent_creation": {
           "type": "boolean",
-          "description": "Prevents creating a new conversation. \nDefaults to False."
+          "description": "Set to True to prevent creating a new conversation if one doesn't exist.\nDefaults to False."
         },
         "return_im": {
           "type": "boolean",
-          "description": "If True, returns the full channel definition including all metadata. \nIf False, returns minimal channel information. Defaults to False."
+          "description": "If True, returns the full channel definition including all metadata.\nIf False, returns minimal channel information (just ID). Defaults to False."
         },
         "users": {
           "type": "string",
-          "description": "Comma-separated list of users. Defaults to None."
+          "description": "Comma-separated list of user IDs to include in the conversation.\nThe current user will be automatically included if not already in the list.\nSupply either this OR channel, not both. Defaults to None."
         }
       }
     }

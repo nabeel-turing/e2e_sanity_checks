@@ -68,7 +68,7 @@ _function_map = {
   "get_issue_by_id": "jira.IssueApi.get_issue",
   "update_issue_by_id": "jira.IssueApi.update_issue",
   "delete_issue_by_id": "jira.IssueApi.delete_issue",
-  "bulk_delete_issues": "jira.IssueApi.bulk_delete_issues_bulk",
+  "bulk_delete_issues": "jira.IssueApi.bulk_delete_issues",
   "assign_issue_to_user": "jira.IssueApi.assign_issue",
   "perform_bulk_issue_operations": "jira.IssueApi.bulk_issue_operation",
   "search_issues_for_picker": "jira.IssueApi.issue_picker",

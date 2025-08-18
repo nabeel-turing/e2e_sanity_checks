@@ -126,7 +126,7 @@ class TestSearchDirectory(BaseTestCaseWithErrorHandler):
 
     def test_search_unsearchable_field(self):
         """Test searching by a field that is not indexed (e.g., department)."""
-        results = search_directory(query="Product")
+        results = search_directory(query="Products")
         self.assertEqual(len(results), 0)
 
     def test_search_default_max_results(self):

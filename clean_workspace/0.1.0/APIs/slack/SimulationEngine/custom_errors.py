@@ -189,4 +189,8 @@ class FileReadError(ValueError):
     """Custom error raised when a file cannot be read from the specified path."""
     pass
 
+class CurrentUserNotSetError(ValueError):
+    """Custom error raised when an operation requires a current user but none is set."""
+    pass
+
 

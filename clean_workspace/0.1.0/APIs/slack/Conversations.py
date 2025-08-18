@@ -9,7 +9,7 @@ import hashlib
 import random
 import string
 import base64
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 
 from .SimulationEngine.custom_errors import (
     ChannelNameMissingError,
@@ -24,7 +24,8 @@ from .SimulationEngine.custom_errors import (
     UserNotInConversationError,
     MissingUserIDError,
     NotAllowedError,
-    MissingPurposeError, 
+    MissingPurposeError,
+    CurrentUserNotSetError,
 )
 from .SimulationEngine.db import DB
 from .SimulationEngine import utils
@@ -494,37 +495,57 @@ def open_conversation(
     users: Optional[str] = None
 ) -> Dict[str, Any]:
     """
-    Opens or resumes a conversation between users.
+    Opens or resumes a direct message or multi-person direct message.
 
-    This function opens or resumes a conversation between users. When return_im=False (default), 
-    the function returns minimal channel information containing only the channel ID. This is useful 
-    when you just need to reference the channel without needing its full metadata. The function can 
-    either resume an existing conversation by channel ID or create a new one with specified users.
-    Note: Returns existing conversation if same user combination already exists.
+    This function opens or resumes a conversation between users. When return_im=False (default),
+    the function returns minimal channel information containing only the channel ID. When return_im=True,
+    it returns the full channel object with all metadata. The function can either resume an existing
+    conversation by channel ID or create a new one with specified users.
+
+
+    Note: Returns existing conversation if same user combination already exists. When creating a new conversation 
+    with the `users` parameter, the current user is automatically included in the conversation. You don't need to 
+    explicitly include the current user in the users list.
+
 
     Args:
-        channel (Optional[str]): Resume a conversation by supplying a channel ID. 
-            Defaults to None.
-        prevent_creation (bool): Prevents creating a new conversation. 
+        channel (Optional[str]): Resume a conversation by supplying a channel ID.
+            Supply either this OR users, not both. Defaults to None.
+        prevent_creation (bool): Set to True to prevent creating a new conversation if one doesn't exist.
             Defaults to False.
-        return_im (bool): If True, returns the full channel definition including all metadata. 
-            If False, returns minimal channel information. Defaults to False.
-        users (Optional[str]): Comma-separated list of users. Defaults to None.
+        return_im (bool): If True, returns the full channel definition including all metadata.
+            If False, returns minimal channel information (just ID). Defaults to False.
+        users (Optional[str]): Comma-separated list of user IDs to include in the conversation.
+            The current user will be automatically included if not already in the list.
+            Supply either this OR channel, not both. Defaults to None.
 
     Returns:
         Dict[str, Any]: A dictionary containing:
             - ok (bool): Whether the operation was successful (always True for success)
-            - channel (dict): Channel information. Content varies based on return_im parameter:
+            - channel (Dict[str, Any]): Channel information. Content varies based on return_im parameter:
+
+                When `return_im` is False:
                 - id (str): Channel ID
-                - name (str): Channel name (comma-separated user list for conversations)
-                - conversations (dict): Conversation metadata
-                - messages (list): List of messages in conversation
-                - is_private (bool): Whether conversation is private (True for user conversations)
+
+                When `return_im` is True:
+                - id (str): Channel ID
+                - name (str): Channel name (comma-separated, sorted user list)
+                - is_private (bool): Whether conversation is private (True for DMs/MPDMs)
+                - conversations (Dict[str, Any]): Conversation metadata including:
+                    - id (str): Conversation ID (same as channel ID)
+                    - members (List[str]): List of user IDs for all conversation members
+                    - users (List[str]): Same as members (compatibility field)
+                    - is_im (bool): True for 2-person direct messages
+                    - is_mpim (bool): True for multi-person direct messages (3+ users)
+                    - user (str): Other user's ID (only present for 2-person DMs)
+                - messages (List[Dict[str, Any]]): List of message objects (initially empty for new conversations)
 
     Raises:
         TypeError: If any parameter has incorrect type
-        ValueError: If both channel and users are provided, or neither are provided, 
+        ValueError: If both channel and users are provided, or neither are provided,
                    or channel not found, or conversation not found when prevent_creation is True
+        CurrentUserNotSetError: If no current user is set in the database when creating
+                               a new conversation. Use utils.set_current_user(user_id) to set one.
     """
     # Type validation
     if channel is not None and not isinstance(channel, str):
@@ -556,8 +577,24 @@ def open_conversation(
         raise ValueError("channel not found")
 
     if users:
-        user_list = sorted(users.split(","))  # Ensure consistent ordering for multi-person DMs
-        
+        user_list = [user.strip() for user in users.split(",")]
+
+        # Get current user from database
+        current_user_id = DB.get("current_user", {}).get("id")
+
+        # Check if current user is set - required for conversation creation
+        if not current_user_id:
+            raise CurrentUserNotSetError(
+                "No current user is set. Please set a current user first using set_current_user(user_id)."
+            )
+
+        # Automatically include current user if not already present
+        # Per Slack API spec: "Don't include the ID of the user you're calling conversations.open on behalf of – we do that for you."
+        if current_user_id not in user_list:
+            user_list.append(current_user_id)
+
+        user_list = sorted(user_list)  # Ensure consistent ordering for multi-person DMs
+
         # Check for existing conversation with same users
         existing_id, existing_data = utils.find_existing_conversation(user_list, DB)
         if existing_id:

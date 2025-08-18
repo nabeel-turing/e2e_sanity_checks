@@ -108,13 +108,13 @@
   },
   {
     "name": "search_contacts",
-    "description": "Search contacts by name, email, or phone number.\n\nThis function searches for contacts using a provided search term. The number of results returned can be limited.",
+    "description": "Search contacts by name, email, phone number, notes, or organization.\n\nThis function searches for contacts using a provided search term. The number of results returned can be limited.",
     "parameters": {
       "type": "object",
       "properties": {
         "query": {
           "type": "string",
-          "description": "Search term to find in contacts; matches against names, emails, and phone numbers."
+          "description": "Search term to find in contacts; matches against names, emails, phone numbers, notes, and organizations."
         },
         "max_results": {
           "type": "integer",

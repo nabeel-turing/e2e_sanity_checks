@@ -531,15 +531,15 @@ class TestCalendarAPI(BaseTestCaseWithErrorHandler):
             )
         self.assertEqual(str(cm.exception), "destination must be a string.")
 
-        # Test sendNotifications type validation
+        # Test sendUpdates type validation
         with self.assertRaises(TypeError) as cm:
             move_event(
                 calendarId=source_cal,
                 eventId=ev_id,
                 destination=dest_cal,
-                sendNotifications="true"  # should be boolean
+                sendUpdates=123  # should be string
             )
-        self.assertEqual(str(cm.exception), "sendNotifications must be a boolean.")
+        self.assertEqual(str(cm.exception), "sendUpdates must be a string if provided.")
 
     def test_move_event_empty_validations(self):
         """Test empty/whitespace validations for move_event parameters."""
@@ -796,7 +796,6 @@ class TestCalendarAPI(BaseTestCaseWithErrorHandler):
         result = quick_add_event(
             calendarId="primary",
             text="Test event with options",
-            sendNotifications=True,
             sendUpdates="all"
         )
         self.assertIsInstance(result, dict)
@@ -4006,6 +4005,28 @@ class TestCalendarAPI(BaseTestCaseWithErrorHandler):
             self.assertIsInstance(result, dict)
             self.assertIn("id", result)
             self.assertEqual(result["summary"], f"Patched Event with sendUpdates={send_updates}")
+
+    def test_create_event_with_attachment(self):
+        """Test creating an event with an attachment."""
+        cal_id = "primary"
+        resource = {
+            "summary": "Event with Attachment",
+            "start": {"dateTime": "2024-01-01T10:00:00Z"},
+            "end": {"dateTime": "2024-01-01T11:00:00Z"},
+            "attachments": [
+                {"fileUrl": "https://example.com/attachment.pdf"}
+            ]
+        }
+        event = create_event(calendarId=cal_id, resource=resource)
+        self.assertIn("attachments", event)
+        self.assertEqual(len(event["attachments"]), 1)
+        self.assertEqual(event["attachments"][0]["fileUrl"], "https://example.com/attachment.pdf")
+
+        # Verify the event is stored correctly in the DB
+        retrieved_event = get_event(calendarId=cal_id, eventId=event["id"])
+        self.assertIn("attachments", retrieved_event)
+        self.assertEqual(len(retrieved_event["attachments"]), 1)
+        self.assertEqual(retrieved_event["attachments"][0]["fileUrl"], "https://example.com/attachment.pdf")
     
     def test_load_state_with_event_with_colon(self):
         """

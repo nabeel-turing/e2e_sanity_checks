@@ -1,15 +1,26 @@
 # APIs/jira/SettingsApi.py
-from typing import Dict, Any
+from typing import Dict, Any, List
+from .SimulationEngine.db import DB
 
-def get_settings() -> Dict[str, Any]:
+def get_settings() -> Dict[str, List[Dict[str, Any]]]:
     """
     Get all settings.
 
     This method returns all settings in the system.
 
     Returns:
-        Dict[str, Any]: A dictionary containing:
-            - settings (Dict[str, Any]): A dictionary containing all settings
-                - exampleSetting (bool): An example setting, currently hardcoded to True
+        Dict[str, List[Dict[str, Any]]]: A dictionary containing all the unique settings as a list of dictionaries 
+        where each dictionary contains one setting key-value pair with setting as the key and its value as the value.
+        
+        - settings (List[Dict[str, Any]]): A list of dictionaries containing all the unique settings
+
     """
-    return {"settings": {"exampleSetting": True}}
+    settings = []
+    users = DB.get("users", {})
+    for key, value in users.items():
+        user_settings = value.get("settings", {})
+        for setting, setting_value in user_settings.items():
+            if {setting: setting_value} not in settings:
+                settings.append({setting: setting_value})
+
+    return {"settings": settings}

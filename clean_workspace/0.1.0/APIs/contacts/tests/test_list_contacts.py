@@ -26,6 +26,7 @@ class TestListContacts(BaseTestCaseWithErrorHandler):
                     "etag": "etag1",
                     "names": [{"givenName": "John", "familyName": "Doe"}],
                     "emailAddresses": [{"value": "john.doe@example.com"}],
+                    "notes": "My best friend"
                 },
                 "people/c2": {
                     "resourceName": "people/c2",
@@ -218,6 +219,28 @@ class TestListContacts(BaseTestCaseWithErrorHandler):
         result_with_no_filter = list_contacts()
         self.assertEqual(len(result_with_empty_filter['contacts']), 4)
         self.assertEqual(result_with_empty_filter, result_with_no_filter)
+
+    def test_list_contacts_includes_notes_field(self):
+        """
+        Test that the 'notes' field is included in the output when it exists.
+        """
+        result = list_contacts(name_filter="John")
+        self.assertEqual(len(result['contacts']), 2)
+        
+        # Find the contact that should have notes
+        john_doe_contact = next((c for c in result['contacts'] if c['resourceName'] == "people/c1"), None)
+        
+        # Assert that the contact was found and has the correct note
+        self.assertIsNotNone(john_doe_contact)
+        self.assertIn("notes", john_doe_contact)
+        self.assertEqual(john_doe_contact["notes"], "My best friend")
+        
+        # Find a contact that should not have notes
+        john_appleseed_contact = next((c for c in result['contacts'] if c['resourceName'] == "people/c4"), None)
+
+        # Assert that the contact was found and does not have the notes field
+        self.assertIsNotNone(john_appleseed_contact)
+        self.assertIsNone(john_appleseed_contact['notes'])
 
 if __name__ == '__main__':
     unittest.main()

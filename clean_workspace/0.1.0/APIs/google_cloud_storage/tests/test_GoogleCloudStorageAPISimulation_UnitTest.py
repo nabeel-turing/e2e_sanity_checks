@@ -77,29 +77,34 @@ class TestGoogleCloudStorageFunctions(BaseTestCaseWithErrorHandler):
         self.assertIn("bucket", result)
 
     def test_restore_bucket_not_found(self):
-        result = google_cloud_storage.Buckets.restore("non-existent", generation="1")
-        self.assertEqual(result["error"], "Bucket not found")
+        with self.assertRaises(google_cloud_storage.Buckets.BucketNotFoundError):
+            google_cloud_storage.Buckets.restore("non-existent", generation="1")
 
     def test_restore_bucket_not_soft_deleted(self):
         bucket = google_cloud_storage.Buckets.insert("test-project")["bucket"]
-        result = google_cloud_storage.Buckets.restore(bucket["name"], generation="1")
-        self.assertEqual(result["error"], "Bucket is not soft deleted")
+        with self.assertRaises(google_cloud_storage.Buckets.NotSoftDeletedError):
+            google_cloud_storage.Buckets.restore(bucket["name"], generation="1")
 
     def test_restore_bucket_generation_mismatch(self):
         bucket = google_cloud_storage.Buckets.insert("test-project")["bucket"]
         google_cloud_storage.Buckets.DB["buckets"][bucket["name"]]["softDeleted"] = True
         google_cloud_storage.Buckets.DB["buckets"][bucket["name"]]["generation"] = "2"
-        result = google_cloud_storage.Buckets.restore(bucket["name"], generation="1")
-        self.assertEqual(result["error"], "Generation mismatch")
+        with self.assertRaises(google_cloud_storage.Buckets.GenerationMismatchError):
+            google_cloud_storage.Buckets.restore(bucket["name"], generation="1")
 
     def test_relocate_bucket(self):
         bucket = google_cloud_storage.Buckets.insert("test-project")["bucket"]
-        result = google_cloud_storage.Buckets.relocate(bucket["name"])
-        self.assertIn("message", result)
+        request_body = {"destinationLocation": "us-west1"}
+        result = google_cloud_storage.Buckets.relocate(bucket["name"], request_body)
+        self.assertIn("done", result)
+        self.assertIn("metadata", result)
+        self.assertEqual(result["kind"], "storage#operation")
 
     def test_relocate_bucket_not_found(self):
-        result = google_cloud_storage.Buckets.relocate("non-existent")
-        self.assertEqual(result["error"], "Bucket not found")
+        request_body = {"destinationLocation": "us-west1"}
+        with self.assertRaises(Exception) as context:  # BucketNotFoundError
+            google_cloud_storage.Buckets.relocate("non-existent", request_body)
+        self.assertIn("not found", str(context.exception))
 
     def test_get_bucket_soft_deleted(self):
         bucket = google_cloud_storage.Buckets.insert("test-project")["bucket"]
@@ -121,23 +126,25 @@ class TestGoogleCloudStorageFunctions(BaseTestCaseWithErrorHandler):
         self.assertIn("iamPolicy", result)
 
     def test_getIamPolicy_not_found(self):
-        result = google_cloud_storage.Buckets.getIamPolicy("non-existent")
-        self.assertEqual(result["error"], "Bucket not found")
+        with self.assertRaises(Exception) as context:  # BucketNotFoundError
+            google_cloud_storage.Buckets.getIamPolicy("non-existent")
+        self.assertIn("not found", str(context.exception))
 
     def test_getIamPolicy_with_invalid_version(self):
         bucket = google_cloud_storage.Buckets.insert("test-project")["bucket"]
-        result = google_cloud_storage.Buckets.getIamPolicy(
-            bucket["name"], options_requested_policy_version=0
-        )
-        self.assertTrue("error" in result or "iamPolicy" in result)
+        with self.assertRaises(ValueError) as context:
+            google_cloud_storage.Buckets.getIamPolicy(
+                bucket["name"], options_requested_policy_version=0
+            )
+        self.assertIn("must be >= 1", str(context.exception))
 
     def test_getIamPolicy_with_negative_policy_version(self):
         bucket = google_cloud_storage.Buckets.insert("test-project")["bucket"]
-        result = google_cloud_storage.Buckets.getIamPolicy(
-            bucket["name"], options_requested_policy_version=-1
-        )
-        self.assertIn("error", result)
-        self.assertEqual(result["error"], "invalid policy version")
+        with self.assertRaises(ValueError) as context:
+            google_cloud_storage.Buckets.getIamPolicy(
+                bucket["name"], options_requested_policy_version=-1
+            )
+        self.assertIn("must be >= 1", str(context.exception))
 
     def test_getIamPolicy_with_valid_version(self):
         bucket = google_cloud_storage.Buckets.insert("test-project")["bucket"]
@@ -159,8 +166,9 @@ class TestGoogleCloudStorageFunctions(BaseTestCaseWithErrorHandler):
         self.assertIn("storageLayout", result)
 
     def test_getStorageLayout_not_found(self):
-        result = google_cloud_storage.Buckets.getStorageLayout("non-existent")
-        self.assertEqual(result["error"], "Bucket not found")
+        with self.assertRaises(Exception) as context:  # BucketNotFoundError
+            google_cloud_storage.Buckets.getStorageLayout("non-existent")
+        self.assertIn("not found", str(context.exception))
 
     def test_insert_returns_expected_keys(self):
         result = google_cloud_storage.Buckets.insert("test-project")
@@ -284,25 +292,26 @@ class TestGoogleCloudStorageFunctions(BaseTestCaseWithErrorHandler):
         result = google_cloud_storage.Buckets.lockRetentionPolicy(
             bucket["name"], if_metageneration_match="1"
         )
-        self.assertTrue("message" in result or "bucket" in result)
-        if "message" in result:
-            self.assertIn("Retention policy locked", result["message"])
+        self.assertIn("bucket", result)
+        self.assertTrue(result["bucket"]["retentionPolicyLocked"])
 
     def test_lockRetentionPolicy_not_found(self):
-        result = google_cloud_storage.Buckets.lockRetentionPolicy(
-            "non-existent", if_metageneration_match="1"
-        )
-        self.assertEqual(result["error"], "Bucket not found")
+        with self.assertRaises(Exception) as context:  # BucketNotFoundError
+            google_cloud_storage.Buckets.lockRetentionPolicy(
+                "non-existent", if_metageneration_match="1"
+            )
+        self.assertIn("not found", str(context.exception))
 
     def test_lockRetentionPolicy_metageneration_mismatch(self):
         bucket = google_cloud_storage.Buckets.insert("test-project")["bucket"]
         google_cloud_storage.Buckets.DB["buckets"][bucket["name"]][
             "metageneration"
         ] = "1"
-        result = google_cloud_storage.Buckets.lockRetentionPolicy(
-            bucket["name"], if_metageneration_match="2"
-        )
-        self.assertEqual(result["error"], "Metageneration mismatch")
+        with self.assertRaises(Exception) as context:  # MetagenerationMismatchError
+            google_cloud_storage.Buckets.lockRetentionPolicy(
+                bucket["name"], if_metageneration_match="2"
+            )
+        self.assertIn("Metageneration mismatch", str(context.exception))
 
     def test_patch_bucket_success(self):
         bucket = google_cloud_storage.Buckets.insert("test-project")["bucket"]
@@ -358,14 +367,32 @@ class TestGoogleCloudStorageFunctions(BaseTestCaseWithErrorHandler):
 
     def test_setIamPolicy_success(self):
         bucket = google_cloud_storage.Buckets.insert("test-project")["bucket"]
-        result, status = google_cloud_storage.Buckets.setIamPolicy(bucket["name"])
-        self.assertEqual(status, 200)
+        policy = {
+            "bindings": [
+                {
+                    "role": "roles/storage.admin",
+                    "members": ["user:admin@example.com"]
+                }
+            ]
+        }
+        result = google_cloud_storage.Buckets.setIamPolicy(bucket["name"], policy)
         self.assertIn("bindings", result)
+        self.assertIn("etag", result)
+        self.assertEqual(result["kind"], "storage#policy")
+        self.assertEqual(result["resourceId"], f"projects/_/buckets/{bucket['name']}")
 
     def test_setIamPolicy_not_found(self):
-        result, status = google_cloud_storage.Buckets.setIamPolicy("non-existent")
-        self.assertEqual(status, 404)
-        self.assertEqual(result["error"], "Bucket non-existent not found")
+        policy = {
+            "bindings": [
+                {
+                    "role": "roles/storage.admin",
+                    "members": ["user:admin@example.com"]
+                }
+            ]
+        }
+        with self.assertRaises(google_cloud_storage.SimulationEngine.custom_errors.BucketNotFoundError) as context:
+            google_cloud_storage.Buckets.setIamPolicy("non-existent", policy)
+        self.assertIn("not found", str(context.exception))
 
     def test_testIamPermissions_success(self):
         bucket = google_cloud_storage.Buckets.insert("test-project")["bucket"]
@@ -717,4 +744,96 @@ class TestBucketsDelete(BaseTestCaseWithErrorHandler):
                 self.assertIn("deleted successfully", result["message"], "Expected 'deleted successfully' in message")
             # If the test passed, the bucket should be deleted even if we get an error response
             self.assertNotIn(bucket_name, TEST_BUCKETS_DELETE_DB["buckets"])
+
+    # New comprehensive validation tests
+    def test_empty_bucket_name(self):
+        """Test that empty bucket name raises ValueError."""
+        with patch('google_cloud_storage.Buckets.DB', self.test_db):
+            self.assert_error_behavior(
+                func_to_call=delete_bucket,
+                expected_exception_type=ValueError,
+                expected_message="Argument 'bucket' cannot be empty or contain only whitespace.",
+                bucket=""
+            )
+
+    def test_whitespace_only_bucket_name(self):
+        """Test that whitespace-only bucket name raises ValueError."""
+        with patch('google_cloud_storage.Buckets.DB', self.test_db):
+            self.assert_error_behavior(
+                func_to_call=delete_bucket,
+                expected_exception_type=ValueError,
+                expected_message="Argument 'bucket' cannot be empty or contain only whitespace.",
+                bucket="   "
+            )
+
+    def test_bucket_name_too_short(self):
+        """Test that bucket name shorter than 3 characters raises ValueError."""
+        with patch('google_cloud_storage.Buckets.DB', self.test_db):
+            self.assert_error_behavior(
+                func_to_call=delete_bucket,
+                expected_exception_type=ValueError,
+                expected_message="Bucket name must be between 3 and 63 characters long.",
+                bucket="ab"
+            )
+
+    def test_bucket_name_too_long(self):
+        """Test that bucket name longer than 63 characters raises ValueError."""
+        with patch('google_cloud_storage.Buckets.DB', self.test_db):
+            long_name = "a" * 64  # 64 characters
+            self.assert_error_behavior(
+                func_to_call=delete_bucket,
+                expected_exception_type=ValueError,
+                expected_message="Bucket name must be between 3 and 63 characters long.",
+                bucket=long_name
+            )
+
+    def test_bucket_name_starts_with_dot(self):
+        """Test that bucket name starting with dot raises ValueError."""
+        with patch('google_cloud_storage.Buckets.DB', self.test_db):
+            self.assert_error_behavior(
+                func_to_call=delete_bucket,
+                expected_exception_type=ValueError,
+                expected_message="Bucket name cannot start or end with dots, or contain consecutive dots.",
+                bucket=".invalid-bucket"
+            )
+
+    def test_bucket_name_ends_with_dot(self):
+        """Test that bucket name ending with dot raises ValueError."""
+        with patch('google_cloud_storage.Buckets.DB', self.test_db):
+            self.assert_error_behavior(
+                func_to_call=delete_bucket,
+                expected_exception_type=ValueError,
+                expected_message="Bucket name cannot start or end with dots, or contain consecutive dots.",
+                bucket="invalid-bucket."
+            )
+
+    def test_bucket_name_consecutive_dots(self):
+        """Test that bucket name with consecutive dots raises ValueError."""
+        with patch('google_cloud_storage.Buckets.DB', self.test_db):
+            self.assert_error_behavior(
+                func_to_call=delete_bucket,
+                expected_exception_type=ValueError,
+                expected_message="Bucket name cannot start or end with dots, or contain consecutive dots.",
+                bucket="invalid..bucket"
+            )
+
+    def test_valid_bucket_name_edge_cases(self):
+        """Test that valid bucket names at the edge of constraints work."""
+        with patch('google_cloud_storage.Buckets.DB', self.test_db):
+            # Add edge case buckets to test DB
+            TEST_BUCKETS_DELETE_DB["buckets"]["abc"] = {"metageneration": "1", "objects": []}  # 3 chars (minimum)
+            TEST_BUCKETS_DELETE_DB["buckets"]["a" * 63] = {"metageneration": "1", "objects": []}  # 63 chars (maximum)
+            TEST_BUCKETS_DELETE_DB["buckets"]["valid.bucket.name"] = {"metageneration": "1", "objects": []}  # dots allowed in middle
+            
+            # Test minimum length
+            result = delete_bucket(bucket="abc")
+            self.assertNotIn("abc", TEST_BUCKETS_DELETE_DB["buckets"])
+            
+            # Test maximum length
+            result = delete_bucket(bucket="a" * 63)
+            self.assertNotIn("a" * 63, TEST_BUCKETS_DELETE_DB["buckets"])
+            
+            # Test dots in middle (valid)
+            result = delete_bucket(bucket="valid.bucket.name")
+            self.assertNotIn("valid.bucket.name", TEST_BUCKETS_DELETE_DB["buckets"])
 

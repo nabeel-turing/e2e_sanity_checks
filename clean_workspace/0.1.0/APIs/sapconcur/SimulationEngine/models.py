@@ -290,11 +290,6 @@ class TripSummariesResponse(BaseModel):
 class InputPassengerModel(BaseModel):
     NameFirst: str
     NameLast: str
-    NameMiddle: Optional[str] = None
-    NamePrefix: Optional[str] = None
-    NameRemark: Optional[str] = None
-    NameSuffix: Optional[str] = None
-    NameTitle: Optional[str] = None
     TextName: Optional[str] = None
     FrequentTravelerProgram: Optional[str] = None
 
