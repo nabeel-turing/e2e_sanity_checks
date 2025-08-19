@@ -1,2 +1,0 @@
-_function_map = {
-}
