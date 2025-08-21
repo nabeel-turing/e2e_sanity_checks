@@ -16,5 +16,5 @@ __pycache__
 
 /execution_configs.csv
 /turing-delivery-g-ga-e36eb2300714.json
-# .DS_Store
+.DS_Store
 /tool_use_metadata_set_v2.pb
