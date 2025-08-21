@@ -4,6 +4,7 @@ import sys
 import shutil
 import json
 import copy
+import traceback
 from tqdm import tqdm
 from pathlib import Path
 
@@ -13,6 +14,8 @@ from nbclient import NotebookClient
 from nbclient.exceptions import CellExecutionError
 from datetime import datetime
 
+from notebook_parser import GAImplementationColabParser, get_code_blocks, create_auto_qc_notebook, SECTIONS
+
 from googleapiclient.http import MediaIoBaseDownload
 
 CLEAN_SOURCE_DIR = Path("/clean_workspace")
@@ -20,6 +23,7 @@ CONTENT_DIR = Path("/content")
 
 RESULTS_DIR = Path("/results")
 LOGS_DIR = Path("/logs")
+NOTEBOOK_OUTPUTS = Path("/notebook_results")
 
 
 TASK_FILE_PATH = "/execution_configs.csv"
@@ -346,7 +350,6 @@ def contains_final_assert(notebook_json):
                 return True
     return False
 
-
 def format_execution_result(result_object):
     
     def format_error_object(error_object):
@@ -374,6 +377,138 @@ def format_execution_result(result_object):
         'contains_final_assert': result_object['contains_final_assert']
     }
     
+def parse_colab_sections(notebook_json):
+
+
+    sections = {}
+    current_header = None
+    for cell in notebook_json['cells']:
+        cell_type = cell['cell_type']
+        cell_source = cell['source']
+        
+        
+        if cell_type == 'markdown':
+            if cell_source[0].startswith(HEADERS.install_dependencies):
+                current_header = HEADERS.install_dependencies
+                continue
+            if cell_source[0].startswith(HEADERS.initialisation):
+                current_header = HEADERS.initialisation
+                continue
+            if cell_source[0].startswith(HEADERS.initial_assertion):
+                current_header = HEADERS.initial_assertion
+                continue        
+            if cell_source[0].startswith(HEADERS.action):
+                current_header = HEADERS.action
+                continue        
+            if cell_source[0].startswith(HEADERS.final_assertion):
+                current_header = HEADERS.final_assertion
+                continue            
+        
+        if cell_type == 'code':
+            if current_header in [HEADERS.install_dependencies,
+                                  HEADERS.initialisation,
+                                  HEADERS.initial_assertion,
+                                  HEADERS.action,
+                                  HEADERS.final_assertion
+                                  ]:
+                if current_header not in sections:
+                    sections[current_header] = []
+                sections[current_header].append(cell_source)
+
+    for key, value in sections.items():
+        if key == HEADERS.install_dependencies:
+            cells = []
+            for block in value:
+                cells += [ln for ln in block if not ln.startswith('!pip')]
+            sections[key] = cells
+        elif key == HEADERS.initialisation:
+            total_cells = len(value)
+            if total_cells == 1:
+                sections[key] = ["\nstart_block()\n"] + value[0] + ["\nend_block()\n"]
+            elif total_cells > 1:
+                cells = []
+                for code_block in value:
+                    if code_block[0].startswith('# proto_ignore'):
+                        cells += ['\n'] + code_block
+                    else:
+                        cells += ["\nstart_block()\n"] + code_block + ["\nend_block()\n"]
+                sections[key] = cells
+        else:
+            combined_source = []
+            for code_cell in value:
+                combined_source += ['\n'] + code_cell
+            sections[key] = ["\nstart_block()\n"] + combined_source + ["\nend_block()\n"]
+
+    notebook = nbformat.v4.new_notebook()
+    notebook.cells = []  # Initialize empty cell list
+
+    notebook.cells.insert(0, {'cell_type': 'code', 'source': [preserve_state], 'metadata': {}, 'outputs': []})
+    for idx, section in enumerate([HEADERS.install_dependencies, HEADERS.initialisation, HEADERS.final_assertion, HEADERS.initial_assertion, HEADERS.action, HEADERS.final_assertion]):
+        notebook.cells.insert((idx*2)+1, {'cell_type': 'markdown', 'source': section, 'metadata': {}, 'outputs': []})
+        notebook.cells.insert((idx*2)+2, {'cell_type': 'code', 'source': sections.get(section, []), 'metadata': {}, 'outputs': []})
+
+    return notebook
+
+
+def run_nb_e2e(notebook):
+
+    # notebook = nbformat.reads(json.dumps(notebook_json), as_version=4)            
+    client = NotebookClient(notebook, timeout=600, kernel_name='python3', allow_errors=True)
+    execution_result = {
+        'script_passed': True,
+        'script_failure_msg': "N/A",
+        
+        f"{SECTIONS.SETUP.value} - {SECTIONS.INSTALL_AND_CLONE_REPO_CODE.value}": [],
+        f"{SECTIONS.SETUP.value} - {SECTIONS.IMPORT_APIS_AND_INITIATE_DBS.value}": [],
+        f"{SECTIONS.FINAL_ASSERTION.value}_NO_ACTION": [],
+        SECTIONS.INITIAL_ASSERTION.value: [],
+        SECTIONS.ACTION.value: [],
+        SECTIONS.FINAL_ASSERTION.value: []
+    }          
+    try:
+        client.execute()
+        current_header = None
+        for i, cell in enumerate(notebook.cells):
+            if cell['cell_type'] == "markdown":
+                current_header = ''.join(cell['source']).strip()
+            if cell['cell_type'] == "code":
+                outputs = cell.get("outputs", [])
+                
+                error_output = [output for output in outputs if output.get("output_type") == "error"]
+                print_time(error_output)
+                if not outputs or len(error_output) == 0:
+                    pass
+                    # execution_result[current_header].append("")
+                elif len(error_output) > 0:
+                    ename = error_output[0].get("ename", "Error")
+                    evalue = error_output[0].get("evalue", "No error message")
+                    execution_result[current_header].append(f"ErrorType: {ename}\nError Description: {evalue}")
+
+                    # print_time(remove_ansi_codes(str(e)[:49999]))                        
+    except:
+        # print_time(f"Notebook execution could not be completed due to an error")
+        error_tb = traceback.format_exc()
+        execution_result = {
+            'script_passed': False,
+            'script_failure_msg': error_tb,
+            
+            f"{SECTIONS.SETUP.value} - {SECTIONS.INSTALL_AND_CLONE_REPO_CODE.value}": [],
+            f"{SECTIONS.SETUP.value} - {SECTIONS.IMPORT_APIS_AND_INITIATE_DBS.value}": [],
+            f"{SECTIONS.FINAL_ASSERTION.value}_NO_ACTION": [],
+            SECTIONS.INITIAL_ASSERTION.value: [],
+            SECTIONS.ACTION.value: [],
+            SECTIONS.FINAL_ASSERTION.value: []
+        }
+    finally:
+        output_file = str(NOTEBOOK_OUTPUTS / f'{notebook_url_id}.ipynb')
+        nbformat.write(notebook, output_file)
+    print_time(execution_result)
+    separator = f'\n{"-"*40}\n'
+    for key in execution_result.keys():
+        if key not in ['script_failure_msg', 'script_passed']:
+            execution_result[key] = separator.join(execution_result[key])
+    return execution_result
+    
 if __name__ == "__main__":
 
     run_id = str(sys.argv[1])
@@ -391,60 +526,71 @@ if __name__ == "__main__":
 
     execution_results = []
 
-    print_time("starting sanitizing workspace")
-    sanitize_workspace()
-    print_time("finished sanitizing workspace")
-
-
     for notebook_url_id in tqdm(notebooks_to_run):
         execution_result = {}
         try:
             print_time(f"Starting colab: {notebook_url_id}")
-            print_time("starting downloading colab")
-            notebook_data = download_notebook(notebook_url_id)
-            print_time("finished downloading colab")
 
+            print_time("starting sanitizing workspace")
+            sanitize_workspace()
+            print_time("finished sanitizing workspace")            
+
+            
+            notebook_data = download_notebook(notebook_url_id)
             notebook_json = json.loads(notebook_data)
 
-            print_time("starting with action sanity")
-            error_cells_action = check_execution_errors(notebook_json)
-            print_time("finished with action sanity")
+            print_time("starting downloading/parsing colab")
+            colab_info = {
+                'id': notebook_url_id,
+                'name': f'{notebook_url_id}.ipynb'
+            }
 
-            print_time("starting no action sanity")
-            error_cells_no_action = check_execution_errors(notebook_json, remove_action=True)
-            print_time("finished no action sanity")
+            colab_id = colab_info['id']
+            colab_url = f"https://colab.research.google.com/drive/{colab_id}"
 
-            print_time("Started: checking if contains Golden Answer")
+            nb_read = nbformat.reads(json.dumps(notebook_json), as_version=4) 
+            parsed_colab = GAImplementationColabParser(colab_info, colab_url, nb_read)
+            code_blocks = get_code_blocks(parsed_colab)
+            notebook = create_auto_qc_notebook(code_blocks.copy())
+            print_time("finished downloading/parsing colab")
+
+            print_time("Started: executing notebook")
+            execution_response = run_nb_e2e(notebook)
+            print_time("Finished: executing notebook")
+
+
+            print_time("Started: checking if contains Golden Answer/Final Assert")
             golden_answer_sample = contains_golden_answer(notebook_json)
             final_assert_sample = contains_final_assert(notebook_json)
-            print_time("Finished: checking if contains Golden Answer")
+            print_time("Finished: checking if contains Golden Answer/Final Assert")
+                        
             execution_result = {
                 'notebook': notebook_url_id,
-                'with_action_error': error_cells_action,
-                'no_action_error': error_cells_no_action,
                 'contains_golden_answer': golden_answer_sample,
                 'contains_final_assert': final_assert_sample,
+                **execution_response
             }
+            print_time(execution_result)
 
-        except Exception as e:
-            print_time(str(e))
-            error_template = {
-                "script_success": False,
-                "Block": "",
-                "Error Type": "",
-                "Error Description": "",
-                "Error Detail": ""
-            }
+        except:
+            # print_time(f"Exception in main: {str(e)}")
+            error_tb = traceback.format_exc()
+            # print_time(traceback.format_exc())
             execution_result = {
+                'script_success': False, 
+                'script_failure_msg': error_tb,
                 'notebook': notebook_url_id,
-                'with_action_error': error_template,
-                'no_action_error': error_template,
-                'contains_golden_answer': golden_answer_sample,
-                'contains_final_assert': final_assert_sample,
+                f"{SECTIONS.SETUP.value} - {SECTIONS.install_dependencies}": '',
+                f"{SECTIONS.SETUP.value} - {SECTIONS.IMPORT_APIS_AND_INITIATE_DBS}": '',
+                f"{SECTIONS.FINAL_ASSERTION.value}_NO_ACTION": '',
+                SECTIONS.INITIAL_ASSERTION: '',
+                SECTIONS.ACTION: '',
+                SECTIONS.FINAL_ASSERTION: '',
+                'contains_golden_answer': "",
+                'contains_final_assert': "",
             }
         finally:
-            execution_result_frmt = format_execution_result(execution_result)
-            execution_results.append(execution_result_frmt)
+            execution_results.append(execution_result)
 
     # Define output the filename
     json_output = RESULTS_DIR  / f'output_batch_{run_id}.json'

@@ -1,7 +1,7 @@
 # File: Dockerfile
 
 # Use the official Python 3.11 slim variant as a parent image.
-FROM python:3.11-slim
+FROM python:3.12.5-slim-bookworm
 
 # Set the working directory in the container to /app.
 WORKDIR /app
@@ -34,6 +34,7 @@ RUN pip install --no-cache-dir -r /tmp/api_requirements.txt
 # COPY sanity_runner.py .
 # COPY docker_test.py .
 COPY sanity_runner_with_download.py .
+COPY notebook_parser.py .
 
 # -----------------------------------------------------------------------------
 # RUNTIME ENVIRONMENT DOCUMENTATION

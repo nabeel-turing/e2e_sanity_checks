@@ -1,12 +1,16 @@
-/.idea
-/.ipynb_checkpoints
-/.venv
+.idea
+.ipynb_checkpoints
+.venv
+__pycache__
+.DS_Store
 
 
 /results
 /execution_logs
 /notebooks
 /clean_workspace
+/executed_notebooks
+/local_dev
 
 
 /execution_configs.csv
