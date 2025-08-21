@@ -12,7 +12,7 @@ from typing import List, Dict
 import pandas as pd
 
 # --- Configuration ---
-DOCKER_IMAGE = "sanity-runner"  # Name of the image built from your Dockerfile
+DOCKER_IMAGE = "sanity-runner-notebook-parser"  # Name of the image built from your Dockerfile
 
 # --- Host Machine Directory Setup ---
 PROJECT_ROOT = Path(__file__).parent.resolve()
@@ -23,6 +23,7 @@ SERVICE_ACCOUNT_FILE = PROJECT_ROOT / "turing-delivery-g-ga-e36eb2300714.json"
 
 TASK_FILE_PATH = PROJECT_ROOT / "execution_configs.csv"
 RESULTS_DIR = PROJECT_ROOT / "results"
+OUTPUT_NOTEBOOKS = PROJECT_ROOT / "executed_notebooks"
 
 def _prepare_run_directories(run_name: str) -> (Path, Path):
     """Creates and returns the unique log directory for this run."""
@@ -43,7 +44,16 @@ def _prepare_run_directories(run_name: str) -> (Path, Path):
     run_results_dir.mkdir(parents=True)
     print(f"✅ Created result directory for this run at: {run_results_dir}")
 
-    return run_log_dir, run_results_dir
+    notebook_output_dir = OUTPUT_NOTEBOOKS / run_name
+    if notebook_output_dir.exists():
+        raise FileExistsError(
+            f"A result directory for '{notebook_output_dir}' already exists. Please use a new run-name."
+        )
+    notebook_output_dir.mkdir(parents=True)
+    print(f"✅ Created result directory for this run at: {notebook_output_dir}")
+
+
+    return run_log_dir
 
 def _validate_host_environment() -> docker.DockerClient:
     """Checks for Docker and service account file, returns an initialized client."""
@@ -66,9 +76,8 @@ def _validate_host_environment() -> docker.DockerClient:
 def _launch_containers(
     client: docker.DockerClient,
     run_name: str,
-    run_log_dir: Path,
-    run_results_dir: Path,
-    run_identifiers: list[str]
+    run_identifiers: list[str],
+    mode = "colab"
 ) -> List[Dict]:
     """Launches a container for each batch and returns a list of container objects."""
     print("\n--- Step 4: Launching Containers in Parallel ---")
@@ -82,17 +91,20 @@ def _launch_containers(
             f"  -> Launching container '{container_name}' for batch {container_id}..."
         )
         environment = {
-            # "EXECUTION_MODE": mode,
-            "CONTAINER_ID": str(container_id),
-            "GOOGLE_APPLICATION_CREDENTIALS": "/secrets/gcp_key.json",
+            "EXECUTION_MODE": mode,
+            # "CONTAINER_ID": str(container_id),
+            # "GOOGLE_APPLICATION_CREDENTIALS": "/secrets/gcp_key.json",
         }
+        run_log_dir = PARENT_LOG_DIR / run_name
+        run_results_dir = RESULTS_DIR / run_name
+        notebook_results_dir = OUTPUT_NOTEBOOKS / run_name
         volumes = {
             # str(NOTEBOOKS_DIR): {"bind": "/notebooks", "mode": "ro"},
             str(CLEAN_WORKSPACE_DIR / api_version): {"bind": f"/clean_workspace", "mode": "ro"},
             str(run_log_dir): {"bind": "/logs", "mode": "rw"},
             str(run_results_dir): {"bind": "/results", "mode": "rw"},
             str(TASK_FILE_PATH): {"bind": "/execution_configs.csv", "mode": "rw"},
-            # str(OUTPUT_JSONS): {"bind": "/outputs/result_jsons", "mode": "rw"},
+            str(notebook_results_dir): {"bind": "/notebook_results", "mode": "rw"},
             str(SERVICE_ACCOUNT_FILE): {"bind": "/secrets/gcp_key.json", "mode": "ro"},
         }
         # print(str(CLEAN_WORKSPACE_DIR / api_version))
@@ -146,7 +158,7 @@ def run_orchestration(run_name: str, run_identifiers: list[str]) -> Path:
         The path to the log directory for this run.
     """
     client = _validate_host_environment()
-    run_log_dir, run_results_dir = _prepare_run_directories(run_name)
+    run_log_dir = _prepare_run_directories(run_name)
 
     # try:
     # num_batches = _create_task_batches(run_log_dir, notebooks_per_batch)
@@ -155,8 +167,6 @@ def run_orchestration(run_name: str, run_identifiers: list[str]) -> Path:
     running_containers = _launch_containers(
         client,
         run_name,
-        run_log_dir,
-        run_results_dir,
         run_identifiers,
     )
     _wait_for_containers(run_log_dir, running_containers)
