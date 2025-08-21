@@ -10,6 +10,7 @@ __pycache__
 /notebooks
 /clean_workspace
 /executed_notebooks
+/local_dev
 
 
 /execution_configs.csv
