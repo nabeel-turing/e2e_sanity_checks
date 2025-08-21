@@ -11,8 +11,10 @@ __pycache__
 /clean_workspace
 /executed_notebooks
 /local_dev
-
+/pb_jsons.json
+/auto_qc_result.csv
 
 /execution_configs.csv
 /turing-delivery-g-ga-e36eb2300714.json
-.DS_Store
+# .DS_Store
+/tool_use_metadata_set_v2.pb

@@ -8,3 +8,4 @@ pydantic
 google-auth-httplib2
 google-auth-oauthlib
 tqdm
+google-protobuf>=3.20.0
