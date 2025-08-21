@@ -12,7 +12,7 @@ from typing import List, Dict
 import pandas as pd
 
 # --- Configuration ---
-DOCKER_IMAGE = "sanity-runner-notebook-parser"  # Name of the image built from your Dockerfile
+DOCKER_IMAGE = "sanity-runner-proto"  # Name of the image built from your Dockerfile
 
 # --- Host Machine Directory Setup ---
 PROJECT_ROOT = Path(__file__).parent.resolve()
@@ -24,6 +24,7 @@ SERVICE_ACCOUNT_FILE = PROJECT_ROOT / "turing-delivery-g-ga-e36eb2300714.json"
 TASK_FILE_PATH = PROJECT_ROOT / "execution_configs.csv"
 RESULTS_DIR = PROJECT_ROOT / "results"
 OUTPUT_NOTEBOOKS = PROJECT_ROOT / "executed_notebooks"
+PROTO_PARSED_FILE = PROJECT_ROOT / "pb_jsons.json"
 
 def _prepare_run_directories(run_name: str) -> (Path, Path):
     """Creates and returns the unique log directory for this run."""
@@ -77,7 +78,7 @@ def _launch_containers(
     client: docker.DockerClient,
     run_name: str,
     run_identifiers: list[str],
-    mode = "colab"
+    mode,
 ) -> List[Dict]:
     """Launches a container for each batch and returns a list of container objects."""
     print("\n--- Step 4: Launching Containers in Parallel ---")
@@ -106,7 +107,10 @@ def _launch_containers(
             str(TASK_FILE_PATH): {"bind": "/execution_configs.csv", "mode": "rw"},
             str(notebook_results_dir): {"bind": "/notebook_results", "mode": "rw"},
             str(SERVICE_ACCOUNT_FILE): {"bind": "/secrets/gcp_key.json", "mode": "ro"},
+            # str(PROTO_PARSED_FILE): {"bind": "/proto_jsons.json", "mode": "ro"}
         }
+        if mode == 'Proto':
+            volumes[str(PROTO_PARSED_FILE)] = {"bind": "/proto_jsons.json", "mode": "ro"}
         # print(str(CLEAN_WORKSPACE_DIR / api_version))
         entry_point_script = "sanity_runner_with_download.py"
         # entry_point_script = "docker_test.py"
@@ -145,7 +149,7 @@ def _wait_for_containers(run_log_dir: Path, running_containers: List[Dict]):
         container.remove()
 
 
-def run_orchestration(run_name: str, run_identifiers: list[str]) -> Path:
+def run_orchestration(run_name: str, run_identifiers: list[str], mode) -> Path:
     """
     Main entry point to run the entire notebook orchestration process.
 
@@ -157,6 +161,9 @@ def run_orchestration(run_name: str, run_identifiers: list[str]) -> Path:
     Returns:
         The path to the log directory for this run.
     """
+    if mode not in ["Proto", "Colab"]:
+        raise Exception("Mode can be either 'Proto' or 'Colab'")
+
     client = _validate_host_environment()
     run_log_dir = _prepare_run_directories(run_name)
 
@@ -168,6 +175,7 @@ def run_orchestration(run_name: str, run_identifiers: list[str]) -> Path:
         client,
         run_name,
         run_identifiers,
+        mode,
     )
     _wait_for_containers(run_log_dir, running_containers)
     print("\n--- Orchestration Complete ---")
