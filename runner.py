@@ -3,6 +3,8 @@ from datetime import datetime
 import pandas as pd
 
 orchestrator.DOCKER_IMAGE = 'gen-agents-auto-qc'
+MODE = "Colab" # 'Colab' or 'Proto'
+
 try:
     start_time = datetime.now()
     run_name = f'sanity_check_{start_time.strftime("%Y%m%d_%H%M%S")}'
