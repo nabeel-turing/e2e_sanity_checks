@@ -12,7 +12,7 @@ from typing import List, Dict
 import pandas as pd
 
 # --- Configuration ---
-DOCKER_IMAGE = "sanity-runner-proto"  # Name of the image built from your Dockerfile
+DOCKER_IMAGE = "gen-agents-auto-qc"  # Name of the image built from your Dockerfile
 
 # --- Host Machine Directory Setup ---
 PROJECT_ROOT = Path(__file__).parent.resolve()

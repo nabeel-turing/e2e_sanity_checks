@@ -1,6 +1,8 @@
 import sanity_orchestrator_with_download as orchestrator
 from datetime import datetime
 import pandas as pd
+
+orchestrator.DOCKER_IMAGE = 'gen-agents-auto-qc'
 try:
     start_time = datetime.now()
     run_name = f'sanity_check_{start_time.strftime("%Y%m%d_%H%M%S")}'

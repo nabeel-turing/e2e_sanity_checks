@@ -1,737 +1,1215 @@
-#@title Imports
-import os
-import re
-import asyncio
-import copy
-import difflib
-import json
-import nbformat
-import threading
-import concurrent.futures
-import pandas as pd
-import importlib # Import importlib
-
-import pytz
-import datetime
-
-from abc import ABC, abstractmethod
-from enum import Enum
-from tqdm.notebook import tqdm
-from typing import Optional, Sequence, Literal, Any
-# from google.colab import auth
-from googleapiclient.discovery import build
-from google.protobuf import json_format
-from pydantic import BaseModel, computed_field, Field, ValidationError, model_validator
-
-from google.oauth2 import service_account
-
-# import tool_use_task_metadata_pb2 as pb2
-
-
-
-#@title Block Level Parsers
-
-class Block(BaseModel, ABC):
-    serial_number: int
-    logical_section: str
-
-    def parse_block(self) -> "Block":
-        raise NotImplementedError
-
-    @computed_field
-    @property
-    @abstractmethod
-    def _block_type_name(self) -> str:
-        raise NotImplementedError
-
-    @property
-    @abstractmethod
-    def type_key(self) -> Literal['markdown', 'code', 'code_output']:
-        raise NotImplementedError
-
-    @computed_field
-    @property
-    def name(self) -> str:
-        return f"Block {self.serial_number}: {self.logical_section} - {self._block_type_name}"
-
-    @abstractmethod
-    def __str__(self) -> str:
-        raise NotImplementedError
-
-    model_config = {
-        "extra": "allow"
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "CW32vdPMvnus"
+      },
+      "source": [
+        "# Protobuf Generator and Validator for Agent Colabs\n",
+        "\n",
+        "This notebook performs the following steps:\n",
+        "\n",
+        "1.  Installs the necessary Protobuf compiler and Python libraries.\n",
+        "2.  Defines and compiles the `ToolUseTaskMetadata` protobuf schema.\n",
+        "3.  Includes the full `GAImplementationColabParser` to read and parse agent Colab notebooks from Google Drive.\n",
+        "4.  Uses a `ProtobufGenerator` class to convert the parsed Colab data into a `ToolUseTaskMetadata` protobuf message.\n",
+        "5.  Uses a `ProtobufValidator` to check for the presence of essential fields in the generated protobuf message.\n",
+        "6.  Runs the entire process on a specified Google Drive folder.\n",
+        "7.  Displays the results, including the file name, any validation errors, the generated protobuf in text format, and the equivalent JSON output."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 3,
+      "metadata": {
+        "id": "jsZOJyvDvnuu"
+      },
+      "outputs": [],
+      "source": [
+        "#@title Imports\n",
+        "import os\n",
+        "import re\n",
+        "import asyncio\n",
+        "import copy\n",
+        "import difflib\n",
+        "import json\n",
+        "import nbformat\n",
+        "import threading\n",
+        "import concurrent.futures\n",
+        "import pandas as pd\n",
+        "import importlib # Import importlib\n",
+        "\n",
+        "import pytz\n",
+        "import datetime\n",
+        "\n",
+        "from abc import ABC, abstractmethod\n",
+        "from enum import Enum\n",
+        "from tqdm.notebook import tqdm\n",
+        "from typing import Optional, Sequence, Literal, Any\n",
+        "# from google.colab import auth\n",
+        "from googleapiclient.discovery import build\n",
+        "from google.protobuf import json_format\n",
+        "from pydantic import BaseModel, computed_field, Field, ValidationError, model_validator\n",
+        "\n",
+        "from google.oauth2 import service_account\n",
+        "\n",
+        "# import tool_use_task_metadata_pb2 as pb2"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 5,
+      "metadata": {
+        "cellView": "form",
+        "id": "P1mLBrxK0rTY"
+      },
+      "outputs": [],
+      "source": [
+        "#@title Block Level Parsers\n",
+        "\n",
+        "class Block(BaseModel, ABC):\n",
+        "    serial_number: int\n",
+        "    logical_section: str\n",
+        "\n",
+        "    def parse_block(self) -> \"Block\":\n",
+        "        raise NotImplementedError\n",
+        "\n",
+        "    @computed_field\n",
+        "    @property\n",
+        "    @abstractmethod\n",
+        "    def _block_type_name(self) -> str:\n",
+        "        raise NotImplementedError\n",
+        "\n",
+        "    @property\n",
+        "    @abstractmethod\n",
+        "    def type_key(self) -> Literal['markdown', 'code', 'code_output']:\n",
+        "        raise NotImplementedError\n",
+        "\n",
+        "    @computed_field\n",
+        "    @property\n",
+        "    def name(self) -> str:\n",
+        "        return f\"Block {self.serial_number}: {self.logical_section} - {self._block_type_name}\"\n",
+        "\n",
+        "    @abstractmethod\n",
+        "    def __str__(self) -> str:\n",
+        "        raise NotImplementedError\n",
+        "\n",
+        "    model_config = {\n",
+        "        \"extra\": \"allow\"\n",
+        "    }\n",
+        "\n",
+        "\n",
+        "class GAMetadata(Block):\n",
+        "    content: str\n",
+        "    metadata: dict = Field(default_factory=dict)\n",
+        "    additional_data: Optional[str] = None\n",
+        "\n",
+        "    @computed_field\n",
+        "    @property\n",
+        "    def _block_type_name(self) -> str:\n",
+        "        return \"GA Metadata\"\n",
+        "\n",
+        "    @property\n",
+        "    def type_key(self) -> Literal['markdown', 'code', 'code_output']:\n",
+        "        return \"markdown\"\n",
+        "\n",
+        "    def parse_block(self) -> \"GAMetadata\":\n",
+        "        content_str = \"\"\n",
+        "        if isinstance(self.content, list):\n",
+        "            content_str = \"\\n\".join([str(item) for item in self.content if item is not None])\n",
+        "        else:\n",
+        "            content_str = str(self.content)\n",
+        "\n",
+        "        metadata_keys = [\"Sample ID\", \"Query\", \"DB Type\", \"Case Description\", \"Global/Context Variables\", \"APIs\", \"Databases\"]\n",
+        "\n",
+        "        try:\n",
+        "            if isinstance(content_str, str):\n",
+        "                metadata = {}\n",
+        "                inside_section = False\n",
+        "                current_section = None\n",
+        "                section_content = []\n",
+        "\n",
+        "                for line in content_str.split(\"\\n\"):\n",
+        "                    line = line.strip()\n",
+        "                    if not line:\n",
+        "                        continue\n",
+        "\n",
+        "                    possible_metadata_label = re.compile(r\"(\\*\\*(.*?)(?::)?\\*\\*)\").match(line)\n",
+        "                    if possible_metadata_label:\n",
+        "                        matched_metadata_label = get_closest_match(possible_metadata_label.group(2), metadata_keys)\n",
+        "                        if matched_metadata_label:\n",
+        "                            if current_section:\n",
+        "                                metadata[current_section] = '\\n'.join(section_content) if section_content else \"\"\n",
+        "                                section_content = []\n",
+        "\n",
+        "                            if line.replace(possible_metadata_label.group(1), \"\").lstrip(\": \"):\n",
+        "                                section_content.append(line.replace(possible_metadata_label.group(1), \"\").lstrip(\": \"))\n",
+        "\n",
+        "                            current_section = matched_metadata_label\n",
+        "                            inside_section = True\n",
+        "                            continue\n",
+        "\n",
+        "                    elif not possible_metadata_label and inside_section:\n",
+        "                        section_content.append(line)\n",
+        "                        continue\n",
+        "\n",
+        "                if current_section and section_content:\n",
+        "                    metadata[current_section] = '\\n'.join(section_content)\n",
+        "\n",
+        "                self.metadata.update(metadata)\n",
+        "\n",
+        "\n",
+        "                if \"Case Description\" in self.metadata:\n",
+        "                    case_desc_content = self.metadata[\"Case Description\"]\n",
+        "                    match = re.search(r\"<additional_data>(.*?)</additional_data>\", case_desc_content, re.DOTALL)\n",
+        "                    if match:\n",
+        "                        self.additional_data = match.group(1).strip()\n",
+        "                        self.metadata[\"Case Description\"] = re.sub(r\"<additional_data>.*?</additional_data>\", \"\", case_desc_content, flags=re.DOTALL).strip()\n",
+        "\n",
+        "                if \"APIs\" in self.metadata:\n",
+        "                    result = {}\n",
+        "                    inside_additional_repo = False\n",
+        "                    additional_repo_content = []\n",
+        "                    additional_repo_cnt = 0\n",
+        "\n",
+        "                    for line in self.metadata.get(\"APIs\").split(\"\\n\"):\n",
+        "                        stripped = line.strip()\n",
+        "\n",
+        "                        if stripped.startswith(\"-\"):\n",
+        "                            label = stripped.lstrip(\"-\").strip()\n",
+        "                            result[label] = label\n",
+        "\n",
+        "                        elif \"```\" in stripped and inside_additional_repo:\n",
+        "                            inside_additional_repo = False\n",
+        "                            additional_repo_content.append(stripped)\n",
+        "                            additional_repo_cnt += 1\n",
+        "                            try:\n",
+        "                                result[f\"addition_repo_{additional_repo_cnt}\"] = json.loads(('\\n'.join(additional_repo_content)).replace(\"```\", \"\"))\n",
+        "                            except Exception as e:\n",
+        "                                result[f\"addition_repo_{additional_repo_cnt}\"] = []\n",
+        "\n",
+        "                            additional_repo_content = []\n",
+        "\n",
+        "                        elif \"```\" in stripped and not inside_additional_repo:\n",
+        "                            additional_repo_content.append(stripped)\n",
+        "                            inside_additional_repo = True\n",
+        "\n",
+        "                        elif inside_additional_repo:\n",
+        "                            additional_repo_content.append(stripped)\n",
+        "\n",
+        "                    self.metadata[\"APIs\"] = result\n",
+        "\n",
+        "        except Exception as e:\n",
+        "            error_msg = f\"Error parsing GA metadata: {str(e)}\"\n",
+        "            raise Exception(error_msg, {\"block_type\": self._block_type_name, \"serial_number\": self.serial_number, \"logical_section\": self.logical_section})\n",
+        "        return self\n",
+        "\n",
+        "    def __str__(self) -> str:\n",
+        "        separator = \"-\" * (len(self.name) + 4)\n",
+        "        metadata_str = json.dumps(self.metadata, indent=2)\n",
+        "        return f\"{self.name}\\n{separator}\\nMetadata:\\n{metadata_str}\\n\"\n",
+        "\n",
+        "\n",
+        "class MarkdownBlock(Block):\n",
+        "    content: str\n",
+        "\n",
+        "    def parse_block(self) -> \"MarkdownBlock\":\n",
+        "        return self\n",
+        "\n",
+        "    @computed_field\n",
+        "    @property\n",
+        "    def _block_type_name(self) -> str:\n",
+        "        return \"Markdown\"\n",
+        "\n",
+        "    @property\n",
+        "    def type_key(self) -> Literal['markdown', 'code', 'code_output']:\n",
+        "        return \"markdown\"\n",
+        "\n",
+        "    def __str__(self) -> str:\n",
+        "        return f\"{self.name}\\n{self.content}\\n\"\n",
+        "\n",
+        "class CodeBlock(Block):\n",
+        "    content: str\n",
+        "\n",
+        "    def parse_block(self) -> \"CodeBlock\":\n",
+        "        return self\n",
+        "\n",
+        "    @computed_field\n",
+        "    @property\n",
+        "    def _block_type_name(self) -> str:\n",
+        "        return \"Code\"\n",
+        "\n",
+        "    @property\n",
+        "    def type_key(self) -> Literal['markdown', 'code', 'code_output']:\n",
+        "        return \"code\"\n",
+        "\n",
+        "    def __str__(self) -> str:\n",
+        "        return f\"{self.name}\\n{self.content}\\n\"\n",
+        "\n",
+        "\n",
+        "class CodeOutputItem(BaseModel):\n",
+        "    output_type: str\n",
+        "    name: Optional[str] = None\n",
+        "    text: Optional[str | list[str]] = None\n",
+        "\n",
+        "class CodeOutputBlock(Block):\n",
+        "    raw_content: str\n",
+        "    outputs: list[CodeOutputItem] = Field(default_factory=list)\n",
+        "\n",
+        "    def parse_block(self) -> \"CodeOutputBlock\":\n",
+        "        return self\n",
+        "\n",
+        "    @model_validator(mode='before')\n",
+        "    @classmethod\n",
+        "    def parse_raw_content_to_outputs(cls, data: Any) -> Any:\n",
+        "        if isinstance(data, dict):\n",
+        "            raw_content_str = data.get('raw_content')\n",
+        "            if isinstance(raw_content_str, str):\n",
+        "                try:\n",
+        "                    parsed_json = json.loads(raw_content_str)\n",
+        "                    if isinstance(parsed_json, list):\n",
+        "                        data['outputs'] = parsed_json\n",
+        "                    else:\n",
+        "                        data['outputs'] = []\n",
+        "                except json.JSONDecodeError:\n",
+        "                    data['outputs'] = []\n",
+        "                except Exception as e:\n",
+        "                    data['outputs'] = []\n",
+        "        return data\n",
+        "\n",
+        "    @computed_field\n",
+        "    @property\n",
+        "    def _block_type_name(self) -> str:\n",
+        "        return \"Code Output\"\n",
+        "\n",
+        "    @property\n",
+        "    def type_key(self) -> Literal['markdown', 'code', 'code_output']:\n",
+        "        return \"code_output\"\n",
+        "\n",
+        "    def __str__(self) -> str:\n",
+        "        output_summary = []\n",
+        "        if not self.outputs:\n",
+        "             output_summary.append(\"  [No parsed output or parse error]\")\n",
+        "        else:\n",
+        "            for i, output_item in enumerate(self.outputs):\n",
+        "                item_dict = output_item.model_dump(exclude_none=True)\n",
+        "                otype = item_dict.get('output_type', 'unknown')\n",
+        "                oname = f\" ({item_dict.get('name', '')})\" if 'name' in item_dict else \"\"\n",
+        "                text_preview = \"\"\n",
+        "                if 'text' in item_dict:\n",
+        "                    text_content = item_dict['text']\n",
+        "                    full_text = \"\".join(text_content) if isinstance(text_content, list) else str(text_content)\n",
+        "                    text_preview = f\": {full_text.strip()}\" if full_text else \"\"\n",
+        "                output_summary.append(f\"  Output {i+1}: type='{otype}'{oname}{text_preview}\")\n",
+        "\n",
+        "        return f\"{self.name}\\n[Raw JSON stored]\\nParsed Outputs:\\n{''.join(output_summary)}\\n\""
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 6,
+      "metadata": {
+        "cellView": "form",
+        "id": "cZg451cc0rTY"
+      },
+      "outputs": [],
+      "source": [
+        "#@title Turn Level Parser\n",
+        "\n",
+        "class Turn(BaseModel):\n",
+        "    idx: int\n",
+        "    blocks: list[Block] = Field(default_factory=list)\n",
+        "\n",
+        "    def parse_blocks(self) -> None:\n",
+        "        for block in self.blocks:\n",
+        "            block.parse_block()\n",
+        "\n",
+        "    def add_block(self, block: Block):\n",
+        "        self.blocks.append(block)\n",
+        "\n",
+        "    def get_blocks_by_section(self, section_name: str) -> list[Block]:\n",
+        "        return [block for block in self.blocks if block.logical_section == section_name]\n",
+        "\n",
+        "    def get_blocks_by_type(self, block_type: Literal['markdown', 'code', 'code_output']) -> list[Block]:\n",
+        "        return [block for block in self.blocks if block.type_key == block_type]\n",
+        "\n",
+        "    def __str__(self) -> str:\n",
+        "        turn_header = f\"********** Turn {self.idx} **********\"\n",
+        "        separator = \"*\" * len(turn_header)\n",
+        "        blocks_str = \"\".join(str(block) for block in self.blocks)\n",
+        "        return f\"{separator}\\n{turn_header}\\n{separator}{blocks_str}\\n\""
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 17,
+      "metadata": {
+        "id": "p2Fok8aC0rTZ"
+      },
+      "outputs": [],
+      "source": [
+        "#@title Colab Parser\n",
+        "\n",
+        "class SECTIONS(str, Enum):\n",
+        "    METADATA = \"Metadata\"\n",
+        "    SETUP = \"Set Up\"\n",
+        "    DOWNLOAD_FILES = \"Download relevant files\"\n",
+        "    IMPORT_APIS_AND_INITIATE_DBS = \"Import APIs and initiate DBs\"\n",
+        "    INSTALL_AND_CLONE_REPO_CODE=\"Install Dependencies and Clone Repositories\"\n",
+        "    INITIAL_ASSERTION = \"Initial Assertion\"\n",
+        "    ACTION = \"Action\"\n",
+        "    GOLDEN_ANSWER = \"Golden Answer\"\n",
+        "    FINAL_ASSERTION = \"Final Assertion\"\n",
+        "\n",
+        "\n",
+        "class GAImplementationColabParser:\n",
+        "    \"\"\"\n",
+        "    Parses a Colab notebook represented as a list of (cell_type, content) tuples\n",
+        "    into Turns and Blocks, associating blocks with logical sections based on specific markdown headers.\n",
+        "\n",
+        "    Assumes the structure: Description -> Setup -> Initial Assertion -> Action -> Final Assertion.\n",
+        "    Assumes a single Turn for this structure.\n",
+        "    \"\"\"\n",
+        "\n",
+        "    # Define the CANONICAL names for main sections\n",
+        "    _CANONICAL_MAIN_SECTIONS: list[str] = [\n",
+        "        SECTIONS.SETUP.value,\n",
+        "        SECTIONS.INITIAL_ASSERTION.value,\n",
+        "        SECTIONS.ACTION.value,\n",
+        "        SECTIONS.GOLDEN_ANSWER.value,\n",
+        "        SECTIONS.FINAL_ASSERTION.value\n",
+        "    ]\n",
+        "    _DEFAULT_SECTION_NAME = SECTIONS.METADATA.value\n",
+        "    # Regex to match H1 headers (allows for no space: #Header or space: # Header)\n",
+        "    _MAIN_SECTION_REGEX = re.compile(r\"^#\\s?([^#].*)\") # Optional space after #\n",
+        "    # Regex to match H2+ sub-section headers\n",
+        "    _SUB_SECTION_REGEX = re.compile(r\"^(#{2,})\\s+(.*)\")\n",
+        "    # Cutoff for fuzzy matching (0.0 to 1.0, higher means stricter match)\n",
+        "    _FUZZY_MATCH_CUTOFF = 0.8\n",
+        "\n",
+        "    def __init__(self, file_info: dict[str, Any], drive_url: str, nb):\n",
+        "        \"\"\"Initializes parser, loads notebook, and parses turns.\"\"\"\n",
+        "        self.file_name: str = file_info[\"name\"]\n",
+        "        self.file_id: str = file_info[\"id\"]\n",
+        "        # self.colab_url: str = drive_url\n",
+        "\n",
+        "        # global DRIVE_SERVICE\n",
+        "        # if 'DRIVE_SERVICE' not in globals():\n",
+        "        #      print(\"Error: DRIVE_SERVICE not initialized. Please authenticate.\")\n",
+        "        #      raise RuntimeError(\"DRIVE_SERVICE is required but not available.\")\n",
+        "\n",
+        "        self._raw_plan = self.__create_a_plan_from_drive_notebook(self.file_id, nb)\n",
+        "\n",
+        "        if not self._raw_plan:\n",
+        "            raise ValueError(f\"Failed to load or parse colab notebook content: {self.file_name} ({self.file_id})\")\n",
+        "\n",
+        "        self.turns: list[Turn] = []\n",
+        "        try:\n",
+        "            self._parse_plan_to_turns()\n",
+        "            self._parse_turns()\n",
+        "\n",
+        "        except ValidationError as e:\n",
+        "            print(f\"Pydantic validation error during parsing: {e}\")\n",
+        "            raise\n",
+        "        except Exception as e:\n",
+        "             print(f\"An unexpected error occurred during parsing logic: {e}\")\n",
+        "             raise\n",
+        "\n",
+        "\n",
+        "    def _parse_turns(self) -> None:\n",
+        "        \"\"\"Parses all turns in the notebook.\"\"\"\n",
+        "        for turn in self.turns:\n",
+        "            turn.parse_blocks()\n",
+        "\n",
+        "    def _parse_plan_to_turns(self) -> None:\n",
+        "        \"\"\"Iterates through the raw plan, creating blocks and assigning them to a turn,\n",
+        "           using fuzzy matching for H1 headers.\"\"\"\n",
+        "        current_turn = Turn(idx=1)\n",
+        "        self.turns.append(current_turn)\n",
+        "\n",
+        "        current_main_section_name: str = self._DEFAULT_SECTION_NAME\n",
+        "        current_sub_section_name: Optional[str] = None\n",
+        "        serial_number = 1\n",
+        "\n",
+        "        for cell_type, raw_content in self._raw_plan:\n",
+        "            content = raw_content.strip()\n",
+        "            block_instance: Optional[Block] = None\n",
+        "            is_new_main_section = False\n",
+        "            is_new_sub_section = False\n",
+        "\n",
+        "            # --- Determine Section based on Markdown Headers ---\n",
+        "            if cell_type == 'markdown' and content and serial_number > 1:\n",
+        "                first_line = content.split('\\n', 1)[0].strip()\n",
+        "\n",
+        "                # Check for H1 Header first (Main Section)\n",
+        "                main_match = self._MAIN_SECTION_REGEX.match(first_line)\n",
+        "                if main_match:\n",
+        "                    extracted_title = main_match.group(1).strip()\n",
+        "\n",
+        "                    # Attempt fuzzy match against canonical names\n",
+        "                    matched_canonical_name = get_closest_match(\n",
+        "                        extracted_title,\n",
+        "                        self._CANONICAL_MAIN_SECTIONS,\n",
+        "                        cutoff=self._FUZZY_MATCH_CUTOFF\n",
+        "                    )\n",
+        "\n",
+        "                    # Use canonical name if matched, otherwise use the extracted title\n",
+        "                    current_main_section_name = matched_canonical_name if matched_canonical_name else extracted_title\n",
+        "                    current_sub_section_name = None # Reset sub-section\n",
+        "                    is_new_main_section = True\n",
+        "                else:\n",
+        "                    # If not H1, check for H2+ Header (Sub-section)\n",
+        "                    sub_match = self._SUB_SECTION_REGEX.match(first_line)\n",
+        "                    if sub_match:\n",
+        "                         # Assign sub-section only if we are not in the default \"Description\"\n",
+        "                         if current_main_section_name != self._DEFAULT_SECTION_NAME:\n",
+        "                            current_sub_section_name = sub_match.group(2).strip()\n",
+        "                            is_new_sub_section = True\n",
+        "\n",
+        "            if current_sub_section_name:\n",
+        "                block_logical_section = f\"{current_main_section_name} - {current_sub_section_name}\"\n",
+        "            else:\n",
+        "                block_logical_section = current_main_section_name\n",
+        "\n",
+        "            common_args = {\n",
+        "                \"serial_number\": serial_number,\n",
+        "                \"logical_section\": block_logical_section,\n",
+        "            }\n",
+        "            try:\n",
+        "                if cell_type == 'markdown':\n",
+        "                    if current_main_section_name == self._DEFAULT_SECTION_NAME:\n",
+        "                        block_instance = GAMetadata(**common_args, content=content)\n",
+        "                    else:\n",
+        "                        block_instance = MarkdownBlock(**common_args, content=content)\n",
+        "                elif cell_type == 'code':\n",
+        "                    block_instance = CodeBlock(**common_args, content=content)\n",
+        "                elif cell_type == 'code_output':\n",
+        "                    block_instance = CodeOutputBlock(**common_args, raw_content=content)\n",
+        "                else:\n",
+        "                    print(f\"Warning: Skipping cell with unexpected type '{cell_type}' at serial number {serial_number}\")\n",
+        "                    continue\n",
+        "            except ValidationError as e:\n",
+        "                 print(f\"Validation Error creating Block {serial_number} ({cell_type}, section: {block_logical_section}):\\n{e}\")\n",
+        "                 serial_number += 1\n",
+        "                 continue\n",
+        "\n",
+        "            if block_instance:\n",
+        "                current_turn.add_block(block_instance)\n",
+        "                serial_number += 1\n",
+        "\n",
+        "    def __create_a_plan_from_colab_notebook(self, note_book: nbformat.NotebookNode) -> list[tuple[str, str]]:\n",
+        "        \"\"\"Creates a plan string from a Colab notebook by extracting markdown and code cells.\n",
+        "\n",
+        "        Parameters:\n",
+        "        ----------\n",
+        "        nb : nbformat.NotebookNode\n",
+        "            The notebook object in nbformat that contains the cells to be processed.\n",
+        "\n",
+        "        Returns:\n",
+        "        -------\n",
+        "        list[tuple[str, str]]]\n",
+        "            A formatted string with content from markdown cells and labeled code cells.\n",
+        "            Code cells are prefixed with \"CODE:\\n\".\n",
+        "\n",
+        "        \"\"\"\n",
+        "        plan_lines = []\n",
+        "\n",
+        "        # Iterate through each cell in the notebook\n",
+        "        for cell in note_book.cells:\n",
+        "            # Check if the cell is of type markdown and contains content\n",
+        "            if cell.cell_type == \"markdown\":\n",
+        "                # Append the tuple ('markdown', content)\n",
+        "                plan_lines.append((\"markdown\", cell.source))\n",
+        "\n",
+        "            # Check if the cell is of type code and contains content\n",
+        "            elif cell.cell_type == \"code\":\n",
+        "                # Append the tuple ('code', content)\n",
+        "                plan_lines.append((\"code\", cell.source))\n",
+        "\n",
+        "                # Check if there are outputs associated with the code cell\n",
+        "                if cell.outputs and len(cell.outputs) > 0:\n",
+        "                    cell_out = json.dumps(cell.outputs)\n",
+        "\n",
+        "                    # Append the tuple ('code_output', output content)\n",
+        "                    plan_lines.append((\"code_output\", cell_out))\n",
+        "\n",
+        "        # Return the list of tuples (cell_type, content)\n",
+        "        return plan_lines\n",
+        "\n",
+        "    def __create_a_plan_from_drive_notebook(self, file_id: str, nb) -> list[tuple[str, str]] | None:\n",
+        "        \"\"\"Fetches a Jupyter notebook from Google Drive, processes it, and returns a formatted plan.\n",
+        "\n",
+        "        Parameters:\n",
+        "        ----------\n",
+        "        file_id : str\n",
+        "            The unique identifier of the file in Google Drive.\n",
+        "\n",
+        "        Returns:\n",
+        "        -------\n",
+        "        Optional[list[tuple[str, str]]]\n",
+        "            A formatted string with content from markdown cells and labeled code cells.\n",
+        "            Code cells are prefixed with \"CODE:\\n\".\n",
+        "\n",
+        "        Notes:\n",
+        "        -----\n",
+        "        - This function assumes access to the Google Drive API through `DRIVE_SERVICE`.\n",
+        "        - Only files with a MIME type other than 'application/vnd.google-apps.folder' are processed.\n",
+        "        - The notebook is assumed to be in `nbformat` version 4.\n",
+        "\n",
+        "        \"\"\"\n",
+        "        try:\n",
+        "            # Fetch the file metadata to determine the MIME type and name\n",
+        "            # file_metadata = DRIVE_SERVICE.files().get(fileId=file_id, fields=\"name, mimeType\", supportsAllDrives=True).execute()  # noqa\n",
+        "            # file_name, mime_type = file_metadata[\"name\"], file_metadata[\"mimeType\"]\n",
+        "\n",
+        "            # Only process if it's not a folder\n",
+        "            # if mime_type != \"application/vnd.google-apps.folder\":\n",
+        "                # Download the file content\n",
+        "                # file_content = DRIVE_SERVICE.files().get_media(fileId=file_id, supportsAllDrives=True).execute()  # noqa\n",
+        "\n",
+        "                # Try to load notebook into nbformat\n",
+        "                try:\n",
+        "                    # nb = nbformat.reads(file_content.decode(\"utf-8\"), as_version=4)\n",
+        "                    # Generate the plan string from the notebook content\n",
+        "                    return self.__create_a_plan_from_colab_notebook(nb)\n",
+        "                except Exception as error:\n",
+        "                    print(f\"Failed to load notebook: ({file_id}) - {str(error)}\")\n",
+        "                    return None\n",
+        "            # else:\n",
+        "            #     print(f\"File {file_name} is a folder.\")\n",
+        "            #     return None\n",
+        "\n",
+        "        except Exception as error:\n",
+        "            print(f\"An error occurred while retrieving the file: {str(error)}\")\n",
+        "            return None\n",
+        "\n",
+        "    def __str__(self):  # noqa\n",
+        "        print(f\"Colab: {self.file_name}\")  # noqa: T201\n",
+        "        for turn in self.turns:\n",
+        "            print(turn)  # noqa: T201\n",
+        "        return \"\"\n",
+        "\n",
+        "    @property\n",
+        "    def first_turn(self) -> Optional[Turn]:\n",
+        "        \"\"\"Returns the first (and likely only) turn.\"\"\"\n",
+        "        return self.turns[0] if self.turns else None\n",
+        "\n",
+        "    def get_all_blocks(self) -> list[Block]:\n",
+        "        \"\"\"Returns a flat list of all blocks from all turns.\"\"\"\n",
+        "        all_blocks = []\n",
+        "        for turn in self.turns:\n",
+        "            all_blocks.extend(turn.blocks)\n",
+        "        return all_blocks"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 18,
+      "metadata": {},
+      "outputs": [],
+      "source": [
+        "SERVICE_ACCOUNT_FILE = 'turing-delivery-g-ga-e36eb2300714.json'\n",
+        "\n",
+        "# Combine scopes for both Drive and Sheets\n",
+        "SCOPES = [\n",
+        "    \"https://www.googleapis.com/auth/drive\",\n",
+        "    \"https://www.googleapis.com/auth/spreadsheets\",\n",
+        "]\n",
+        "\n",
+        "def authenticate_with_service_account():\n",
+        "    \"\"\"Authenticate using a service account and return credentials.\"\"\"\n",
+        "    creds = service_account.Credentials.from_service_account_file(\n",
+        "        SERVICE_ACCOUNT_FILE,\n",
+        "        scopes=SCOPES\n",
+        "    )\n",
+        "    return creds\n",
+        "\n",
+        "# Get the shared credentials object\n",
+        "credentials = authenticate_with_service_account()\n",
+        "DRIVE_SERVICE = build(\"drive\", \"v3\", credentials=credentials)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 19,
+      "metadata": {},
+      "outputs": [],
+      "source": [
+        "def get_closest_match(item: str, valid_items: list[str], cutoff: float = 0.8) -> str | None:\n",
+        "    \"\"\"Finds the closest matching item from the provided list using difflib,\n",
+        "    performing case-insensitive comparison after stripping whitespace.\n",
+        "    \"\"\"\n",
+        "    if not item or not valid_items:\n",
+        "        return None\n",
+        "\n",
+        "    item_normalized = item.strip().lower()\n",
+        "    if not item_normalized:\n",
+        "        return None\n",
+        "\n",
+        "    normalized_to_original_map = {\n",
+        "        v.strip().lower(): v for v in valid_items if v.strip()\n",
+        "    }\n",
+        "    normalized_valid_items = list(normalized_to_original_map.keys())\n",
+        "\n",
+        "    if not normalized_valid_items:\n",
+        "        return None\n",
+        "\n",
+        "    closest_matches_normalized = difflib.get_close_matches(\n",
+        "        item_normalized,\n",
+        "        normalized_valid_items,\n",
+        "        n=1,\n",
+        "        cutoff=cutoff\n",
+        "    )\n",
+        "\n",
+        "    if closest_matches_normalized:\n",
+        "        matched_normalized = closest_matches_normalized[0]\n",
+        "        return normalized_to_original_map.get(matched_normalized)\n",
+        "\n",
+        "    return None"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 20,
+      "metadata": {},
+      "outputs": [],
+      "source": [
+        "preserve_state = '''\n",
+        "\n",
+        "# SKIPPED ORIGINAL SETUP CELL\n",
+        "# Adding API and DB directories to path instead\n",
+        "import sys\n",
+        "import os\n",
+        "print(\"Injecting API and DB paths into system path...\")\n",
+        "api_dir = \"/content/APIs\"\n",
+        "db_dir = \"/content/DBs\"\n",
+        "scripts_dir = \"/content\"\n",
+        "if api_dir not in sys.path:\n",
+        "    sys.path.append(api_dir)\n",
+        "if db_dir not in sys.path:\n",
+        "    sys.path.append(db_dir)\n",
+        "if scripts_dir not in sys.path:\n",
+        "    sys.path.append(scripts_dir)\n",
+        "\n",
+        "os.chdir('/content')\n",
+        "print(\"System paths updated.\")\n",
+        "\n",
+        "_initial_dir = None\n",
+        "\n",
+        "def start_block():\n",
+        "  global _initial_dir\n",
+        "  _initial_dir = set(globals().keys())\n",
+        "\n",
+        "def end_block():\n",
+        "  global _initial_dir\n",
+        "  # Compare current dir() to the saved _initial_dir\n",
+        "  for name in set(globals().keys()):\n",
+        "      # Skip anything that was already there originally,\n",
+        "      # or that starts with an underscore, or the function names themselves\n",
+        "      if (\n",
+        "          name not in _initial_dir\n",
+        "          and not name.startswith('_')\n",
+        "          and name not in ['start_block', 'end_block']\n",
+        "      ):\n",
+        "          del globals()[name]'''"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 21,
+      "metadata": {},
+      "outputs": [],
+      "source": [
+        "def get_code_blocks(parsed_colab):\n",
+        "    relevant_sections = [\n",
+        "        f\"{SECTIONS.SETUP.value} - {SECTIONS.INSTALL_AND_CLONE_REPO_CODE.value}\",\n",
+        "        f\"{SECTIONS.SETUP.value} - {SECTIONS.IMPORT_APIS_AND_INITIATE_DBS.value}\",\n",
+        "        SECTIONS.INITIAL_ASSERTION.value,\n",
+        "        SECTIONS.ACTION.value,\n",
+        "        SECTIONS.FINAL_ASSERTION.value\n",
+        "    ]\n",
+        "    result_code_blocks = {section: [] for section in relevant_sections}\n",
+        "    result_code_blocks['setup_section'] = [preserve_state]\n",
+        "    all_code_blocks = [block for block in parsed_colab.get_all_blocks() if isinstance(block, CodeBlock)]\n",
+        "    # colab_cells = [\n",
+        "    #     {'cell_type': 'code', 'source': [preserve_state], 'metadata': {}, 'outputs': []}\n",
+        "    #     ]\n",
+        "    for section in relevant_sections:\n",
+        "        # print(f\"In {section}\")\n",
+        "        # colab_cells.append({'cell_type': 'markdown', 'source': [section], 'metadata': {}, 'outputs': []})\n",
+        "\n",
+        "        if section == f\"{SECTIONS.SETUP.value} - {SECTIONS.INSTALL_AND_CLONE_REPO_CODE.value}\":        \n",
+        "            section_code_blocks = [block for block in all_code_blocks if block.logical_section==section]\n",
+        "            # print(f\"Dependencies {section_code_blocks}\")\n",
+        "            for section_code_block in section_code_blocks:\n",
+        "                code_without_pip = '\\n'.join([line for line in section_code_block.content.split('\\n') if not line.startswith('!pip')])\n",
+        "                # print(f\"Code withot Pip {code_without_pip}\")\n",
+        "                result_code_blocks[section].append(code_without_pip)\n",
+        "                # colab_cells.append({'cell_type': 'code', 'source': [code_without_pip], 'metadata': {}, 'outputs': []})\n",
+        "        elif section == f\"{SECTIONS.SETUP.value} - {SECTIONS.IMPORT_APIS_AND_INITIATE_DBS.value}\":\n",
+        "            section_code_blocks = [block for block in all_code_blocks if block.logical_section==section]\n",
+        "            section_code_block_count = len(section_code_blocks)\n",
+        "            # print(f\"DB Code cells: {section_code_blocks}\")\n",
+        "            for idx, section_code_block in enumerate(section_code_blocks):     \n",
+        "                # print(f\"DB {idx}: {section_code_block}\")       \n",
+        "                # if idx == section_code_block_count-1: # last block\n",
+        "                    # colab_cells.append({'cell_type': 'code', 'source': ['\\nstart_block()\\n'], 'metadata': {}, 'outputs': []})\n",
+        "                \n",
+        "                # colab_cells.append({'cell_type': 'code', 'source': [section_code_block.content], 'metadata': {}, 'outputs': []})\n",
+        "                if idx == section_code_block_count-1: # last block\n",
+        "                    result_code_blocks[section].append(section_code_block.content)\n",
+        "                else:\n",
+        "                    result_code_blocks['setup_section'].append(section_code_block.content)\n",
+        "                \n",
+        "                # if idx == section_code_block_count-1: # last block\n",
+        "                    # colab_cells.append({'cell_type': 'code', 'source': ['\\nend_block()\\n'], 'metadata': {}, 'outputs': []})\n",
+        "        else:\n",
+        "            # colab_cells.append({'cell_type': 'code', 'source': ['\\nstart_block()\\n'], 'metadata': {}, 'outputs': []})\n",
+        "            section_code_blocks = [block for block in all_code_blocks if block.logical_section==section]\n",
+        "            for section_code_block in section_code_blocks:            \n",
+        "                # colab_cells.append({'cell_type': 'code', 'source': [section_code_block.content], 'metadata': {}, 'outputs': []})\n",
+        "                result_code_blocks[section].append(section_code_block.content)\n",
+        "            # colab_cells.append({'cell_type': 'code', 'source': ['\\nend_block()\\n'], 'metadata': {}, 'outputs': []})\n",
+        "    return result_code_blocks"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 24,
+      "metadata": {},
+      "outputs": [],
+      "source": [
+        "def create_auto_qc_notebook(code_blocks):\n",
+        "    nb_cells = []\n",
+        "    \n",
+        "    setup_section = \"setup_section\"\n",
+        "    setup_code_cells = code_blocks[setup_section]\n",
+        "    \n",
+        "    combined_cells = []\n",
+        "    for code_cell in setup_code_cells:\n",
+        "        combined_cells += [code_cell]    \n",
+        "    nb_cells.append({'cell_type': 'markdown', 'source': [setup_section], 'metadata': {}, 'outputs': []})\n",
+        "    nb_cells.append({'cell_type': 'code', 'source': combined_cells, 'metadata': {}, 'outputs': []})\n",
+        "\n",
+        "    del code_blocks[setup_section]\n",
+        "\n",
+        "    dependencies_section = f\"{SECTIONS.SETUP.value} - {SECTIONS.INSTALL_AND_CLONE_REPO_CODE.value}\"\n",
+        "    dependencies_code_cells = code_blocks[dependencies_section]\n",
+        "    \n",
+        "    combined_cells = []\n",
+        "    for code_cell in dependencies_code_cells:\n",
+        "        combined_cells += [code_cell]\n",
+        "    nb_cells.append({'cell_type': 'markdown', 'source': [dependencies_section], 'metadata': {}, 'outputs': []})\n",
+        "    nb_cells.append({'cell_type': 'code', 'source': combined_cells, 'metadata': {}, 'outputs': []})\n",
+        "\n",
+        "    del code_blocks[dependencies_section]\n",
+        "\n",
+        "    init_section = f\"{SECTIONS.SETUP.value} - {SECTIONS.IMPORT_APIS_AND_INITIATE_DBS.value}\"\n",
+        "    init_code_cells = code_blocks[init_section]\n",
+        "    nb_cells.append({'cell_type': 'markdown', 'source': [init_section], 'metadata': {}, 'outputs': []})\n",
+        "    combined_cells = []\n",
+        "    for cell in init_code_cells:\n",
+        "        combined_cells += [cell]\n",
+        "    nb_cells.append({'cell_type': 'code', 'source': ['\\nstart_block()\\n'], 'metadata': {}, 'outputs': []})\n",
+        "    nb_cells.append({'cell_type': 'code', 'source': ['\\n'.join(combined_cells)], 'metadata': {}, 'outputs': []})\n",
+        "    nb_cells.append({'cell_type': 'code', 'source': ['\\nend_block()\\n'], 'metadata': {}, 'outputs': []})\n",
+        "    del code_blocks[init_section]\n",
+        "\n",
+        "    fa_section = SECTIONS.FINAL_ASSERTION.value\n",
+        "    fa_code_cells = code_blocks[fa_section]\n",
+        "    nb_cells.append({'cell_type': 'markdown', 'source': [f'fa_section_no_action'], 'metadata': {}, 'outputs': []})\n",
+        "    combined_cells = []\n",
+        "    for cell in fa_code_cells:\n",
+        "        combined_cells += [cell]\n",
+        "    nb_cells.append({'cell_type': 'code', 'source': ['\\nstart_block()\\n'], 'metadata': {}, 'outputs': []})\n",
+        "    nb_cells.append({'cell_type': 'code', 'source': ['\\n'.join(combined_cells)], 'metadata': {}, 'outputs': []})\n",
+        "    nb_cells.append({'cell_type': 'code', 'source': ['\\nend_block()\\n'], 'metadata': {}, 'outputs': []})\n",
+        "\n",
+        "    for header in [SECTIONS.INITIAL_ASSERTION.value, SECTIONS.ACTION.value, SECTIONS.FINAL_ASSERTION.value]:\n",
+        "        nb_cells.append({'cell_type': 'markdown', 'source': [header], 'metadata': {}, 'outputs': []})\n",
+        "        combined_cells = []\n",
+        "        for cell in code_blocks[header]:\n",
+        "            combined_cells += [cell]\n",
+        "        nb_cells.append({'cell_type': 'code', 'source': ['\\nstart_block()\\n'], 'metadata': {}, 'outputs': []})\n",
+        "        nb_cells.append({'cell_type': 'code', 'source': ['\\n'.join(combined_cells)], 'metadata': {}, 'outputs': []})\n",
+        "        nb_cells.append({'cell_type': 'code', 'source': ['\\nend_block()\\n'], 'metadata': {}, 'outputs': []})\n",
+        "\n",
+        "    notebook = nbformat.v4.new_notebook()\n",
+        "    notebook.cells = nb_cells\n",
+        "    notebook = nbformat.reads(json.dumps(notebook), as_version=4)\n",
+        "    return notebook"
+      ]
     }
-
-
-class GAMetadata(Block):
-    content: str
-    metadata: dict = Field(default_factory=dict)
-    additional_data: Optional[str] = None
-
-    @computed_field
-    @property
-    def _block_type_name(self) -> str:
-        return "GA Metadata"
-
-    @property
-    def type_key(self) -> Literal['markdown', 'code', 'code_output']:
-        return "markdown"
-
-    def parse_block(self) -> "GAMetadata":
-        content_str = ""
-        if isinstance(self.content, list):
-            content_str = "\n".join([str(item) for item in self.content if item is not None])
-        else:
-            content_str = str(self.content)
-
-        metadata_keys = ["Sample ID", "Query", "DB Type", "Case Description", "Global/Context Variables", "APIs", "Databases"]
-
-        try:
-            if isinstance(content_str, str):
-                metadata = {}
-                inside_section = False
-                current_section = None
-                section_content = []
-
-                for line in content_str.split("\n"):
-                    line = line.strip()
-                    if not line:
-                        continue
-
-                    possible_metadata_label = re.compile(r"(\*\*(.*?)(?::)?\*\*)").match(line)
-                    if possible_metadata_label:
-                        matched_metadata_label = get_closest_match(possible_metadata_label.group(2), metadata_keys)
-                        if matched_metadata_label:
-                            if current_section:
-                                metadata[current_section] = '\n'.join(section_content) if section_content else ""
-                                section_content = []
-
-                            if line.replace(possible_metadata_label.group(1), "").lstrip(": "):
-                                section_content.append(line.replace(possible_metadata_label.group(1), "").lstrip(": "))
-
-                            current_section = matched_metadata_label
-                            inside_section = True
-                            continue
-
-                    elif not possible_metadata_label and inside_section:
-                        section_content.append(line)
-                        continue
-
-                if current_section and section_content:
-                    metadata[current_section] = '\n'.join(section_content)
-
-                self.metadata.update(metadata)
-
-
-                if "Case Description" in self.metadata:
-                    case_desc_content = self.metadata["Case Description"]
-                    match = re.search(r"<additional_data>(.*?)</additional_data>", case_desc_content, re.DOTALL)
-                    if match:
-                        self.additional_data = match.group(1).strip()
-                        self.metadata["Case Description"] = re.sub(r"<additional_data>.*?</additional_data>", "", case_desc_content, flags=re.DOTALL).strip()
-
-                if "APIs" in self.metadata:
-                    result = {}
-                    inside_additional_repo = False
-                    additional_repo_content = []
-                    additional_repo_cnt = 0
-
-                    for line in self.metadata.get("APIs").split("\n"):
-                        stripped = line.strip()
-
-                        if stripped.startswith("-"):
-                            label = stripped.lstrip("-").strip()
-                            result[label] = label
-
-                        elif "```" in stripped and inside_additional_repo:
-                            inside_additional_repo = False
-                            additional_repo_content.append(stripped)
-                            additional_repo_cnt += 1
-                            try:
-                                result[f"addition_repo_{additional_repo_cnt}"] = json.loads(('\n'.join(additional_repo_content)).replace("```", ""))
-                            except Exception as e:
-                                result[f"addition_repo_{additional_repo_cnt}"] = []
-
-                            additional_repo_content = []
-
-                        elif "```" in stripped and not inside_additional_repo:
-                            additional_repo_content.append(stripped)
-                            inside_additional_repo = True
-
-                        elif inside_additional_repo:
-                            additional_repo_content.append(stripped)
-
-                    self.metadata["APIs"] = result
-
-        except Exception as e:
-            error_msg = f"Error parsing GA metadata: {str(e)}"
-            raise Exception(error_msg, {"block_type": self._block_type_name, "serial_number": self.serial_number, "logical_section": self.logical_section})
-        return self
-
-    def __str__(self) -> str:
-        separator = "-" * (len(self.name) + 4)
-        metadata_str = json.dumps(self.metadata, indent=2)
-        return f"{self.name}\n{separator}\nMetadata:\n{metadata_str}\n"
-
-
-class MarkdownBlock(Block):
-    content: str
-
-    def parse_block(self) -> "MarkdownBlock":
-        return self
-
-    @computed_field
-    @property
-    def _block_type_name(self) -> str:
-        return "Markdown"
-
-    @property
-    def type_key(self) -> Literal['markdown', 'code', 'code_output']:
-        return "markdown"
-
-    def __str__(self) -> str:
-        return f"{self.name}\n{self.content}\n"
-
-class CodeBlock(Block):
-    content: str
-
-    def parse_block(self) -> "CodeBlock":
-        return self
-
-    @computed_field
-    @property
-    def _block_type_name(self) -> str:
-        return "Code"
-
-    @property
-    def type_key(self) -> Literal['markdown', 'code', 'code_output']:
-        return "code"
-
-    def __str__(self) -> str:
-        return f"{self.name}\n{self.content}\n"
-
-
-class CodeOutputItem(BaseModel):
-    output_type: str
-    name: Optional[str] = None
-    text: Optional[str | list[str]] = None
-
-class CodeOutputBlock(Block):
-    raw_content: str
-    outputs: list[CodeOutputItem] = Field(default_factory=list)
-
-    def parse_block(self) -> "CodeOutputBlock":
-        return self
-
-    @model_validator(mode='before')
-    @classmethod
-    def parse_raw_content_to_outputs(cls, data: Any) -> Any:
-        if isinstance(data, dict):
-            raw_content_str = data.get('raw_content')
-            if isinstance(raw_content_str, str):
-                try:
-                    parsed_json = json.loads(raw_content_str)
-                    if isinstance(parsed_json, list):
-                        data['outputs'] = parsed_json
-                    else:
-                        data['outputs'] = []
-                except json.JSONDecodeError:
-                    data['outputs'] = []
-                except Exception as e:
-                    data['outputs'] = []
-        return data
-
-    @computed_field
-    @property
-    def _block_type_name(self) -> str:
-        return "Code Output"
-
-    @property
-    def type_key(self) -> Literal['markdown', 'code', 'code_output']:
-        return "code_output"
-
-    def __str__(self) -> str:
-        output_summary = []
-        if not self.outputs:
-             output_summary.append("  [No parsed output or parse error]")
-        else:
-            for i, output_item in enumerate(self.outputs):
-                item_dict = output_item.model_dump(exclude_none=True)
-                otype = item_dict.get('output_type', 'unknown')
-                oname = f" ({item_dict.get('name', '')})" if 'name' in item_dict else ""
-                text_preview = ""
-                if 'text' in item_dict:
-                    text_content = item_dict['text']
-                    full_text = "".join(text_content) if isinstance(text_content, list) else str(text_content)
-                    text_preview = f": {full_text.strip()}" if full_text else ""
-                output_summary.append(f"  Output {i+1}: type='{otype}'{oname}{text_preview}")
-
-        return f"{self.name}\n[Raw JSON stored]\nParsed Outputs:\n{''.join(output_summary)}\n"
-      
-
-#@title Turn Level Parser
-
-class Turn(BaseModel):
-    idx: int
-    blocks: list[Block] = Field(default_factory=list)
-
-    def parse_blocks(self) -> None:
-        for block in self.blocks:
-            block.parse_block()
-
-    def add_block(self, block: Block):
-        self.blocks.append(block)
-
-    def get_blocks_by_section(self, section_name: str) -> list[Block]:
-        return [block for block in self.blocks if block.logical_section == section_name]
-
-    def get_blocks_by_type(self, block_type: Literal['markdown', 'code', 'code_output']) -> list[Block]:
-        return [block for block in self.blocks if block.type_key == block_type]
-
-    def __str__(self) -> str:
-        turn_header = f"********** Turn {self.idx} **********"
-        separator = "*" * len(turn_header)
-        blocks_str = "".join(str(block) for block in self.blocks)
-        return f"{separator}\n{turn_header}\n{separator}{blocks_str}\n"
-    
-  
-
-#@title Colab Parser
-
-class SECTIONS(str, Enum):
-    METADATA = "Metadata"
-    SETUP = "Set Up"
-    DOWNLOAD_FILES = "Download relevant files"
-    IMPORT_APIS_AND_INITIATE_DBS = "Import APIs and initiate DBs"
-    INSTALL_AND_CLONE_REPO_CODE="Install Dependencies and Clone Repositories"
-    INITIAL_ASSERTION = "Initial Assertion"
-    ACTION = "Action"
-    GOLDEN_ANSWER = "Golden Answer"
-    FINAL_ASSERTION = "Final Assertion"
-
-
-class GAImplementationColabParser:
-    """
-    Parses a Colab notebook represented as a list of (cell_type, content) tuples
-    into Turns and Blocks, associating blocks with logical sections based on specific markdown headers.
-
-    Assumes the structure: Description -> Setup -> Initial Assertion -> Action -> Final Assertion.
-    Assumes a single Turn for this structure.
-    """
-
-    # Define the CANONICAL names for main sections
-    _CANONICAL_MAIN_SECTIONS: list[str] = [
-        SECTIONS.SETUP.value,
-        SECTIONS.INITIAL_ASSERTION.value,
-        SECTIONS.ACTION.value,
-        SECTIONS.GOLDEN_ANSWER.value,
-        SECTIONS.FINAL_ASSERTION.value
-    ]
-    _DEFAULT_SECTION_NAME = SECTIONS.METADATA.value
-    # Regex to match H1 headers (allows for no space: #Header or space: # Header)
-    _MAIN_SECTION_REGEX = re.compile(r"^#\s?([^#].*)") # Optional space after #
-    # Regex to match H2+ sub-section headers
-    _SUB_SECTION_REGEX = re.compile(r"^(#{2,})\s+(.*)")
-    # Cutoff for fuzzy matching (0.0 to 1.0, higher means stricter match)
-    _FUZZY_MATCH_CUTOFF = 0.8
-
-    def __init__(self, file_info: dict[str, Any], drive_url: str, nb):
-        """Initializes parser, loads notebook, and parses turns."""
-        self.file_name: str = file_info["name"]
-        self.file_id: str = file_info["id"]
-        # self.colab_url: str = drive_url
-
-        # global DRIVE_SERVICE
-        # if 'DRIVE_SERVICE' not in globals():
-        #      print("Error: DRIVE_SERVICE not initialized. Please authenticate.")
-        #      raise RuntimeError("DRIVE_SERVICE is required but not available.")
-
-        self._raw_plan = self.__create_a_plan_from_drive_notebook(self.file_id, nb)
-
-        if not self._raw_plan:
-            raise ValueError(f"Failed to load or parse colab notebook content: {self.file_name} ({self.file_id})")
-
-        self.turns: list[Turn] = []
-        try:
-            self._parse_plan_to_turns()
-            self._parse_turns()
-
-        except ValidationError as e:
-            print(f"Pydantic validation error during parsing: {e}")
-            raise
-        except Exception as e:
-             print(f"An unexpected error occurred during parsing logic: {e}")
-             raise
-
-
-    def _parse_turns(self) -> None:
-        """Parses all turns in the notebook."""
-        for turn in self.turns:
-            turn.parse_blocks()
-
-    def _parse_plan_to_turns(self) -> None:
-        """Iterates through the raw plan, creating blocks and assigning them to a turn,
-           using fuzzy matching for H1 headers."""
-        current_turn = Turn(idx=1)
-        self.turns.append(current_turn)
-
-        current_main_section_name: str = self._DEFAULT_SECTION_NAME
-        current_sub_section_name: Optional[str] = None
-        serial_number = 1
-
-        for cell_type, raw_content in self._raw_plan:
-            content = raw_content.strip()
-            block_instance: Optional[Block] = None
-            is_new_main_section = False
-            is_new_sub_section = False
-
-            # --- Determine Section based on Markdown Headers ---
-            if cell_type == 'markdown' and content and serial_number > 1:
-                first_line = content.split('\n', 1)[0].strip()
-
-                # Check for H1 Header first (Main Section)
-                main_match = self._MAIN_SECTION_REGEX.match(first_line)
-                if main_match:
-                    extracted_title = main_match.group(1).strip()
-
-                    # Attempt fuzzy match against canonical names
-                    matched_canonical_name = get_closest_match(
-                        extracted_title,
-                        self._CANONICAL_MAIN_SECTIONS,
-                        cutoff=self._FUZZY_MATCH_CUTOFF
-                    )
-
-                    # Use canonical name if matched, otherwise use the extracted title
-                    current_main_section_name = matched_canonical_name if matched_canonical_name else extracted_title
-                    current_sub_section_name = None # Reset sub-section
-                    is_new_main_section = True
-                else:
-                    # If not H1, check for H2+ Header (Sub-section)
-                    sub_match = self._SUB_SECTION_REGEX.match(first_line)
-                    if sub_match:
-                         # Assign sub-section only if we are not in the default "Description"
-                         if current_main_section_name != self._DEFAULT_SECTION_NAME:
-                            current_sub_section_name = sub_match.group(2).strip()
-                            is_new_sub_section = True
-
-            if current_sub_section_name:
-                block_logical_section = f"{current_main_section_name} - {current_sub_section_name}"
-            else:
-                block_logical_section = current_main_section_name
-
-            common_args = {
-                "serial_number": serial_number,
-                "logical_section": block_logical_section,
-            }
-            try:
-                if cell_type == 'markdown':
-                    if current_main_section_name == self._DEFAULT_SECTION_NAME:
-                        block_instance = GAMetadata(**common_args, content=content)
-                    else:
-                        block_instance = MarkdownBlock(**common_args, content=content)
-                elif cell_type == 'code':
-                    block_instance = CodeBlock(**common_args, content=content)
-                elif cell_type == 'code_output':
-                    block_instance = CodeOutputBlock(**common_args, raw_content=content)
-                else:
-                    print(f"Warning: Skipping cell with unexpected type '{cell_type}' at serial number {serial_number}")
-                    continue
-            except ValidationError as e:
-                 print(f"Validation Error creating Block {serial_number} ({cell_type}, section: {block_logical_section}):\n{e}")
-                 serial_number += 1
-                 continue
-
-            if block_instance:
-                current_turn.add_block(block_instance)
-                serial_number += 1
-
-    def __create_a_plan_from_colab_notebook(self, note_book: nbformat.NotebookNode) -> list[tuple[str, str]]:
-        """Creates a plan string from a Colab notebook by extracting markdown and code cells.
-
-        Parameters:
-        ----------
-        nb : nbformat.NotebookNode
-            The notebook object in nbformat that contains the cells to be processed.
-
-        Returns:
-        -------
-        list[tuple[str, str]]]
-            A formatted string with content from markdown cells and labeled code cells.
-            Code cells are prefixed with "CODE:\n".
-
-        """
-        plan_lines = []
-
-        # Iterate through each cell in the notebook
-        for cell in note_book.cells:
-            # Check if the cell is of type markdown and contains content
-            if cell.cell_type == "markdown":
-                # Append the tuple ('markdown', content)
-                plan_lines.append(("markdown", cell.source))
-
-            # Check if the cell is of type code and contains content
-            elif cell.cell_type == "code":
-                # Append the tuple ('code', content)
-                plan_lines.append(("code", cell.source))
-
-                # Check if there are outputs associated with the code cell
-                if cell.outputs and len(cell.outputs) > 0:
-                    cell_out = json.dumps(cell.outputs)
-
-                    # Append the tuple ('code_output', output content)
-                    plan_lines.append(("code_output", cell_out))
-
-        # Return the list of tuples (cell_type, content)
-        return plan_lines
-
-    def __create_a_plan_from_drive_notebook(self, file_id: str, nb) -> list[tuple[str, str]] | None:
-        """Fetches a Jupyter notebook from Google Drive, processes it, and returns a formatted plan.
-
-        Parameters:
-        ----------
-        file_id : str
-            The unique identifier of the file in Google Drive.
-
-        Returns:
-        -------
-        Optional[list[tuple[str, str]]]
-            A formatted string with content from markdown cells and labeled code cells.
-            Code cells are prefixed with "CODE:\n".
-
-        Notes:
-        -----
-        - This function assumes access to the Google Drive API through `DRIVE_SERVICE`.
-        - Only files with a MIME type other than 'application/vnd.google-apps.folder' are processed.
-        - The notebook is assumed to be in `nbformat` version 4.
-
-        """
-        try:
-            # Fetch the file metadata to determine the MIME type and name
-            # file_metadata = DRIVE_SERVICE.files().get(fileId=file_id, fields="name, mimeType", supportsAllDrives=True).execute()  # noqa
-            # file_name, mime_type = file_metadata["name"], file_metadata["mimeType"]
-
-            # Only process if it's not a folder
-            # if mime_type != "application/vnd.google-apps.folder":
-                # Download the file content
-                # file_content = DRIVE_SERVICE.files().get_media(fileId=file_id, supportsAllDrives=True).execute()  # noqa
-
-                # Try to load notebook into nbformat
-                try:
-                    # nb = nbformat.reads(file_content.decode("utf-8"), as_version=4)
-                    # Generate the plan string from the notebook content
-                    return self.__create_a_plan_from_colab_notebook(nb)
-                except Exception as error:
-                    print(f"Failed to load notebook: ({file_id}) - {str(error)}")
-                    return None
-            # else:
-            #     print(f"File {file_name} is a folder.")
-            #     return None
-
-        except Exception as error:
-            print(f"An error occurred while retrieving the file: {str(error)}")
-            return None
-
-    def __str__(self):  # noqa
-        print(f"Colab: {self.file_name}")  # noqa: T201
-        for turn in self.turns:
-            print(turn)  # noqa: T201
-        return ""
-
-    @property
-    def first_turn(self) -> Optional[Turn]:
-        """Returns the first (and likely only) turn."""
-        return self.turns[0] if self.turns else None
-
-    def get_all_blocks(self) -> list[Block]:
-        """Returns a flat list of all blocks from all turns."""
-        all_blocks = []
-        for turn in self.turns:
-            all_blocks.extend(turn.blocks)
-        return all_blocks
-
-def get_closest_match(item: str, valid_items: list[str], cutoff: float = 0.8) -> str | None:
-    """Finds the closest matching item from the provided list using difflib,
-    performing case-insensitive comparison after stripping whitespace.
-    """
-    if not item or not valid_items:
-        return None
-
-    item_normalized = item.strip().lower()
-    if not item_normalized:
-        return None
-
-    normalized_to_original_map = {
-        v.strip().lower(): v for v in valid_items if v.strip()
+  ],
+  "metadata": {
+    "colab": {
+      "provenance": []
+    },
+    "kernelspec": {
+      "display_name": ".venv",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.12.5"
+    },
+    "widgets": {
+      "application/vnd.jupyter.widget-state+json": {
+        "0a8dca321c1846419b9fe70b52c15fa3": {
+          "model_module": "@jupyter-widgets/controls",
+          "model_module_version": "1.5.0",
+          "model_name": "DescriptionStyleModel",
+          "state": {
+            "_model_module": "@jupyter-widgets/controls",
+            "_model_module_version": "1.5.0",
+            "_model_name": "DescriptionStyleModel",
+            "_view_count": null,
+            "_view_module": "@jupyter-widgets/base",
+            "_view_module_version": "1.2.0",
+            "_view_name": "StyleView",
+            "description_width": ""
+          }
+        },
+        "1f05ce555783415781b4b8c234cc0d2b": {
+          "model_module": "@jupyter-widgets/base",
+          "model_module_version": "1.2.0",
+          "model_name": "LayoutModel",
+          "state": {
+            "_model_module": "@jupyter-widgets/base",
+            "_model_module_version": "1.2.0",
+            "_model_name": "LayoutModel",
+            "_view_count": null,
+            "_view_module": "@jupyter-widgets/base",
+            "_view_module_version": "1.2.0",
+            "_view_name": "LayoutView",
+            "align_content": null,
+            "align_items": null,
+            "align_self": null,
+            "border": null,
+            "bottom": null,
+            "display": null,
+            "flex": null,
+            "flex_flow": null,
+            "grid_area": null,
+            "grid_auto_columns": null,
+            "grid_auto_flow": null,
+            "grid_auto_rows": null,
+            "grid_column": null,
+            "grid_gap": null,
+            "grid_row": null,
+            "grid_template_areas": null,
+            "grid_template_columns": null,
+            "grid_template_rows": null,
+            "height": null,
+            "justify_content": null,
+            "justify_items": null,
+            "left": null,
+            "margin": null,
+            "max_height": null,
+            "max_width": null,
+            "min_height": null,
+            "min_width": null,
+            "object_fit": null,
+            "object_position": null,
+            "order": null,
+            "overflow": null,
+            "overflow_x": null,
+            "overflow_y": null,
+            "padding": null,
+            "right": null,
+            "top": null,
+            "visibility": null,
+            "width": null
+          }
+        },
+        "3d8a64f4e80748828b7c4cd2281a25ab": {
+          "model_module": "@jupyter-widgets/base",
+          "model_module_version": "1.2.0",
+          "model_name": "LayoutModel",
+          "state": {
+            "_model_module": "@jupyter-widgets/base",
+            "_model_module_version": "1.2.0",
+            "_model_name": "LayoutModel",
+            "_view_count": null,
+            "_view_module": "@jupyter-widgets/base",
+            "_view_module_version": "1.2.0",
+            "_view_name": "LayoutView",
+            "align_content": null,
+            "align_items": null,
+            "align_self": null,
+            "border": null,
+            "bottom": null,
+            "display": null,
+            "flex": null,
+            "flex_flow": null,
+            "grid_area": null,
+            "grid_auto_columns": null,
+            "grid_auto_flow": null,
+            "grid_auto_rows": null,
+            "grid_column": null,
+            "grid_gap": null,
+            "grid_row": null,
+            "grid_template_areas": null,
+            "grid_template_columns": null,
+            "grid_template_rows": null,
+            "height": null,
+            "justify_content": null,
+            "justify_items": null,
+            "left": null,
+            "margin": null,
+            "max_height": null,
+            "max_width": null,
+            "min_height": null,
+            "min_width": null,
+            "object_fit": null,
+            "object_position": null,
+            "order": null,
+            "overflow": null,
+            "overflow_x": null,
+            "overflow_y": null,
+            "padding": null,
+            "right": null,
+            "top": null,
+            "visibility": null,
+            "width": null
+          }
+        },
+        "48cef67afbcd4df5a68ccbc84c5163d4": {
+          "model_module": "@jupyter-widgets/controls",
+          "model_module_version": "1.5.0",
+          "model_name": "ProgressStyleModel",
+          "state": {
+            "_model_module": "@jupyter-widgets/controls",
+            "_model_module_version": "1.5.0",
+            "_model_name": "ProgressStyleModel",
+            "_view_count": null,
+            "_view_module": "@jupyter-widgets/base",
+            "_view_module_version": "1.2.0",
+            "_view_name": "StyleView",
+            "bar_color": null,
+            "description_width": ""
+          }
+        },
+        "4b603072a86f4f0fa0bdf114df2beae4": {
+          "model_module": "@jupyter-widgets/base",
+          "model_module_version": "1.2.0",
+          "model_name": "LayoutModel",
+          "state": {
+            "_model_module": "@jupyter-widgets/base",
+            "_model_module_version": "1.2.0",
+            "_model_name": "LayoutModel",
+            "_view_count": null,
+            "_view_module": "@jupyter-widgets/base",
+            "_view_module_version": "1.2.0",
+            "_view_name": "LayoutView",
+            "align_content": null,
+            "align_items": null,
+            "align_self": null,
+            "border": null,
+            "bottom": null,
+            "display": null,
+            "flex": null,
+            "flex_flow": null,
+            "grid_area": null,
+            "grid_auto_columns": null,
+            "grid_auto_flow": null,
+            "grid_auto_rows": null,
+            "grid_column": null,
+            "grid_gap": null,
+            "grid_row": null,
+            "grid_template_areas": null,
+            "grid_template_columns": null,
+            "grid_template_rows": null,
+            "height": null,
+            "justify_content": null,
+            "justify_items": null,
+            "left": null,
+            "margin": null,
+            "max_height": null,
+            "max_width": null,
+            "min_height": null,
+            "min_width": null,
+            "object_fit": null,
+            "object_position": null,
+            "order": null,
+            "overflow": null,
+            "overflow_x": null,
+            "overflow_y": null,
+            "padding": null,
+            "right": null,
+            "top": null,
+            "visibility": null,
+            "width": null
+          }
+        },
+        "4c9d6db48257486c87c14ffd4cdc247c": {
+          "model_module": "@jupyter-widgets/controls",
+          "model_module_version": "1.5.0",
+          "model_name": "HBoxModel",
+          "state": {
+            "_dom_classes": [],
+            "_model_module": "@jupyter-widgets/controls",
+            "_model_module_version": "1.5.0",
+            "_model_name": "HBoxModel",
+            "_view_count": null,
+            "_view_module": "@jupyter-widgets/controls",
+            "_view_module_version": "1.5.0",
+            "_view_name": "HBoxView",
+            "box_style": "",
+            "children": [
+              "IPY_MODEL_fd048d88a7ed4b258279760ebbec2932",
+              "IPY_MODEL_95a21cc320d847a18a49addffa05bd54",
+              "IPY_MODEL_b4bd82bb70e04ab2a61c23537b2ed5be"
+            ],
+            "layout": "IPY_MODEL_51367177213948ac8810b9f189ec4c1c"
+          }
+        },
+        "51367177213948ac8810b9f189ec4c1c": {
+          "model_module": "@jupyter-widgets/base",
+          "model_module_version": "1.2.0",
+          "model_name": "LayoutModel",
+          "state": {
+            "_model_module": "@jupyter-widgets/base",
+            "_model_module_version": "1.2.0",
+            "_model_name": "LayoutModel",
+            "_view_count": null,
+            "_view_module": "@jupyter-widgets/base",
+            "_view_module_version": "1.2.0",
+            "_view_name": "LayoutView",
+            "align_content": null,
+            "align_items": null,
+            "align_self": null,
+            "border": null,
+            "bottom": null,
+            "display": null,
+            "flex": null,
+            "flex_flow": null,
+            "grid_area": null,
+            "grid_auto_columns": null,
+            "grid_auto_flow": null,
+            "grid_auto_rows": null,
+            "grid_column": null,
+            "grid_gap": null,
+            "grid_row": null,
+            "grid_template_areas": null,
+            "grid_template_columns": null,
+            "grid_template_rows": null,
+            "height": null,
+            "justify_content": null,
+            "justify_items": null,
+            "left": null,
+            "margin": null,
+            "max_height": null,
+            "max_width": null,
+            "min_height": null,
+            "min_width": null,
+            "object_fit": null,
+            "object_position": null,
+            "order": null,
+            "overflow": null,
+            "overflow_x": null,
+            "overflow_y": null,
+            "padding": null,
+            "right": null,
+            "top": null,
+            "visibility": null,
+            "width": null
+          }
+        },
+        "918de5236e0e455f870849e370173b32": {
+          "model_module": "@jupyter-widgets/controls",
+          "model_module_version": "1.5.0",
+          "model_name": "DescriptionStyleModel",
+          "state": {
+            "_model_module": "@jupyter-widgets/controls",
+            "_model_module_version": "1.5.0",
+            "_model_name": "DescriptionStyleModel",
+            "_view_count": null,
+            "_view_module": "@jupyter-widgets/base",
+            "_view_module_version": "1.2.0",
+            "_view_name": "StyleView",
+            "description_width": ""
+          }
+        },
+        "95a21cc320d847a18a49addffa05bd54": {
+          "model_module": "@jupyter-widgets/controls",
+          "model_module_version": "1.5.0",
+          "model_name": "FloatProgressModel",
+          "state": {
+            "_dom_classes": [],
+            "_model_module": "@jupyter-widgets/controls",
+            "_model_module_version": "1.5.0",
+            "_model_name": "FloatProgressModel",
+            "_view_count": null,
+            "_view_module": "@jupyter-widgets/controls",
+            "_view_module_version": "1.5.0",
+            "_view_name": "ProgressView",
+            "bar_style": "success",
+            "description": "",
+            "description_tooltip": null,
+            "layout": "IPY_MODEL_1f05ce555783415781b4b8c234cc0d2b",
+            "max": 1000,
+            "min": 0,
+            "orientation": "horizontal",
+            "style": "IPY_MODEL_48cef67afbcd4df5a68ccbc84c5163d4",
+            "value": 1000
+          }
+        },
+        "b4bd82bb70e04ab2a61c23537b2ed5be": {
+          "model_module": "@jupyter-widgets/controls",
+          "model_module_version": "1.5.0",
+          "model_name": "HTMLModel",
+          "state": {
+            "_dom_classes": [],
+            "_model_module": "@jupyter-widgets/controls",
+            "_model_module_version": "1.5.0",
+            "_model_name": "HTMLModel",
+            "_view_count": null,
+            "_view_module": "@jupyter-widgets/controls",
+            "_view_module_version": "1.5.0",
+            "_view_name": "HTMLView",
+            "description": "",
+            "description_tooltip": null,
+            "layout": "IPY_MODEL_4b603072a86f4f0fa0bdf114df2beae4",
+            "placeholder": "​",
+            "style": "IPY_MODEL_0a8dca321c1846419b9fe70b52c15fa3",
+            "value": " 1000/1000 [19:08&lt;00:00,  1.14it/s]"
+          }
+        },
+        "fd048d88a7ed4b258279760ebbec2932": {
+          "model_module": "@jupyter-widgets/controls",
+          "model_module_version": "1.5.0",
+          "model_name": "HTMLModel",
+          "state": {
+            "_dom_classes": [],
+            "_model_module": "@jupyter-widgets/controls",
+            "_model_module_version": "1.5.0",
+            "_model_name": "HTMLModel",
+            "_view_count": null,
+            "_view_module": "@jupyter-widgets/controls",
+            "_view_module_version": "1.5.0",
+            "_view_name": "HTMLView",
+            "description": "",
+            "description_tooltip": null,
+            "layout": "IPY_MODEL_3d8a64f4e80748828b7c4cd2281a25ab",
+            "placeholder": "​",
+            "style": "IPY_MODEL_918de5236e0e455f870849e370173b32",
+            "value": "Processing Colabs: 100%"
+          }
+        }
+      }
     }
-    normalized_valid_items = list(normalized_to_original_map.keys())
-
-    if not normalized_valid_items:
-        return None
-
-    closest_matches_normalized = difflib.get_close_matches(
-        item_normalized,
-        normalized_valid_items,
-        n=1,
-        cutoff=cutoff
-    )
-
-    if closest_matches_normalized:
-        matched_normalized = closest_matches_normalized[0]
-        return normalized_to_original_map.get(matched_normalized)
-
-    return None
-
-
-preserve_state = '''
-
-# SKIPPED ORIGINAL SETUP CELL
-# Adding API and DB directories to path instead
-import sys
-import os
-print("Injecting API and DB paths into system path...")
-api_dir = "/content/APIs"
-db_dir = "/content/DBs"
-scripts_dir = "/content"
-if api_dir not in sys.path:
-    sys.path.append(api_dir)
-if db_dir not in sys.path:
-    sys.path.append(db_dir)
-if scripts_dir not in sys.path:
-    sys.path.append(scripts_dir)
-
-os.chdir('/content')
-print("System paths updated.")
-
-_initial_dir = None
-
-def start_block():
-  global _initial_dir
-  _initial_dir = set(globals().keys())
-
-def end_block():
-  global _initial_dir
-  # Compare current dir() to the saved _initial_dir
-  for name in set(globals().keys()):
-      # Skip anything that was already there originally,
-      # or that starts with an underscore, or the function names themselves
-      if (
-          name not in _initial_dir
-          and not name.startswith('_')
-          and name not in ['start_block', 'end_block']
-      ):
-          del globals()[name]'''
-
-
-def get_code_blocks(parsed_colab):
-    relevant_sections = [
-        f"{SECTIONS.SETUP.value} - {SECTIONS.INSTALL_AND_CLONE_REPO_CODE.value}",
-        f"{SECTIONS.SETUP.value} - {SECTIONS.IMPORT_APIS_AND_INITIATE_DBS.value}",
-        SECTIONS.INITIAL_ASSERTION.value,
-        SECTIONS.ACTION.value,
-        SECTIONS.FINAL_ASSERTION.value
-    ]
-    result_code_blocks = {section: [] for section in relevant_sections}
-    result_code_blocks['setup_section'] = [preserve_state]
-    all_code_blocks = [block for block in parsed_colab.get_all_blocks() if isinstance(block, CodeBlock)]
-    # colab_cells = [
-    #     {'cell_type': 'code', 'source': [preserve_state], 'metadata': {}, 'outputs': []}
-    #     ]
-    for section in relevant_sections:
-        # print(f"In {section}")
-        # colab_cells.append({'cell_type': 'markdown', 'source': [section], 'metadata': {}, 'outputs': []})
-
-        if section == f"{SECTIONS.SETUP.value} - {SECTIONS.INSTALL_AND_CLONE_REPO_CODE.value}":        
-            section_code_blocks = [block for block in all_code_blocks if block.logical_section==section]
-            # print(f"Dependencies {section_code_blocks}")
-            for section_code_block in section_code_blocks:
-                code_without_pip = '\n'.join([line for line in section_code_block.content.split('\n') if not line.startswith('!pip')])
-                # print(f"Code withot Pip {code_without_pip}")
-                result_code_blocks[section].append(code_without_pip)
-                # colab_cells.append({'cell_type': 'code', 'source': [code_without_pip], 'metadata': {}, 'outputs': []})
-        elif section == f"{SECTIONS.SETUP.value} - {SECTIONS.IMPORT_APIS_AND_INITIATE_DBS.value}":
-            section_code_blocks = [block for block in all_code_blocks if block.logical_section==section]
-            section_code_block_count = len(section_code_blocks)
-            # print(f"DB Code cells: {section_code_blocks}")
-            for idx, section_code_block in enumerate(section_code_blocks):     
-                # print(f"DB {idx}: {section_code_block}")       
-                # if idx == section_code_block_count-1: # last block
-                    # colab_cells.append({'cell_type': 'code', 'source': ['\nstart_block()\n'], 'metadata': {}, 'outputs': []})
-                
-                # colab_cells.append({'cell_type': 'code', 'source': [section_code_block.content], 'metadata': {}, 'outputs': []})
-                if idx == section_code_block_count-1: # last block
-                    result_code_blocks[section].append(section_code_block.content)
-                else:
-                    result_code_blocks['setup_section'].append(section_code_block.content)
-                
-                # if idx == section_code_block_count-1: # last block
-                    # colab_cells.append({'cell_type': 'code', 'source': ['\nend_block()\n'], 'metadata': {}, 'outputs': []})
-        else:
-            # colab_cells.append({'cell_type': 'code', 'source': ['\nstart_block()\n'], 'metadata': {}, 'outputs': []})
-            section_code_blocks = [block for block in all_code_blocks if block.logical_section==section]
-            for section_code_block in section_code_blocks:            
-                # colab_cells.append({'cell_type': 'code', 'source': [section_code_block.content], 'metadata': {}, 'outputs': []})
-                result_code_blocks[section].append(section_code_block.content)
-            # colab_cells.append({'cell_type': 'code', 'source': ['\nend_block()\n'], 'metadata': {}, 'outputs': []})
-    return result_code_blocks
-
-
-
-def create_auto_qc_notebook(code_blocks):
-    nb_cells = []
-    
-    setup_section = "setup_section"
-    setup_code_cells = code_blocks[setup_section]
-    
-    combined_cells = []
-    for code_cell in setup_code_cells:
-        combined_cells += [code_cell]    
-    nb_cells.append({'cell_type': 'markdown', 'source': [setup_section], 'metadata': {}, 'outputs': []})
-    nb_cells.append({'cell_type': 'code', 'source': combined_cells, 'metadata': {}, 'outputs': []})
-
-    del code_blocks[setup_section]
-
-    dependencies_section = f"{SECTIONS.SETUP.value} - {SECTIONS.INSTALL_AND_CLONE_REPO_CODE.value}"
-    dependencies_code_cells = code_blocks[dependencies_section]
-    
-    combined_cells = []
-    for code_cell in dependencies_code_cells:
-        combined_cells += [code_cell]
-    nb_cells.append({'cell_type': 'markdown', 'source': [dependencies_section], 'metadata': {}, 'outputs': []})
-    nb_cells.append({'cell_type': 'code', 'source': combined_cells, 'metadata': {}, 'outputs': []})
-
-    del code_blocks[dependencies_section]
-
-    init_section = f"{SECTIONS.SETUP.value} - {SECTIONS.IMPORT_APIS_AND_INITIATE_DBS.value}"
-    init_code_cells = code_blocks[init_section]
-    nb_cells.append({'cell_type': 'markdown', 'source': [init_section], 'metadata': {}, 'outputs': []})
-    combined_cells = []
-    for cell in init_code_cells:
-        combined_cells += [cell]
-    nb_cells.append({'cell_type': 'code', 'source': ['\nstart_block()\n'], 'metadata': {}, 'outputs': []})
-    nb_cells.append({'cell_type': 'code', 'source': ['\n'.join(combined_cells)], 'metadata': {}, 'outputs': []})
-    nb_cells.append({'cell_type': 'code', 'source': ['\nend_block()\n'], 'metadata': {}, 'outputs': []})
-    del code_blocks[init_section]
-
-    fa_section = SECTIONS.FINAL_ASSERTION.value
-    fa_code_cells = code_blocks[fa_section]
-    nb_cells.append({'cell_type': 'markdown', 'source': [f'{fa_section}_NO_ACTION'], 'metadata': {}, 'outputs': []})
-    combined_cells = []
-    for cell in fa_code_cells:
-        combined_cells += [cell]
-    nb_cells.append({'cell_type': 'code', 'source': ['\nstart_block()\n'], 'metadata': {}, 'outputs': []})
-    nb_cells.append({'cell_type': 'code', 'source': ['\n'.join(combined_cells)], 'metadata': {}, 'outputs': []})
-    nb_cells.append({'cell_type': 'code', 'source': ['\nend_block()\n'], 'metadata': {}, 'outputs': []})
-
-    for header in [SECTIONS.INITIAL_ASSERTION.value, SECTIONS.ACTION.value, SECTIONS.FINAL_ASSERTION.value]:
-        nb_cells.append({'cell_type': 'markdown', 'source': [header], 'metadata': {}, 'outputs': []})
-        combined_cells = []
-        for cell in code_blocks[header]:
-            combined_cells += [cell]
-        nb_cells.append({'cell_type': 'code', 'source': ['\nstart_block()\n'], 'metadata': {}, 'outputs': []})
-        nb_cells.append({'cell_type': 'code', 'source': ['\n'.join(combined_cells)], 'metadata': {}, 'outputs': []})
-        nb_cells.append({'cell_type': 'code', 'source': ['\nend_block()\n'], 'metadata': {}, 'outputs': []})
-
-    notebook = nbformat.v4.new_notebook()
-    notebook.cells = nb_cells
-    notebook = nbformat.reads(json.dumps(notebook), as_version=4)
-    return notebook
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
