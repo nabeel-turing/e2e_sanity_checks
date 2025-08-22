@@ -1,13 +1,10 @@
 # Base Configs
 
-1. Create a venv and install the requirement in `requirements.txt`
+1. Create a venv (python 3.12.5) and install the requirement in `requirements.txt`
 
 2. Make sure you have a service account file in the project root. Update the name `SERVICE_ACCOUNT_FILE` in `sanity_orchestrator_with_download.py` & in `docker_orchestrator_colab.ipynb` (in Setup and Auth section)
 
-3. Adjust the max docker containers to run in parallel in `Create Batches and Configuration Files for Docker Runs` section.
-
-4. Run the notebook `download_apis.ipynb` to download apis and relevant files.
-
+3. Run the notebook `download_apis.ipynb` to download apis and relevant files.
 
 4. Create the docker image using the following command
 ```docker build -t gen-agents-auto-qc .```
@@ -15,11 +12,13 @@
 ----
 ## To Run with Proto Schema.
 
-  - Move the .pb file to the root folder.
+  1. Move the .pb file to the root folder.
   
-  - Open `docker_orchestrator_proto.ipynb` file and update proto_file_name in `Parse Proto` section i.e. `proto_file_name = 'tool_use_metadata_set_v2.pb'`
+  2. Open `docker_orchestrator_proto.ipynb` file and update proto_file_name in `Parse Proto` section i.e. `proto_file_name = 'tool_use_metadata_set_v2.pb'`
+ 
+  3. Adjust the max docker containers to run in parallel in `Create Batches and Configuration Files for Docker Runs` section. 
   
-  - Run All Sections in the same notebook one by one. The last cell will store the results as csv, that csv can then be utilised to analyse the response.
+  4. Run All Sections in the same notebook one by one. The last cell will store the results as csv, that csv can then be utilised to analyse the response.
 
 ---
 ## To Run with Colab Schema.
